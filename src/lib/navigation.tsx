@@ -16,6 +16,8 @@ import {
   Network,
   Gamepad2,
   Target,
+  Briefcase,
+  Wallet,
   type LucideIcon,
 } from "lucide-react"
 
@@ -78,6 +80,16 @@ export const navTree: NavNode[] = [
       { type: "item", label: "Composition", path: "/pole-technique/composition", icon: Network },
       { type: "item", label: "Consignes", path: "/pole-technique/consignes", icon: Gamepad2 },
       { type: "item", label: "Défis", path: "/pole-technique/defis", icon: Target },
+    ],
+  },
+
+  {
+    type: "group",
+    label: "Gestion",
+    icon: Briefcase,
+    key: "gestion",
+    children: [
+      { type: "item", label: "Budget", path: "/budget", icon: Wallet },
     ],
   },
 ]
