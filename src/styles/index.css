@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@600;700&family=DM+Sans:wght@400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=DM+Sans:wght@400;500&display=swap");
 
 /* ===========================================================================
    iSmart Coach — Design Tokens
@@ -75,7 +75,7 @@
 
   /* ---- Fonts ------------------------------------------------------------ */
   --font-display: "Bebas Neue", sans-serif; /* display / stat numbers only */
-  --font-ui: "Syne", sans-serif; /* buttons, tags, nav, table headers */
+  --font-ui: "Inter", sans-serif; /* buttons, tags, nav, table headers */
   --font-body: "DM Sans", sans-serif; /* body, inputs, rows, timestamps */
 
   /* ---- Radii ------------------------------------------------------------ */
@@ -209,7 +209,7 @@
   h4,
   h5,
   h6 {
-    font-family: var(--font-ui); /* Syne — use .font-display for Bebas hero/stats */
+    font-family: var(--font-ui); /* Inter — use .font-display for Bebas hero/stats */
     color: var(--ink);
     letter-spacing: 0.01em;
   }
@@ -236,5 +236,19 @@
   }
   .glow-green {
     box-shadow: var(--shadow-glow);
+  }
+  /* Toast entrance — slides up + fades in (design-system §12 easing). */
+  @keyframes toast-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .animate-toast-in {
+    animation: toast-in 0.28s cubic-bezier(0.16, 1, 0.3, 1);
   }
 }

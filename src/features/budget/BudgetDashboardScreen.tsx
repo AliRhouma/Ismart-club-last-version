@@ -1,11 +1,30 @@
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { ArrowLeft, Bell, Check, ChevronRight, Upload, X } from "lucide-react"
+import {
+  ArrowLeft,
+  Bell,
+  CalendarRange,
+  Check,
+  ChevronDown,
+  ChevronRight,
+  Search,
+  Trash2,
+  TrendingDown,
+  TrendingUp,
+  Upload,
+  X,
+} from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { fmt, fmtShort, r } from "@/lib/format"
 import { useData } from "@/data/useData"
-import { simulateBudget, type BudgetAlert } from "@/features/budget/simulate"
+import type { Entry, EntryKind } from "@/data/seed/entries"
+import {
+  simulateBudget,
+  type BudgetAlert,
+  type Transaction,
+} from "@/features/budget/simulate"
+import { EntryModal } from "@/features/budget/EntryModal"
 import {
   Bar,
   CatTag,
@@ -15,6 +34,13 @@ import {
   Stat,
   TeamChip,
 } from "@/features/budget/ui"
+
+/** A transactions-table row — either simulated or a recorded entry. */
+type Row = Transaction & {
+  manual?: boolean
+  entryId?: string
+  teams?: string[]
+}
 
 const alertTone = {
   error: { dot: "bg-danger" },
@@ -41,22 +67,53 @@ export function BudgetDashboardScreen() {
   const navigate = useNavigate()
   const { budget } = useData()
   const [tab, setTab] = useState<"suivi" | "alertes">("suivi")
+  const [entryKind, setEntryKind] = useState<EntryKind | null>(null)
+  const [toast, setToast] = useState<{ id: number; msg: string } | null>(null)
+  const toastId = useRef(0)
 
   const sim = useMemo(() => simulateBudget(budget), [budget])
+
+  useEffect(() => {
+    if (!toast) return
+    const timer = setTimeout(() => setToast(null), 2600)
+    return () => clearTimeout(timer)
+  }, [toast])
 
   return (
     <>
       <PageHead
-        eyebrow={`Tableau de bord · ${budget.season}`}
         title="Pilotage du budget"
         action={
-          <button
-            type="button"
-            onClick={() => navigate("/budget")}
-            className="inline-flex items-center gap-1.5 rounded-md border border-border px-3 py-2 font-ui text-sm font-semibold text-ink transition-colors hover:border-[var(--border-hover)] hover:bg-accent"
-          >
-            <ArrowLeft size={15} /> Configuration
-          </button>
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={() => navigate("/budget/nouvelle")}
+              className="inline-flex items-center gap-1.5 rounded-md border border-border px-3 py-2 font-ui text-sm font-semibold text-ink transition-colors hover:border-[var(--border-hover)] hover:bg-accent"
+            >
+              <ArrowLeft size={15} /> Configuration
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate("/budget/mensuel")}
+              className="inline-flex items-center gap-1.5 rounded-md border border-border px-3 py-2 font-ui text-sm font-semibold text-ink transition-colors hover:border-[var(--border-hover)] hover:bg-accent"
+            >
+              <CalendarRange size={15} /> Mensuel
+            </button>
+            <button
+              type="button"
+              onClick={() => setEntryKind("out")}
+              className="inline-flex items-center gap-1.5 rounded-md border border-team-away/30 bg-team-away/[0.06] px-3.5 py-2 font-ui text-sm font-bold text-team-away transition-colors hover:bg-team-away/15"
+            >
+              <TrendingDown size={15} /> Dépense
+            </button>
+            <button
+              type="button"
+              onClick={() => setEntryKind("in")}
+              className="inline-flex items-center gap-1.5 rounded-md bg-brand px-3.5 py-2 font-ui text-sm font-bold text-ink-inverted shadow-glow transition-[transform,box-shadow] hover:-translate-y-0.5 hover:shadow-[0_12px_40px_var(--green-glow)]"
+            >
+              <TrendingUp size={15} /> Recette
+            </button>
+          </div>
         }
       />
 
@@ -73,29 +130,196 @@ export function BudgetDashboardScreen() {
       <div key={tab}>
         {tab === "suivi" ? <TabSuivi sim={sim} /> : <TabAlertes sim={sim} />}
       </div>
+
+      {entryKind ? (
+        <EntryModal
+          kind={entryKind}
+          onClose={() => setEntryKind(null)}
+          onAdded={(msg) => setToast({ id: toastId.current++, msg })}
+        />
+      ) : null}
+
+      {toast ? (
+        <div
+          key={toast.id}
+          role="status"
+          className="animate-toast-in fixed right-5 bottom-5 z-[120] flex items-center gap-2.5 rounded-md border border-brand/30 bg-surface px-4 py-3 shadow-deep"
+        >
+          <span className="flex size-6 items-center justify-center rounded-full bg-brand/15 text-brand">
+            <Check size={14} />
+          </span>
+          <span className="font-body text-[0.84rem] text-ink">{toast.msg}</span>
+        </div>
+      ) : null}
     </>
+  )
+}
+
+/* ── Compact dropdown filter (category / team) ─────────────────────────── */
+function FilterSelect({
+  value,
+  onChange,
+  options,
+  allLabel,
+}: {
+  value: string
+  onChange: (v: string) => void
+  options: string[]
+  allLabel: string
+}) {
+  return (
+    <div className="relative">
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className={cn(
+          "cursor-pointer appearance-none rounded-md border bg-input-bg py-1.5 pr-7 pl-3 font-ui text-[0.72rem] font-semibold outline-none transition-colors focus:border-brand",
+          value === "all"
+            ? "border-border text-ink-muted hover:text-ink"
+            : "border-brand/30 text-brand",
+        )}
+      >
+        <option value="all">{allLabel}</option>
+        {options.map((o) => (
+          <option key={o} value={o} className="bg-surface text-ink">
+            {o}
+          </option>
+        ))}
+      </select>
+      <ChevronDown
+        size={13}
+        className="pointer-events-none absolute top-1/2 right-2 -translate-y-1/2 text-ink-disabled"
+      />
+    </div>
   )
 }
 
 /* ───────── Suivi ───────── */
 function TabSuivi({ sim }: { sim: ReturnType<typeof simulateBudget> }) {
   const navigate = useNavigate()
+  const { entries, removeEntry } = useData()
   const [showAlerts, setShowAlerts] = useState(true)
   const [openCat, setOpenCat] = useState<string | null>(null)
   const [filter, setFilter] = useState<"all" | "in" | "out">("all")
+  const [query, setQuery] = useState("")
+  const [catFilter, setCatFilter] = useState("all")
+  const [teamFilter, setTeamFilter] = useState("all")
 
-  const incPct = sim.totalIncome ? r((sim.realIncome / sim.totalIncome) * 100) : 0
-  const expPct = sim.totalExpense ? r((sim.realExpense / sim.totalExpense) * 100) : 0
-  const realBal = sim.realIncome - sim.realExpense
+  // Merge the recorded entries into the simulated "réel" view: they lift the
+  // headline stats, head the transactions list, and ripple into the per-category
+  // bars and team tracking — so a saisie behaves like real data everywhere.
+  const view = useMemo(() => {
+    const toRow = (e: Entry): Row => ({
+      date: e.date,
+      label: e.label,
+      cat: e.cat,
+      team: e.teams[0] ?? "—",
+      teams: e.teams,
+      amount: e.kind === "out" ? -e.amount : e.amount,
+      kind: e.kind,
+      auto: true,
+      manual: true,
+      entryId: e.id,
+    })
+
+    let manualIn = 0
+    let manualOut = 0
+    const outByCat: Record<string, number> = {}
+    const outByTeam: Record<string, number> = {}
+    const manualByCat: Record<string, Row[]> = {}
+    entries.forEach((e) => {
+      if (e.kind === "in") {
+        manualIn += e.amount
+        return
+      }
+      manualOut += e.amount
+      outByCat[e.cat] = (outByCat[e.cat] || 0) + e.amount
+      // A dépense shared across teams splits equally between them.
+      const share = e.amount / Math.max(e.teams.length, 1)
+      e.teams.forEach((tm) => {
+        outByTeam[tm] = (outByTeam[tm] || 0) + share
+      })
+      ;(manualByCat[e.cat] = manualByCat[e.cat] || []).push(toRow(e))
+    })
+
+    const expReal = sim.expReal.map((e) => {
+      const add = outByCat[e.label] || 0
+      if (!add) return e
+      const real = e.real + add
+      return { ...e, real, cons: e.amount ? r((real / e.amount) * 100) : e.cons }
+    })
+
+    const teamReal = sim.teamReal.map((t) => {
+      const add = outByTeam[t.label] || 0
+      if (!add) return t
+      const real = t.real + add
+      return {
+        ...t,
+        real,
+        cons: t.amount ? r((real / t.amount) * 100) : t.cons,
+        remaining: t.amount - real,
+      }
+    })
+
+    const txByCat: Record<string, Row[]> = {}
+    new Set([...Object.keys(sim.txByCat), ...Object.keys(manualByCat)]).forEach(
+      (c) => {
+        txByCat[c] = [...(manualByCat[c] || []), ...(sim.txByCat[c] || [])]
+      },
+    )
+
+    return {
+      realIncome: sim.realIncome + manualIn,
+      realExpense: sim.realExpense + manualOut,
+      transactions: [...entries.map(toRow), ...sim.transactions] as Row[],
+      expReal,
+      teamReal,
+      txByCat,
+    }
+  }, [sim, entries])
+
+  const incPct = sim.totalIncome ? r((view.realIncome / sim.totalIncome) * 100) : 0
+  const expPct = sim.totalExpense ? r((view.realExpense / sim.totalExpense) * 100) : 0
+  const realBal = view.realIncome - view.realExpense
 
   const counts = {
-    all: sim.transactions.length,
-    in: sim.transactions.filter((t) => t.kind === "in").length,
-    out: sim.transactions.filter((t) => t.kind === "out").length,
+    all: view.transactions.length,
+    in: view.transactions.filter((t) => t.kind === "in").length,
+    out: view.transactions.filter((t) => t.kind === "out").length,
   }
-  const txs = sim.transactions.filter((t) =>
-    filter === "all" ? true : filter === "in" ? t.kind === "in" : t.kind === "out",
+
+  // Filter options derived from the transactions actually present.
+  const cats = useMemo(
+    () => Array.from(new Set(view.transactions.map((t) => t.cat))).sort(),
+    [view.transactions],
   )
+  const teams = useMemo(
+    () =>
+      Array.from(
+        new Set(view.transactions.flatMap((t) => t.teams ?? [t.team])),
+      ).sort(),
+    [view.transactions],
+  )
+
+  const q = query.trim().toLowerCase()
+  const txs = view.transactions.filter((t) => {
+    if (filter !== "all" && t.kind !== filter) return false
+    if (catFilter !== "all" && t.cat !== catFilter) return false
+    if (teamFilter !== "all" && !(t.teams ?? [t.team]).includes(teamFilter))
+      return false
+    if (q && !t.label.toLowerCase().includes(q) && !t.cat.toLowerCase().includes(q))
+      return false
+    return true
+  })
+
+  const active =
+    filter !== "all" || catFilter !== "all" || teamFilter !== "all" || q !== ""
+  const resetFilters = () => {
+    setFilter("all")
+    setCatFilter("all")
+    setTeamFilter("all")
+    setQuery("")
+  }
 
   const chip = (key: "all" | "in" | "out", label: string) => (
     <button
@@ -154,13 +378,13 @@ function TabSuivi({ sim }: { sim: ReturnType<typeof simulateBudget> }) {
       <div className="mb-[1.1rem] grid grid-cols-1 gap-[1.1rem] sm:grid-cols-3">
         <Stat
           label="Recettes réelles"
-          value={fmt(sim.realIncome)}
+          value={fmt(view.realIncome)}
           delta={`${incPct}% du prévisionnel`}
           dtone="up"
         />
         <Stat
           label="Dépenses réelles"
-          value={fmt(sim.realExpense)}
+          value={fmt(view.realExpense)}
           delta={`${expPct}% du prévisionnel`}
         />
         <Stat
@@ -190,6 +414,46 @@ function TabSuivi({ sim }: { sim: ReturnType<typeof simulateBudget> }) {
           </div>
         }
       >
+        {/* Filter toolbar */}
+        <div className="mb-3 flex flex-wrap items-center gap-2">
+          <div className="relative">
+            <Search
+              size={14}
+              className="pointer-events-none absolute top-1/2 left-2.5 -translate-y-1/2 text-ink-disabled"
+            />
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Rechercher un libellé…"
+              className="w-full rounded-md border border-border bg-input-bg py-1.5 pr-3 pl-8 font-body text-[0.78rem] text-ink outline-none transition-[border-color,box-shadow] placeholder:text-ink-disabled focus:border-brand focus:shadow-[0_0_0_3px_var(--green-glow)] sm:w-52"
+            />
+          </div>
+          <FilterSelect
+            value={catFilter}
+            onChange={setCatFilter}
+            options={cats}
+            allLabel="Toutes catégories"
+          />
+          <FilterSelect
+            value={teamFilter}
+            onChange={setTeamFilter}
+            options={teams}
+            allLabel="Toutes équipes"
+          />
+          {active ? (
+            <button
+              type="button"
+              onClick={resetFilters}
+              className="inline-flex items-center gap-1 rounded-pill px-2 py-1 font-ui text-[0.66rem] font-bold tracking-[0.04em] text-ink-muted uppercase transition-colors hover:text-ink"
+            >
+              <X size={12} /> Réinitialiser
+            </button>
+          ) : null}
+          <span className="ml-auto font-body text-[0.72rem] text-ink-disabled tabular-nums">
+            {txs.length} transaction{txs.length > 1 ? "s" : ""}
+          </span>
+        </div>
+
         <div className="overflow-x-auto">
           <table className="w-full border-collapse">
             <thead>
@@ -205,22 +469,45 @@ function TabSuivi({ sim }: { sim: ReturnType<typeof simulateBudget> }) {
                 <th className="border-b border-border px-2.5 py-2 text-right font-ui text-[0.66rem] font-bold tracking-[0.07em] whitespace-nowrap text-ink-disabled uppercase">
                   Montant
                 </th>
+                <th className="w-9 border-b border-border" aria-hidden />
               </tr>
             </thead>
             <tbody>
-              {txs.map((t, i) => (
-                <tr key={i} className="transition-colors hover:bg-accent">
-                  <td className="border-b border-border px-2.5 py-2.5 font-body text-[0.78rem] whitespace-nowrap text-brand tabular-nums">
+              {txs.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan={6}
+                    className="px-2.5 py-10 text-center font-body text-[0.82rem] text-ink-disabled"
+                  >
+                    Aucune transaction ne correspond aux filtres.
+                  </td>
+                </tr>
+              ) : (
+                txs.map((t, i) => (
+                <tr
+                  key={t.entryId ?? i}
+                  className="group transition-colors hover:bg-accent"
+                >
+                  <td
+                    className={cn(
+                      "border-b border-border px-2.5 py-2.5 font-body text-[0.78rem] whitespace-nowrap text-ink-disabled tabular-nums",
+                      t.manual && "border-l-2 border-l-brand/50",
+                    )}
+                  >
                     {t.date}
                   </td>
-                  <td className="border-b border-border px-2.5 py-2.5 font-body text-[0.85rem] text-ink-subtle">
+                  <td className="border-b border-border px-2.5 py-2.5 font-body text-[0.85rem] text-ink">
                     {t.label}
                   </td>
                   <td className="border-b border-border px-2.5 py-2.5">
                     <CatTag flagged={!t.auto}>{t.cat}</CatTag>
                   </td>
                   <td className="border-b border-border px-2.5 py-2.5">
-                    <TeamChip>{t.team}</TeamChip>
+                    <div className="flex flex-wrap gap-1">
+                      {(t.teams ?? [t.team]).map((tm) => (
+                        <TeamChip key={tm}>{tm}</TeamChip>
+                      ))}
+                    </div>
                   </td>
                   <td
                     className={cn(
@@ -231,8 +518,21 @@ function TabSuivi({ sim }: { sim: ReturnType<typeof simulateBudget> }) {
                     {t.kind === "in" ? "+" : "−"}
                     {fmtShort(Math.abs(t.amount))} TND
                   </td>
+                  <td className="border-b border-border px-1.5 py-2.5 text-right">
+                    {t.manual && t.entryId ? (
+                      <button
+                        type="button"
+                        onClick={() => removeEntry(t.entryId!)}
+                        aria-label="Supprimer la saisie"
+                        className="inline-flex size-6 items-center justify-center rounded-sm border border-transparent text-ink-disabled opacity-0 transition-[opacity,color,border-color] group-hover:opacity-100 hover:border-team-away/30 hover:text-team-away focus-visible:opacity-100"
+                      >
+                        <Trash2 size={13} />
+                      </button>
+                    ) : null}
+                  </td>
                 </tr>
-              ))}
+                ))
+              )}
             </tbody>
           </table>
         </div>
@@ -240,9 +540,9 @@ function TabSuivi({ sim }: { sim: ReturnType<typeof simulateBudget> }) {
 
       {/* Prévisionnel vs Réel */}
       <Panel title="Prévisionnel vs Réel — par catégorie">
-        {sim.expReal.map((e, idx) => {
+        {view.expReal.map((e, idx) => {
           const open = openCat === e.id || (openCat === null && idx === 0)
-          const txList = sim.txByCat[e.label] || []
+          const txList = view.txByCat[e.label] || []
           const over = e.cons >= e.threshold
           return (
             <div
@@ -289,7 +589,13 @@ function TabSuivi({ sim }: { sim: ReturnType<typeof simulateBudget> }) {
                           {t.date}
                         </span>
                         <span className="truncate text-ink-subtle">{t.label}</span>
-                        <TeamChip sm>{t.team}</TeamChip>
+                        <div className="flex flex-wrap justify-end gap-1">
+                          {(t.teams ?? [t.team]).map((tm) => (
+                            <TeamChip key={tm} sm>
+                              {tm}
+                            </TeamChip>
+                          ))}
+                        </div>
                         <span className="text-danger tabular-nums">
                           −{fmtShort(Math.abs(t.amount))} TND
                         </span>
@@ -317,7 +623,7 @@ function TabSuivi({ sim }: { sim: ReturnType<typeof simulateBudget> }) {
           <span>Consommation</span>
           <span className="text-right">%</span>
         </div>
-        {sim.teamReal.map((t) => (
+        {view.teamReal.map((t) => (
           <div
             key={t.id}
             className="grid grid-cols-2 items-center gap-x-3 gap-y-1 border-t border-border py-2.5 font-body text-[0.84rem] tabular-nums sm:grid-cols-[1.3fr_0.9fr_0.9fr_0.9fr_1.6fr_48px]"

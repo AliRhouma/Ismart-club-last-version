@@ -5,8 +5,11 @@ import { navLeaves } from "@/lib/navigation"
 import { DataProvider } from "@/data/DataProvider"
 import { AppShell } from "@/shells/AppShell"
 import { Placeholder } from "@/components/kit/Placeholder"
+import { SeasonSelectScreen } from "@/features/budget/SeasonSelectScreen"
 import { BudgetConfigScreen } from "@/features/budget/BudgetConfigScreen"
 import { BudgetDashboardScreen } from "@/features/budget/BudgetDashboardScreen"
+import { MonthlyPlanningScreen } from "@/features/budget/MonthlyPlanningScreen"
+import { MonthPlanScreen } from "@/features/budget/MonthPlanScreen"
 
 /** Routes that have a real screen (so they skip the generic Placeholder). */
 const CUSTOM_ROUTES = new Set(["/budget"])
@@ -40,9 +43,13 @@ export default function App() {
                 ),
               )}
 
-            {/* Budget — real feature */}
-            <Route path="budget" element={<BudgetConfigScreen />} />
+            {/* Budget — real feature. /budget is the season picker; the
+                active season opens the config ("Nouvelle saison"). */}
+            <Route path="budget" element={<SeasonSelectScreen />} />
+            <Route path="budget/nouvelle" element={<BudgetConfigScreen />} />
             <Route path="budget/dashboard" element={<BudgetDashboardScreen />} />
+            <Route path="budget/mensuel" element={<MonthlyPlanningScreen />} />
+            <Route path="budget/mensuel/plan" element={<MonthPlanScreen />} />
 
             <Route
               path="*"

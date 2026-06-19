@@ -2,24 +2,18 @@ import type { ReactNode } from "react"
 
 import { cn } from "@/lib/utils"
 
-/* ── Page header (green eyebrow + Bebas title + right action) ───────────── */
+/* ── Page header (Inter title + optional right action) ──────────────────── */
 export function PageHead({
-  eyebrow,
   title,
   action,
 }: {
-  eyebrow: ReactNode
   title: ReactNode
   action?: ReactNode
 }) {
   return (
     <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
       <div className="min-w-0">
-        <span className="mb-2 flex items-center gap-2 font-ui text-[0.72rem] font-bold tracking-[0.12em] text-brand uppercase">
-          <span className="h-0.5 w-5 bg-brand" />
-          {eyebrow}
-        </span>
-        <h1 className="font-display text-[2.4rem] leading-none tracking-[0.02em] text-ink">
+        <h1 className="font-ui text-2xl font-bold tracking-wide text-ink">
           {title}
         </h1>
       </div>

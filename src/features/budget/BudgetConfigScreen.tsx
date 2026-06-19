@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom"
-import { ArrowRight, Check, Plus, X } from "lucide-react"
+import { ArrowLeft, ArrowRight, Check, Plus, X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { fmt, r } from "@/lib/format"
@@ -174,8 +174,15 @@ export function BudgetConfigScreen() {
 
   return (
     <>
+      <button
+        type="button"
+        onClick={() => navigate("/budget")}
+        className="mb-4 inline-flex items-center gap-1.5 rounded-md border border-border px-3 py-2 font-ui text-sm font-semibold text-ink transition-colors hover:border-[var(--border-hover)] hover:bg-accent"
+      >
+        <ArrowLeft size={15} /> Saisons
+      </button>
+
       <PageHead
-        eyebrow="Configuration"
         title="Nouvelle saison"
         action={
           <div className="flex flex-col gap-1.5 sm:items-end">

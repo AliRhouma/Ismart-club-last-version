@@ -1,4 +1,10 @@
-import { createContext, useMemo, useReducer, type ReactNode } from "react"
+import {
+  createContext,
+  useMemo,
+  useReducer,
+  useState,
+  type ReactNode,
+} from "react"
 
 import { r } from "@/lib/format"
 import {
@@ -9,6 +15,9 @@ import {
   type Line,
   type LineList,
 } from "@/data/seed/budget"
+import { seasonsSeed, type Season } from "@/data/seed/seasons"
+import { entriesSeed, type Entry } from "@/data/seed/entries"
+import { monthsSeed, type Month } from "@/data/seed/months"
 
 /**
  * App-root in-memory store (plain React Context + useReducer — no library).
@@ -113,6 +122,12 @@ function reducer(state: BudgetState, action: Action): BudgetState {
 
 export type DataContextValue = {
   budget: BudgetState
+  /** Past, clôturée seasons shown (read-only) in the season picker. */
+  seasons: Season[]
+  /** Recorded recettes & dépenses (newest first). */
+  entries: Entry[]
+  /** Month-by-month planning preview (read-only). */
+  months: Month[]
   setSeason: (season: string) => void
   setMode: (mode: BudgetMode) => void
   setGlobalIncome: (value: number) => void
@@ -120,16 +135,30 @@ export type DataContextValue = {
   updateLine: (list: LineList, id: string, patch: Partial<Line>) => void
   addLine: (list: LineList, line?: Partial<Line>) => void
   removeLine: (list: LineList, id: string) => void
+  addEntry: (entry: Omit<Entry, "id">) => void
+  removeEntry: (id: string) => void
 }
 
 export const DataContext = createContext<DataContextValue | null>(null)
 
 export function DataProvider({ children }: { children: ReactNode }) {
   const [budget, dispatch] = useReducer(reducer, budgetSeed)
+  // Archived seasons are read-only for now (no screen mutates them), so they
+  // live in plain in-memory state rather than the budget reducer.
+  const [seasons] = useState<Season[]>(seasonsSeed)
+  // Recorded entries only ever add/remove (no per-field edit), so plain state
+  // is enough — no reducer. New entries go to the front (most recent first).
+  const [entries, setEntries] = useState<Entry[]>(entriesSeed)
+  // Monthly planning preview is read-only for now (the plan screen is
+  // auto-filled and self-contained), so it stays in plain in-memory state.
+  const [months] = useState<Month[]>(monthsSeed)
 
   const value = useMemo<DataContextValue>(
     () => ({
       budget,
+      seasons,
+      entries,
+      months,
       setSeason: (season) => dispatch({ type: "setSeason", season }),
       setMode: (mode) => dispatch({ type: "setMode", mode }),
       setGlobalIncome: (value) => dispatch({ type: "setGlobalIncome", value }),
@@ -149,8 +178,12 @@ export function DataProvider({ children }: { children: ReactNode }) {
           },
         }),
       removeLine: (list, id) => dispatch({ type: "removeLine", list, id }),
+      addEntry: (entry) =>
+        setEntries((prev) => [{ id: crypto.randomUUID(), ...entry }, ...prev]),
+      removeEntry: (id) =>
+        setEntries((prev) => prev.filter((entry) => entry.id !== id)),
     }),
-    [budget],
+    [budget, seasons, entries, months],
   )
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>
