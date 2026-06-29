@@ -1,8 +1,9 @@
+import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { ArrowLeft, ArrowRight, Check, Plus, X } from "lucide-react"
+import { ArrowLeft, ArrowRight, Check, ChevronRight, Plus, X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
-import { fmt, r } from "@/lib/format"
+import { fmt, fmtShort, r } from "@/lib/format"
 import { useData } from "@/data/useData"
 import { sumLines, type Line, type LineList } from "@/data/seed/budget"
 import { Bar, LinkBtn, NumInput, PageHead, Panel, Segmented } from "@/features/budget/ui"
@@ -129,6 +130,131 @@ function HeadRow({ gridClass, cols }: { gridClass: string; cols: string[] }) {
   )
 }
 
+/* ── Sous-postes (sub-titles + sub-budgets under a line) ─────────────────
+   Prototype-only: local state, seeded with examples, NOT wired into the line
+   amount or the totals — just to show how a breakdown could look. */
+type Sub = { id: string; label: string; amount: number }
+
+const SEED_SUBS: Record<string, { label: string; amount: number }[]> = {
+  "inc-cotisations": [
+    { label: "Séniors", amount: 40000 },
+    { label: "Jeunes (U13–U17)", amount: 34000 },
+    { label: "Féminines", amount: 22000 },
+  ],
+  "inc-subventions": [
+    { label: "Municipalité", amount: 38000 },
+    { label: "Fédération", amount: 22000 },
+  ],
+  "inc-sponsors": [
+    { label: "Sponsor principal", amount: 35000 },
+    { label: "Équipementier", amount: 12000 },
+    { label: "Sponsors locaux", amount: 8000 },
+  ],
+  "exp-salaires": [
+    { label: "Staff technique", amount: 70000 },
+    { label: "Personnel administratif", amount: 28000 },
+    { label: "Primes & indemnités", amount: 12000 },
+  ],
+  "exp-equipement": [
+    { label: "Maillots & tenues", amount: 16000 },
+    { label: "Ballons & matériel", amount: 8000 },
+    { label: "Matériel médical", amount: 4000 },
+  ],
+  "exp-deplacements": [
+    { label: "Transport", amount: 14000 },
+    { label: "Hébergement", amount: 6000 },
+    { label: "Restauration", amount: 4000 },
+  ],
+}
+
+const subInputCls =
+  "w-full rounded-md border border-border bg-input-bg px-3 py-2 font-body text-[0.82rem] text-ink-subtle outline-none transition-[border-color,box-shadow] placeholder:text-ink-disabled focus:border-brand focus:shadow-[0_0_0_3px_var(--green-glow)]"
+
+function SubBudgets({ lineId }: { lineId: string }) {
+  const seeded = SEED_SUBS[lineId]
+  const [items, setItems] = useState<Sub[]>(() =>
+    (seeded ?? []).map((s, i) => ({ id: `${lineId}-sub-${i}`, ...s })),
+  )
+  const [open, setOpen] = useState(Boolean(seeded))
+
+  const subtotal = items.reduce((s, x) => s + (x.amount || 0), 0)
+
+  const add = () =>
+    setItems((p) => [...p, { id: crypto.randomUUID(), label: "", amount: 0 }])
+  const remove = (id: string) => setItems((p) => p.filter((x) => x.id !== id))
+  const setLabel = (id: string, v: string) =>
+    setItems((p) => p.map((x) => (x.id === id ? { ...x, label: v } : x)))
+  const setAmount = (id: string, v: number) =>
+    setItems((p) => p.map((x) => (x.id === id ? { ...x, amount: v } : x)))
+
+  return (
+    <div className="mt-1 mb-2.5 ml-1 pl-2">
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        className="inline-flex items-center gap-1 font-ui text-[0.62rem] font-bold tracking-[0.05em] text-ink-disabled uppercase transition-colors hover:text-ink-muted"
+      >
+        <ChevronRight
+          size={12}
+          className={cn("transition-transform", open && "rotate-90")}
+        />
+        Sous-postes
+        {items.length ? (
+          <span className="rounded-full bg-accent px-1.5 text-[0.6rem] text-ink-muted">
+            {items.length}
+          </span>
+        ) : null}
+      </button>
+
+      {open ? (
+        <div className="mt-1.5 ml-1.5 border-l border-border pl-3">
+          {items.map((s) => (
+            <div
+              key={s.id}
+              className="mb-1.5 grid grid-cols-[1fr_120px_28px] items-center gap-2"
+            >
+              <input
+                className={subInputCls}
+                value={s.label}
+                placeholder="Sous-titre"
+                onChange={(e) => setLabel(s.id, e.target.value)}
+              />
+              <NumInput
+                value={s.amount}
+                suffix="TND"
+                onChange={(v) => setAmount(s.id, v)}
+              />
+              <button
+                type="button"
+                onClick={() => remove(s.id)}
+                aria-label="Supprimer le sous-poste"
+                className="flex h-[28px] w-[28px] items-center justify-center rounded-sm border border-border text-ink-disabled transition-colors hover:border-team-away/30 hover:bg-team-away/10 hover:text-team-away"
+              >
+                <X size={13} />
+              </button>
+            </div>
+          ))}
+
+          <div className="flex items-center justify-between pt-0.5">
+            <button
+              type="button"
+              onClick={add}
+              className="inline-flex items-center gap-1 font-ui text-[0.64rem] font-bold tracking-[0.04em] text-brand uppercase transition-opacity hover:opacity-80"
+            >
+              <Plus size={12} /> Sous-poste
+            </button>
+            {items.length ? (
+              <span className="font-body text-[0.7rem] text-ink-disabled tabular-nums">
+                Σ {fmtShort(subtotal)} TND
+              </span>
+            ) : null}
+          </div>
+        </div>
+      ) : null}
+    </div>
+  )
+}
+
 export function BudgetConfigScreen() {
   const navigate = useNavigate()
   const {
@@ -251,12 +377,14 @@ export function BudgetConfigScreen() {
               cols={isPercent ? ["Source", "Part", "Montant"] : ["Source", "Montant annuel"]}
             />
             {income.map((it) => (
-              <LineRow
-                key={it.id}
-                {...lineProps("income")(it)}
-                gridClass={incGrid}
-                placeholder="Source de revenu"
-              />
+              <div key={it.id}>
+                <LineRow
+                  {...lineProps("income")(it)}
+                  gridClass={incGrid}
+                  placeholder="Source de revenu"
+                />
+                <SubBudgets lineId={it.id} />
+              </div>
             ))}
             <div className="mt-3 flex items-center justify-between border-t border-border pt-3 font-ui text-[0.82rem] font-bold">
               <span>Total recettes</span>
@@ -290,14 +418,18 @@ export function BudgetConfigScreen() {
               }
             />
             {expenses.map((it) => (
-              <LineRow
-                key={it.id}
-                {...lineProps("expenses")(it)}
-                gridClass={expGrid}
-                placeholder="Catégorie de dépense"
-                withThreshold
-                onThreshold={(v) => updateLine("expenses", it.id, { threshold: v })}
-              />
+              <div key={it.id}>
+                <LineRow
+                  {...lineProps("expenses")(it)}
+                  gridClass={expGrid}
+                  placeholder="Catégorie de dépense"
+                  withThreshold
+                  onThreshold={(v) =>
+                    updateLine("expenses", it.id, { threshold: v })
+                  }
+                />
+                <SubBudgets lineId={it.id} />
+              </div>
             ))}
             <div className="mt-3 flex items-center justify-between border-t border-border pt-3 font-ui text-[0.82rem] font-bold">
               <span>Total dépenses</span>
@@ -367,13 +499,7 @@ export function BudgetConfigScreen() {
 
         {/* ── Summary ── */}
         <aside className="lg:sticky lg:top-0">
-          <div
-            className="rounded-lg border border-brand/25 p-5 shadow-glow"
-            style={{
-              background:
-                "linear-gradient(160deg, var(--green-glow), var(--surface))",
-            }}
-          >
+          <div className="rounded-lg border border-border bg-surface p-5">
             <div className="mb-4 font-ui text-[0.78rem] font-bold tracking-[0.06em] text-ink uppercase">
               Résumé prévisionnel
             </div>
@@ -426,7 +552,7 @@ export function BudgetConfigScreen() {
             <button
               type="button"
               onClick={() => navigate("/budget/dashboard")}
-              className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-md bg-brand px-5 py-3 font-ui text-sm font-bold text-ink-inverted shadow-glow transition-[transform,box-shadow] hover:-translate-y-0.5 hover:shadow-[0_12px_40px_var(--green-glow)]"
+              className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-md bg-brand px-5 py-3 font-ui text-sm font-bold text-ink-inverted transition-colors hover:bg-brand-dim"
             >
               Enregistrer &amp; voir le dashboard <ArrowRight size={16} />
             </button>
