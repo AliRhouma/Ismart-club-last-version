@@ -60,13 +60,13 @@ export function ConfirmDialog({
           <span
             className={cn(
               "mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-md",
-              destructive ? "bg-danger/10 text-danger" : "bg-brand/10 text-brand",
+              destructive ? "bg-danger/10 text-danger" : "bg-info/10 text-info",
             )}
           >
             <AlertTriangle className="size-5" strokeWidth={1.75} />
           </span>
           <div className="flex flex-col gap-1.5">
-            <DialogTitle className="font-ui text-base font-bold text-ink">
+            <DialogTitle className="font-ui text-base font-medium text-ink">
               {title}
             </DialogTitle>
             {description ? (

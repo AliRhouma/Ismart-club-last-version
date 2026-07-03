@@ -12,15 +12,9 @@ export type Tint = {
   text: string
 }
 
-// Five visually distinct hues from the data-encoding + accent tokens.
-// (success/team-home/brand share the same green, so green appears once.)
-const TINTS: readonly Tint[] = [
-  { bg: "bg-brand/15", text: "text-brand" },
-  { bg: "bg-team-away/15", text: "text-team-away" },
-  { bg: "bg-neutral/15", text: "text-neutral" },
-  { bg: "bg-amber/15", text: "text-amber" },
-  { bg: "bg-blue/15", text: "text-blue" },
-]
+// One calm accent — blue — never a rainbow (design rule 3). Category badges
+// derive a stable but single-hue tint; green is reserved for buttons/success.
+const TINTS: readonly Tint[] = [{ bg: "bg-info/10", text: "text-info" }]
 
 /** Stable 32-bit string hash (djb2-ish), independent of platform. */
 export function hashString(input: string): number {

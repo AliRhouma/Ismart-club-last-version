@@ -34,7 +34,7 @@ export function EmptyState({
           <Icon className="size-6" strokeWidth={1.5} />
         </div>
       ) : null}
-      <h3 className="font-ui text-sm font-bold text-ink-muted">{title}</h3>
+      <h3 className="font-ui text-sm font-medium text-ink-muted">{title}</h3>
       {description ? (
         <p className="max-w-xs font-body text-sm text-ink-disabled">
           {description}

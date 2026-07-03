@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
-import { ArrowLeft, ArrowRight, CalendarPlus, Check } from "lucide-react"
+import { ArrowRight, CalendarPlus, Check } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { fmt, fmtShort, r } from "@/lib/format"
 import { useData } from "@/data/useData"
 import type { MonthStatus } from "@/data/seed/months"
+import { BackButton } from "@/components/kit/BackButton"
 import { Bar, PageHead, Panel, Stat } from "@/features/budget/ui"
 
 const STATUS: Record<
@@ -19,8 +20,8 @@ const STATUS: Record<
   },
   current: {
     label: "En cours",
-    dot: "bg-brand shadow-[0_0_8px_var(--green-glow)]",
-    chip: "border-brand/25 bg-brand/10 text-brand",
+    dot: "bg-success",
+    chip: "border-success/25 bg-success/10 text-success",
   },
   planned: {
     label: "Planifié",
@@ -50,7 +51,7 @@ function VsRow({
       <span className="font-body text-[0.85rem] font-medium text-ink">{label}</span>
       <Bar value={pct} warn={warn} />
       <span className="text-right font-body text-[0.78rem] whitespace-nowrap text-ink-muted tabular-nums">
-        <span className={tone === "brand" ? "text-brand" : "text-danger"}>
+        <span className={tone === "brand" ? "text-success" : "text-danger"}>
           {fmtShort(reel)}
         </span>{" "}
         / {fmtShort(prevu)}
@@ -101,13 +102,7 @@ export function MonthlyPlanningScreen() {
 
   return (
     <>
-      <button
-        type="button"
-        onClick={() => navigate("/budget/dashboard")}
-        className="mb-4 inline-flex items-center gap-1.5 rounded-md border border-border px-3 py-2 font-ui text-sm font-semibold text-ink transition-colors hover:border-[var(--border-hover)] hover:bg-accent"
-      >
-        <ArrowLeft size={15} /> Tableau de bord
-      </button>
+      <BackButton to="/budget/dashboard" label="Tableau de bord" />
 
       <PageHead
         title="Planification mensuelle"
@@ -116,7 +111,7 @@ export function MonthlyPlanningScreen() {
             <button
               type="button"
               onClick={() => navigate("/budget/mensuel/plan")}
-              className="inline-flex items-center gap-1.5 rounded-md bg-brand px-4 py-2.5 font-ui text-sm font-bold text-ink-inverted shadow-glow transition-[transform,box-shadow] hover:-translate-y-0.5 hover:shadow-[0_12px_40px_var(--green-glow)]"
+              className="inline-flex items-center gap-1.5 rounded-md bg-brand px-4 py-2.5 font-ui text-sm font-medium text-ink-inverted shadow-glow transition-colors hover:bg-brand-dim"
             >
               <CalendarPlus size={16} /> Planifier {nextPlan.label}
             </button>
@@ -141,12 +136,12 @@ export function MonthlyPlanningScreen() {
               className={cn(
                 "flex min-w-[118px] shrink-0 flex-col gap-1.5 rounded-lg border px-3.5 py-3 text-left transition-[transform,box-shadow,border-color]",
                 on
-                  ? "border-brand/40 bg-brand/[0.04] shadow-glow"
-                  : "border-border bg-surface hover:border-[var(--border-hover)]",
+                  ? "border-info/40 bg-info/[0.04]"
+                  : "border-border hover:border-[var(--border-hover)]",
               )}
             >
               <div className="flex items-center justify-between gap-2">
-                <span className="font-ui text-[0.8rem] font-bold text-ink">
+                <span className="font-ui text-[0.8rem] font-medium text-ink">
                   {m.short}
                 </span>
                 <span className={cn("size-1.5 rounded-full", STATUS[m.status].dot)} />
@@ -155,7 +150,7 @@ export function MonthlyPlanningScreen() {
                 {ms >= 0 ? "+" : "−"}
                 {fmtShort(Math.abs(ms))}
               </span>
-              <span className="font-ui text-[0.54rem] font-bold tracking-[0.08em] text-ink-disabled uppercase">
+              <span className="font-ui text-[0.54rem] font-medium tracking-[0.08em] text-ink-disabled uppercase">
                 {STATUS[m.status].label}
               </span>
             </button>
@@ -165,12 +160,12 @@ export function MonthlyPlanningScreen() {
 
       {/* ── Selected month header ──────────────────────────────────────── */}
       <div className="mb-[1.1rem] flex flex-wrap items-center gap-3">
-        <h2 className="font-ui text-xl font-bold tracking-tight text-ink">
+        <h2 className="font-ui text-xl font-medium tracking-tight text-ink">
           {sel.label}
         </h2>
         <span
           className={cn(
-            "inline-flex items-center gap-1.5 rounded-pill border px-2.5 py-1 font-ui text-[0.62rem] font-bold tracking-[0.08em] uppercase",
+            "inline-flex items-center gap-1.5 rounded-pill border px-2.5 py-1 font-ui text-[0.62rem] font-medium tracking-[0.08em] uppercase",
             STATUS[sel.status].chip,
           )}
         >
@@ -221,7 +216,7 @@ export function MonthlyPlanningScreen() {
               <CalendarPlus size={20} />
             </span>
             <div>
-              <div className="font-ui text-[0.9rem] font-bold text-ink-muted">
+              <div className="font-ui text-[0.9rem] font-medium text-ink-muted">
                 Mois non démarré
               </div>
               <p className="mx-auto mt-1 max-w-xs font-body text-[0.82rem] leading-relaxed text-ink-disabled">
@@ -232,7 +227,7 @@ export function MonthlyPlanningScreen() {
             <button
               type="button"
               onClick={() => navigate("/budget/mensuel/plan")}
-              className="mt-1 inline-flex items-center gap-1.5 rounded-md bg-brand px-4 py-2.5 font-ui text-sm font-bold text-ink-inverted shadow-glow transition-[transform,box-shadow] hover:-translate-y-0.5 hover:shadow-[0_12px_40px_var(--green-glow)]"
+              className="mt-1 inline-flex items-center gap-1.5 rounded-md bg-brand px-4 py-2.5 font-ui text-sm font-medium text-ink-inverted shadow-glow transition-colors hover:bg-brand-dim"
             >
               Définir le plan <ArrowRight size={15} />
             </button>
@@ -267,9 +262,9 @@ export function MonthlyPlanningScreen() {
       {confirm ? (
         <div
           role="status"
-          className="animate-toast-in fixed right-5 bottom-5 z-[120] flex items-center gap-2.5 rounded-md border border-brand/30 bg-surface px-4 py-3 shadow-deep"
+          className="animate-toast-in fixed right-5 bottom-5 z-[120] flex items-center gap-2.5 rounded-md border border-success/30 bg-surface px-4 py-3 shadow-deep"
         >
-          <span className="flex size-6 items-center justify-center rounded-full bg-brand/15 text-brand">
+          <span className="flex size-6 items-center justify-center rounded-full bg-success/15 text-success">
             <Check size={14} />
           </span>
           <span className="font-body text-[0.84rem] text-ink">

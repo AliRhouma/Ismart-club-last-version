@@ -72,7 +72,7 @@ export function FormSheet({
       >
         <form onSubmit={handleSubmit} className="flex h-full flex-col">
           <SheetHeader className="border-b border-border">
-            <SheetTitle className="font-ui text-base font-bold text-ink">
+            <SheetTitle className="font-ui text-base font-medium text-ink">
               {title}
             </SheetTitle>
             {description ? (

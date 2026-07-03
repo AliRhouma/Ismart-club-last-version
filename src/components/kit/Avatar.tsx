@@ -1,5 +1,9 @@
 import { cn } from "@/lib/utils"
-import { initials as toInitials, tintFor } from "@/lib/tint"
+import { initials as toInitials } from "@/lib/tint"
+
+/* Neutral gray gradient fill — avatars are NOT auto-colored per name (design
+   rule: one calm accent, no rainbow). The same neutral treatment everywhere. */
+const AVATAR_BG = "linear-gradient(135deg, #2e2e2e, #1c1c1c)"
 
 const sizeClasses = {
   sm: "size-7 text-[0.65rem]",
@@ -25,16 +29,14 @@ export function Avatar({
   size?: AvatarSize
   className?: string
 }) {
-  const tint = tintFor(name)
-
   return (
     <span
       title={name}
+      style={!src ? { background: AVATAR_BG } : undefined}
       className={cn(
-        "relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-pill font-ui font-bold uppercase select-none",
+        "relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-pill font-ui font-medium uppercase select-none",
         sizeClasses[size],
-        !src && tint.bg,
-        !src && tint.text,
+        !src && "text-ink-subtle",
         className,
       )}
     >

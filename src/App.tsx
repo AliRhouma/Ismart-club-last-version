@@ -1,5 +1,5 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom"
-import { FileQuestion } from "lucide-react"
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom"
+import { FileQuestion, FileText } from "lucide-react"
 
 import { navLeaves } from "@/lib/navigation"
 import { DataProvider } from "@/data/DataProvider"
@@ -10,9 +10,24 @@ import { BudgetConfigScreen } from "@/features/budget/BudgetConfigScreen"
 import { BudgetDashboardScreen } from "@/features/budget/BudgetDashboardScreen"
 import { MonthlyPlanningScreen } from "@/features/budget/MonthlyPlanningScreen"
 import { MonthPlanScreen } from "@/features/budget/MonthPlanScreen"
+import { Budget2SeasonsScreen } from "@/features/budget2/Budget2SeasonsScreen"
+import { Budget2SeasonScreen } from "@/features/budget2/Budget2SeasonScreen"
+import { Budget2EditorScreen } from "@/features/budget2/Budget2EditorScreen"
+import { Budget2CompareScreen } from "@/features/budget2/Budget2CompareScreen"
+import { DocumentsScreen } from "@/features/documents/DocumentsScreen"
+import { TransactionsScreen } from "@/features/finance/TransactionsScreen"
+import { DemandeTransactionScreen } from "@/features/finance/DemandeTransactionScreen"
+import { CompteRenduScreen } from "@/features/compte-rendu/CompteRenduScreen"
 
 /** Routes that have a real screen (so they skip the generic Placeholder). */
-const CUSTOM_ROUTES = new Set(["/budget"])
+const CUSTOM_ROUTES = new Set([
+  "/budget",
+  "/budget2",
+  "/documents",
+  "/finance/transactions",
+  "/finance/demande",
+  "/compte-rendu",
+])
 
 /**
  * <DataProvider> wraps the router (CLAUDE.md). Every screen renders inside
@@ -24,6 +39,10 @@ export default function App() {
     <DataProvider>
       <BrowserRouter>
         <Routes>
+          {/* Standalone light "compte rendu" report — renders OUTSIDE the app
+              shell (no sidebar/topbar): it's a document about the product. */}
+          <Route path="/compte-rendu" element={<CompteRenduScreen />} />
+
           <Route element={<AppShell />}>
             {navLeaves
               .filter((leaf) => !CUSTOM_ROUTES.has(leaf.path))
@@ -43,6 +62,10 @@ export default function App() {
                 ),
               )}
 
+            {/* Finance — Transactions is the first real tool of the module. */}
+            <Route path="finance/transactions" element={<TransactionsScreen />} />
+            <Route path="finance/demande" element={<DemandeTransactionScreen />} />
+
             {/* Budget — real feature. /budget is the season picker; the
                 active season opens the config ("Nouvelle saison"). */}
             <Route path="budget" element={<SeasonSelectScreen />} />
@@ -51,14 +74,32 @@ export default function App() {
             <Route path="budget/mensuel" element={<MonthlyPlanningScreen />} />
             <Route path="budget/mensuel/plan" element={<MonthPlanScreen />} />
 
+            {/* Budget 2 — Outil Budget: three levels (saisons → onglets →
+                éditeur de brouillon). Independent of the legacy Budget above. */}
+            <Route path="budget2" element={<Budget2SeasonsScreen />} />
+            <Route path="budget2/comparaison" element={<Budget2CompareScreen />} />
+            <Route
+              path="budget2/:seasonId"
+              element={<Navigate to="brouillon" replace />}
+            />
+            <Route path="budget2/:seasonId/:tab" element={<Budget2SeasonScreen />} />
+            <Route
+              path="budget2/:seasonId/brouillon/:draftId"
+              element={<Budget2EditorScreen />}
+            />
+
+            {/* Documents — list is real; the per-document editor is a
+                clickable placeholder until the editor is built. */}
+            <Route path="documents" element={<DocumentsScreen />} />
+            <Route
+              path="documents/:id"
+              element={<Placeholder title="Éditeur de document" icon={FileText} />}
+            />
+
             <Route
               path="*"
               element={
-                <Placeholder
-                  title="Page introuvable"
-                  icon={FileQuestion}
-                  eyebrow="Erreur 404"
-                />
+                <Placeholder title="Page introuvable" icon={FileQuestion} />
               }
             />
           </Route>

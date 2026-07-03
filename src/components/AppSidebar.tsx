@@ -39,14 +39,14 @@ function BrandMark() {
     <Link
       to="/"
       className="flex min-w-0 items-center gap-2.5 outline-hidden"
-      aria-label="iSmart Coach — Accueil"
+      aria-label="iSmart Club — Accueil"
     >
-      <span className="flex size-8 shrink-0 items-center justify-center rounded-md bg-brand font-display text-lg leading-none text-ink-inverted shadow-glow">
+      <span className="flex size-8 shrink-0 items-center justify-center rounded-md bg-brand font-display text-lg font-bold leading-none text-ink-inverted shadow-glow">
         iS
       </span>
       <span className="flex min-w-0 flex-col group-data-[collapsible=icon]:hidden">
-        <span className="truncate font-ui text-sm font-bold tracking-wide text-ink">
-          iSmart Coach
+        <span className="truncate font-ui text-sm font-semibold tracking-normal text-ink">
+          iSmart Club
         </span>
         <span className="truncate font-body text-[0.68rem] text-ink-muted">
           Plateforme club
@@ -95,7 +95,7 @@ function NavGroupItem({
     >
       <SidebarMenuItem>
         <CollapsibleTrigger asChild>
-          {/* In icon mode the parent turns green when one of its children is active. */}
+          {/* In icon mode the parent shows the active state when a child is active. */}
           <SidebarMenuButton
             tooltip={group.label}
             isActive={state === "collapsed" && hasActiveChild}

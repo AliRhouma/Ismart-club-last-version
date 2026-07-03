@@ -14,14 +14,14 @@ import {
 import { NumInput } from "@/features/budget/ui"
 
 const inputCls =
-  "w-full rounded-md border border-border bg-input-bg px-3.5 py-2.5 font-body text-sm text-ink outline-none transition-[border-color,box-shadow] placeholder:text-ink-disabled focus:border-brand focus:shadow-[0_0_0_3px_var(--green-glow)]"
+  "w-full rounded-md border border-input bg-input-bg px-3.5 py-2.5 font-body text-sm text-ink outline-none transition-colors placeholder:text-ink-disabled focus:border-border-focus"
 
 const TEAM_FALLBACK = "Club"
 
 function Field({ label, children }: { label: string; children: ReactNode }) {
   return (
     <label className="flex flex-col gap-1.5">
-      <span className="font-ui text-[0.7rem] font-bold tracking-[0.06em] text-ink-muted uppercase">
+      <span className="font-ui text-[0.7rem] font-medium tracking-[0.06em] text-ink-muted uppercase">
         {label}
       </span>
       {children}
@@ -130,7 +130,7 @@ export function EntryModal({
         {/* Header */}
         <div className="flex items-start justify-between gap-3 border-b border-border px-5 py-4">
           <div className="min-w-0">
-            <DialogTitle className="font-ui text-base font-bold text-ink">
+            <DialogTitle className="font-ui text-base font-medium text-ink">
               {title}
             </DialogTitle>
             <DialogDescription className="mt-0.5 font-body text-[0.8rem] text-ink-muted">
@@ -184,7 +184,7 @@ export function EntryModal({
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <span className="font-ui text-[0.7rem] font-bold tracking-[0.06em] text-ink-muted uppercase">
+            <span className="font-ui text-[0.7rem] font-medium tracking-[0.06em] text-ink-muted uppercase">
               Équipes concernées
             </span>
             <div className="flex flex-wrap gap-1.5">
@@ -197,9 +197,9 @@ export function EntryModal({
                     onClick={() => toggleTeam(name)}
                     aria-pressed={on}
                     className={cn(
-                      "inline-flex items-center gap-1 rounded-pill border px-2.5 py-1 font-ui text-[0.68rem] font-bold tracking-[0.04em] uppercase transition-colors",
+                      "inline-flex items-center gap-1 rounded-pill border px-2.5 py-1 font-ui text-[0.68rem] font-medium tracking-[0.04em] uppercase transition-colors",
                       on
-                        ? "border-brand/30 bg-brand/10 text-brand"
+                        ? "border-info/30 bg-info/10 text-info"
                         : "border-border text-ink-muted hover:border-[var(--border-hover)] hover:text-ink",
                     )}
                   >
@@ -222,7 +222,7 @@ export function EntryModal({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-md border border-border px-4 py-2 font-ui text-sm font-semibold text-ink transition-colors hover:border-[var(--border-hover)] hover:bg-accent"
+            className="rounded-md border border-input px-4 py-2 font-ui text-sm font-medium text-ink transition-colors hover:border-[var(--border-hover)] hover:bg-accent"
           >
             Annuler
           </button>
@@ -230,7 +230,7 @@ export function EntryModal({
             type="button"
             onClick={submit}
             disabled={!canSubmit}
-            className="inline-flex items-center gap-1.5 rounded-md bg-brand px-5 py-2 font-ui text-sm font-bold text-ink-inverted shadow-glow transition-[transform,box-shadow,opacity] hover:-translate-y-0.5 hover:shadow-[0_12px_40px_var(--green-glow)] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:translate-y-0"
+            className="inline-flex items-center gap-1.5 rounded-md bg-brand px-5 py-2 font-ui text-sm font-medium text-ink-inverted shadow-glow transition-[colors,opacity] hover:bg-brand-dim disabled:cursor-not-allowed disabled:opacity-40"
           >
             <Check size={16} /> Enregistrer
           </button>

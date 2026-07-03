@@ -2,7 +2,7 @@ import type { ReactNode } from "react"
 
 import { cn } from "@/lib/utils"
 
-/* ── Page header (Inter title + optional right action) ──────────────────── */
+/* ── Page header (Rubik title + optional right action) ──────────────────── */
 export function PageHead({
   title,
   action,
@@ -13,7 +13,7 @@ export function PageHead({
   return (
     <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
       <div className="min-w-0">
-        <h1 className="font-ui text-2xl font-bold tracking-wide text-ink">
+        <h1 className="font-ui text-2xl font-semibold tracking-normal text-ink">
           {title}
         </h1>
       </div>
@@ -37,12 +37,12 @@ export function Panel({
   return (
     <section
       className={cn(
-        "mb-[1.1rem] overflow-hidden rounded-md border border-border bg-surface-panel",
+        "mb-[1.1rem] overflow-hidden rounded-md border border-border",
         className,
       )}
     >
       <div className="flex items-center justify-between gap-2 border-b border-border px-[1.1rem] py-3">
-        <h2 className="font-ui text-[0.78rem] font-bold tracking-[0.06em] text-ink-subtle uppercase">
+        <h2 className="font-ui text-[0.78rem] font-medium tracking-[0.06em] text-ink-subtle uppercase">
           {title}
         </h2>
         {action}
@@ -52,7 +52,7 @@ export function Panel({
   )
 }
 
-/* ── Stat card (Bebas value + label + delta) ───────────────────────────── */
+/* ── Stat card (Rubik value + label + delta) ───────────────────────────── */
 export function Stat({
   label,
   value,
@@ -67,25 +67,25 @@ export function Stat({
   dtone?: "up" | "down"
 }) {
   return (
-    <div className="rounded-lg border border-border bg-surface px-5 py-[1.1rem]">
+    <div className="rounded-lg border border-border px-5 py-[1.1rem]">
       <div
         className={cn(
-          "font-display text-[2.3rem] leading-none",
-          tone === "positive" && "text-brand",
+          "font-display text-[2.3rem] font-semibold leading-none",
+          tone === "positive" && "text-success",
           tone === "negative" && "text-danger",
           !tone && "text-ink",
         )}
       >
         {value}
       </div>
-      <div className="mt-1.5 font-ui text-[0.68rem] font-bold tracking-[0.1em] text-ink-muted uppercase">
+      <div className="mt-1.5 font-ui text-[0.68rem] font-medium tracking-[0.1em] text-ink-muted uppercase">
         {label}
       </div>
       {delta ? (
         <div
           className={cn(
             "mt-2 font-body text-[0.76rem]",
-            dtone === "up" && "text-brand",
+            dtone === "up" && "text-success",
             dtone === "down" && "text-danger",
             !dtone && "text-ink-muted",
           )}
@@ -112,9 +112,7 @@ export function Bar({
       <div
         className={cn(
           "h-full rounded transition-[width] duration-500",
-          warn
-            ? "bg-warning"
-            : "bg-brand shadow-[0_0_8px_var(--green-glow)]",
+          warn ? "bg-warning" : "bg-info",
         )}
         style={{ width: Math.min(Math.max(value, 0), 100) + "%" }}
       />
@@ -141,7 +139,7 @@ export function NumInput({
         value={value}
         onChange={(e) => onChange(Number(e.target.value) || 0)}
         className={cn(
-          "w-full rounded-md border border-border bg-input-bg py-2.5 text-right font-body text-sm text-ink tabular-nums outline-none transition-[border-color,box-shadow] placeholder:text-ink-disabled focus:border-brand focus:shadow-[0_0_0_3px_var(--green-glow)]",
+          "w-full rounded-md border border-input bg-input-bg py-2.5 text-right font-body text-sm text-ink tabular-nums outline-none transition-colors placeholder:text-ink-disabled focus:border-border-focus",
           small ? "pr-7 pl-2.5" : "pr-12 pl-3",
         )}
       />
@@ -178,7 +176,7 @@ export function Segmented<T extends string>({
   return (
     <div
       className={cn(
-        "inline-flex gap-1 rounded-pill border border-border bg-surface p-1",
+        "inline-flex gap-1 rounded-pill border border-border bg-transparent p-1",
         className,
       )}
     >
@@ -190,10 +188,10 @@ export function Segmented<T extends string>({
             type="button"
             onClick={() => onChange(o.value)}
             className={cn(
-              "inline-flex items-center gap-1.5 rounded-pill px-4 py-1.5 font-ui text-[0.76rem] font-bold transition-colors",
+              "inline-flex items-center gap-1.5 rounded-pill px-4 py-1.5 font-ui text-[0.76rem] font-medium transition-colors",
               active
-                ? "bg-brand text-ink-inverted shadow-glow"
-                : "text-ink-muted hover:text-ink",
+                ? "border border-border-second bg-surface-nested text-ink"
+                : "border border-transparent text-ink-muted hover:text-ink",
             )}
           >
             {o.label}
@@ -201,7 +199,7 @@ export function Segmented<T extends string>({
               <span
                 className={cn(
                   "rounded-full px-1.5 text-[0.66rem]",
-                  active ? "bg-ink-inverted/20" : "bg-accent",
+                  active ? "bg-surface-hover" : "bg-accent",
                 )}
               >
                 {o.badge}
@@ -226,7 +224,7 @@ export function LinkBtn({
     <button
       type="button"
       onClick={onClick}
-      className="inline-flex items-center gap-1.5 font-ui text-[0.7rem] font-bold tracking-[0.05em] text-brand uppercase transition-opacity hover:opacity-80"
+      className="inline-flex items-center gap-1.5 font-ui text-[0.7rem] font-medium tracking-[0.05em] text-info uppercase transition-opacity hover:opacity-80"
     >
       {children}
     </button>
@@ -244,7 +242,7 @@ export function TeamChip({
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-pill border border-border bg-accent font-ui font-bold tracking-[0.03em] whitespace-nowrap text-ink-subtle uppercase",
+        "inline-flex items-center rounded-pill border border-border bg-accent font-ui font-medium tracking-[0.03em] whitespace-nowrap text-ink-subtle uppercase",
         sm ? "px-2 py-0.5 text-[0.58rem]" : "px-2.5 py-1 text-[0.62rem]",
       )}
     >
@@ -264,10 +262,10 @@ export function CatTag({
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-sm border px-2 py-1 font-ui text-[0.64rem] font-bold tracking-[0.04em] uppercase",
+        "inline-flex items-center rounded-sm border px-2 py-1 font-ui text-[0.64rem] font-medium tracking-[0.04em] uppercase",
         flagged
           ? "border-team-away/20 bg-team-away/10 text-team-away"
-          : "border-neutral/20 bg-neutral/10 text-neutral",
+          : "border-brand-blue-600/30 bg-brand-blue-600/10 text-brand-blue-600",
       )}
     >
       {children}

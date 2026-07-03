@@ -9,8 +9,8 @@ const variants = {
   success: "border-success/25 bg-success/10 text-success",
   warning: "border-warning/25 bg-warning/10 text-warning",
   danger: "border-danger/25 bg-danger/10 text-danger",
-  info: "border-info/25 bg-info/10 text-info",
-  neutral: "border-neutral/25 bg-neutral/10 text-neutral",
+  info: "border-brand-blue-600/30 bg-brand-blue-600/10 text-brand-blue-600",
+  neutral: "border-brand-blue-600/30 bg-brand-blue-600/10 text-brand-blue-600",
   home: "border-team-home/25 bg-team-home/10 text-team-home",
   away: "border-team-away/25 bg-team-away/10 text-team-away",
 } as const
@@ -44,7 +44,7 @@ export function Badge({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-pill border px-2.5 py-0.5 font-ui text-[0.65rem] font-bold tracking-[0.08em] whitespace-nowrap uppercase",
+        "inline-flex items-center gap-1.5 rounded-pill border px-2.5 py-0.5 font-ui text-[0.65rem] font-medium tracking-[0.08em] whitespace-nowrap uppercase",
         auto ? cn("border-transparent", auto.bg, auto.text) : variants[variant],
         className,
       )}

@@ -24,15 +24,17 @@ function Figure({
       <div
         className={cn(
           "leading-none tabular-nums",
-          big ? "font-display text-[1.7rem]" : "font-ui text-[0.95rem] font-bold",
-          tone === "brand" && "text-brand",
+          big
+            ? "font-display text-[1.7rem] font-semibold"
+            : "font-ui text-[0.95rem] font-medium",
+          tone === "brand" && "text-success",
           tone === "danger" && "text-danger",
           !tone && "text-ink",
         )}
       >
         {value}
       </div>
-      <div className="mt-1 font-ui text-[0.6rem] font-bold tracking-[0.08em] text-ink-disabled uppercase">
+      <div className="mt-1 font-ui text-[0.6rem] font-medium tracking-[0.08em] text-ink-disabled uppercase">
         {label}
       </div>
     </div>
@@ -59,7 +61,7 @@ export function SeasonSelectScreen() {
           <button
             type="button"
             onClick={() => navigate("/budget/nouvelle")}
-            className="inline-flex items-center gap-2 rounded-md bg-brand px-5 py-3 font-ui text-sm font-bold text-ink-inverted shadow-glow transition-[transform,box-shadow] hover:-translate-y-0.5 hover:shadow-[0_12px_40px_var(--green-glow)]"
+            className="inline-flex items-center gap-2 rounded-md bg-brand px-5 py-3 font-ui text-sm font-medium text-ink-inverted shadow-glow transition-colors hover:bg-brand-dim"
           >
             <Plus size={16} /> Ajouter une saison
           </button>
@@ -74,18 +76,14 @@ export function SeasonSelectScreen() {
       <button
         type="button"
         onClick={() => navigate("/budget/dashboard")}
-        className="group block w-full rounded-lg border border-brand/25 p-6 text-left shadow-glow transition-[transform,box-shadow] hover:-translate-y-1 hover:shadow-[0_16px_50px_var(--green-glow)]"
-        style={{
-          background:
-            "linear-gradient(160deg, var(--green-glow), var(--surface))",
-        }}
+        className="group block w-full rounded-lg border border-border p-6 text-left shadow-card transition-colors hover:border-border-strong"
       >
         <div className="flex items-start justify-between gap-4">
-          <span className="inline-flex items-center gap-2 rounded-pill border border-brand/25 bg-brand/10 px-2.5 py-1 font-ui text-[0.64rem] font-bold tracking-[0.08em] text-brand uppercase">
-            <span className="size-1.5 rounded-full bg-brand shadow-[0_0_8px_var(--green-glow)]" />
+          <span className="inline-flex items-center gap-2 rounded-pill border border-success/25 bg-success/10 px-2.5 py-1 font-ui text-[0.64rem] font-medium tracking-[0.08em] text-success uppercase">
+            <span className="size-1.5 rounded-full bg-success" />
             Saison active
           </span>
-          <span className="inline-flex items-center gap-1.5 font-ui text-[0.72rem] font-bold tracking-[0.05em] text-brand uppercase">
+          <span className="inline-flex items-center gap-1.5 font-ui text-[0.72rem] font-medium tracking-[0.05em] text-info uppercase">
             Tableau de bord
             <ArrowRight
               size={15}
@@ -94,7 +92,7 @@ export function SeasonSelectScreen() {
           </span>
         </div>
 
-        <h2 className="mt-3 font-ui text-[1.6rem] font-bold leading-tight tracking-tight text-ink">
+        <h2 className="mt-3 font-ui text-[1.6rem] font-medium leading-tight tracking-tight text-ink">
           {budget.season}
         </h2>
         <p className="mt-1.5 font-body text-[0.82rem] text-ink-muted">
@@ -114,7 +112,7 @@ export function SeasonSelectScreen() {
       </button>
 
       {/* ── Archived seasons — read-only, non-clickable ───────────────────── */}
-      <div className="mt-8 mb-3 flex items-center gap-2 font-ui text-[0.62rem] font-bold tracking-[0.1em] text-ink-disabled uppercase">
+      <div className="mt-8 mb-3 flex items-center gap-2 font-ui text-[0.62rem] font-medium tracking-[0.1em] text-ink-disabled uppercase">
         Saisons précédentes
         <span className="rounded-full bg-accent px-1.5 py-0.5 text-[0.6rem] text-ink-muted">
           {seasons.length}
@@ -129,20 +127,20 @@ export function SeasonSelectScreen() {
             <article
               key={s.id}
               aria-disabled="true"
-              className="flex cursor-default flex-col rounded-lg border border-border bg-surface p-5"
+              className="flex cursor-default flex-col rounded-lg border border-border p-5"
             >
               <div className="flex items-center justify-between gap-2">
-                <span className="inline-flex items-center gap-1.5 rounded-pill border border-border bg-accent px-2.5 py-1 font-ui text-[0.6rem] font-bold tracking-[0.08em] text-ink-muted uppercase">
+                <span className="inline-flex items-center gap-1.5 rounded-pill border border-border bg-accent px-2.5 py-1 font-ui text-[0.6rem] font-medium tracking-[0.08em] text-ink-muted uppercase">
                   <Lock size={11} /> Archivée
                 </span>
                 {deficit ? (
-                  <span className="rounded-sm border border-danger/20 bg-danger/10 px-1.5 py-0.5 font-ui text-[0.58rem] font-bold tracking-[0.04em] text-danger uppercase">
+                  <span className="rounded-sm border border-danger/20 bg-danger/10 px-1.5 py-0.5 font-ui text-[0.58rem] font-medium tracking-[0.04em] text-danger uppercase">
                     Déficit
                   </span>
                 ) : null}
               </div>
 
-              <h3 className="mt-3 font-ui text-xl font-bold leading-tight tracking-tight text-ink-subtle">
+              <h3 className="mt-3 font-ui text-xl font-medium leading-tight tracking-tight text-ink-subtle">
                 {s.label}
               </h3>
               <p className="mt-1 font-body text-[0.76rem] text-ink-disabled">
@@ -190,7 +188,7 @@ function Row({
         className={cn(
           "font-ui tabular-nums",
           strong ? "text-[0.9rem] font-bold" : "font-semibold",
-          tone === "brand" && "text-brand",
+          tone === "brand" && "text-success",
           tone === "danger" && "text-danger",
           !tone && "text-ink-subtle",
         )}

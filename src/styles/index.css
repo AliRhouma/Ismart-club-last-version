@@ -1,5 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap");
 @import "tailwindcss";
-@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=DM+Sans:wght@400;500&display=swap");
 
 /* ===========================================================================
    iSmart Coach — Design Tokens
@@ -15,7 +15,7 @@
 
 :root {
   /* ---- Base ---- */
-  font-family: "DM Sans", system-ui, sans-serif;
+  font-family: "Rubik", system-ui, sans-serif;
   line-height: 1.5;
   font-weight: 400;
   font-synthesis: none;
@@ -28,26 +28,66 @@
   --green: #00ff87; /* CTAs, active states, accent text, home-team data */
   --green-dim: #00cc6a; /* hover / secondary green */
   --green-glow: rgba(0, 255, 135, 0.15);
+  --green-button: #4eaf60; /* softer "confirm/go" green (additive — NOT the neon --primary) */
 
-  /* ---- Surfaces (deep → raised) ----------------------------------------- */
-  --surface-deep: #0e0e0e; /* sidebars, footers, app shell */
+  /* ---- Brand blue scale (2026 refresh) — additive product accent ----------
+     A saturated blue brand ramp from the new palette. --primary stays neon
+     green; this scale gives links / brand marks / accents a richer blue than
+     the lighter --info (#60a5fa). Use bg-brand-blue-600 / text-brand-blue-600. */
+  --brand-blue-50: #10243e; /* rgb(16,36,62)  — tint / soft background */
+  --brand-blue-500: #0954a5; /* rgb(9,84,165)  — pressed / deep */
+  --brand-blue-600: #0091ff; /* rgb(0,145,255) — primary blue accent */
+  --brand-blue-700: #369eff; /* rgb(54,158,255)— hover */
+
+  /* ---- Purple — AI / special-action accent (new) ------------------------ */
+  --purple: #7f77dd; /* rgb(127,119,221) — AI / generative actions */
+  --purple-dim: #534ab7; /* rgb(83,74,183)  — pressed / deep */
+
+  /* ---- Surfaces — TWO structural fills only --------------------------------
+     #131313 = the page (--background), #181818 = any element on it (--surface).
+     Never a third structural shade: separate nested regions with a BORDER. The
+     only nested fill allowed inside a #181818 card is #1d1d1d (--surface-nested).
+     The deep/muted/panel tokens are kept as back-compat aliases but resolve to
+     one of these two so the "two surfaces" rule holds. */
+  --surface-deep: #0e0e0e; /* app-shell chrome only (very rare) */
   --surface-subtle: #131313; /* primary page background */
-  --surface-muted: #151515; /* alternating section background */
-  --surface: #181818; /* card surfaces */
-  --surface-panel: #161616; /* app panel / sidebar background */
-  --input-bg: rgba(255, 255, 255, 0.04);
+  --surface-muted: #181818; /* collapsed onto --surface (no 3rd shade) */
+  --surface: #181818; /* card / element surface */
+  --surface-nested: #1d1d1d; /* the ONLY fill allowed nested inside a card */
+  --surface-panel: #181818; /* sidebar / panels — same as --surface */
+  --surface-hover: rgba(255, 255, 255, 0.05); /* hover overlay, not a new layer */
+  --input-bg: transparent; /* inputs are empty + bordered, not filled */
 
-  /* ---- Ink (text) ------------------------------------------------------- */
-  --ink: #ffffff; /* primary text */
-  --ink-subtle: #cbd5e1; /* secondary emphasis */
-  --ink-muted: #969696; /* body / secondary text */
-  --ink-disabled: #5a5a5a; /* disabled / placeholder text */
-  --ink-inverted: #1e1e1e; /* text on green surfaces */
+  /* ---- Neutral scale — the canonical gray ramp (TRUE neutral, R=G=B) ----------
+     One ordered family of grays for the whole UI. Dark steps are surfaces /
+     borders, light steps are text. Pick a step per role (see Ink below).
+     Never cool/slate/blue, never warm — strictly neutral. */
+  --neutral-0: #131313; /* page background (= --surface-subtle) */
+  --neutral-50: #181818; /* element surface (= --surface) */
+  --neutral-100: #242424;
+  --neutral-150: #303030; /* mid separators (= --border-second) */
+  --neutral-200: #252525; /* default border (= --border) */
+  --neutral-300: #525252; /* disabled / placeholder text */
+  --neutral-400: #737373;
+  --neutral-500: #a3a3a3; /* body / most-used secondary text */
+  --neutral-600: #d4d4d4; /* secondary-emphasis text */
+  --neutral-700: #e5e5e5;
+  --neutral-800: #f5f5f5;
+  --neutral-900: #fafafa; /* primary text / titles */
+  --neutral-950: #ffffff; /* max-emphasis white */
+
+  /* ---- Ink (text) — chosen steps of the neutral scale ----------------------- */
+  --ink: var(--neutral-900); /* primary text / titles — #fafafa */
+  --ink-subtle: var(--neutral-600); /* secondary emphasis — #d4d4d4 */
+  --ink-muted: var(--neutral-500); /* body / secondary, most used — #a3a3a3 */
+  --ink-disabled: var(--neutral-300); /* disabled / placeholder — #525252 */
+  --ink-inverted: #1e1e1e; /* text on green surfaces (near-black) */
 
   /* ---- Data encoding (consistent across all charts / heatmaps) ---------- */
   --team-home: #00ff87; /* home / your team — always green */
-  --team-away: #ff4d6d; /* away / opponent — always red-pink */
-  --neutral: #60a5fa; /* neutral events, possession, referee */
+  --team-away: #e5484d; /* away / opponent — always red */
+  /* neutral data events (possession/referee) → use the blue accent --info.
+     "neutral" now names the gray scale above (--neutral-0…950), not a color. */
 
   /* ---- Heatmap gradient stops ------------------------------------------- */
   --heat-0: rgba(0, 255, 135, 0); /* no activity */
@@ -59,51 +99,79 @@
   /* ---- Status ----------------------------------------------------------- */
   --success: #00ff87;
   --warning: #e6a817; /* amber — also premium badges */
-  --danger: #ff4d6d;
+  --danger: #e5484d; /* true red — errors, overdue, money-out, destructive */
   --info: #60a5fa;
+
+  /* ---- Status (2026 refresh) — additive softer variants from new palette --
+     Kept ALONGSIDE the originals above (not a replacement). Use these where a
+     calmer, less-neon status reads better; the originals stay valid.
+     NB: --warning-600 is a CYAN per the new spec, distinct from amber --warning. */
+  --success-600: #46a758; /* rgb(70,167,88)   — soft success green */
+  --error-600: #e5484d; /* rgb(229,72,77)   — error red */
+  --warning-600: #68ddfd; /* rgb(104,221,253) — cyan info/warning highlight */
+
+  /* ---- Accent (blue) — the single NON-button accent --------------------
+     Tags, selected controls, links, active indicators, stat deltas. Green is
+     reserved for buttons + success status; blue carries every other cue. */
+  --accent: #60a5fa;
+  --accent-soft: rgba(96, 165, 250, 0.15);
+  --accent-text: #60a5fa;
 
   /* ---- Misc accents ----------------------------------------------------- */
   --blue: #3b82f6; /* secondary accent — sparse use */
   --amber: #e6a817; /* premium / gold badges */
 
-  /* ---- Borders, rings, inputs ------------------------------------------- */
-  --border: rgba(255, 255, 255, 0.07);
-  --border-hover: rgba(255, 255, 255, 0.15);
+  /* ---- New-palette named aliases (point at existing tokens — same values) -
+     Provided so code written against the new spec's names resolves correctly. */
+  --default-font: var(--ink); /* primary text  — #fafafa */
+  --subtext-color: var(--ink-muted); /* secondary text — #a3a3a3 */
+  --neutral-border: var(--border); /* default edge   — #252525 */
+  --default-background: var(--surface-subtle); /* page bg — #131313 */
+
+  /* ---- Borders, rings, inputs ------------------------------------------------
+     Three-style SOLID-gray system on the dark surfaces. */
+  --border: #252525; /* Neutral Border — default edge everywhere */
+  --border-second: #303030; /* Second Border — mid-weight separators */
+  --border-strong: #404040; /* Primary Border — inputs / hover / emphasis */
+  --border-hover: #404040;
+  --border-focus: #5a5a5a; /* focus = a lighter gray, never green or blue */
   --border-green: rgba(0, 255, 135, 0.25);
-  --input-border: rgba(255, 255, 255, 0.11);
-  --ring: #00ff87;
+  --input-border: #252525; /* input default edge = neutral border; focus → --border-focus, color only */
+  --ring: rgba(255, 255, 255, 0.08); /* faint white focus ring, not colored */
 
-  /* ---- Fonts ------------------------------------------------------------ */
-  --font-display: "Bebas Neue", sans-serif; /* display / stat numbers only */
-  --font-ui: "Inter", sans-serif; /* buttons, tags, nav, table headers */
-  --font-body: "DM Sans", sans-serif; /* body, inputs, rows, timestamps */
+  /* ---- Fonts — Rubik for everything; mono for numeric/IDs --------------- */
+  --font-display: "Rubik", sans-serif; /* large stat numbers */
+  --font-ui: "Rubik", sans-serif; /* buttons, tags, nav, table headers */
+  --font-body: "Rubik", sans-serif; /* body, inputs, rows, timestamps */
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 
-  /* ---- Radii ------------------------------------------------------------ */
-  --radius-sm: 6px; /* inputs, icon buttons */
+  /* ---- Radii (2026 refresh: sm 4 · md/default 8 · lg 12 · full 9999) ----- */
+  --radius-sm: 4px; /* inputs, icon buttons (was 6) */
   --radius-md: 8px; /* buttons */
   --radius: 8px; /* legacy shadcn default */
-  --radius-lg: 16px; /* cards */
-  --radius-xl: 20px; /* modals */
+  --radius-lg: 12px; /* cards (was 16) */
+  --radius-xl: 20px; /* modals — kept (new spec omits xl) */
   --radius-pill: 100px; /* pills */
+  --radius-full: 9999px; /* fully round — new-spec "full" */
 
   /* ---- Shadows ---------------------------------------------------------- */
   --shadow-glow: 0 0 40px rgba(0, 255, 135, 0.1);
   --shadow-card: 0 12px 40px rgba(0, 255, 135, 0.06);
   --shadow-deep: 0 20px 50px rgba(0, 0, 0, 0.5);
-  --shadow-focus: 0 0 0 3px rgba(0, 255, 135, 0.18);
+  --shadow-focus: 0 0 0 3px rgba(255, 255, 255, 0.08); /* neutral, not green */
 
   /* ---- shadcn semantic aliases (mapped to tokens above) ----------------- */
   --background: var(--surface-subtle);
   --foreground: var(--ink);
   --card: var(--surface);
   --card-foreground: var(--ink);
-  --popover: var(--surface-panel);
+  --popover: var(--surface-subtle); /* floating chips read as #131313 + border */
   --popover-foreground: var(--ink);
   --primary: var(--green);
   --primary-foreground: var(--ink-inverted);
-  --secondary: #1e1e1e;
+  --secondary: var(--surface-nested);
   --secondary-foreground: var(--ink-subtle);
-  --muted: #1c1c1c;
+  --muted: var(--surface-nested);
   --muted-foreground: var(--ink-muted);
   --accent-bg: rgba(255, 255, 255, 0.06);
   --accent-bg-foreground: var(--ink);
@@ -118,9 +186,19 @@
   /* ---- Brand & data colors ---- */
   --color-brand: var(--green);
   --color-brand-dim: var(--green-dim);
+  --color-green-button: var(--green-button);
+
+  /* ---- Brand blue scale (new) — bg-/text-/border-brand-blue-NNN ---- */
+  --color-brand-blue-50: var(--brand-blue-50);
+  --color-brand-blue-500: var(--brand-blue-500);
+  --color-brand-blue-600: var(--brand-blue-600);
+  --color-brand-blue-700: var(--brand-blue-700);
+
+  /* ---- Purple — AI / special accent (new) ---- */
+  --color-purple: var(--purple);
+  --color-purple-dim: var(--purple-dim);
   --color-team-home: var(--team-home);
   --color-team-away: var(--team-away);
-  --color-neutral: var(--neutral);
   --color-heat-1: var(--heat-1);
   --color-heat-2: var(--heat-2);
   --color-heat-3: var(--heat-3);
@@ -131,12 +209,29 @@
   --color-surface-deep: var(--surface-deep);
   --color-surface-subtle: var(--surface-subtle);
   --color-surface-muted: var(--surface-muted);
+  --color-surface-nested: var(--surface-nested);
   --color-surface-panel: var(--surface-panel);
+  --color-surface-hover: var(--surface-hover);
   --color-ink: var(--ink);
   --color-ink-subtle: var(--ink-subtle);
   --color-ink-muted: var(--ink-muted);
   --color-ink-disabled: var(--ink-disabled);
   --color-ink-inverted: var(--ink-inverted);
+
+  /* ---- Neutral scale (bg-/text-/border-neutral-NNN) — pick a step directly ---- */
+  --color-neutral-0: var(--neutral-0);
+  --color-neutral-50: var(--neutral-50);
+  --color-neutral-100: var(--neutral-100);
+  --color-neutral-150: var(--neutral-150);
+  --color-neutral-200: var(--neutral-200);
+  --color-neutral-300: var(--neutral-300);
+  --color-neutral-400: var(--neutral-400);
+  --color-neutral-500: var(--neutral-500);
+  --color-neutral-600: var(--neutral-600);
+  --color-neutral-700: var(--neutral-700);
+  --color-neutral-800: var(--neutral-800);
+  --color-neutral-900: var(--neutral-900);
+  --color-neutral-950: var(--neutral-950);
 
   /* ---- Status ---- */
   --color-success: var(--success);
@@ -145,6 +240,15 @@
   --color-info: var(--info);
   --color-amber: var(--amber);
   --color-blue: var(--blue);
+
+  /* ---- Status (new softer variants) ---- */
+  --color-success-600: var(--success-600);
+  --color-error-600: var(--error-600);
+  --color-warning-600: var(--warning-600);
+
+  /* ---- Accent (blue) — non-button accent ---- */
+  --color-accent-blue: var(--accent);
+  --color-accent-soft: var(--accent-soft);
 
   /* ---- shadcn semantic aliases ---- */
   --color-background: var(--background);
@@ -164,6 +268,9 @@
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
+  --color-border-second: var(--border-second);
+  --color-border-strong: var(--border-strong);
+  --color-border-focus: var(--border-focus);
   --color-input: var(--input-border);
   --color-input-bg: var(--input-bg);
   --color-ring: var(--ring);
@@ -179,6 +286,7 @@
   --radius-lg: var(--radius-lg);
   --radius-xl: var(--radius-xl);
   --radius-pill: var(--radius-pill);
+  --radius-full: var(--radius-full);
 
   /* ---- Shadows ---- */
   --shadow-glow: var(--shadow-glow);
@@ -209,17 +317,17 @@
   h4,
   h5,
   h6 {
-    font-family: var(--font-ui); /* Inter — use .font-display for Bebas hero/stats */
+    font-family: var(--font-ui); /* Rubik; weight comes from utilities, not here */
     color: var(--ink);
-    letter-spacing: 0.01em;
+    letter-spacing: 0;
   }
   *:focus-visible {
-    outline: 2px solid var(--green);
+    outline: 2px solid var(--border-focus); /* neutral gray, never green/blue */
     outline-offset: 2px;
     border-radius: var(--radius-sm);
   }
   ::selection {
-    background: var(--green-glow);
+    background: var(--accent-soft);
     color: var(--ink);
   }
 }
@@ -250,5 +358,19 @@
   }
   .animate-toast-in {
     animation: toast-in 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  /* Results reveal — a quiet fade + rise (design-system §12 motion). */
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .animate-fade-up {
+    animation: fade-up 0.32s cubic-bezier(0.4, 0, 0.2, 1);
   }
 }

@@ -18,6 +18,11 @@ import {
   Target,
   Briefcase,
   Wallet,
+  WalletCards,
+  FileText,
+  Landmark,
+  ArrowLeftRight,
+  Send,
   type LucideIcon,
 } from "lucide-react"
 
@@ -85,11 +90,24 @@ export const navTree: NavNode[] = [
 
   {
     type: "group",
+    label: "Finance",
+    icon: Landmark,
+    key: "finance",
+    children: [
+      { type: "item", label: "Transactions", path: "/finance/transactions", icon: ArrowLeftRight },
+      { type: "item", label: "Demander une transaction", path: "/finance/demande", icon: Send },
+      { type: "item", label: "Budget", path: "/budget", icon: Wallet },
+      { type: "item", label: "Budget 2", path: "/budget2", icon: WalletCards },
+    ],
+  },
+
+  {
+    type: "group",
     label: "Gestion",
     icon: Briefcase,
     key: "gestion",
     children: [
-      { type: "item", label: "Budget", path: "/budget", icon: Wallet },
+      { type: "item", label: "Documents", path: "/documents", icon: FileText },
     ],
   },
 ]

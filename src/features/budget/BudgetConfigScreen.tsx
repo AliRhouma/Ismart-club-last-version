@@ -1,15 +1,16 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { ArrowLeft, ArrowRight, Check, ChevronRight, Plus, X } from "lucide-react"
+import { ArrowRight, Check, ChevronRight, Plus, X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { fmt, fmtShort, r } from "@/lib/format"
 import { useData } from "@/data/useData"
 import { sumLines, type Line, type LineList } from "@/data/seed/budget"
+import { BackButton } from "@/components/kit/BackButton"
 import { Bar, LinkBtn, NumInput, PageHead, Panel, Segmented } from "@/features/budget/ui"
 
 const textInputCls =
-  "w-full rounded-md border border-border bg-input-bg px-3.5 py-2.5 font-body text-sm text-ink outline-none transition-[border-color,box-shadow] placeholder:text-ink-disabled focus:border-brand focus:shadow-[0_0_0_3px_var(--green-glow)]"
+  "w-full rounded-md border border-input bg-input-bg px-3.5 py-2.5 font-body text-sm text-ink outline-none transition-colors placeholder:text-ink-disabled focus:border-border-focus"
 const derivedCls =
   "flex items-center justify-end rounded-md border border-border bg-input-bg px-3.5 py-2.5 font-body text-[0.84rem] text-ink-muted tabular-nums whitespace-nowrap"
 const btnXCls =
@@ -22,8 +23,8 @@ function SumPctTag({ sum }: { sum: number }) {
   return (
     <span
       className={cn(
-        "rounded-pill px-2 py-1 font-ui text-[0.66rem] font-bold whitespace-nowrap",
-        ok ? "bg-brand/10 text-brand" : "bg-warning/10 text-warning",
+        "rounded-pill px-2 py-1 font-ui text-[0.66rem] font-medium whitespace-nowrap",
+        ok ? "bg-success/10 text-success" : "bg-warning/10 text-warning",
       )}
     >
       Σ {sum}%
@@ -43,8 +44,8 @@ function GlobalRow({
   sum: number
 }) {
   return (
-    <div className="mb-3.5 grid grid-cols-[1fr_170px_auto] items-center gap-2.5 rounded-md border border-brand/25 bg-brand/[0.03] px-3.5 py-2.5">
-      <div className="font-ui text-[0.74rem] font-bold tracking-[0.04em] text-ink-subtle uppercase">
+    <div className="mb-3.5 grid grid-cols-[1fr_170px_auto] items-center gap-2.5 rounded-md border border-border bg-surface-nested px-3.5 py-2.5">
+      <div className="font-ui text-[0.74rem] font-medium tracking-[0.04em] text-ink-subtle uppercase">
         {label}
       </div>
       <NumInput value={value} suffix="TND" onChange={onChange} />
@@ -116,7 +117,7 @@ function HeadRow({ gridClass, cols }: { gridClass: string; cols: string[] }) {
   return (
     <div
       className={cn(
-        "grid gap-2.5 px-0.5 pb-1.5 font-ui text-[0.6rem] font-bold tracking-[0.06em] text-ink-disabled uppercase",
+        "grid gap-2.5 px-0.5 pb-1.5 font-ui text-[0.6rem] font-medium tracking-[0.06em] text-ink-disabled uppercase",
         gridClass,
       )}
     >
@@ -168,7 +169,7 @@ const SEED_SUBS: Record<string, { label: string; amount: number }[]> = {
 }
 
 const subInputCls =
-  "w-full rounded-md border border-border bg-input-bg px-3 py-2 font-body text-[0.82rem] text-ink-subtle outline-none transition-[border-color,box-shadow] placeholder:text-ink-disabled focus:border-brand focus:shadow-[0_0_0_3px_var(--green-glow)]"
+  "w-full rounded-md border border-input bg-input-bg px-3 py-2 font-body text-[0.82rem] text-ink-subtle outline-none transition-colors placeholder:text-ink-disabled focus:border-border-focus"
 
 function SubBudgets({ lineId }: { lineId: string }) {
   const seeded = SEED_SUBS[lineId]
@@ -192,7 +193,7 @@ function SubBudgets({ lineId }: { lineId: string }) {
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="inline-flex items-center gap-1 font-ui text-[0.62rem] font-bold tracking-[0.05em] text-ink-disabled uppercase transition-colors hover:text-ink-muted"
+        className="inline-flex items-center gap-1 font-ui text-[0.62rem] font-medium tracking-[0.05em] text-ink-disabled uppercase transition-colors hover:text-ink-muted"
       >
         <ChevronRight
           size={12}
@@ -239,7 +240,7 @@ function SubBudgets({ lineId }: { lineId: string }) {
             <button
               type="button"
               onClick={add}
-              className="inline-flex items-center gap-1 font-ui text-[0.64rem] font-bold tracking-[0.04em] text-brand uppercase transition-opacity hover:opacity-80"
+              className="inline-flex items-center gap-1 font-ui text-[0.64rem] font-medium tracking-[0.04em] text-info uppercase transition-opacity hover:opacity-80"
             >
               <Plus size={12} /> Sous-poste
             </button>
@@ -300,19 +301,13 @@ export function BudgetConfigScreen() {
 
   return (
     <>
-      <button
-        type="button"
-        onClick={() => navigate("/budget")}
-        className="mb-4 inline-flex items-center gap-1.5 rounded-md border border-border px-3 py-2 font-ui text-sm font-semibold text-ink transition-colors hover:border-[var(--border-hover)] hover:bg-accent"
-      >
-        <ArrowLeft size={15} /> Saisons
-      </button>
+      <BackButton to="/budget" label="Saisons" />
 
       <PageHead
         title="Nouvelle saison"
         action={
           <div className="flex flex-col gap-1.5 sm:items-end">
-            <span className="font-ui text-[0.62rem] font-bold tracking-[0.08em] text-ink-disabled uppercase">
+            <span className="font-ui text-[0.62rem] font-medium tracking-[0.08em] text-ink-disabled uppercase">
               Mode de saisie
             </span>
             <Segmented
@@ -333,7 +328,7 @@ export function BudgetConfigScreen() {
           <Panel title="Informations">
             <div className="flex flex-col gap-4 sm:flex-row">
               <label className="flex flex-1 flex-col gap-1.5">
-                <span className="font-ui text-[0.7rem] font-bold tracking-[0.06em] text-ink-muted uppercase">
+                <span className="font-ui text-[0.7rem] font-medium tracking-[0.06em] text-ink-muted uppercase">
                   Nom de la saison
                 </span>
                 <input
@@ -343,7 +338,7 @@ export function BudgetConfigScreen() {
                 />
               </label>
               <label className="flex flex-col gap-1.5">
-                <span className="font-ui text-[0.7rem] font-bold tracking-[0.06em] text-ink-muted uppercase">
+                <span className="font-ui text-[0.7rem] font-medium tracking-[0.06em] text-ink-muted uppercase">
                   Devise
                 </span>
                 <input
@@ -386,9 +381,9 @@ export function BudgetConfigScreen() {
                 <SubBudgets lineId={it.id} />
               </div>
             ))}
-            <div className="mt-3 flex items-center justify-between border-t border-border pt-3 font-ui text-[0.82rem] font-bold">
+            <div className="mt-3 flex items-center justify-between border-t border-border pt-3 font-ui text-[0.82rem] font-medium">
               <span>Total recettes</span>
-              <b className="text-[0.95rem] text-brand">{fmt(totalIncome)}</b>
+              <b className="text-[0.95rem] text-success">{fmt(totalIncome)}</b>
             </div>
           </Panel>
 
@@ -431,7 +426,7 @@ export function BudgetConfigScreen() {
                 <SubBudgets lineId={it.id} />
               </div>
             ))}
-            <div className="mt-3 flex items-center justify-between border-t border-border pt-3 font-ui text-[0.82rem] font-bold">
+            <div className="mt-3 flex items-center justify-between border-t border-border pt-3 font-ui text-[0.82rem] font-medium">
               <span>Total dépenses</span>
               <b className="text-[0.95rem] text-danger">{fmt(totalExpense)}</b>
             </div>
@@ -451,11 +446,11 @@ export function BudgetConfigScreen() {
             }
           >
             {isPercent ? (
-              <div className="mb-3.5 grid grid-cols-[1fr_170px_auto] items-center gap-2.5 rounded-md border border-brand/25 bg-brand/[0.03] px-3.5 py-2.5">
-                <div className="font-ui text-[0.74rem] font-bold tracking-[0.04em] text-ink-subtle uppercase">
+              <div className="mb-3.5 grid grid-cols-[1fr_170px_auto] items-center gap-2.5 rounded-md border border-border bg-surface-nested px-3.5 py-2.5">
+                <div className="font-ui text-[0.74rem] font-medium tracking-[0.04em] text-ink-subtle uppercase">
                   Budget total à répartir
                 </div>
-                <div className="text-right font-ui text-sm font-bold text-ink tabular-nums">
+                <div className="text-right font-ui text-sm font-medium text-ink tabular-nums">
                   {fmt(globalExpense)}
                 </div>
                 <SumPctTag sum={sumPct(teams)} />
@@ -477,7 +472,7 @@ export function BudgetConfigScreen() {
               className={cn(
                 "mt-3 flex items-center gap-1.5 rounded-md border px-3 py-2.5 font-body text-[0.78rem]",
                 balanced
-                  ? "border-brand/25 bg-brand/[0.06] text-brand"
+                  ? "border-success/25 bg-success/[0.06] text-success"
                   : "border-warning/25 bg-warning/[0.07] text-warning",
               )}
             >
@@ -499,13 +494,13 @@ export function BudgetConfigScreen() {
 
         {/* ── Summary ── */}
         <aside className="lg:sticky lg:top-0">
-          <div className="rounded-lg border border-border bg-surface p-5">
-            <div className="mb-4 font-ui text-[0.78rem] font-bold tracking-[0.06em] text-ink uppercase">
+          <div className="rounded-lg border border-border p-5">
+            <div className="mb-4 font-ui text-[0.78rem] font-medium tracking-[0.06em] text-ink uppercase">
               Résumé prévisionnel
             </div>
             <div className="flex items-center justify-between py-1.5 font-body text-[0.86rem] text-ink-muted">
               <span>Recettes</span>
-              <b className="font-ui text-[0.92rem] text-brand">{fmt(totalIncome)}</b>
+              <b className="font-ui text-[0.92rem] text-success">{fmt(totalIncome)}</b>
             </div>
             <div className="flex items-center justify-between py-1.5 font-body text-[0.86rem] text-ink-muted">
               <span>Dépenses</span>
@@ -516,8 +511,8 @@ export function BudgetConfigScreen() {
               <span>Solde prévisionnel</span>
               <b
                 className={cn(
-                  "font-display text-[1.7rem] leading-none",
-                  balance >= 0 ? "text-brand" : "text-danger",
+                  "font-display text-[1.7rem] font-semibold leading-none",
+                  balance >= 0 ? "text-success" : "text-danger",
                 )}
               >
                 {balance >= 0 ? "+" : ""}
@@ -526,14 +521,14 @@ export function BudgetConfigScreen() {
             </div>
             <div
               className={cn(
-                "my-2.5 rounded-sm p-1.5 text-center font-ui text-[0.64rem] font-bold tracking-[0.07em] uppercase",
-                balance >= 0 ? "bg-brand/10 text-brand" : "bg-danger/10 text-danger",
+                "my-2.5 rounded-sm p-1.5 text-center font-ui text-[0.64rem] font-medium tracking-[0.07em] uppercase",
+                balance >= 0 ? "bg-success/10 text-success" : "bg-danger/10 text-danger",
               )}
             >
               {balance >= 0 ? "Excédent projeté" : "Déficit projeté"}
             </div>
 
-            <div className="mt-2 mb-3 font-ui text-[0.64rem] font-bold tracking-[0.08em] text-ink-disabled uppercase">
+            <div className="mt-2 mb-3 font-ui text-[0.64rem] font-medium tracking-[0.08em] text-ink-disabled uppercase">
               Top catégories de dépense
             </div>
             {topCats.map((c) => {
@@ -542,7 +537,7 @@ export function BudgetConfigScreen() {
                 <div className="mb-2.5" key={c.id}>
                   <div className="mb-1 flex justify-between font-body text-[0.76rem] text-ink-subtle">
                     <span className="truncate">{c.label || "—"}</span>
-                    <span className="font-ui font-bold text-brand">{pct}%</span>
+                    <span className="font-ui font-medium text-info">{pct}%</span>
                   </div>
                   <Bar value={pct} sm />
                 </div>
@@ -552,7 +547,7 @@ export function BudgetConfigScreen() {
             <button
               type="button"
               onClick={() => navigate("/budget/dashboard")}
-              className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-md bg-brand px-5 py-3 font-ui text-sm font-bold text-ink-inverted transition-colors hover:bg-brand-dim"
+              className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-md bg-brand px-5 py-3 font-ui text-sm font-medium text-ink-inverted transition-colors hover:bg-brand-dim"
             >
               Enregistrer &amp; voir le dashboard <ArrowRight size={16} />
             </button>

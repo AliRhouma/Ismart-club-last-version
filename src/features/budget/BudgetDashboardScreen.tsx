@@ -45,7 +45,7 @@ type Row = Transaction & {
 const alertTone = {
   error: { dot: "bg-danger" },
   warning: { dot: "bg-warning" },
-  info: { dot: "bg-neutral" },
+  info: { dot: "bg-info" },
 } as const
 
 function AlertRow({ a }: { a: BudgetAlert }) {
@@ -102,14 +102,14 @@ export function BudgetDashboardScreen() {
             <button
               type="button"
               onClick={() => setEntryKind("out")}
-              className="inline-flex items-center gap-1.5 rounded-md border border-team-away/30 bg-team-away/[0.06] px-3.5 py-2 font-ui text-sm font-bold text-team-away transition-colors hover:bg-team-away/15"
+              className="inline-flex items-center gap-1.5 rounded-md border border-team-away/30 bg-team-away/[0.06] px-3.5 py-2 font-ui text-sm font-medium text-team-away transition-colors hover:bg-team-away/15"
             >
               <TrendingDown size={15} /> Dépense
             </button>
             <button
               type="button"
               onClick={() => setEntryKind("in")}
-              className="inline-flex items-center gap-1.5 rounded-md bg-brand px-3.5 py-2 font-ui text-sm font-bold text-ink-inverted shadow-glow transition-[transform,box-shadow] hover:-translate-y-0.5 hover:shadow-[0_12px_40px_var(--green-glow)]"
+              className="inline-flex items-center gap-1.5 rounded-md bg-brand px-3.5 py-2 font-ui text-sm font-medium text-ink-inverted shadow-glow transition-colors hover:bg-brand-dim"
             >
               <TrendingUp size={15} /> Recette
             </button>
@@ -143,9 +143,9 @@ export function BudgetDashboardScreen() {
         <div
           key={toast.id}
           role="status"
-          className="animate-toast-in fixed right-5 bottom-5 z-[120] flex items-center gap-2.5 rounded-md border border-brand/30 bg-surface px-4 py-3 shadow-deep"
+          className="animate-toast-in fixed right-5 bottom-5 z-[120] flex items-center gap-2.5 rounded-md border border-success/30 bg-surface px-4 py-3 shadow-deep"
         >
-          <span className="flex size-6 items-center justify-center rounded-full bg-brand/15 text-brand">
+          <span className="flex size-6 items-center justify-center rounded-full bg-success/15 text-success">
             <Check size={14} />
           </span>
           <span className="font-body text-[0.84rem] text-ink">{toast.msg}</span>
@@ -173,10 +173,10 @@ function FilterSelect({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         className={cn(
-          "cursor-pointer appearance-none rounded-md border bg-input-bg py-1.5 pr-7 pl-3 font-ui text-[0.72rem] font-semibold outline-none transition-colors focus:border-brand",
+          "cursor-pointer appearance-none rounded-md border bg-input-bg py-1.5 pr-7 pl-3 font-ui text-[0.72rem] font-semibold outline-none transition-colors focus:border-border-focus",
           value === "all"
-            ? "border-border text-ink-muted hover:text-ink"
-            : "border-brand/30 text-brand",
+            ? "border-input text-ink-muted hover:text-ink"
+            : "border-info/30 text-info",
         )}
       >
         <option value="all">{allLabel}</option>
@@ -326,9 +326,9 @@ function TabSuivi({ sim }: { sim: ReturnType<typeof simulateBudget> }) {
       type="button"
       onClick={() => setFilter(key)}
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-pill border px-3 py-1 font-ui text-[0.64rem] font-bold tracking-[0.05em] uppercase transition-colors",
+        "inline-flex items-center gap-1.5 rounded-pill border px-3 py-1 font-ui text-[0.64rem] font-medium tracking-[0.05em] uppercase transition-colors",
         filter === key
-          ? "border-brand/25 bg-brand/10 text-brand"
+          ? "border-info/30 bg-info/10 text-info"
           : "border-border text-ink-muted hover:text-ink",
       )}
     >
@@ -346,7 +346,7 @@ function TabSuivi({ sim }: { sim: ReturnType<typeof simulateBudget> }) {
         <div className="mb-[1.1rem] overflow-hidden rounded-md border border-warning/20 bg-warning/[0.04]">
           <div className="flex items-center gap-2 border-b border-border px-3.5 py-2.5 text-warning">
             <Bell size={15} />
-            <span className="flex-1 font-ui text-[0.74rem] font-bold tracking-[0.06em] uppercase">
+            <span className="flex-1 font-ui text-[0.74rem] font-medium tracking-[0.06em] uppercase">
               Alertes ({sim.alerts.length})
             </span>
             <button
@@ -368,7 +368,7 @@ function TabSuivi({ sim }: { sim: ReturnType<typeof simulateBudget> }) {
         <button
           type="button"
           onClick={() => setShowAlerts(true)}
-          className="mb-[1.1rem] inline-flex items-center gap-1.5 rounded-pill border border-warning/25 bg-warning/[0.06] px-3.5 py-2 font-ui text-[0.72rem] font-bold text-warning transition-colors hover:bg-warning/10"
+          className="mb-[1.1rem] inline-flex items-center gap-1.5 rounded-pill border border-warning/25 bg-warning/[0.06] px-3.5 py-2 font-ui text-[0.72rem] font-medium text-warning transition-colors hover:bg-warning/10"
         >
           <Bell size={14} /> {sim.alerts.length} alertes masquées — Afficher
         </button>
@@ -407,7 +407,7 @@ function TabSuivi({ sim }: { sim: ReturnType<typeof simulateBudget> }) {
             <button
               type="button"
               onClick={() => navigate("/importer")}
-              className="inline-flex items-center gap-1.5 font-ui text-[0.7rem] font-bold tracking-[0.05em] text-brand uppercase transition-opacity hover:opacity-80"
+              className="inline-flex items-center gap-1.5 font-ui text-[0.7rem] font-medium tracking-[0.05em] text-info uppercase transition-opacity hover:opacity-80"
             >
               <Upload size={13} /> Import CSV
             </button>
@@ -425,7 +425,7 @@ function TabSuivi({ sim }: { sim: ReturnType<typeof simulateBudget> }) {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Rechercher un libellé…"
-              className="w-full rounded-md border border-border bg-input-bg py-1.5 pr-3 pl-8 font-body text-[0.78rem] text-ink outline-none transition-[border-color,box-shadow] placeholder:text-ink-disabled focus:border-brand focus:shadow-[0_0_0_3px_var(--green-glow)] sm:w-52"
+              className="w-full rounded-md border border-input bg-input-bg py-1.5 pr-3 pl-8 font-body text-[0.78rem] text-ink outline-none transition-colors placeholder:text-ink-disabled focus:border-border-focus sm:w-52"
             />
           </div>
           <FilterSelect
@@ -444,7 +444,7 @@ function TabSuivi({ sim }: { sim: ReturnType<typeof simulateBudget> }) {
             <button
               type="button"
               onClick={resetFilters}
-              className="inline-flex items-center gap-1 rounded-pill px-2 py-1 font-ui text-[0.66rem] font-bold tracking-[0.04em] text-ink-muted uppercase transition-colors hover:text-ink"
+              className="inline-flex items-center gap-1 rounded-pill px-2 py-1 font-ui text-[0.66rem] font-medium tracking-[0.04em] text-ink-muted uppercase transition-colors hover:text-ink"
             >
               <X size={12} /> Réinitialiser
             </button>
@@ -461,12 +461,12 @@ function TabSuivi({ sim }: { sim: ReturnType<typeof simulateBudget> }) {
                 {["Date", "Libellé", "Catégorie (IA)", "Équipe"].map((h) => (
                   <th
                     key={h}
-                    className="border-b border-border px-2.5 py-2 text-left font-ui text-[0.66rem] font-bold tracking-[0.07em] whitespace-nowrap text-ink-disabled uppercase"
+                    className="border-b border-border px-2.5 py-2 text-left font-ui text-[0.66rem] font-medium tracking-[0.07em] whitespace-nowrap text-ink-disabled uppercase"
                   >
                     {h}
                   </th>
                 ))}
-                <th className="border-b border-border px-2.5 py-2 text-right font-ui text-[0.66rem] font-bold tracking-[0.07em] whitespace-nowrap text-ink-disabled uppercase">
+                <th className="border-b border-border px-2.5 py-2 text-right font-ui text-[0.66rem] font-medium tracking-[0.07em] whitespace-nowrap text-ink-disabled uppercase">
                   Montant
                 </th>
                 <th className="w-9 border-b border-border" aria-hidden />
@@ -491,7 +491,7 @@ function TabSuivi({ sim }: { sim: ReturnType<typeof simulateBudget> }) {
                   <td
                     className={cn(
                       "border-b border-border px-2.5 py-2.5 font-body text-[0.78rem] whitespace-nowrap text-ink-disabled tabular-nums",
-                      t.manual && "border-l-2 border-l-brand/50",
+                      t.manual && "border-l-2 border-l-info/50",
                     )}
                   >
                     {t.date}
@@ -512,7 +512,7 @@ function TabSuivi({ sim }: { sim: ReturnType<typeof simulateBudget> }) {
                   <td
                     className={cn(
                       "border-b border-border px-2.5 py-2.5 text-right font-body text-[0.85rem] tabular-nums",
-                      t.kind === "in" ? "text-brand" : "text-danger",
+                      t.kind === "in" ? "text-success" : "text-danger",
                     )}
                   >
                     {t.kind === "in" ? "+" : "−"}
@@ -563,7 +563,7 @@ function TabSuivi({ sim }: { sim: ReturnType<typeof simulateBudget> }) {
                 </span>
                 <span
                   className={cn(
-                    "text-right font-ui text-[0.8rem] font-bold",
+                    "text-right font-ui text-[0.8rem] font-medium",
                     over ? "text-warning" : "text-ink-muted",
                   )}
                 >
@@ -585,7 +585,7 @@ function TabSuivi({ sim }: { sim: ReturnType<typeof simulateBudget> }) {
                         key={i}
                         className="grid grid-cols-[64px_1fr_auto_auto] items-center gap-3 border-t border-border py-2 font-body text-[0.8rem] first:border-0"
                       >
-                        <span className="font-body text-[0.78rem] text-brand tabular-nums">
+                        <span className="font-body text-[0.78rem] text-info tabular-nums">
                           {t.date}
                         </span>
                         <span className="truncate text-ink-subtle">{t.label}</span>
@@ -615,7 +615,7 @@ function TabSuivi({ sim }: { sim: ReturnType<typeof simulateBudget> }) {
 
       {/* Teams */}
       <Panel title="Suivi par équipe">
-        <div className="hidden grid-cols-[1.3fr_0.9fr_0.9fr_0.9fr_1.6fr_48px] items-center gap-3 px-1 pb-2 font-ui text-[0.62rem] font-bold tracking-[0.07em] text-ink-disabled uppercase sm:grid">
+        <div className="hidden grid-cols-[1.3fr_0.9fr_0.9fr_0.9fr_1.6fr_48px] items-center gap-3 px-1 pb-2 font-ui text-[0.62rem] font-medium tracking-[0.07em] text-ink-disabled uppercase sm:grid">
           <span>Équipe</span>
           <span>Budget</span>
           <span>Dépensé</span>
@@ -631,13 +631,13 @@ function TabSuivi({ sim }: { sim: ReturnType<typeof simulateBudget> }) {
             <span className="font-ui font-semibold text-ink">{t.label}</span>
             <span className="text-ink-subtle">{fmtShort(t.amount)}</span>
             <span className="text-danger">{fmtShort(t.real)}</span>
-            <span className={t.remaining >= 0 ? "text-brand" : "text-danger"}>
+            <span className={t.remaining >= 0 ? "text-success" : "text-danger"}>
               {fmtShort(t.remaining)}
             </span>
             <div className="col-span-2 sm:col-span-1">
               <Bar value={t.cons} warn={t.cons >= 85} />
             </div>
-            <span className="text-right font-ui font-bold text-ink-muted">
+            <span className="text-right font-ui font-medium text-ink-muted">
               {t.cons}%
             </span>
           </div>
@@ -694,7 +694,7 @@ function TabAlertes({ sim }: { sim: ReturnType<typeof simulateBudget> }) {
                 </button>
                 <button
                   type="button"
-                  className="inline-flex items-center gap-1 rounded-sm bg-brand px-2.5 py-1.5 font-ui text-[0.72rem] font-bold text-ink-inverted shadow-glow transition-[transform,box-shadow] hover:-translate-y-0.5"
+                  className="inline-flex items-center gap-1 rounded-sm bg-brand px-2.5 py-1.5 font-ui text-[0.72rem] font-medium text-ink-inverted shadow-glow transition-colors hover:bg-brand-dim"
                 >
                   <Check size={14} /> Approuver
                 </button>
@@ -713,7 +713,7 @@ function TabAlertes({ sim }: { sim: ReturnType<typeof simulateBudget> }) {
             key={i}
             className="flex items-center gap-3 border-b border-border py-2.5 last:border-0"
           >
-            <span className="flex size-7 shrink-0 items-center justify-center rounded-pill bg-accent font-ui text-[0.7rem] font-bold text-ink-subtle">
+            <span className="flex size-7 shrink-0 items-center justify-center rounded-pill bg-accent font-ui text-[0.7rem] font-medium text-ink-subtle">
               {a.who === "Système" ? "⚙" : a.who.slice(0, 1)}
             </span>
             <div className="min-w-0 flex-1 font-body text-[0.83rem] text-ink-subtle">

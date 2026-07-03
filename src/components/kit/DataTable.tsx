@@ -75,21 +75,21 @@ export function DataTable<T>({
   return (
     <div
       className={cn(
-        "overflow-hidden rounded-lg border border-border bg-surface",
+        "overflow-hidden rounded-lg border border-border",
         className,
       )}
     >
       <div className="overflow-x-auto">
         <table className="w-full border-collapse">
           <thead>
-            <tr className="border-b border-border bg-surface-muted">
+            <tr className="border-b border-border">
               {columns.map((col) => (
                 <th
                   key={col.id}
                   scope="col"
                   style={col.width ? { width: col.width } : undefined}
                   className={cn(
-                    "px-3.5 py-2.5 font-ui text-[0.7rem] font-bold tracking-[0.08em] whitespace-nowrap text-ink-disabled uppercase",
+                    "px-3.5 py-2.5 font-ui text-[0.7rem] font-medium tracking-[0.08em] whitespace-nowrap text-ink-disabled uppercase",
                     alignClass[col.align ?? "left"],
                     col.headerClassName,
                   )}
@@ -130,7 +130,7 @@ export function DataTable<T>({
                         "border-b border-border transition-colors outline-none last:border-0",
                         interactive &&
                           "cursor-pointer hover:bg-accent focus-visible:bg-accent",
-                        active && "bg-brand/5",
+                        active && "bg-info/8",
                       )}
                     >
                       {columns.map((col) => (

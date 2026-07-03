@@ -18,6 +18,33 @@ import {
 import { seasonsSeed, type Season } from "@/data/seed/seasons"
 import { entriesSeed, type Entry } from "@/data/seed/entries"
 import { monthsSeed, type Month } from "@/data/seed/months"
+import { documentsSeed, type Document } from "@/data/seed/documents"
+import {
+  budget2Reducer,
+  budget2InitialState,
+  type Budget2State,
+} from "@/data/budget2Reducer"
+import type {
+  BudgetLine,
+  BudgetTeamGroup,
+  Budget2Draft,
+  Budget2Season,
+} from "@/data/seed/budget2"
+import {
+  financeConfigSeed,
+  financeTeamsSeed,
+  staffSeed,
+  groupsSeed,
+  subCategoriesSeed,
+  transactionsSeed,
+  type FinanceConfig,
+  type FinanceTeam,
+  type StaffMember,
+  type Group,
+  type SubCategory,
+  type Transaction,
+  type NewTransaction,
+} from "@/data/seed/finance"
 
 /**
  * App-root in-memory store (plain React Context + useReducer — no library).
@@ -128,6 +155,20 @@ export type DataContextValue = {
   entries: Entry[]
   /** Month-by-month planning preview (read-only). */
   months: Month[]
+  /** Club documents catalogue (newest first). */
+  documents: Document[]
+  /** Finance module — global config (active season + currency). */
+  financeConfig: FinanceConfig
+  /** Teams the Finance module can target (portée = équipe). */
+  financeTeams: FinanceTeam[]
+  /** Staff members (portée = staff). */
+  staff: StaffMember[]
+  /** Groupes referential (admin-managed). */
+  groups: Group[]
+  /** Sous-catégories referential (admin-managed). */
+  subCategories: SubCategory[]
+  /** All financial movements of the active season (incl. soft-deleted). */
+  transactions: Transaction[]
   setSeason: (season: string) => void
   setMode: (mode: BudgetMode) => void
   setGlobalIncome: (value: number) => void
@@ -137,6 +178,43 @@ export type DataContextValue = {
   removeLine: (list: LineList, id: string) => void
   addEntry: (entry: Omit<Entry, "id">) => void
   removeEntry: (id: string) => void
+  /** Add a document; returns the new id so the caller can open its editor. */
+  addDocument: (doc: Omit<Document, "id">) => string
+  removeDocument: (id: string) => void
+  /** Add a transaction (id/season/flags filled in); returns the new id. */
+  addTransaction: (tx: NewTransaction) => string
+  /** Edit an existing transaction in place. */
+  updateTransaction: (id: string, patch: Partial<NewTransaction>) => void
+  /** Soft-delete: hide from table/KPIs, keep restorable in the Historique. */
+  deleteTransaction: (id: string) => void
+  /** Restore a soft-deleted transaction back into the active view. */
+  restoreTransaction: (id: string) => void
+
+  /* ── Budget module (Outil Budget) — seasons / drafts / groups / lines ── */
+  budget2: Budget2State
+  /** Create a global season; returns its id. */
+  addBudget2Season: (input: Omit<Budget2Season, "id">) => string
+  /** Create a blank `brouillon` draft in a season; returns its id. */
+  addBudget2Draft: (seasonId: string, label: string) => string
+  updateBudget2Draft: (id: string, patch: Partial<Budget2Draft>) => void
+  removeBudget2Draft: (id: string) => void
+  /** Clone a draft (lines + pooled groups); returns the new draft id. */
+  duplicateBudget2Draft: (id: string) => string
+  /** Validate a draft — becomes the season reference, demotes the previous one. */
+  validateBudget2Draft: (id: string) => void
+  /** Clone another draft's lines into a target draft (replace or append). */
+  importBudget2FromDraft: (
+    sourceId: string,
+    targetId: string,
+    mode: "replace" | "append",
+  ) => void
+  addBudget2Line: (line: Omit<BudgetLine, "id">) => string
+  updateBudget2Line: (id: string, patch: Partial<BudgetLine>) => void
+  removeBudget2Line: (id: string) => void
+  /** Add a pooled team-group to a draft; returns its id. */
+  addBudget2Group: (group: Omit<BudgetTeamGroup, "id">) => string
+  updateBudget2Group: (id: string, patch: Partial<BudgetTeamGroup>) => void
+  removeBudget2Group: (id: string) => void
 }
 
 export const DataContext = createContext<DataContextValue | null>(null)
@@ -152,6 +230,21 @@ export function DataProvider({ children }: { children: ReactNode }) {
   // Monthly planning preview is read-only for now (the plan screen is
   // auto-filled and self-contained), so it stays in plain in-memory state.
   const [months] = useState<Month[]>(monthsSeed)
+  // Documents only add/remove (the editor is a placeholder), so plain state is
+  // enough. New documents go to the front (most recent first).
+  const [documents, setDocuments] = useState<Document[]>(documentsSeed)
+  // Finance referential + config are read-only in this phase (managed on a
+  // future admin page), so they live in plain in-memory state. Transactions
+  // add / edit / soft-delete / restore, so they carry the mutating helpers.
+  const [financeConfig] = useState<FinanceConfig>(financeConfigSeed)
+  const [financeTeams] = useState<FinanceTeam[]>(financeTeamsSeed)
+  const [staff] = useState<StaffMember[]>(staffSeed)
+  const [groups] = useState<Group[]>(groupsSeed)
+  const [subCategories] = useState<SubCategory[]>(subCategoriesSeed)
+  const [transactions, setTransactions] = useState<Transaction[]>(transactionsSeed)
+  // Budget module — its own reducer (seasons / drafts / groups / lines). IDs and
+  // timestamps are minted here and passed in, keeping the reducer pure.
+  const [budget2, dispatch2] = useReducer(budget2Reducer, budget2InitialState)
 
   const value = useMemo<DataContextValue>(
     () => ({
@@ -159,6 +252,13 @@ export function DataProvider({ children }: { children: ReactNode }) {
       seasons,
       entries,
       months,
+      documents,
+      financeConfig,
+      financeTeams,
+      staff,
+      groups,
+      subCategories,
+      transactions,
       setSeason: (season) => dispatch({ type: "setSeason", season }),
       setMode: (mode) => dispatch({ type: "setMode", mode }),
       setGlobalIncome: (value) => dispatch({ type: "setGlobalIncome", value }),
@@ -182,8 +282,120 @@ export function DataProvider({ children }: { children: ReactNode }) {
         setEntries((prev) => [{ id: crypto.randomUUID(), ...entry }, ...prev]),
       removeEntry: (id) =>
         setEntries((prev) => prev.filter((entry) => entry.id !== id)),
+      addDocument: (doc) => {
+        const id = crypto.randomUUID()
+        setDocuments((prev) => [{ id, ...doc }, ...prev])
+        return id
+      },
+      removeDocument: (id) =>
+        setDocuments((prev) => prev.filter((doc) => doc.id !== id)),
+      addTransaction: (tx) => {
+        const id = crypto.randomUUID()
+        setTransactions((prev) => [
+          {
+            ...tx,
+            id,
+            season: financeConfig.active_season,
+            is_deleted: false,
+            created_at: new Date().toISOString(),
+          },
+          ...prev,
+        ])
+        return id
+      },
+      updateTransaction: (id, patch) =>
+        setTransactions((prev) =>
+          prev.map((tx) => (tx.id === id ? { ...tx, ...patch } : tx)),
+        ),
+      deleteTransaction: (id) =>
+        setTransactions((prev) =>
+          prev.map((tx) =>
+            tx.id === id
+              ? { ...tx, is_deleted: true, deleted_at: new Date().toISOString() }
+              : tx,
+          ),
+        ),
+      restoreTransaction: (id) =>
+        setTransactions((prev) =>
+          prev.map((tx) =>
+            tx.id === id
+              ? { ...tx, is_deleted: false, deleted_at: undefined }
+              : tx,
+          ),
+        ),
+
+      /* ── Budget module ──────────────────────────────────────────────── */
+      budget2,
+      addBudget2Season: (input) => {
+        const id = crypto.randomUUID()
+        dispatch2({ type: "addSeason", season: { id, ...input } })
+        return id
+      },
+      addBudget2Draft: (seasonId, label) => {
+        const id = crypto.randomUUID()
+        dispatch2({
+          type: "addDraft",
+          draft: {
+            id,
+            season_id: seasonId,
+            label,
+            status: "brouillon",
+            updated_at: new Date().toISOString(),
+          },
+        })
+        return id
+      },
+      updateBudget2Draft: (id, patch) =>
+        dispatch2({ type: "updateDraft", id, patch, at: new Date().toISOString() }),
+      removeBudget2Draft: (id) => dispatch2({ type: "removeDraft", id }),
+      duplicateBudget2Draft: (id) => {
+        const newId = crypto.randomUUID()
+        dispatch2({ type: "duplicateDraft", id, newId, at: new Date().toISOString() })
+        return newId
+      },
+      validateBudget2Draft: (id) =>
+        dispatch2({ type: "validateDraft", id, at: new Date().toISOString() }),
+      importBudget2FromDraft: (sourceId, targetId, mode) =>
+        dispatch2({
+          type: "importFromDraft",
+          sourceId,
+          targetId,
+          mode,
+          at: new Date().toISOString(),
+        }),
+      addBudget2Line: (line) => {
+        const id = crypto.randomUUID()
+        dispatch2({ type: "addLine", line: { id, ...line }, at: new Date().toISOString() })
+        return id
+      },
+      updateBudget2Line: (id, patch) =>
+        dispatch2({ type: "updateLine", id, patch, at: new Date().toISOString() }),
+      removeBudget2Line: (id) =>
+        dispatch2({ type: "removeLine", id, at: new Date().toISOString() }),
+      addBudget2Group: (group) => {
+        const id = crypto.randomUUID()
+        dispatch2({ type: "addGroup", group: { id, ...group }, at: new Date().toISOString() })
+        return id
+      },
+      updateBudget2Group: (id, patch) =>
+        dispatch2({ type: "updateGroup", id, patch, at: new Date().toISOString() }),
+      removeBudget2Group: (id) =>
+        dispatch2({ type: "removeGroup", id, at: new Date().toISOString() }),
     }),
-    [budget, seasons, entries, months],
+    [
+      budget,
+      seasons,
+      entries,
+      months,
+      documents,
+      financeConfig,
+      financeTeams,
+      staff,
+      groups,
+      subCategories,
+      transactions,
+      budget2,
+    ],
   )
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>
