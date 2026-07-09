@@ -19,6 +19,7 @@ import { seasonsSeed, type Season } from "@/data/seed/seasons"
 import { entriesSeed, type Entry } from "@/data/seed/entries"
 import { monthsSeed, type Month } from "@/data/seed/months"
 import { documentsSeed, type Document } from "@/data/seed/documents"
+import { eventsSeed, type PlanEvent } from "@/data/seed/events"
 import {
   budget2Reducer,
   budget2InitialState,
@@ -157,6 +158,8 @@ export type DataContextValue = {
   months: Month[]
   /** Club documents catalogue (newest first). */
   documents: Document[]
+  /** Scheduled events shown on the Planification calendar. */
+  events: PlanEvent[]
   /** Finance module — global config (active season + currency). */
   financeConfig: FinanceConfig
   /** Teams the Finance module can target (portée = équipe). */
@@ -181,6 +184,10 @@ export type DataContextValue = {
   /** Add a document; returns the new id so the caller can open its editor. */
   addDocument: (doc: Omit<Document, "id">) => string
   removeDocument: (id: string) => void
+  /** Add a calendar event; returns the new id. */
+  addEvent: (event: Omit<PlanEvent, "id">) => string
+  updateEvent: (id: string, patch: Partial<PlanEvent>) => void
+  removeEvent: (id: string) => void
   /** Add a transaction (id/season/flags filled in); returns the new id. */
   addTransaction: (tx: NewTransaction) => string
   /** Edit an existing transaction in place. */
@@ -233,6 +240,9 @@ export function DataProvider({ children }: { children: ReactNode }) {
   // Documents only add/remove (the editor is a placeholder), so plain state is
   // enough. New documents go to the front (most recent first).
   const [documents, setDocuments] = useState<Document[]>(documentsSeed)
+  // Calendar events add / edit / remove, so plain in-memory state is enough
+  // (no reducer). New rows get a uuid; seed rows keep their readable slug ids.
+  const [events, setEvents] = useState<PlanEvent[]>(eventsSeed)
   // Finance referential + config are read-only in this phase (managed on a
   // future admin page), so they live in plain in-memory state. Transactions
   // add / edit / soft-delete / restore, so they carry the mutating helpers.
@@ -253,6 +263,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
       entries,
       months,
       documents,
+      events,
       financeConfig,
       financeTeams,
       staff,
@@ -289,6 +300,17 @@ export function DataProvider({ children }: { children: ReactNode }) {
       },
       removeDocument: (id) =>
         setDocuments((prev) => prev.filter((doc) => doc.id !== id)),
+      addEvent: (event) => {
+        const id = crypto.randomUUID()
+        setEvents((prev) => [...prev, { id, ...event }])
+        return id
+      },
+      updateEvent: (id, patch) =>
+        setEvents((prev) =>
+          prev.map((event) => (event.id === id ? { ...event, ...patch } : event)),
+        ),
+      removeEvent: (id) =>
+        setEvents((prev) => prev.filter((event) => event.id !== id)),
       addTransaction: (tx) => {
         const id = crypto.randomUUID()
         setTransactions((prev) => [
@@ -388,6 +410,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
       entries,
       months,
       documents,
+      events,
       financeConfig,
       financeTeams,
       staff,

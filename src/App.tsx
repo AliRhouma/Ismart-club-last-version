@@ -18,9 +18,11 @@ import { DocumentsScreen } from "@/features/documents/DocumentsScreen"
 import { TransactionsScreen } from "@/features/finance/TransactionsScreen"
 import { DemandeTransactionScreen } from "@/features/finance/DemandeTransactionScreen"
 import { CompteRenduScreen } from "@/features/compte-rendu/CompteRenduScreen"
+import { PlanificationScreen } from "@/features/planification/PlanificationScreen"
 
 /** Routes that have a real screen (so they skip the generic Placeholder). */
 const CUSTOM_ROUTES = new Set([
+  "/planification",
   "/budget",
   "/budget2",
   "/documents",
@@ -61,6 +63,9 @@ export default function App() {
                   />
                 ),
               )}
+
+            {/* Planification — month calendar of séances / matchs / réunions. */}
+            <Route path="planification" element={<PlanificationScreen />} />
 
             {/* Finance — Transactions is the first real tool of the module. */}
             <Route path="finance/transactions" element={<TransactionsScreen />} />
