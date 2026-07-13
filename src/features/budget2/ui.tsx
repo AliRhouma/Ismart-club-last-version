@@ -62,8 +62,7 @@ export function Budget2Tabs({
 }) {
   return (
     <div className="inline-flex gap-1 rounded-pill border border-border p-1">
-      {/* "Analyse" is hidden for now — its route still resolves if reached directly. */}
-      {BUDGET2_TABS.filter((tab) => tab.value !== "analyse").map((tab) => {
+      {BUDGET2_TABS.map((tab) => {
         const on = tab.value === active
         return (
           <Link

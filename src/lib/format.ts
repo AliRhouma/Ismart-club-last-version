@@ -22,6 +22,38 @@ export const fmtFrDate = (iso: string) => {
   return `${String(d).padStart(2, "0")} ${FR_MONTHS[m - 1] ?? ""}`
 }
 
+/** Full French months — for section headers ("Août 2025"). */
+const FR_MONTHS_FULL = [
+  "janvier", "février", "mars", "avril", "mai", "juin",
+  "juillet", "août", "septembre", "octobre", "novembre", "décembre",
+]
+
+/** French weekdays, Sun→Sat to match Date.getDay(). */
+const FR_WEEKDAYS = [
+  "dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi",
+]
+
+const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
+
+/** "2025-08" or "2025-08-13" → "Août 2025" (month-group header). */
+export const fmtMonthYear = (key: string) => {
+  const [y, m] = key.split("-").map(Number)
+  if (!y || !m) return key
+  return `${cap(FR_MONTHS_FULL[m - 1] ?? "")} ${y}`
+}
+
+/** "2025-08-13" → "mercredi, 13 août" (day-group header). */
+export const fmtDayLong = (iso: string) => {
+  const [y, m, d] = iso.split("-").map(Number)
+  if (!y || !m || !d) return iso
+  const wd = FR_WEEKDAYS[new Date(y, m - 1, d).getDay()] ?? ""
+  return `${wd}, ${d} ${FR_MONTHS_FULL[m - 1] ?? ""}`
+}
+
+/** "3429.45" → "3 429,45", "3500" → "3 500" (fr-FR, decimals only when present). */
+export const fmtAmount = (n: number) =>
+  n.toLocaleString("fr-FR", { maximumFractionDigits: 2 })
+
 /** Today as "2026-05-14" (local), for date-input defaults. */
 export const todayISO = () => {
   const n = new Date()

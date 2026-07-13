@@ -1,22 +1,23 @@
 import * as React from "react"
 import type { ReactNode } from "react"
-import { Loader2 } from "lucide-react"
+import { Loader2, X } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet"
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/components/ui/dialog"
 
 /**
- * Slide-in sheet wrapping a create/edit form. Controlled via `open`/
+ * Centered modal wrapping a create/edit form. Controlled via `open`/
  * `onOpenChange`. Renders the form fields (`children`) in a scrollable body
  * with a sticky header + footer (Cancel / Submit). `onSubmit` may be async —
- * the submit button shows a spinner and the sheet locks until it settles.
+ * the submit button shows a spinner and the modal locks until it settles.
+ *
+ * (Historically a right-side sheet; now a modal — the name is kept so the
+ * existing call sites don't churn.)
  */
 export function FormSheet({
   open,
@@ -30,7 +31,6 @@ export function FormSheet({
   cancelLabel = "Annuler",
   submitting = false,
   submitDisabled = false,
-  side = "right",
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
@@ -43,7 +43,6 @@ export function FormSheet({
   cancelLabel?: string
   submitting?: boolean
   submitDisabled?: boolean
-  side?: "right" | "left"
 }) {
   const [pending, setPending] = React.useState(false)
   const busy = submitting || pending
@@ -65,26 +64,42 @@ export function FormSheet({
   }
 
   return (
-    <Sheet open={open} onOpenChange={(next) => !busy && onOpenChange(next)}>
-      <SheetContent
-        side={side}
-        className="w-full gap-0 border-border bg-surface-panel p-0 sm:max-w-md"
+    <Dialog open={open} onOpenChange={(next) => !busy && onOpenChange(next)}>
+      <DialogContent
+        showCloseButton={false}
+        className="flex max-h-[85vh] flex-col gap-0 overflow-hidden rounded-xl border-border bg-surface p-0 sm:max-w-lg"
       >
-        <form onSubmit={handleSubmit} className="flex h-full flex-col">
-          <SheetHeader className="border-b border-border">
-            <SheetTitle className="font-ui text-base font-medium text-ink">
-              {title}
-            </SheetTitle>
-            {description ? (
-              <SheetDescription className="font-body text-sm text-ink-muted">
-                {description}
-              </SheetDescription>
-            ) : null}
-          </SheetHeader>
+        <form onSubmit={handleSubmit} className="flex min-h-0 flex-col">
+          {/* Header */}
+          <div className="flex items-start justify-between gap-3 border-b border-border px-5 py-4">
+            <div className="min-w-0">
+              <DialogTitle className="font-ui text-base font-medium text-ink">
+                {title}
+              </DialogTitle>
+              {description ? (
+                <DialogDescription className="mt-0.5 font-body text-sm text-ink-muted">
+                  {description}
+                </DialogDescription>
+              ) : null}
+            </div>
+            <button
+              type="button"
+              onClick={handleCancel}
+              disabled={busy}
+              aria-label="Fermer"
+              className="flex size-[30px] shrink-0 items-center justify-center rounded-sm border border-border text-ink-disabled transition-colors hover:border-[var(--border-hover)] hover:text-ink disabled:opacity-45"
+            >
+              <X size={15} />
+            </button>
+          </div>
 
-          <div className="flex-1 overflow-y-auto p-4">{children}</div>
+          {/* Body */}
+          <div className="min-h-0 flex-1 overflow-y-auto px-5 py-4">
+            {children}
+          </div>
 
-          <SheetFooter className="flex-row justify-end gap-2 border-t border-border">
+          {/* Footer */}
+          <div className="flex flex-row justify-end gap-2 border-t border-border px-5 py-3.5">
             <Button
               type="button"
               variant="ghost"
@@ -97,9 +112,9 @@ export function FormSheet({
               {busy ? <Loader2 className="size-4 animate-spin" /> : null}
               {submitLabel}
             </Button>
-          </SheetFooter>
+          </div>
         </form>
-      </SheetContent>
-    </Sheet>
+      </DialogContent>
+    </Dialog>
   )
 }

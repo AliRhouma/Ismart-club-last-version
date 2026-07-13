@@ -9,9 +9,11 @@ import {
   History,
   Inbox,
   Info,
+  LayoutList,
   Paperclip,
   Pencil,
   Plus,
+  Rows3,
   Search,
   SlidersHorizontal,
   Trash2,
@@ -20,7 +22,7 @@ import {
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
-import { fmt, fmtShort, fmtFrDate } from "@/lib/format"
+import { fmt, fmtShort, fmtAmount, fmtFrDate, fmtMonthYear, fmtDayLong } from "@/lib/format"
 import { useData } from "@/data/useData"
 import type {
   FinanceTeam,
@@ -38,10 +40,12 @@ import { HistoriquePanel } from "@/features/finance/HistoriquePanel"
 import { DemandesModal, DEMANDES_COUNT } from "@/features/finance/DemandesModal"
 import { Badge } from "@/components/kit/Badge"
 import { TeamChip } from "@/features/budget/ui"
+import { Segmented } from "@/features/budget/ui"
 import { PageHeader } from "@/components/kit/PageHeader"
 import { EmptyState } from "@/components/kit/EmptyState"
 import { ConfirmDialog } from "@/components/kit/ConfirmDialog"
 
+type ViewMode = "ledger" | "table"
 type SortKey = "date" | "amount"
 type Filters = {
   nature: string
@@ -63,13 +67,15 @@ const EMPTY_FILTERS: Filters = {
   from: "",
   to: "",
 }
-const PAGE = 10
+const PAGE = 12
 const PAYMENTS: PaymentMethod[] = ["Espèces", "Virement", "Chèque", "Carte"]
 const SCOPES: { value: Scope; label: string }[] = [
   { value: "general", label: "Général" },
   { value: "equipe", label: "Équipe" },
   { value: "staff", label: "Staff" },
 ]
+/** Single treasurer records every entry in this club (matches the ledger design). */
+const RECORDED_BY = "Foued Ben Jemaa"
 
 export function TransactionsScreen() {
   const {
@@ -87,6 +93,7 @@ export function TransactionsScreen() {
   const teamMap = useMemo(() => byId(financeTeams), [financeTeams])
   const staffMap = useMemo(() => byId(staff), [staff])
 
+  const [view, setView] = useState<ViewMode>("ledger")
   const [query, setQuery] = useState("")
   const [filters, setFilters] = useState<Filters>(EMPTY_FILTERS)
   const [showFilters, setShowFilters] = useState(false)
@@ -142,6 +149,22 @@ export function TransactionsScreen() {
     })
   }, [seasonTx, filters, query])
 
+  // Ledger ordering — chronological, newest first (also used for export).
+  const ordered = useMemo(() => {
+    return [...filtered].sort((a, b) => {
+      if (a.date !== b.date) return a.date < b.date ? 1 : -1
+      // within a day: revenus first, then each side by amount desc (largest first)
+      const na = a.nature === "Revenu" ? 0 : 1
+      const nb = b.nature === "Revenu" ? 0 : 1
+      if (na !== nb) return na - nb
+      return b.amount - a.amount
+    })
+  }, [filtered])
+
+  // Ledger grouping — months → days, each level carrying its own subtotals.
+  const months = useMemo(() => groupLedger(ordered), [ordered])
+
+  // Table ordering — respects the sortable column headers.
   const sorted = useMemo(() => {
     const rows = [...filtered]
     rows.sort((a, b) => {
@@ -184,7 +207,7 @@ export function TransactionsScreen() {
     )
 
   const doExport = (mode: "filtered" | "season") => {
-    const rows = mode === "filtered" ? sorted : seasonTx
+    const rows = mode === "filtered" ? (view === "table" ? sorted : ordered) : seasonTx
     const slug = financeConfig.active_season.replace(/\s*\/\s*/, "-")
     exportTransactionsCsv(
       rows,
@@ -222,6 +245,17 @@ export function TransactionsScreen() {
         ? null
         : { tx, top: rect.bottom + 4, right: window.innerWidth - rect.right },
     )
+  }
+
+  /** Plain scope names for a transaction's ledger meta line. */
+  const scopeNames = (tx: Transaction): string => {
+    if (tx.scope === "general") return financeTeams.map((t) => t.name).join(", ")
+    if (tx.scope === "equipe")
+      return tx.team_ids.map((id) => teamMap.get(id)?.name ?? id).join(", ")
+    const parts = [tx.staff_category ?? "Staff"]
+    const member = tx.staff_member_id ? staffMap.get(tx.staff_member_id) : undefined
+    if (member) parts.push(member.full_name)
+    return parts.join(" · ")
   }
 
   const seasonEmpty = seasonTx.length === 0
@@ -299,6 +333,16 @@ export function TransactionsScreen() {
               />
             </div>
 
+            {/* View switch — ledger ⇄ table */}
+            <Segmented
+              value={view}
+              onChange={setView}
+              options={[
+                { value: "ledger", label: <span className="inline-flex items-center gap-1.5"><Rows3 size={14} /> Relevé</span> },
+                { value: "table", label: <span className="inline-flex items-center gap-1.5"><LayoutList size={14} /> Tableau</span> },
+              ]}
+            />
+
             <button
               type="button"
               onClick={() => setShowFilters((v) => !v)}
@@ -339,7 +383,7 @@ export function TransactionsScreen() {
                   <div className="absolute right-0 z-50 mt-1 w-56 overflow-hidden rounded-md border border-border bg-background py-1 shadow-deep">
                     <MenuItem onClick={() => doExport("filtered")}>
                       Vue filtrée actuelle
-                      <span className="ml-auto text-ink-disabled tabular-nums">{sorted.length}</span>
+                      <span className="ml-auto text-ink-disabled tabular-nums">{ordered.length}</span>
                     </MenuItem>
                     <MenuItem onClick={() => doExport("season")}>
                       Toute la saison
@@ -470,116 +514,217 @@ export function TransactionsScreen() {
             </div>
           ) : null}
 
-          {/* 4 — Table */}
-          <div className="mt-4 overflow-hidden rounded-lg border border-border">
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse">
-                <thead>
-                  <tr className="border-b border-border">
-                    <SortHeader label="Date" active={sort.key === "date"} dir={sort.dir} onClick={() => toggleSort("date")} />
-                    <Th>Nature</Th>
-                    <Th>Catégorie</Th>
-                    <Th>Portée</Th>
-                    <SortHeader label="Montant" align="right" active={sort.key === "amount"} dir={sort.dir} onClick={() => toggleSort("amount")} />
-                    <Th>Paiement</Th>
-                    <Th align="center">
-                      <Paperclip size={13} className="inline" />
-                    </Th>
-                    <th className="w-10 border-b-0" aria-hidden />
-                  </tr>
-                </thead>
-                <tbody>
-                  {sorted.length === 0 ? (
-                    <tr>
-                      <td colSpan={8} className="px-4 py-12 text-center">
-                        <p className="font-body text-sm text-ink-muted">Aucun résultat</p>
-                        <button
-                          type="button"
-                          onClick={resetAll}
-                          className="mt-1.5 font-ui text-[0.74rem] font-medium text-info transition-opacity hover:opacity-80"
-                        >
-                          Réinitialiser les filtres
-                        </button>
-                      </td>
-                    </tr>
-                  ) : (
-                    sorted.slice(0, visible).map((t) => {
-                      const { group, sub } = categoryPath(t, groupMap, subMap)
-                      const revenu = t.nature === "Revenu"
-                      return (
-                        <tr key={t.id} className="border-b border-border transition-colors last:border-0 hover:bg-accent">
-                          <td className="px-3.5 py-3 font-body text-[0.82rem] whitespace-nowrap text-ink-muted tabular-nums">
-                            {fmtFrDate(t.date)}
-                          </td>
-                          <td className="px-3.5 py-3">
-                            <NaturePill nature={t.nature} />
-                          </td>
-                          <td className="px-3.5 py-3">
-                            <div className="font-body text-[0.85rem] text-ink">{sub}</div>
-                            <div className="font-body text-[0.72rem] text-ink-disabled">{group}</div>
-                          </td>
-                          <td className="px-3.5 py-3">
-                            <ScopeCell tx={t} teamMap={teamMap} staffMap={staffMap} />
-                          </td>
-                          <td
-                            className={cn(
-                              "px-3.5 py-3 text-right font-body text-[0.85rem] whitespace-nowrap tabular-nums",
-                              revenu ? "text-success" : "text-danger",
-                            )}
-                          >
-                            {revenu ? "+" : "−"}
-                            {fmtShort(t.amount)} TND
-                          </td>
-                          <td className="px-3.5 py-3 font-body text-[0.8rem] whitespace-nowrap text-ink-muted">
-                            {t.payment_method ?? "—"}
-                          </td>
-                          <td className="px-3.5 py-3 text-center">
-                            {t.attachment ? (
-                              <span title={t.attachment}>
-                                <Paperclip size={14} className="inline text-info" />
-                              </span>
-                            ) : (
-                              <span className="text-ink-disabled">—</span>
-                            )}
-                          </td>
-                          <td className="px-2 py-3 text-right">
-                            <button
-                              type="button"
-                              onClick={(e) => openMenu(t, e)}
-                              aria-label="Actions"
-                              className="inline-flex size-7 items-center justify-center rounded-sm border border-transparent text-ink-muted transition-colors hover:border-border hover:bg-surface-hover hover:text-ink"
-                            >
-                              <span className="text-lg leading-none">⋯</span>
-                            </button>
-                          </td>
-                        </tr>
-                      )
-                    })
-                  )}
-                </tbody>
-              </table>
-            </div>
+          {/* 4 — Data view: relevé (grouped ledger) or tableau */}
+          {view === "ledger" ? (
+            months.length === 0 ? (
+              <NoResults onReset={resetAll} />
+            ) : (
+              <div className="mt-6 flex flex-col gap-8">
+                {months.map((month) => (
+                  <section key={month.key}>
+                    {/* Month header — title + count on the left, subtotals on the right */}
+                    <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-2 border-b border-border pb-2.5">
+                      <div className="flex items-baseline gap-2.5">
+                        <h2 className="font-display text-[1.1rem] font-medium text-ink">
+                          {fmtMonthYear(month.key)}
+                        </h2>
+                        <span className="font-body text-[0.76rem] text-ink-muted">
+                          {month.rows} transaction{month.rows > 1 ? "s" : ""}
+                        </span>
+                      </div>
+                      <Totals sums={month} size="month" />
+                    </div>
 
-            {sorted.length > visible ? (
-              <div className="flex items-center justify-center border-t border-border py-3">
-                <button
-                  type="button"
-                  onClick={() => setVisible((v) => v + PAGE)}
-                  className="inline-flex items-center gap-1.5 rounded-md border border-input px-3.5 py-1.5 font-ui text-[0.78rem] font-medium text-ink-subtle transition-colors hover:border-[var(--border-hover)] hover:text-ink"
-                >
-                  Charger plus ({sorted.length - visible})
-                </button>
+                    {/* Days card */}
+                    <div className="mt-3 overflow-hidden rounded-lg border border-border">
+                      {month.days.map((day) => (
+                        <div key={day.key} className="border-b border-border last:border-0">
+                          {/* Day header strip — single allowed nested fill */}
+                          <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 bg-surface-nested px-4 py-2">
+                            <h3 className="font-body text-[0.8rem] text-ink-subtle">
+                              {fmtDayLong(day.key)}
+                            </h3>
+                            <Totals sums={day} size="day" />
+                          </div>
+
+                          {/* Rows */}
+                          <ul>
+                            {day.rows.map((t) => {
+                              const { group, sub } = categoryPath(t, groupMap, subMap)
+                              const revenu = t.nature === "Revenu"
+                              return (
+                                <li
+                                  key={t.id}
+                                  className="group flex items-start justify-between gap-4 border-t border-border px-4 py-3 transition-colors hover:bg-surface-hover"
+                                >
+                                  <div className="min-w-0">
+                                    <div className="flex items-center gap-1.5">
+                                      <span className="truncate font-body text-[0.9rem] text-ink">
+                                        {sub}
+                                      </span>
+                                      {t.attachment ? (
+                                        <span title={t.attachment} className="shrink-0">
+                                          <Paperclip size={12} className="text-info" />
+                                        </span>
+                                      ) : null}
+                                    </div>
+                                    <div className="mt-1 truncate font-body text-[0.75rem] text-ink-muted">
+                                      {RECORDED_BY}
+                                      <span className="text-ink-disabled"> · {group} · {scopeNames(t)}</span>
+                                    </div>
+                                    {t.label ? (
+                                      <div className="mt-0.5 truncate font-body text-[0.78rem] text-ink-subtle">
+                                        {t.label}
+                                      </div>
+                                    ) : null}
+                                  </div>
+
+                                  <div className="flex shrink-0 items-start gap-1">
+                                    <span
+                                      className={cn(
+                                        "font-body text-[0.9rem] whitespace-nowrap tabular-nums",
+                                        revenu ? "text-success" : "text-danger",
+                                      )}
+                                    >
+                                      {revenu ? "+" : "−"}
+                                      {fmtAmount(t.amount)} DT
+                                    </span>
+                                    <button
+                                      type="button"
+                                      onClick={(e) => openMenu(t, e)}
+                                      aria-label="Actions"
+                                      className="-mr-1 inline-flex size-6 items-center justify-center rounded-sm border border-transparent text-ink-muted opacity-0 transition-all group-hover:opacity-100 hover:border-border hover:bg-surface hover:text-ink"
+                                    >
+                                      <span className="text-lg leading-none">⋯</span>
+                                    </button>
+                                  </div>
+                                </li>
+                              )
+                            })}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+                  </section>
+                ))}
+
+                <p className="text-right font-body text-[0.72rem] text-ink-disabled tabular-nums">
+                  {ordered.length} transaction{ordered.length > 1 ? "s" : ""} · {months.length} mois
+                </p>
               </div>
-            ) : sorted.length > 0 ? (
-              <div className="border-t border-border px-4 py-2.5 text-right font-body text-[0.72rem] text-ink-disabled tabular-nums">
-                {sorted.length} transaction{sorted.length > 1 ? "s" : ""}
+            )
+          ) : (
+            /* Table view */
+            <div className="mt-4 overflow-hidden rounded-lg border border-border">
+              <div className="overflow-x-auto">
+                <table className="w-full border-collapse">
+                  <thead>
+                    <tr className="border-b border-border">
+                      <SortHeader label="Date" active={sort.key === "date"} dir={sort.dir} onClick={() => toggleSort("date")} />
+                      <Th>Nature</Th>
+                      <Th>Catégorie</Th>
+                      <Th>Portée</Th>
+                      <SortHeader label="Montant" align="right" active={sort.key === "amount"} dir={sort.dir} onClick={() => toggleSort("amount")} />
+                      <Th>Paiement</Th>
+                      <Th align="center">
+                        <Paperclip size={13} className="inline" />
+                      </Th>
+                      <th className="w-10 border-b-0" aria-hidden />
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {sorted.length === 0 ? (
+                      <tr>
+                        <td colSpan={8} className="px-4 py-12 text-center">
+                          <p className="font-body text-sm text-ink-muted">Aucun résultat</p>
+                          <button
+                            type="button"
+                            onClick={resetAll}
+                            className="mt-1.5 font-ui text-[0.74rem] font-medium text-info transition-opacity hover:opacity-80"
+                          >
+                            Réinitialiser les filtres
+                          </button>
+                        </td>
+                      </tr>
+                    ) : (
+                      sorted.slice(0, visible).map((t) => {
+                        const { group, sub } = categoryPath(t, groupMap, subMap)
+                        const revenu = t.nature === "Revenu"
+                        return (
+                          <tr key={t.id} className="border-b border-border transition-colors last:border-0 hover:bg-accent">
+                            <td className="px-3.5 py-3 font-body text-[0.82rem] whitespace-nowrap text-ink-muted tabular-nums">
+                              {fmtFrDate(t.date)}
+                            </td>
+                            <td className="px-3.5 py-3">
+                              <NaturePill nature={t.nature} />
+                            </td>
+                            <td className="px-3.5 py-3">
+                              <div className="font-body text-[0.85rem] text-ink">{sub}</div>
+                              <div className="font-body text-[0.72rem] text-ink-disabled">{group}</div>
+                            </td>
+                            <td className="px-3.5 py-3">
+                              <ScopeCell tx={t} teamMap={teamMap} staffMap={staffMap} />
+                            </td>
+                            <td
+                              className={cn(
+                                "px-3.5 py-3 text-right font-body text-[0.85rem] whitespace-nowrap tabular-nums",
+                                revenu ? "text-success" : "text-danger",
+                              )}
+                            >
+                              {revenu ? "+" : "−"}
+                              {fmtShort(t.amount)} TND
+                            </td>
+                            <td className="px-3.5 py-3 font-body text-[0.8rem] whitespace-nowrap text-ink-muted">
+                              {t.payment_method ?? "—"}
+                            </td>
+                            <td className="px-3.5 py-3 text-center">
+                              {t.attachment ? (
+                                <span title={t.attachment}>
+                                  <Paperclip size={14} className="inline text-info" />
+                                </span>
+                              ) : (
+                                <span className="text-ink-disabled">—</span>
+                              )}
+                            </td>
+                            <td className="px-2 py-3 text-right">
+                              <button
+                                type="button"
+                                onClick={(e) => openMenu(t, e)}
+                                aria-label="Actions"
+                                className="inline-flex size-7 items-center justify-center rounded-sm border border-transparent text-ink-muted transition-colors hover:border-border hover:bg-surface-hover hover:text-ink"
+                              >
+                                <span className="text-lg leading-none">⋯</span>
+                              </button>
+                            </td>
+                          </tr>
+                        )
+                      })
+                    )}
+                  </tbody>
+                </table>
               </div>
-            ) : null}
-          </div>
+
+              {sorted.length > visible ? (
+                <div className="flex items-center justify-center border-t border-border py-3">
+                  <button
+                    type="button"
+                    onClick={() => setVisible((v) => v + PAGE)}
+                    className="inline-flex items-center gap-1.5 rounded-md border border-input px-3.5 py-1.5 font-ui text-[0.78rem] font-medium text-ink-subtle transition-colors hover:border-[var(--border-hover)] hover:text-ink"
+                  >
+                    Charger plus ({sorted.length - visible})
+                  </button>
+                </div>
+              ) : sorted.length > 0 ? (
+                <div className="border-t border-border px-4 py-2.5 text-right font-body text-[0.72rem] text-ink-disabled tabular-nums">
+                  {sorted.length} transaction{sorted.length > 1 ? "s" : ""}
+                </div>
+              ) : null}
+            </div>
+          )}
         </>
       )}
 
-      {/* Row actions menu (fixed — escapes the table's overflow clipping) */}
+      {/* Row actions menu (fixed — escapes any overflow clipping) */}
       {menu ? (
         <>
           <button
@@ -659,7 +804,145 @@ export function TransactionsScreen() {
   )
 }
 
+/* ── Ledger grouping ────────────────────────────────────────────────────── */
+type DayLevel = { key: string; revenus: number; depenses: number; net: number; rows: Transaction[] }
+type MonthLevel = {
+  key: string
+  revenus: number
+  depenses: number
+  net: number
+  rows: number
+  days: DayLevel[]
+}
+
+function tally(target: { revenus: number; depenses: number }, t: Transaction) {
+  if (t.nature === "Revenu") target.revenus += t.amount
+  else target.depenses += t.amount
+}
+
+/** ordered (date-desc) rows → months → days, subtotals accumulated per level. */
+function groupLedger(ordered: Transaction[]): MonthLevel[] {
+  const months: MonthLevel[] = []
+  const monthIndex = new Map<string, number>()
+  const dayIndex = new Map<string, number>()
+
+  for (const t of ordered) {
+    const mKey = t.date.slice(0, 7)
+    let mi = monthIndex.get(mKey)
+    if (mi === undefined) {
+      mi = months.length
+      monthIndex.set(mKey, mi)
+      months.push({ key: mKey, revenus: 0, depenses: 0, net: 0, rows: 0, days: [] })
+    }
+    const month = months[mi]
+    tally(month, t)
+    month.rows += 1
+
+    const dKey = t.date
+    let di = dayIndex.get(dKey)
+    if (di === undefined) {
+      di = month.days.length
+      dayIndex.set(dKey, di)
+      month.days.push({ key: dKey, revenus: 0, depenses: 0, net: 0, rows: [] })
+    }
+    const day = month.days[di]
+    tally(day, t)
+    day.rows.push(t)
+  }
+
+  for (const m of months) {
+    m.net = m.revenus - m.depenses
+    for (const d of m.days) d.net = d.revenus - d.depenses
+  }
+  return months
+}
+
 /* ── Small building blocks ──────────────────────────────────────────────── */
+function NoResults({ onReset }: { onReset: () => void }) {
+  return (
+    <div className="mt-4 rounded-lg border border-border px-4 py-12 text-center">
+      <p className="font-body text-sm text-ink-muted">Aucun résultat</p>
+      <button
+        type="button"
+        onClick={onReset}
+        className="mt-1.5 font-ui text-[0.74rem] font-medium text-info transition-opacity hover:opacity-80"
+      >
+        Réinitialiser les filtres
+      </button>
+    </div>
+  )
+}
+
+/** Revenus / Dépenses / Solde figures for a month or day header. */
+function Totals({
+  sums,
+  size,
+}: {
+  sums: { revenus: number; depenses: number; net: number }
+  size: "month" | "day"
+}) {
+  const month = size === "month"
+  return (
+    <div className={cn("flex items-center", month ? "gap-5" : "gap-4")}>
+      <Figure label="Revenus" value={sums.revenus} tone="pos" month={month} />
+      <Figure label="Dépenses" value={sums.depenses} tone="neg" month={month} />
+      <Figure
+        label="Solde"
+        value={sums.net}
+        tone={sums.net < 0 ? "neg" : sums.net > 0 ? "pos" : "none"}
+        month={month}
+        signed
+        strong
+      />
+    </div>
+  )
+}
+
+function Figure({
+  label,
+  value,
+  tone,
+  month,
+  signed,
+  strong,
+}: {
+  label: string
+  value: number
+  tone: "pos" | "neg" | "none"
+  month: boolean
+  signed?: boolean
+  strong?: boolean
+}) {
+  const color =
+    tone === "pos" ? "text-success" : tone === "neg" ? "text-danger" : "text-ink-muted"
+  const sign = signed && value !== 0 ? (value > 0 ? "+" : "−") : ""
+  const text = `${sign}${fmtAmount(Math.abs(value))} DT`
+
+  if (month) {
+    return (
+      <div className="text-right">
+        <div className="font-ui text-[0.58rem] font-medium tracking-[0.09em] text-ink-disabled uppercase">
+          {label}
+        </div>
+        <div className={cn("mt-0.5 font-body text-[0.92rem] tabular-nums", color, strong && "font-medium")}>
+          {text}
+        </div>
+      </div>
+    )
+  }
+  return (
+    <span className="flex items-baseline gap-1.5">
+      <span className="font-ui text-[0.58rem] font-medium tracking-[0.08em] text-ink-disabled uppercase">
+        {label}
+      </span>
+      <span className={cn("font-body text-[0.76rem] tabular-nums", color, strong && "font-medium")}>
+        {text}
+      </span>
+    </span>
+  )
+}
+
+/* ── Table building blocks ──────────────────────────────────────────────── */
 function Th({
   children,
   align = "left",

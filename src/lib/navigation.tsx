@@ -6,8 +6,6 @@ import {
   UserCheck,
   ShieldCheck,
   Calendar,
-  Upload,
-  Database,
   Gauge,
   Layers,
   CalendarDays,
@@ -16,7 +14,14 @@ import {
   Network,
   Gamepad2,
   Target,
-  Briefcase,
+  SquarePen,
+  MessageSquare,
+  Share2,
+  Boxes,
+  ListTodo,
+  BookOpen,
+  GraduationCap,
+  Flag,
   Wallet,
   WalletCards,
   FileText,
@@ -69,8 +74,6 @@ export const navTree: NavNode[] = [
   },
 
   { type: "item", label: "Planification", path: "/planification", icon: Calendar },
-  { type: "item", label: "Importer des données", path: "/importer", icon: Upload },
-  { type: "item", label: "Données Ouvertes", path: "/donnees-ouvertes", icon: Database },
 
   {
     type: "group",
@@ -88,9 +91,30 @@ export const navTree: NavNode[] = [
     ],
   },
 
+  { type: "item", label: "Analyse et Suivi", path: "/analyse-et-suivi", icon: SquarePen },
+  { type: "item", label: "Messagerie", path: "/messagerie", icon: MessageSquare },
+  { type: "item", label: "Communauté", path: "/communaute", icon: Share2 },
+
   {
     type: "group",
-    label: "Finance",
+    label: "Structuration",
+    icon: Boxes,
+    key: "structuration",
+    children: [
+      { type: "item", label: "Organigramme", path: "/structuration/organigramme", icon: Network },
+      { type: "item", label: "Gestion des tâches", path: "/structuration/taches", icon: ListTodo },
+      { type: "item", label: "Réunions", path: "/structuration/reunions", icon: CalendarDays },
+      { type: "item", label: "Formations", path: "/structuration/formations", icon: BookOpen },
+      { type: "item", label: "Qualifications", path: "/structuration/qualifications", icon: GraduationCap },
+      { type: "item", label: "Fiches & Documents", path: "/documents", icon: FileText },
+      { type: "item", label: "Projet du club", path: "/structuration/projet-du-club", icon: Flag },
+      { type: "item", label: "Objectifs techniques", path: "/structuration/objectifs-techniques", icon: Target },
+    ],
+  },
+
+  {
+    type: "group",
+    label: "Finances",
     icon: Landmark,
     key: "finance",
     children: [
@@ -98,16 +122,6 @@ export const navTree: NavNode[] = [
       { type: "item", label: "Demander une transaction", path: "/finance/demande", icon: Send },
       { type: "item", label: "Budget", path: "/budget", icon: Wallet },
       { type: "item", label: "Budget 2", path: "/budget2", icon: WalletCards },
-    ],
-  },
-
-  {
-    type: "group",
-    label: "Gestion",
-    icon: Briefcase,
-    key: "gestion",
-    children: [
-      { type: "item", label: "Documents", path: "/documents", icon: FileText },
     ],
   },
 ]

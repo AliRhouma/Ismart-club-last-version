@@ -1,13 +1,32 @@
-import { useMemo, useState } from "react"
+import { useMemo, useState, type ReactNode } from "react"
 import { useSearchParams } from "react-router-dom"
 import {
   ArrowDown,
   ArrowLeftRight,
   ArrowUp,
+  BarChart3,
   Check,
   ChevronDown,
+  GitCompareArrows,
+  Radar as RadarIcon,
   Scale,
 } from "lucide-react"
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  PolarAngleAxis,
+  PolarGrid,
+  PolarRadiusAxis,
+  Radar,
+  RadarChart,
+  ReferenceLine,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts"
 
 import { cn } from "@/lib/utils"
 import { fmt, fmtShort } from "@/lib/format"
@@ -26,6 +45,7 @@ import {
   type CompareRow,
 } from "@/features/budget2/compare"
 import { byId } from "@/features/budget2/helpers"
+import { Select } from "@/features/finance/ui"
 import { BackButton } from "@/components/kit/BackButton"
 import { EmptyState } from "@/components/kit/EmptyState"
 import { PageHeader } from "@/components/kit/PageHeader"
@@ -178,6 +198,9 @@ export function Budget2CompareScreen() {
               { key: "sol", label: "Solde prévisionnel", nature: "Solde", av: totalsA.solde, bv: totalsB.solde, strong: true },
             ]}
           />
+
+          {/* ── Vue graphique — stats visuelles pour arbitrer ───────────── */}
+          <CompareCharts />
 
           {/* ── Par section ─────────────────────────────────────────────── */}
           <CompareBlock title="Répartition par section" a={a.label} b={b.label}>
@@ -676,6 +699,466 @@ function CompareBlock({
       {children}
     </section>
   )
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+ * Vue graphique — comparison stats
+ * --------------------------------------------------------------------------
+ * Charts that make the A/B comparison legible at a glance. The first three
+ * VISUALISE the real selected budgets (same figures as the tables — display
+ * arithmetic only, no engine); the multi-season trend uses illustrative data
+ * (the prototype has no budget history). All are UI-only with local filters.
+ * ══════════════════════════════════════════════════════════════════════════ */
+
+/* A = info blue, B = brand-blue — the two series already used across the page. */
+const A_C = "#60a5fa"
+const B_C = "#0091ff"
+const AXIS = "#a3a3a3" // --ink-muted
+const GRID = "#252525" // --border
+const FAV = "#46a758" // favourable move (success-600)
+const UNFAV = "#e5484d" // unfavourable move (--danger)
+
+/* ── Illustrative seasons — self-contained, richer than the live drafts ──────
+   The charts below run on their own imaginary multi-season dataset (more
+   categories = fuller radar & écart bars) with A/B season pickers, so the
+   comparison reads at season scale. Pure data shaping — no engine. */
+const DEP_CATS = [
+  "Équipements", "Déplacements", "Arbitrage", "Stages & tournois", "Médical",
+  "Restauration", "Hébergement", "Matériel", "Formation", "Communication",
+]
+const REV_CATS = ["Cotisations", "Subventions", "Sponsoring", "Billetterie", "Buvette", "Partenariats"]
+const DEP_BASE = [46000, 42000, 20000, 32000, 17000, 21000, 19000, 13000, 11000, 9000]
+const REV_BASE = [120000, 74000, 66000, 24000, 17000, 13000]
+
+type SeasonDef = { id: string; label: string; short: string; g: number }
+const SEASONS: SeasonDef[] = [
+  { id: "s2122", label: "Saison 2021/2022", short: "21/22", g: 0.84 },
+  { id: "s2223", label: "Saison 2022/2023", short: "22/23", g: 0.91 },
+  { id: "s2324", label: "Saison 2023/2024", short: "23/24", g: 0.99 },
+  { id: "s2425", label: "Saison 2024/2025", short: "24/25", g: 1.06 },
+  { id: "s2526", label: "Saison 2025/2026", short: "25/26", g: 1.13 },
+]
+
+const round50 = (n: number) => Math.round(n / 50) * 50
+type SeasonData = { dep: number[]; rev: number[]; totDep: number; totRev: number; solde: number }
+const SEASON_DATA: Record<string, SeasonData> = {}
+SEASONS.forEach((s, si) => {
+  const dep = DEP_BASE.map((b, ci) =>
+    round50(b * s.g * (1 + 0.14 * Math.sin((ci + 1) * (si + 2) * 0.7))),
+  )
+  const rev = REV_BASE.map((b, ci) =>
+    round50(b * s.g * (1 + 0.1 * Math.sin((ci + 2) * (si + 1) * 0.6))),
+  )
+  const totDep = dep.reduce((a, b) => a + b, 0)
+  const totRev = rev.reduce((a, b) => a + b, 0)
+  SEASON_DATA[s.id] = { dep, rev, totDep, totRev, solde: totRev - totDep }
+})
+
+/** CompareRow[] between two seasons for one nature. */
+function seasonRows(aId: string, bId: string, nature: "Dépense" | "Revenu"): CompareRow[] {
+  const cats = nature === "Dépense" ? DEP_CATS : REV_CATS
+  const A = SEASON_DATA[aId]
+  const B = SEASON_DATA[bId]
+  const av = nature === "Dépense" ? A.dep : A.rev
+  const bv = nature === "Dépense" ? B.dep : B.rev
+  return cats.map((label, i) => ({ key: label, label, a: av[i], b: bv[i], delta: bv[i] - av[i] }))
+}
+
+type Totals = { revenus: number; depenses: number; solde: number }
+const totalsOf = (d: SeasonData): Totals => ({
+  revenus: d.totRev,
+  depenses: d.totDep,
+  solde: d.solde,
+})
+
+function CompareCharts() {
+  const [aId, setAId] = useState("s2526")
+  const [bId, setBId] = useState("s2324")
+  const A = SEASON_DATA[aId]
+  const B = SEASON_DATA[bId]
+  const aLabel = SEASONS.find((s) => s.id === aId)!.label
+  const bLabel = SEASONS.find((s) => s.id === bId)!.label
+  const depRows = useMemo(() => seasonRows(aId, bId, "Dépense"), [aId, bId])
+  const revRows = useMemo(() => seasonRows(aId, bId, "Revenu"), [aId, bId])
+
+  return (
+    <div className="mt-6">
+      <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h2 className="font-ui text-[1.05rem] font-medium text-ink">Vue graphique</h2>
+          <p className="mt-0.5 font-body text-[0.8rem] text-ink-muted">
+            Analyse comparative des saisons — données illustratives.
+          </p>
+        </div>
+        <div className="flex items-end gap-2">
+          <SeasonSelect label="Saison A" dot={A_C} value={aId} onChange={setAId} />
+          <span className="pb-2.5 font-body text-[0.72rem] text-ink-disabled">vs</span>
+          <SeasonSelect label="Saison B" dot={B_C} value={bId} onChange={setBId} />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <FaceToFaceChart aLabel={aLabel} bLabel={bLabel} totalsA={totalsOf(A)} totalsB={totalsOf(B)} />
+        <ProfileRadarChart aLabel={aLabel} bLabel={bLabel} depRows={depRows} />
+        <DivergingChart depRows={depRows} revRows={revRows} />
+      </div>
+    </div>
+  )
+}
+
+/** Labelled season picker with a colour dot (A / B). */
+function SeasonSelect({
+  label,
+  dot,
+  value,
+  onChange,
+}: {
+  label: string
+  dot: string
+  value: string
+  onChange: (v: string) => void
+}) {
+  return (
+    <div className="flex flex-col gap-1">
+      <span className="font-ui text-[0.58rem] font-medium tracking-[0.08em] text-ink-disabled uppercase">
+        {label}
+      </span>
+      <div className="flex items-center gap-2">
+        <span className="size-2.5 shrink-0 rounded-full" style={{ background: dot }} />
+        <div className="w-[170px]">
+          <Select
+            value={value}
+            onChange={onChange}
+            options={SEASONS.map((s) => ({ value: s.id, label: s.label }))}
+          />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* ── 1 · Face-à-face — grouped bars (Revenus / Dépenses / Solde) ─────────── */
+function FaceToFaceChart({
+  aLabel,
+  bLabel,
+  totalsA,
+  totalsB,
+}: {
+  aLabel: string
+  bLabel: string
+  totalsA: Totals
+  totalsB: Totals
+}) {
+  const data = [
+    { metric: "Revenus", A: totalsA.revenus, B: totalsB.revenus },
+    { metric: "Dépenses", A: totalsA.depenses, B: totalsB.depenses },
+    { metric: "Solde", A: totalsA.solde, B: totalsB.solde },
+  ]
+  return (
+    <ChartCard
+      icon={GitCompareArrows}
+      title="Face-à-face"
+      subtitle="Indicateurs clés, A vs B"
+      legend={[
+        { color: A_C, label: `A · ${aLabel}` },
+        { color: B_C, label: `B · ${bLabel}` },
+      ]}
+    >
+      <div className="h-[260px] p-4">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={data} margin={{ top: 4, right: 8, bottom: 4, left: 4 }} barGap={3} barCategoryGap="34%">
+            <CartesianGrid vertical={false} stroke={GRID} />
+            <XAxis dataKey="metric" tick={{ fill: AXIS, fontSize: 11 }} axisLine={{ stroke: GRID }} tickLine={false} />
+            <YAxis tickFormatter={kFmt} tick={{ fill: AXIS, fontSize: 11 }} axisLine={false} tickLine={false} width={44} />
+            <ReferenceLine y={0} stroke="#404040" />
+            <Tooltip cursor={{ fill: "rgba(255,255,255,0.04)" }} content={<MoneyTooltip />} />
+            <Bar dataKey="A" name={`A · ${aLabel}`} fill={A_C} radius={[3, 3, 0, 0]} maxBarSize={30} />
+            <Bar dataKey="B" name={`B · ${bLabel}`} fill={B_C} radius={[3, 3, 0, 0]} maxBarSize={30} />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+    </ChartCard>
+  )
+}
+
+/* ── 2 · Profil de dépenses — radar (share of dépenses per category) ─────── */
+function ProfileRadarChart({
+  aLabel,
+  bLabel,
+  depRows,
+}: {
+  aLabel: string
+  bLabel: string
+  depRows: CompareRow[]
+}) {
+  const totA = depRows.reduce((s, r) => s + r.a, 0) || 1
+  const totB = depRows.reduce((s, r) => s + r.b, 0) || 1
+  // Top categories by combined weight → structure profile (share of dépenses).
+  const data = [...depRows]
+    .sort((x, y) => y.a + y.b - (x.a + x.b))
+    .slice(0, 7)
+    .map((r) => ({
+      axis: r.label,
+      A: Math.round((r.a / totA) * 100),
+      B: Math.round((r.b / totB) * 100),
+    }))
+
+  const hasData = data.some((d) => d.A > 0 || d.B > 0)
+
+  return (
+    <ChartCard
+      icon={RadarIcon}
+      title="Profil de dépenses"
+      subtitle="Répartition en % des dépenses"
+      legend={[
+        { color: A_C, label: `A · ${aLabel}` },
+        { color: B_C, label: `B · ${bLabel}` },
+      ]}
+    >
+      <div className="h-[260px] p-4">
+        {hasData ? (
+          <ResponsiveContainer width="100%" height="100%">
+            <RadarChart data={data} outerRadius="72%">
+              <PolarGrid stroke={GRID} />
+              <PolarAngleAxis dataKey="axis" tick={{ fill: AXIS, fontSize: 10 }} />
+              <PolarRadiusAxis tick={false} axisLine={false} tickCount={4} />
+              <Radar name={`A · ${aLabel}`} dataKey="A" stroke={A_C} fill={A_C} fillOpacity={0.14} strokeWidth={2} />
+              <Radar name={`B · ${bLabel}`} dataKey="B" stroke={B_C} fill={B_C} fillOpacity={0.14} strokeWidth={2} />
+              <Tooltip content={<PctTooltip />} />
+            </RadarChart>
+          </ResponsiveContainer>
+        ) : (
+          <EmptyChart label="Aucune dépense à profiler." />
+        )}
+      </div>
+    </ChartCard>
+  )
+}
+
+/* ── 3 · Écart par catégorie — diverging bars (B − A), metric-filtered ───── */
+function DivergingChart({
+  depRows,
+  revRows,
+}: {
+  depRows: CompareRow[]
+  revRows: CompareRow[]
+}) {
+  const [nature, setNature] = useState<"Dépense" | "Revenu">("Dépense")
+  const rows = nature === "Dépense" ? depRows : revRows
+  const data = rows.filter((r) => r.delta !== 0).slice(0, 8)
+
+  return (
+    <ChartCard
+      icon={BarChart3}
+      title="Écart par catégorie (B − A)"
+      subtitle="Où les deux budgets divergent"
+      right={
+        <Segmented
+          value={nature}
+          onChange={(v) => setNature(v as "Dépense" | "Revenu")}
+          options={[
+            { value: "Dépense", label: "Dépenses" },
+            { value: "Revenu", label: "Revenus" },
+          ]}
+        />
+      }
+    >
+      <div className="flex items-center gap-3 px-4 pt-3 font-body text-[0.7rem] text-ink-muted">
+        <LegendDot color={FAV} label="Favorable à B" />
+        <LegendDot color={UNFAV} label="Défavorable à B" />
+      </div>
+      <div className="h-[260px] p-4 pt-2">
+        {data.length ? (
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={data} layout="vertical" margin={{ top: 4, right: 16, bottom: 4, left: 8 }}>
+              <CartesianGrid horizontal={false} stroke={GRID} />
+              <XAxis type="number" tickFormatter={(v) => kFmt(Math.abs(v))} tick={{ fill: AXIS, fontSize: 11 }} axisLine={{ stroke: GRID }} tickLine={false} />
+              <YAxis type="category" dataKey="label" width={110} tick={{ fill: AXIS, fontSize: 10 }} axisLine={false} tickLine={false} />
+              <ReferenceLine x={0} stroke="#404040" />
+              <Tooltip cursor={{ fill: "rgba(255,255,255,0.04)" }} content={<DeltaTooltip nature={nature} />} />
+              <Bar dataKey="delta" radius={2} maxBarSize={16}>
+                {data.map((r) => (
+                  <Cell key={r.key} fill={favorable(nature, r.delta) ? FAV : UNFAV} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        ) : (
+          <EmptyChart label="Aucun écart entre les deux budgets." />
+        )}
+      </div>
+    </ChartCard>
+  )
+}
+
+/* ── Chart chrome ───────────────────────────────────────────────────────── */
+function ChartCard({
+  icon: Icon,
+  title,
+  subtitle,
+  legend,
+  right,
+  children,
+}: {
+  icon: typeof BarChart3
+  title: string
+  subtitle?: string
+  legend?: { color: string; label: string }[]
+  right?: ReactNode
+  children: ReactNode
+}) {
+  return (
+    <section className="overflow-hidden rounded-lg border border-border">
+      <div className="flex flex-wrap items-start justify-between gap-3 border-b border-border px-4 py-3">
+        <div className="flex items-center gap-2.5">
+          <span className="flex size-8 items-center justify-center rounded-md bg-surface-nested text-ink-muted">
+            <Icon size={15} />
+          </span>
+          <div>
+            <h3 className="font-ui text-[0.9rem] font-medium text-ink">{title}</h3>
+            {subtitle ? <p className="font-body text-[0.72rem] text-ink-disabled">{subtitle}</p> : null}
+          </div>
+        </div>
+        {right ?? (legend ? (
+          <div className="flex flex-wrap items-center gap-3">
+            {legend.map((l) => (
+              <LegendDot key={l.label} color={l.color} label={l.label} />
+            ))}
+          </div>
+        ) : null)}
+      </div>
+      {children}
+    </section>
+  )
+}
+
+function LegendDot({ color, label }: { color: string; label: string }) {
+  return (
+    <span className="inline-flex items-center gap-1.5 font-body text-[0.7rem] text-ink-muted">
+      <span className="size-2.5 shrink-0 rounded-[3px]" style={{ background: color }} />
+      <span className="max-w-[9rem] truncate">{label}</span>
+    </span>
+  )
+}
+
+function Segmented({
+  value,
+  onChange,
+  options,
+}: {
+  value: string
+  onChange: (v: string) => void
+  options: { value: string; label: string }[]
+}) {
+  return (
+    <div className="inline-flex rounded-md border border-border p-0.5">
+      {options.map((o) => {
+        const on = o.value === value
+        return (
+          <button
+            key={o.value}
+            type="button"
+            onClick={() => onChange(o.value)}
+            className={cn(
+              "rounded-[5px] px-3 py-1 font-ui text-[0.72rem] font-medium transition-colors",
+              on ? "bg-surface-nested text-ink" : "text-ink-muted hover:text-ink",
+            )}
+          >
+            {o.label}
+          </button>
+        )
+      })}
+    </div>
+  )
+}
+
+function EmptyChart({ label }: { label: string }) {
+  return (
+    <div className="flex h-full items-center justify-center text-center font-body text-[0.82rem] text-ink-disabled">
+      {label}
+    </div>
+  )
+}
+
+/* ── Tooltips ────────────────────────────────────────────────────────────── */
+type TipItem = { name?: string; value?: number; color?: string; payload?: Record<string, unknown> }
+
+function TipShell({ label, children }: { label?: ReactNode; children: ReactNode }) {
+  return (
+    <div className="min-w-[150px] rounded-md border border-border-strong bg-surface px-3 py-2 shadow-deep">
+      {label != null ? <div className="mb-1.5 font-ui text-[0.72rem] font-medium text-ink">{label}</div> : null}
+      <div className="flex flex-col gap-1">{children}</div>
+    </div>
+  )
+}
+
+function TipRow({ color, name, value }: { color?: string; name: ReactNode; value: ReactNode }) {
+  return (
+    <div className="flex items-center gap-2 font-body text-[0.76rem]">
+      {color ? <span className="size-2 rounded-[2px]" style={{ background: color }} /> : null}
+      <span className="text-ink-muted">{name}</span>
+      <span className="ml-auto pl-3 font-ui tabular-nums text-ink">{value}</span>
+    </div>
+  )
+}
+
+function MoneyTooltip({ active, payload, label }: { active?: boolean; payload?: TipItem[]; label?: string | number }) {
+  if (!active || !payload?.length) return null
+  return (
+    <TipShell label={label}>
+      {payload.map((p, i) => (
+        <TipRow key={i} color={p.color} name={p.name} value={`${signed(Number(p.value ?? 0))} TND`} />
+      ))}
+    </TipShell>
+  )
+}
+
+function PctTooltip({ active, payload, label }: { active?: boolean; payload?: TipItem[]; label?: string | number }) {
+  if (!active || !payload?.length) return null
+  return (
+    <TipShell label={label}>
+      {payload.map((p, i) => (
+        <TipRow key={i} color={p.color} name={p.name} value={`${Number(p.value ?? 0)}%`} />
+      ))}
+    </TipShell>
+  )
+}
+
+function DeltaTooltip({
+  active,
+  payload,
+  nature,
+}: {
+  active?: boolean
+  payload?: TipItem[]
+  nature: "Dépense" | "Revenu"
+}) {
+  if (!active || !payload?.length) return null
+  const row = payload[0]?.payload as unknown as CompareRow | undefined
+  if (!row) return null
+  const fav = favorable(nature, row.delta)
+  return (
+    <TipShell label={row.label}>
+      <TipRow color={A_C} name="A" value={`${fmtShort(row.a)} TND`} />
+      <TipRow color={B_C} name="B" value={`${fmtShort(row.b)} TND`} />
+      <div className="mt-0.5 flex items-center gap-2 border-t border-border pt-1 font-body text-[0.76rem]">
+        <span className="text-ink-muted">Écart</span>
+        <span className={cn("ml-auto pl-3 font-ui tabular-nums", fav ? "text-success" : "text-danger")}>
+          {signed(row.delta)} TND
+        </span>
+      </div>
+    </TipShell>
+  )
+}
+
+/** Compact axis formatter — 12000 → "12k", 15900 → "15,9k". */
+function kFmt(v: number): string {
+  const abs = Math.abs(v)
+  if (abs >= 1000) {
+    const k = Math.round(abs / 100) / 10
+    return `${v < 0 ? "−" : ""}${k.toLocaleString("fr-FR")}k`
+  }
+  return String(v)
 }
 
 /* ── Table header cell ──────────────────────────────────────────────────── */

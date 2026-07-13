@@ -1,729 +1,723 @@
 import { useMemo, useState, type ReactNode } from "react"
 import {
   Activity,
-  ArrowDownRight,
-  ArrowUpRight,
   BarChart3,
-  Filter,
-  Info,
-  RotateCcw,
+  GitCompareArrows,
+  Home,
+  LineChart as LineChartIcon,
+  PieChart as PieChartIcon,
+  Plane,
   Scale,
-  SlidersHorizontal,
-  TrendingDown,
   TrendingUp,
+  Trophy,
+  Users,
   Wallet,
 } from "lucide-react"
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  Line,
+  LineChart,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts"
 
 import { cn } from "@/lib/utils"
 import { fmt, fmtShort } from "@/lib/format"
 import { signed } from "@/features/budget2/suivi"
 import type { Budget2Season } from "@/data/seed/budget2"
-import { Segmented } from "@/features/budget/ui"
-import { Field, Select } from "@/features/finance/ui"
-import { Badge } from "@/components/kit/Badge"
+import { Select } from "@/features/finance/ui"
 
 /* ═══════════════════════════════════════════════════════════════════════════
- * Budget 2 — Analyse (analyse d'écart : réel vs plan validé).
+ * Budget 2 — Analyse (tableau de bord visuel du trésorier).
  *
- * A UI-only, chart-driven view of the gap between the REALISED transactions
- * (réel) and the VALIDATED budget draft (le brouillon de référence). Where the
- * Dashboard tab lists the operational suivi (tables + alerts), this tab is the
- * treasurer's *visual* variance toolkit: pace over time, écart par rubrique,
- * consumption vs limit, and a detail ledger — surfaced only once a filter is run.
+ * A UI-ONLY, chart-driven analysis surface. Every figure below is illustrative
+ * ("imagination") fake data — there is NO business logic here, only local
+ * filters that re-slice the same seeded datasets. It answers the questions a
+ * treasurer actually asks:
+ *   · Comparer le coût de deux équipes, poste par poste.
+ *   · Suivre les dépenses mensuelles, filtrées par équipe.
+ *   · Comparer les trajectoires de dépense de chaque équipe.
+ *   · Comparer le coût moyen d'un match à domicile vs à l'extérieur.
+ *   · Analyser la répartition des dépenses par catégorie.
+ *   · Confronter le prévu au réel, catégorie par catégorie.
  *
- * NOTE — this screen carries NO business logic. The figures below are
- * illustrative "imagination" data shaped exactly like `buildSuivi()` output
- * (prévu / réel per rubrique), so it could later be fed from the store with no
- * layout change. Colours follow the two-series language already used by the
- * Comparaison screen: Prévu = info (#60a5fa), Réel = brand-blue (#0091ff);
- * favourable/défavorable écarts use genuine status green/red.
+ * Charts are drawn with Recharts. Colours follow the design-system data-viz
+ * language: a validated categorical palette for team series (fixed per team,
+ * never re-assigned when a filter hides one), neutral grey for the "prévu"
+ * reference and brand-blue for the "réel", genuine status green/red for écarts.
  * ═══════════════════════════════════════════════════════════════════════════ */
 
-type SectionKey = "generales" | "staff" | "equipes" | "revenus"
-type RowNature = "Dépense" | "Revenu"
+/* ── Data-viz chrome (design tokens, as hex for the SVG layer) ─────────────── */
+const AXIS = "#a3a3a3" // --ink-muted
+const GRID = "#252525" // --border
+const PREVU = "#737373" // neutral-400 — the plan / reference
+const REEL = "#0091ff" // --brand-blue-600 — the realised
+const HOME_C = "#3987e5" // domicile
+const AWAY_C = "#c98500" // extérieur
 
-type Rubrique = {
-  label: string
-  nature: RowNature
-  section: SectionKey
-  prevu: number
-  reel: number
-}
-
-const SECTION_LABEL: Record<SectionKey, string> = {
-  generales: "Générales",
-  staff: "Staff",
-  equipes: "Équipes",
-  revenus: "Revenus",
-}
-
-/* ── Illustrative dataset — one validated season, varied on purpose ─────────
-   (overruns, savings, a near-limit line, an off-budget line, revenue over- and
-   under-performance) so every chart state is represented. */
-const RUBRIQUES: Rubrique[] = [
-  // Dépenses — générales
-  { label: "Équipements sportifs", nature: "Dépense", section: "generales", prevu: 42000, reel: 47800 },
-  { label: "Matériel médical", nature: "Dépense", section: "generales", prevu: 5000, reel: 8400 },
-  { label: "Déplacements & transport", nature: "Dépense", section: "generales", prevu: 28000, reel: 24300 },
-  { label: "Location & terrains", nature: "Dépense", section: "generales", prevu: 36000, reel: 35100 },
-  { label: "Arbitrage", nature: "Dépense", section: "generales", prevu: 12000, reel: 13600 },
-  { label: "Communication & médias", nature: "Dépense", section: "generales", prevu: 9000, reel: 6200 },
-  { label: "Frais administratifs", nature: "Dépense", section: "generales", prevu: 7000, reel: 7050 },
-  { label: "Événements & tournois", nature: "Dépense", section: "generales", prevu: 15000, reel: 9800 },
-  { label: "Assurances", nature: "Dépense", section: "generales", prevu: 0, reel: 2600 },
-  // Dépenses — staff
-  { label: "Staff technique", nature: "Dépense", section: "staff", prevu: 60000, reel: 61500 },
-  { label: "Staff administratif", nature: "Dépense", section: "staff", prevu: 22000, reel: 20800 },
-  // Dépenses — équipes
-  { label: "Équipe U15", nature: "Dépense", section: "equipes", prevu: 14000, reel: 15900 },
-  { label: "Équipe U17", nature: "Dépense", section: "equipes", prevu: 16000, reel: 14200 },
-  { label: "Équipe Senior", nature: "Dépense", section: "equipes", prevu: 24000, reel: 26800 },
-  // Revenus
-  { label: "Cotisations membres", nature: "Revenu", section: "revenus", prevu: 110000, reel: 112400 },
-  { label: "Subventions municipales", nature: "Revenu", section: "revenus", prevu: 72000, reel: 66000 },
-  { label: "Sponsoring", nature: "Revenu", section: "revenus", prevu: 64000, reel: 69800 },
-  { label: "Billetterie", nature: "Revenu", section: "revenus", prevu: 22000, reel: 18300 },
-  { label: "Buvette & boutique", nature: "Revenu", section: "revenus", prevu: 16000, reel: 18100 },
-  { label: "Partenariats médias", nature: "Revenu", section: "revenus", prevu: 12000, reel: 9500 },
-  { label: "Subvention exceptionnelle", nature: "Revenu", section: "revenus", prevu: 0, reel: 8000 },
+/* Validated categorical palette (dark surface #181818 — see dataviz validator).
+   Assigned to teams in fixed order; a hidden team never repaints the others. */
+const SERIES = ["#3987e5", "#199e70", "#c98500", "#9085e9", "#e66767", "#d95926"]
+/* Category slots — the validated 8-hue dark set (labels carry identity). */
+const CAT_COLORS = [
+  "#3987e5", "#199e70", "#c98500", "#9085e9",
+  "#e66767", "#d95926", "#d55181", "#4f9d3a",
 ]
 
-const SEUIL = 0.8 // alert threshold — 80 % of budget consumed
+/* ── Referentials ──────────────────────────────────────────────────────────── */
+type Team = { id: string; name: string; base: number; color: string }
+const TEAMS: Team[] = [
+  { id: "seniors", name: "Séniors", base: 92000, color: SERIES[0] },
+  { id: "u19", name: "U19", base: 58000, color: SERIES[1] },
+  { id: "u17", name: "U17", base: 49000, color: SERIES[2] },
+  { id: "u15", name: "U15", base: 39000, color: SERIES[3] },
+  { id: "u13", name: "U13", base: 27000, color: SERIES[4] },
+  { id: "u11", name: "U11", base: 20000, color: SERIES[5] },
+]
+const teamById = new Map(TEAMS.map((t) => [t.id, t]))
 
-/* Favourable-signed écart: dépense → prévu − réel ; revenu → réel − prévu. */
-const ecartOf = (r: Rubrique) =>
-  r.nature === "Dépense" ? r.prevu - r.reel : r.reel - r.prevu
-const ratioOf = (r: Rubrique) => (r.prevu > 0 ? r.reel / r.prevu : null)
+const MONTHS = [
+  "Août", "Sept", "Oct", "Nov", "Déc", "Janv",
+  "Févr", "Mars", "Avr", "Mai", "Juin",
+]
+/* Season spend shape — pre-season équipement spike, spring tournament bump. */
+const MONTH_SHAPE = [0.14, 0.1, 0.075, 0.07, 0.06, 0.07, 0.08, 0.095, 0.11, 0.1, 0.1]
 
-/* ── Filter model ──────────────────────────────────────────────────────────── */
-type NatureFilter = "Tous" | "Dépense" | "Revenu"
-type Applied = {
-  saison: string
-  section: "toutes" | SectionKey
-  nature: NatureFilter
-}
+const CATEGORIES = [
+  "Équipements", "Déplacements", "Arbitrage", "Stages & tournois",
+  "Médical", "Restauration", "Hébergement", "Matériel",
+]
+const CAT_SHAPE = [0.22, 0.2, 0.09, 0.15, 0.08, 0.1, 0.1, 0.06]
 
+/* ── Derived fake matrices (pure shaping of the bases — no business logic) ──── */
+const round50 = (n: number) => Math.round(n / 50) * 50
+
+/** team → month → dépense réelle. */
+const teamMonth: Record<string, number[]> = {}
+/** team → category → dépense réelle. */
+const teamCat: Record<string, number[]> = {}
+TEAMS.forEach((t, ti) => {
+  teamMonth[t.id] = MONTH_SHAPE.map((w, mi) =>
+    round50(t.base * w * (1 + 0.18 * Math.sin((mi + ti * 1.6) * 0.9))),
+  )
+  teamCat[t.id] = CAT_SHAPE.map((w, ci) =>
+    round50(t.base * w * (1 + 0.16 * Math.sin((ci + 1) * (ti + 1) * 0.7))),
+  )
+})
+
+const teamTotal = (id: string) => teamCat[id].reduce((s, v) => s + v, 0)
+const grandTotal = TEAMS.reduce((s, t) => s + teamTotal(t.id), 0)
+
+/* Prévu par catégorie — derived from réel with a per-category drift so the
+   comparison shows a believable mix of savings and overruns. */
+const reelByCat = CATEGORIES.map((_, ci) =>
+  TEAMS.reduce((s, t) => s + teamCat[t.id][ci], 0),
+)
+const PREVU_FACTOR = [0.92, 1.06, 1.0, 0.86, 1.12, 0.95, 0.9, 1.14]
+const prevuByCat = reelByCat.map((v, ci) => round50(v * PREVU_FACTOR[ci]))
+const prevuTotal = prevuByCat.reduce((s, v) => s + v, 0)
+
+/* Coût moyen par match — domicile vs extérieur (extérieur = déplacement +
+   hébergement, donc plus cher). Base costs scaled by the team's weight. */
+const MATCH_TYPES = ["Transport", "Arbitrage", "Repas", "Hébergement", "Divers"]
+const HOME_COST = [45, 190, 110, 0, 70]
+const AWAY_COST = [340, 190, 210, 260, 95]
+
+/* ════════════════════════════════════════════════════════════════════════════
+ * Page
+ * ════════════════════════════════════════════════════════════════════════════ */
 export function Budget2Analyse({ season }: { season: Budget2Season }) {
-  const [saison, setSaison] = useState(season.id)
-  const [section, setSection] = useState<"toutes" | SectionKey>("toutes")
-  const [nature, setNature] = useState<NatureFilter>("Dépense")
-  const [applied, setApplied] = useState<Applied | null>(null)
-
-  const current: Applied = { saison, section, nature }
-  const dirty =
-    applied !== null &&
-    JSON.stringify(applied) !== JSON.stringify(current)
-
-  const run = () => setApplied(current)
-  const reset = () => {
-    setSection("toutes")
-    setNature("Dépense")
-    setApplied(null)
-  }
+  const topTeam = [...TEAMS].sort((a, b) => teamTotal(b.id) - teamTotal(a.id))[0]
+  const tauxReal = Math.round((grandTotal / prevuTotal) * 100)
 
   return (
     <div className="mt-6 flex flex-col gap-4 pb-16">
-      {/* ── Filter bar — the analysis is gated behind it ─────────────────── */}
-      <FilterBar
-        saison={saison}
-        setSaison={setSaison}
-        section={section}
-        setSection={setSection}
-        nature={nature}
-        setNature={setNature}
-        seasonLabel={season.label}
-        applied={applied}
-        dirty={dirty}
-        onRun={run}
-        onReset={reset}
-      />
-
-      {applied === null ? (
-        <FilterPrompt />
-      ) : (
-        <AnalyseResults key={JSON.stringify(applied)} applied={applied} />
-      )}
-    </div>
-  )
-}
-
-/* ════════════════════════════════════════════════════════════════════════════
- * Filter bar
- * ════════════════════════════════════════════════════════════════════════════ */
-function FilterBar({
-  saison,
-  setSaison,
-  section,
-  setSection,
-  nature,
-  setNature,
-  seasonLabel,
-  applied,
-  dirty,
-  onRun,
-  onReset,
-}: {
-  saison: string
-  setSaison: (v: string) => void
-  section: "toutes" | SectionKey
-  setSection: (v: "toutes" | SectionKey) => void
-  nature: NatureFilter
-  setNature: (v: NatureFilter) => void
-  seasonLabel: string
-  applied: Applied | null
-  dirty: boolean
-  onRun: () => void
-  onReset: () => void
-}) {
-  return (
-    <section className="overflow-hidden rounded-lg border border-border">
-      <div className="flex items-center gap-2 border-b border-border px-4 py-3">
-        <SlidersHorizontal size={15} className="text-ink-muted" />
-        <h2 className="font-ui text-[0.78rem] font-medium tracking-[0.06em] text-ink-subtle uppercase">
-          Paramètres de l'analyse
-        </h2>
-        {applied && dirty ? (
-          <span className="ml-auto inline-flex items-center gap-1.5 font-body text-[0.72rem] text-warning">
-            <Info size={13} /> Filtres modifiés — relancez l'analyse
-          </span>
-        ) : null}
+      {/* ── Intro ─────────────────────────────────────────────────────────── */}
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h2 className="font-ui text-[1.05rem] font-medium text-ink">
+            Analyse des dépenses
+          </h2>
+          <p className="mt-1 max-w-xl font-body text-[0.82rem] text-ink-muted">
+            Lecture visuelle du coût des équipes, de la répartition par catégorie
+            et de l'écart prévu / réel — saison {season.label}.
+          </p>
+        </div>
+        <span className="inline-flex items-center gap-1.5 rounded-pill border border-border px-3 py-1.5 font-ui text-[0.72rem] text-ink-muted">
+          <Activity size={13} className="text-info" /> Données de démonstration
+        </span>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-2 lg:grid-cols-3">
-        <Field label="Saison">
-          <Select
-            value={saison}
-            onChange={setSaison}
-            options={[{ value: saison, label: seasonLabel }]}
-          />
-        </Field>
-        <Field label="Rubrique">
-          <Select
-            value={section}
-            onChange={(v) => setSection(v as "toutes" | SectionKey)}
-            options={[
-              { value: "toutes", label: "Toutes les rubriques" },
-              { value: "generales", label: "Générales" },
-              { value: "staff", label: "Staff" },
-              { value: "equipes", label: "Équipes" },
-            ]}
-          />
-        </Field>
-        <Field label="Nature">
-          <Segmented
-            className="w-full"
-            value={nature}
-            onChange={setNature}
-            options={[
-              { value: "Tous", label: "Tous" },
-              { value: "Dépense", label: "Dépenses" },
-              { value: "Revenu", label: "Recettes" },
-            ]}
-          />
-        </Field>
-      </div>
-
-      <div className="flex flex-wrap items-center justify-end gap-2 border-t border-border px-4 py-3">
-        <button
-          type="button"
-          onClick={onReset}
-          className="inline-flex items-center gap-1.5 rounded-md border border-input px-3.5 py-2 font-ui text-[0.8rem] font-medium text-ink-subtle transition-colors hover:border-border-strong hover:text-ink"
-        >
-          <RotateCcw size={14} /> Réinitialiser
-        </button>
-        <button
-          type="button"
-          onClick={onRun}
-          className="inline-flex items-center gap-2 rounded-md bg-brand px-5 py-2 font-ui text-[0.8rem] font-medium text-ink-inverted shadow-glow transition-colors hover:bg-brand-dim"
-        >
-          <BarChart3 size={15} /> {applied ? "Actualiser l'analyse" : "Lancer l'analyse"}
-        </button>
-      </div>
-    </section>
-  )
-}
-
-/* Empty prompt shown before any analysis is run. */
-function FilterPrompt() {
-  return (
-    <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed border-border-strong px-6 py-16 text-center">
-      <span className="flex size-12 items-center justify-center rounded-full bg-surface-nested text-info">
-        <Filter size={20} />
-      </span>
-      <p className="font-ui text-[1rem] font-medium text-ink">Aucune analyse lancée</p>
-      <p className="max-w-md font-body text-[0.85rem] text-ink-muted">
-        Choisissez une rubrique et une nature, puis lancez l'analyse pour
-        visualiser les écarts entre le réel et le budget de référence.
-      </p>
-    </div>
-  )
-}
-
-/* ════════════════════════════════════════════════════════════════════════════
- * Results
- * ════════════════════════════════════════════════════════════════════════════ */
-function AnalyseResults({ applied }: { applied: Applied }) {
-  const rows = useMemo(
-    () =>
-      RUBRIQUES.filter((r) => {
-        if (applied.nature !== "Tous" && r.nature !== applied.nature) return false
-        if (applied.section !== "toutes" && r.nature === "Dépense" && r.section !== applied.section)
-          return false
-        return true
-      }),
-    [applied],
-  )
-
-  // Global headline totals (both natures, always — a stable summary).
-  const dep = RUBRIQUES.filter((r) => r.nature === "Dépense")
-  const rev = RUBRIQUES.filter((r) => r.nature === "Revenu")
-  const sum = (arr: Rubrique[], k: "prevu" | "reel") => arr.reduce((s, r) => s + r[k], 0)
-  const prevuDep = sum(dep, "prevu")
-  const reelDep = sum(dep, "reel")
-  const prevuRev = sum(rev, "prevu")
-  const reelRev = sum(rev, "reel")
-  const ecartDep = prevuDep - reelDep
-  const ecartRev = reelRev - prevuRev
-  const soldePrevu = prevuRev - prevuDep
-  const soldeReel = reelRev - reelDep
-
-  return (
-    <div className="animate-fade-up flex flex-col gap-4">
-      {/* ── KPI row — the headline gap ─────────────────────────────────── */}
+      {/* ── KPI row ───────────────────────────────────────────────────────── */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <KpiTile
-          icon={TrendingDown}
+        <Kpi
+          icon={Wallet}
           label="Dépenses réelles"
-          value={fmt(reelDep)}
-          sub={`sur ${fmtShort(prevuDep)} prévu`}
-          delta={`${signed(ecartDep)} TND`}
-          deltaTone={ecartDep >= 0 ? "up" : "down"}
+          value={fmt(grandTotal)}
+          sub={`sur ${fmtShort(prevuTotal)} prévu`}
         />
-        <KpiTile
-          icon={TrendingUp}
-          label="Recettes réelles"
-          value={fmt(reelRev)}
-          sub={`sur ${fmtShort(prevuRev)} prévu`}
-          delta={`${signed(ecartRev)} TND`}
-          deltaTone={ecartRev >= 0 ? "up" : "down"}
+        <Kpi
+          icon={Users}
+          label="Coût moyen / équipe"
+          value={fmt(Math.round(grandTotal / TEAMS.length))}
+          sub={`${TEAMS.length} équipes`}
         />
-        <KpiTile
+        <Kpi
+          icon={Trophy}
+          label="Équipe la plus coûteuse"
+          value={topTeam.name}
+          sub={`${fmtShort(teamTotal(topTeam.id))} TND`}
+          accent={topTeam.color}
+        />
+        <Kpi
           icon={Activity}
           label="Taux de réalisation"
-          value={`${Math.round((reelDep / prevuDep) * 100)}%`}
-          sub="des dépenses prévues"
-          delta={reelDep > prevuDep ? "Budget dépassé" : "Sous le budget"}
-          deltaTone={reelDep > prevuDep ? "down" : "up"}
-        />
-        <KpiTile
-          icon={Wallet}
-          label="Solde réel"
-          value={(soldeReel >= 0 ? "+" : "") + fmt(soldeReel)}
-          valueTone={soldeReel >= 0 ? "positive" : "negative"}
-          sub={`prévu ${signed(soldePrevu)} TND`}
-          delta={`${signed(soldeReel - soldePrevu)} TND vs prévu`}
-          deltaTone={soldeReel - soldePrevu >= 0 ? "up" : "down"}
+          value={`${tauxReal}%`}
+          sub={grandTotal > prevuTotal ? "budget dépassé" : "sous le budget"}
+          tone={grandTotal > prevuTotal ? "negative" : "positive"}
         />
       </div>
 
-      {/* ── Écart par rubrique — the gap, ranked ───────────────────────── */}
-      <EcartSection rows={rows} natureFilter={applied.nature} />
-
-      {/* ── Taux de consommation — where each budget stands ────────────── */}
-      <ConsumptionSection rows={rows} natureFilter={applied.nature} />
-
-      {/* ── Detail ledger ──────────────────────────────────────────────── */}
-      <DetailSection rows={rows} natureFilter={applied.nature} />
-    </div>
-  )
-}
-
-/* ── KPI tile ───────────────────────────────────────────────────────────── */
-function KpiTile({
-  icon: Icon,
-  label,
-  value,
-  valueTone,
-  sub,
-  delta,
-  deltaTone,
-}: {
-  icon: typeof TrendingUp
-  label: string
-  value: ReactNode
-  valueTone?: "positive" | "negative"
-  sub: string
-  delta: string
-  deltaTone: "up" | "down"
-}) {
-  return (
-    <div className="rounded-lg border border-border px-5 py-[1.1rem]">
-      <div className="flex items-center gap-1.5 font-ui text-[0.64rem] font-medium tracking-[0.1em] text-ink-muted uppercase">
-        <Icon size={13} className="text-ink-disabled" />
-        {label}
-      </div>
-      <div
-        className={cn(
-          "mt-2 font-display text-[1.9rem] leading-none font-semibold tabular-nums",
-          valueTone === "positive" && "text-success",
-          valueTone === "negative" && "text-danger",
-          !valueTone && "text-ink",
-        )}
-      >
-        {value}
-      </div>
-      <div className="mt-1.5 font-body text-[0.76rem] text-ink-muted tabular-nums">{sub}</div>
-      <div
-        className={cn(
-          "mt-2 inline-flex items-center gap-1 font-ui text-[0.76rem] font-medium tabular-nums",
-          deltaTone === "up" ? "text-success" : "text-danger",
-        )}
-      >
-        {deltaTone === "up" ? <ArrowUpRight size={13} /> : <ArrowDownRight size={13} />}
-        {delta}
+      {/* ── Sections ──────────────────────────────────────────────────────── */}
+      <TeamCompareSection />
+      <MonthlyByTeamSection />
+      <TeamLinesSection />
+      <HomeAwaySection />
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+        <CategoryBreakdownSection />
+        <PlanVsRealSection />
       </div>
     </div>
   )
 }
 
 /* ════════════════════════════════════════════════════════════════════════════
- * Écart par rubrique — diverging bars centred on zero
+ * 1 — Comparaison de deux équipes (grouped horizontal bars, par catégorie)
  * ════════════════════════════════════════════════════════════════════════════ */
-function EcartSection({ rows, natureFilter }: { rows: Rubrique[]; natureFilter: NatureFilter }) {
-  const ranked = useMemo(() => {
-    const withE = rows.map((r) => ({ r, e: ecartOf(r) }))
-    // biggest movers first (both directions)
-    withE.sort((a, b) => Math.abs(b.e) - Math.abs(a.e))
-    return natureFilter === "Tous" ? withE.slice(0, 10) : withE
-  }, [rows, natureFilter])
+function TeamCompareSection() {
+  const [a, setA] = useState("seniors")
+  const [b, setB] = useState("u17")
+  const teamA = teamById.get(a)!
+  const teamB = teamById.get(b)!
 
-  const maxAbs = Math.max(1, ...ranked.map((x) => Math.abs(x.e)))
+  const data = useMemo(
+    () =>
+      CATEGORIES.map((cat, ci) => ({
+        cat,
+        a: teamCat[a][ci],
+        b: teamCat[b][ci],
+      })),
+    [a, b],
+  )
+  const totA = teamTotal(a)
+  const totB = teamTotal(b)
+  const diff = totA - totB
+
+  return (
+    <Block
+      icon={GitCompareArrows}
+      title="Comparaison de deux équipes"
+      subtitle="Dépenses par catégorie — face à face"
+      right={
+        <div className="flex items-end gap-2">
+          <MiniSelect label="Équipe A" value={a} onChange={setA} dot={teamA.color} />
+          <span className="pb-2 font-body text-[0.72rem] text-ink-disabled">vs</span>
+          <MiniSelect label="Équipe B" value={b} onChange={setB} dot={teamB.color} />
+        </div>
+      }
+    >
+      <div className="grid grid-cols-1 gap-4 p-4 lg:grid-cols-[1fr_260px]">
+        <div className="h-[340px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart
+              data={data}
+              layout="vertical"
+              margin={{ top: 4, right: 12, bottom: 4, left: 8 }}
+              barGap={2}
+              barCategoryGap="26%"
+            >
+              <CartesianGrid horizontal={false} stroke={GRID} />
+              <XAxis
+                type="number"
+                tickFormatter={kFmt}
+                tick={{ fill: AXIS, fontSize: 11 }}
+                axisLine={{ stroke: GRID }}
+                tickLine={false}
+              />
+              <YAxis
+                type="category"
+                dataKey="cat"
+                width={116}
+                tick={{ fill: AXIS, fontSize: 11 }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <Tooltip
+                cursor={{ fill: "rgba(255,255,255,0.04)" }}
+                content={<ChartTooltip />}
+              />
+              <Bar dataKey="a" name={teamA.name} fill={teamA.color} radius={[0, 3, 3, 0]} maxBarSize={13} />
+              <Bar dataKey="b" name={teamB.name} fill={teamB.color} radius={[0, 3, 3, 0]} maxBarSize={13} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Face-à-face summary */}
+        <div className="flex flex-col justify-center gap-3">
+          <FaceRow color={teamA.color} name={teamA.name} value={totA} />
+          <FaceRow color={teamB.color} name={teamB.name} value={totB} />
+          <div className="mt-1 rounded-lg border border-border px-4 py-3">
+            <div className="font-ui text-[0.62rem] font-medium tracking-[0.1em] text-ink-muted uppercase">
+              Différence
+            </div>
+            <div
+              className={cn(
+                "mt-1 font-display text-[1.5rem] leading-none font-semibold tabular-nums",
+                diff === 0 ? "text-ink" : diff > 0 ? "text-danger" : "text-success",
+              )}
+            >
+              {signed(diff)} TND
+            </div>
+            <div className="mt-1 font-body text-[0.72rem] text-ink-disabled">
+              {diff === 0
+                ? "coût identique"
+                : `${teamA.name} ${diff > 0 ? "dépense plus" : "dépense moins"} que ${teamB.name}`}
+            </div>
+          </div>
+        </div>
+      </div>
+    </Block>
+  )
+}
+
+function FaceRow({ color, name, value }: { color: string; name: string; value: number }) {
+  return (
+    <div className="flex items-center gap-2.5 rounded-md border border-border px-3.5 py-2.5">
+      <span className="size-2.5 rounded-full" style={{ background: color }} />
+      <span className="font-body text-[0.86rem] text-ink">{name}</span>
+      <span className="ml-auto font-ui text-[0.9rem] font-medium tabular-nums text-ink-subtle">
+        {fmtShort(value)}
+      </span>
+    </div>
+  )
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+ * 2 — Dépenses mensuelles par équipe (grouped bars, filtrable par équipe)
+ * ════════════════════════════════════════════════════════════════════════════ */
+function MonthlyByTeamSection() {
+  const [sel, setSel] = useState<string[]>(["seniors", "u19", "u17"])
+  const teams = TEAMS.filter((t) => sel.includes(t.id))
+
+  const data = useMemo(
+    () =>
+      MONTHS.map((month, mi) => {
+        const row: Record<string, number | string> = { month }
+        for (const t of TEAMS) row[t.id] = teamMonth[t.id][mi]
+        return row
+      }),
+    [],
+  )
 
   return (
     <Block
       icon={BarChart3}
-      title="Écart par rubrique"
-      right={
-        <div className="flex items-center gap-3">
-          <Legend items={[
-            { label: "Favorable", cls: "bg-success-600" },
-            { label: "Défavorable", cls: "bg-danger" },
-          ]} />
-          {natureFilter === "Tous" ? (
-            <span className="font-body text-[0.7rem] text-ink-disabled">10 écarts les plus marquants</span>
-          ) : null}
-        </div>
-      }
+      title="Dépenses mensuelles par équipe"
+      subtitle="Filtrez les équipes à comparer"
+      right={<TeamToggle sel={sel} onToggle={(id) => setSel((s) => toggle(s, id))} />}
     >
-      <div className="flex flex-col">
-        {ranked.map(({ r, e }, i) => {
-          const fav = e >= 0
-          const pct = (Math.abs(e) / maxAbs) * 100
-          const pctBudget = r.prevu > 0 ? Math.round((Math.abs(e) / r.prevu) * 100) : null
-          return (
-            <div
-              key={r.label + i}
-              className="grid grid-cols-[minmax(120px,1.1fr)_minmax(0,2fr)_minmax(96px,auto)] items-center gap-3 border-b border-border px-4 py-2.5 transition-colors last:border-0 hover:bg-surface-hover"
-            >
-              <div className="min-w-0">
-                <div className="truncate font-body text-[0.84rem] text-ink">{r.label}</div>
-                {natureFilter === "Tous" ? (
-                  <div className="font-body text-[0.68rem] text-ink-disabled">{r.nature}</div>
-                ) : null}
-              </div>
-
-              {/* diverging track */}
-              <div className="relative h-5">
-                <span className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-border-strong" />
-                {fav ? (
-                  <span
-                    className="absolute top-1/2 left-1/2 h-[10px] -translate-y-1/2 rounded-r-[3px] bg-success-600"
-                    style={{ width: `${pct / 2}%` }}
-                  />
-                ) : (
-                  <span
-                    className="absolute top-1/2 right-1/2 h-[10px] -translate-y-1/2 rounded-l-[3px] bg-danger"
-                    style={{ width: `${pct / 2}%` }}
-                  />
-                )}
-              </div>
-
-              <div className="text-right">
-                <span
-                  className={cn(
-                    "font-ui text-[0.82rem] font-medium tabular-nums",
-                    fav ? "text-success" : "text-danger",
-                  )}
-                >
-                  {signed(e)}
-                </span>
-                {pctBudget != null ? (
-                  <span className="ml-1 font-body text-[0.68rem] text-ink-disabled">({pctBudget}%)</span>
-                ) : null}
-              </div>
-            </div>
-          )
-        })}
+      <div className="h-[320px] p-4">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={data} margin={{ top: 4, right: 8, bottom: 4, left: 4 }} barGap={2} barCategoryGap="22%">
+            <CartesianGrid vertical={false} stroke={GRID} />
+            <XAxis dataKey="month" tick={{ fill: AXIS, fontSize: 11 }} axisLine={{ stroke: GRID }} tickLine={false} />
+            <YAxis tickFormatter={kFmt} tick={{ fill: AXIS, fontSize: 11 }} axisLine={false} tickLine={false} width={40} />
+            <Tooltip cursor={{ fill: "rgba(255,255,255,0.04)" }} content={<ChartTooltip />} />
+            {teams.map((t) => (
+              <Bar key={t.id} dataKey={t.id} name={t.name} fill={t.color} radius={[3, 3, 0, 0]} maxBarSize={22} />
+            ))}
+          </BarChart>
+        </ResponsiveContainer>
       </div>
     </Block>
   )
 }
 
 /* ════════════════════════════════════════════════════════════════════════════
- * Taux de consommation — meter bars with the 80 % seuil marked
+ * 3 — Trajectoires comparées (line chart, une courbe par équipe)
  * ════════════════════════════════════════════════════════════════════════════ */
-function ConsumptionSection({ rows, natureFilter }: { rows: Rubrique[]; natureFilter: NatureFilter }) {
-  const meterRows = useMemo(() => {
-    const src = natureFilter === "Revenu" ? rows : rows.filter((r) => r.nature === "Dépense")
-    return [...src].sort((a, b) => {
-      const ra = ratioOf(a) ?? Infinity
-      const rb = ratioOf(b) ?? Infinity
-      return rb - ra
-    })
-  }, [rows, natureFilter])
+function TeamLinesSection() {
+  const [sel, setSel] = useState<string[]>(["seniors", "u19", "u17", "u15"])
+  const [mode, setMode] = useState<"mensuel" | "cumule">("mensuel")
+  const teams = TEAMS.filter((t) => sel.includes(t.id))
 
-  const isRevenu = natureFilter === "Revenu"
+  const data = useMemo(
+    () =>
+      MONTHS.map((month, mi) => {
+        const row: Record<string, number | string> = { month }
+        for (const t of TEAMS) {
+          row[t.id] =
+            mode === "mensuel"
+              ? teamMonth[t.id][mi]
+              : teamMonth[t.id].slice(0, mi + 1).reduce((s, v) => s + v, 0)
+        }
+        return row
+      }),
+    [mode],
+  )
 
   return (
     <Block
-      icon={Activity}
-      title={isRevenu ? "Taux de réalisation par rubrique" : "Taux de consommation par rubrique"}
+      icon={LineChartIcon}
+      title="Trajectoires comparées des équipes"
+      subtitle={mode === "cumule" ? "Dépense cumulée sur la saison" : "Dépense mensuelle"}
       right={
-        <span className="font-body text-[0.7rem] text-ink-disabled">
-          Seuil d'alerte {Math.round(SEUIL * 100)}%
-        </span>
+        <div className="flex flex-wrap items-center gap-3">
+          <Segmented2
+            value={mode}
+            onChange={(v) => setMode(v as "mensuel" | "cumule")}
+            options={[
+              { value: "mensuel", label: "Mensuel" },
+              { value: "cumule", label: "Cumulé" },
+            ]}
+          />
+          <TeamToggle sel={sel} onToggle={(id) => setSel((s) => toggle(s, id))} />
+        </div>
       }
     >
-      <div className="flex flex-col">
-        {meterRows.map((r) => {
-          const ratio = ratioOf(r)
-          const pct = ratio == null ? null : Math.round(ratio * 100)
-          const noPlan = r.prevu === 0 && r.reel > 0
-          return (
-            <div
-              key={r.label}
-              className="grid grid-cols-[minmax(120px,1fr)_minmax(0,1.6fr)_auto] items-center gap-3 border-b border-border px-4 py-2.5 last:border-0 hover:bg-surface-hover"
-            >
-              <div className="flex min-w-0 items-center gap-2">
-                <span className="truncate font-body text-[0.84rem] text-ink">{r.label}</span>
-                {noPlan ? (
-                  <span className="shrink-0 rounded-sm border border-danger/25 bg-danger/10 px-1.5 py-0.5 font-ui text-[0.54rem] font-medium tracking-[0.04em] text-danger uppercase">
-                    Hors budget
-                  </span>
-                ) : null}
-              </div>
-              <Meter pct={pct} tone="info" />
-              <div className="flex items-center justify-end gap-3">
-                <span className="hidden font-body text-[0.74rem] text-ink-muted tabular-nums sm:inline">
-                  {fmtShort(r.reel)} / {r.prevu ? fmtShort(r.prevu) : "—"}
-                </span>
-                <span className="w-11 text-right font-ui text-[0.8rem] font-medium tabular-nums text-ink-subtle">
-                  {pct == null ? "—" : `${pct}%`}
-                </span>
-              </div>
-            </div>
-          )
-        })}
+      <div className="h-[320px] p-4">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={data} margin={{ top: 6, right: 12, bottom: 4, left: 4 }}>
+            <CartesianGrid vertical={false} stroke={GRID} />
+            <XAxis dataKey="month" tick={{ fill: AXIS, fontSize: 11 }} axisLine={{ stroke: GRID }} tickLine={false} />
+            <YAxis tickFormatter={kFmt} tick={{ fill: AXIS, fontSize: 11 }} axisLine={false} tickLine={false} width={40} />
+            <Tooltip cursor={{ stroke: GRID, strokeWidth: 1 }} content={<ChartTooltip />} />
+            {teams.map((t) => (
+              <Line
+                key={t.id}
+                type="monotone"
+                dataKey={t.id}
+                name={t.name}
+                stroke={t.color}
+                strokeWidth={2}
+                dot={false}
+                activeDot={{ r: 4, strokeWidth: 0 }}
+              />
+            ))}
+          </LineChart>
+        </ResponsiveContainer>
       </div>
     </Block>
   )
 }
 
-type MeterTone = "info" | "warning" | "danger"
-const METER_FILL: Record<MeterTone, string> = {
-  info: "bg-info",
-  warning: "bg-warning",
-  danger: "bg-danger",
+/* ════════════════════════════════════════════════════════════════════════════
+ * 4 — Coût moyen par match : domicile vs extérieur (par équipe)
+ * ════════════════════════════════════════════════════════════════════════════ */
+function HomeAwaySection() {
+  const [team, setTeam] = useState("seniors")
+  const t = teamById.get(team)!
+  const scale = t.base / 49000
+
+  const data = useMemo(
+    () =>
+      MATCH_TYPES.map((type, i) => ({
+        type,
+        domicile: round50(HOME_COST[i] * scale),
+        exterieur: round50(AWAY_COST[i] * scale),
+      })),
+    [scale],
+  )
+  const avgHome = data.reduce((s, r) => s + r.domicile, 0)
+  const avgAway = data.reduce((s, r) => s + r.exterieur, 0)
+
+  return (
+    <Block
+      icon={Scale}
+      title="Coût moyen par match — domicile vs extérieur"
+      subtitle="Poste de dépense moyen par rencontre"
+      right={<MiniSelect label="Équipe" value={team} onChange={setTeam} dot={t.color} />}
+    >
+      <div className="grid grid-cols-1 gap-4 p-4 lg:grid-cols-[240px_1fr]">
+        {/* KPI pair */}
+        <div className="flex flex-col justify-center gap-3">
+          <AvgCard icon={Home} color={HOME_C} label="Match à domicile" value={avgHome} />
+          <AvgCard icon={Plane} color={AWAY_C} label="Match à l'extérieur" value={avgAway} />
+          <div className="rounded-md border border-border px-3.5 py-2.5">
+            <div className="font-body text-[0.72rem] text-ink-muted">
+              Un déplacement coûte{" "}
+              <span className="font-medium text-ink">
+                {avgHome > 0 ? `${(avgAway / avgHome).toFixed(1)}×` : "—"}
+              </span>{" "}
+              un match à domicile.
+            </div>
+          </div>
+        </div>
+
+        <div className="h-[280px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={data} margin={{ top: 4, right: 8, bottom: 4, left: 4 }} barGap={2} barCategoryGap="30%">
+              <CartesianGrid vertical={false} stroke={GRID} />
+              <XAxis dataKey="type" tick={{ fill: AXIS, fontSize: 11 }} axisLine={{ stroke: GRID }} tickLine={false} />
+              <YAxis tickFormatter={kFmt} tick={{ fill: AXIS, fontSize: 11 }} axisLine={false} tickLine={false} width={44} />
+              <Tooltip cursor={{ fill: "rgba(255,255,255,0.04)" }} content={<ChartTooltip />} />
+              <Bar dataKey="domicile" name="Domicile" fill={HOME_C} radius={[3, 3, 0, 0]} maxBarSize={26} />
+              <Bar dataKey="exterieur" name="Extérieur" fill={AWAY_C} radius={[3, 3, 0, 0]} maxBarSize={26} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+    </Block>
+  )
 }
 
-function Meter({ pct, tone }: { pct: number | null; tone: MeterTone }) {
-  const width = pct == null ? 100 : Math.min(pct, 100)
+function AvgCard({
+  icon: Icon,
+  color,
+  label,
+  value,
+}: {
+  icon: typeof Home
+  color: string
+  label: string
+  value: number
+}) {
   return (
-    <div className="relative h-2 overflow-hidden rounded bg-accent">
-      <div
-        className={cn("h-full rounded transition-[width] duration-500", METER_FILL[tone])}
-        style={{ width: width + "%" }}
-      />
-      <span
-        aria-hidden
-        className="absolute inset-y-0 w-px bg-border-strong"
-        style={{ left: `${Math.round(SEUIL * 100)}%` }}
-      />
+    <div className="rounded-lg border border-border px-4 py-3.5">
+      <div className="flex items-center gap-1.5 font-ui text-[0.62rem] font-medium tracking-[0.08em] text-ink-muted uppercase">
+        <Icon size={13} style={{ color }} /> {label}
+      </div>
+      <div className="mt-1.5 font-display text-[1.5rem] leading-none font-semibold tabular-nums text-ink">
+        {fmtShort(value)} <span className="text-[0.9rem] font-normal text-ink-disabled">TND</span>
+      </div>
     </div>
   )
 }
 
 /* ════════════════════════════════════════════════════════════════════════════
- * Detail ledger
+ * 5 — Répartition des dépenses par catégorie (donut + liste)
  * ════════════════════════════════════════════════════════════════════════════ */
-function DetailSection({ rows, natureFilter }: { rows: Rubrique[]; natureFilter: NatureFilter }) {
-  const catRows = rows.filter((r) => r.section === "generales" || r.section === "revenus")
-  const teamStaffRows = rows.filter((r) => r.section === "equipes" || r.section === "staff")
+function CategoryBreakdownSection() {
+  const [team, setTeam] = useState<"toutes" | string>("toutes")
+
+  const data = useMemo(() => {
+    const vals =
+      team === "toutes"
+        ? reelByCat
+        : CATEGORIES.map((_, ci) => teamCat[team][ci])
+    const total = vals.reduce((s, v) => s + v, 0)
+    return CATEGORIES.map((name, ci) => ({
+      name,
+      value: vals[ci],
+      color: CAT_COLORS[ci],
+      pct: Math.round((vals[ci] / total) * 100),
+    })).sort((x, y) => y.value - x.value)
+  }, [team])
+  const total = data.reduce((s, d) => s + d.value, 0)
+
   return (
-    <>
-      {catRows.length ? (
-        <DetailTable title="Détail par catégorie" rows={catRows} natureFilter={natureFilter} />
-      ) : null}
-      {teamStaffRows.length ? (
-        <DetailTable
-          title="Détail par équipe & staff"
-          rows={teamStaffRows}
-          natureFilter={natureFilter}
+    <Block
+      icon={PieChartIcon}
+      title="Répartition par catégorie"
+      subtitle="Part de chaque poste de dépense"
+      right={
+        <MiniSelect
+          label="Périmètre"
+          value={team}
+          onChange={(v) => setTeam(v)}
+          extra={[{ value: "toutes", label: "Toutes les équipes" }]}
         />
-      ) : null}
-    </>
-  )
-}
+      }
+    >
+      <div className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-[190px_1fr]">
+        <div className="relative h-[190px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={data}
+                dataKey="value"
+                nameKey="name"
+                innerRadius={54}
+                outerRadius={82}
+                paddingAngle={2}
+                stroke="#181818"
+                strokeWidth={2}
+                startAngle={90}
+                endAngle={-270}
+              >
+                {data.map((d) => (
+                  <Cell key={d.name} fill={d.color} />
+                ))}
+              </Pie>
+              <Tooltip content={<ChartTooltip />} />
+            </PieChart>
+          </ResponsiveContainer>
+          <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
+            <span className="font-display text-[1.15rem] font-semibold tabular-nums text-ink">
+              {kFmt(total)}
+            </span>
+            <span className="font-ui text-[0.58rem] tracking-[0.1em] text-ink-disabled uppercase">
+              TND total
+            </span>
+          </div>
+        </div>
 
-/* One detail table (a slice of rubriques — categories, or équipes & staff). */
-function DetailTable({
-  title,
-  rows,
-  natureFilter,
-}: {
-  title: string
-  rows: Rubrique[]
-  natureFilter: NatureFilter
-}) {
-  const sorted = useMemo(
-    () => [...rows].sort((a, b) => ecartOf(a) - ecartOf(b)), // worst écarts first
-    [rows],
-  )
-  const totPrevu = rows.reduce((s, r) => s + r.prevu, 0)
-  const totReel = rows.reduce((s, r) => s + r.reel, 0)
-
-  return (
-    <Block icon={Scale} title={title}>
-      <div className="overflow-x-auto">
-        <table className="w-full border-collapse">
-          <thead>
-            <tr className="border-b border-border">
-              <Th>Rubrique</Th>
-              <Th align="right">Prévu</Th>
-              <Th align="right">Réel</Th>
-              <Th align="right">Écart</Th>
-              <Th align="right">Écart %</Th>
-              <Th align="right">Statut</Th>
-            </tr>
-          </thead>
-          <tbody>
-            {sorted.map((r) => {
-              const e = ecartOf(r)
-              const fav = e >= 0
-              const pctBudget = r.prevu > 0 ? Math.round((Math.abs(e) / r.prevu) * 100) : null
-              const st = statusOf(r)
-              return (
-                <tr key={r.label} className="border-b border-border last:border-0 hover:bg-surface-hover">
-                  <td className="px-4 py-2.5">
-                    <div className="font-body text-[0.84rem] text-ink">{r.label}</div>
-                    {natureFilter === "Tous" ? (
-                      <div className="font-body text-[0.68rem] text-ink-disabled">
-                        {r.nature} · {SECTION_LABEL[r.section]}
-                      </div>
-                    ) : (
-                      <div className="font-body text-[0.68rem] text-ink-disabled">
-                        {SECTION_LABEL[r.section]}
-                      </div>
-                    )}
-                  </td>
-                  <td className="px-4 py-2.5 text-right font-body text-[0.82rem] text-ink-muted tabular-nums">
-                    {r.prevu ? fmtShort(r.prevu) : "—"}
-                  </td>
-                  <td className="px-4 py-2.5 text-right font-body text-[0.82rem] text-ink-subtle tabular-nums">
-                    {fmtShort(r.reel)}
-                  </td>
-                  <td className="px-4 py-2.5 text-right">
-                    {e === 0 ? (
-                      <span className="font-body text-[0.82rem] text-ink-disabled">—</span>
-                    ) : (
-                      <span
-                        className={cn(
-                          "font-ui text-[0.82rem] font-medium tabular-nums",
-                          fav ? "text-success" : "text-danger",
-                        )}
-                      >
-                        {signed(e)}
-                      </span>
-                    )}
-                  </td>
-                  <td
-                    className={cn(
-                      "px-4 py-2.5 text-right font-body text-[0.8rem] tabular-nums",
-                      e === 0 ? "text-ink-disabled" : fav ? "text-success/80" : "text-danger/80",
-                    )}
-                  >
-                    {pctBudget == null ? "—" : `${fav ? "+" : "−"}${pctBudget}%`}
-                  </td>
-                  <td className="px-4 py-2.5 text-right">
-                    <Badge variant={st.variant}>{st.label}</Badge>
-                  </td>
-                </tr>
-              )
-            })}
-          </tbody>
-          <tfoot>
-            <tr className="border-t border-border-second">
-              <td className="px-4 py-2.5 font-ui text-[0.82rem] font-medium text-ink">Total</td>
-              <td className="px-4 py-2.5 text-right font-ui text-[0.82rem] font-medium text-ink-subtle tabular-nums">
-                {fmtShort(totPrevu)}
-              </td>
-              <td className="px-4 py-2.5 text-right font-ui text-[0.82rem] font-medium text-ink-subtle tabular-nums">
-                {fmtShort(totReel)}
-              </td>
-              <td className="px-4 py-2.5 text-right font-ui text-[0.82rem] font-semibold tabular-nums" colSpan={3}>
-                <span className={totReel <= totPrevu ? "text-success" : "text-danger"}>
-                  {signed(totPrevu - totReel)} TND{" "}
-                  <span className="font-normal text-ink-disabled">
-                    ({natureFilter === "Revenu" ? "recettes" : "écart"})
-                  </span>
-                </span>
-              </td>
-            </tr>
-          </tfoot>
-        </table>
+        <ul className="flex flex-col justify-center gap-1.5">
+          {data.map((d) => (
+            <li key={d.name} className="flex items-center gap-2.5">
+              <span className="size-2.5 shrink-0 rounded-[3px]" style={{ background: d.color }} />
+              <span className="truncate font-body text-[0.82rem] text-ink-subtle">{d.name}</span>
+              <span className="ml-auto font-ui text-[0.78rem] tabular-nums text-ink-muted">
+                {fmtShort(d.value)}
+              </span>
+              <span className="w-9 text-right font-body text-[0.72rem] tabular-nums text-ink-disabled">
+                {d.pct}%
+              </span>
+            </li>
+          ))}
+        </ul>
       </div>
     </Block>
   )
 }
 
-type StatusMeta = { label: string; variant: "success" | "warning" | "danger" | "info" | "neutral" }
-function statusOf(r: Rubrique): StatusMeta {
-  const ratio = ratioOf(r)
-  if (r.nature === "Dépense") {
-    if (r.prevu === 0 && r.reel > 0) return { label: "Hors budget", variant: "danger" }
-    if (ratio != null && ratio > 1) return { label: "Dépassement", variant: "danger" }
-    if (ratio != null && ratio >= SEUIL) return { label: "Proche du seuil", variant: "warning" }
-    return { label: "Maîtrisé", variant: "success" }
-  }
-  // Revenu
-  if (r.prevu === 0 && r.reel > 0) return { label: "Recette imprévue", variant: "info" }
-  if (ratio != null && ratio >= 1) return { label: "Objectif atteint", variant: "success" }
-  if (ratio != null && ratio >= 0.85) return { label: "Proche de l'objectif", variant: "warning" }
-  return { label: "En retrait", variant: "danger" }
+/* ════════════════════════════════════════════════════════════════════════════
+ * 6 — Prévu vs Réel par catégorie (grouped horizontal bars)
+ * ════════════════════════════════════════════════════════════════════════════ */
+function PlanVsRealSection() {
+  const data = useMemo(
+    () =>
+      CATEGORIES.map((cat, ci) => ({
+        cat,
+        prevu: prevuByCat[ci],
+        reel: reelByCat[ci],
+      })).sort((a, b) => b.reel - a.reel),
+    [],
+  )
+  const ecart = prevuTotal - grandTotal
+
+  return (
+    <Block
+      icon={TrendingUp}
+      title="Prévu vs Réel"
+      subtitle="Par catégorie de dépense"
+      right={
+        <div className="flex items-center gap-3">
+          <LegendDot color={PREVU} label="Prévu" />
+          <LegendDot color={REEL} label="Réel" />
+        </div>
+      }
+    >
+      <div className="flex flex-col gap-3 p-4">
+        <div className="h-[300px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart
+              data={data}
+              layout="vertical"
+              margin={{ top: 4, right: 12, bottom: 4, left: 8 }}
+              barGap={2}
+              barCategoryGap="26%"
+            >
+              <CartesianGrid horizontal={false} stroke={GRID} />
+              <XAxis type="number" tickFormatter={kFmt} tick={{ fill: AXIS, fontSize: 11 }} axisLine={{ stroke: GRID }} tickLine={false} />
+              <YAxis type="category" dataKey="cat" width={116} tick={{ fill: AXIS, fontSize: 11 }} axisLine={false} tickLine={false} />
+              <Tooltip cursor={{ fill: "rgba(255,255,255,0.04)" }} content={<ChartTooltip />} />
+              <Bar dataKey="prevu" name="Prévu" fill={PREVU} radius={[0, 3, 3, 0]} maxBarSize={12} />
+              <Bar dataKey="reel" name="Réel" fill={REEL} radius={[0, 3, 3, 0]} maxBarSize={12} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+        <div className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-border px-4 py-3">
+          <span className="font-body text-[0.8rem] text-ink-muted">
+            Total réel <span className="tabular-nums text-ink-subtle">{fmtShort(grandTotal)}</span> sur{" "}
+            <span className="tabular-nums text-ink-subtle">{fmtShort(prevuTotal)}</span> prévu
+          </span>
+          <span
+            className={cn(
+              "font-ui text-[0.85rem] font-medium tabular-nums",
+              ecart >= 0 ? "text-success" : "text-danger",
+            )}
+          >
+            {signed(ecart)} TND {ecart >= 0 ? "d'économie" : "de dépassement"}
+          </span>
+        </div>
+      </div>
+    </Block>
+  )
 }
 
 /* ════════════════════════════════════════════════════════════════════════════
  * Shared bits
  * ════════════════════════════════════════════════════════════════════════════ */
+function Kpi({
+  icon: Icon,
+  label,
+  value,
+  sub,
+  tone,
+  accent,
+}: {
+  icon: typeof Wallet
+  label: string
+  value: ReactNode
+  sub: string
+  tone?: "positive" | "negative"
+  accent?: string
+}) {
+  return (
+    <div className="rounded-lg border border-border px-5 py-[1.1rem]">
+      <div className="flex items-center gap-1.5 font-ui text-[0.62rem] font-medium tracking-[0.1em] text-ink-muted uppercase">
+        <Icon size={13} style={accent ? { color: accent } : undefined} className={accent ? "" : "text-ink-disabled"} />
+        {label}
+      </div>
+      <div
+        className={cn(
+          "mt-2 font-display text-[1.7rem] leading-none font-semibold tabular-nums",
+          tone === "positive" && "text-success",
+          tone === "negative" && "text-danger",
+          !tone && "text-ink",
+        )}
+      >
+        {value}
+      </div>
+      <div className="mt-1.5 font-body text-[0.74rem] text-ink-muted tabular-nums">{sub}</div>
+    </div>
+  )
+}
+
 function Block({
   icon: Icon,
   title,
+  subtitle,
   right,
   children,
 }: {
   icon: typeof BarChart3
   title: string
+  subtitle?: string
   right?: ReactNode
   children: ReactNode
 }) {
   return (
     <section className="overflow-hidden rounded-lg border border-border">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-4 py-3">
-        <div className="flex items-center gap-2">
-          <Icon size={15} className="text-ink-muted" />
-          <h2 className="font-ui text-[0.78rem] font-medium tracking-[0.06em] text-ink-subtle uppercase">
-            {title}
-          </h2>
+      <div className="flex flex-wrap items-start justify-between gap-3 border-b border-border px-4 py-3">
+        <div className="flex items-center gap-2.5">
+          <span className="flex size-8 items-center justify-center rounded-md bg-surface-nested text-ink-muted">
+            <Icon size={15} />
+          </span>
+          <div>
+            <h3 className="font-ui text-[0.9rem] font-medium text-ink">{title}</h3>
+            {subtitle ? (
+              <p className="font-body text-[0.72rem] text-ink-disabled">{subtitle}</p>
+            ) : null}
+          </div>
         </div>
         {right}
       </div>
@@ -732,28 +726,159 @@ function Block({
   )
 }
 
-function Legend({ items }: { items: { label: string; cls: string }[] }) {
+/** Recharts custom tooltip — design-system popover. */
+function ChartTooltip({
+  active,
+  payload,
+  label,
+}: {
+  active?: boolean
+  payload?: { name?: string; value?: number; color?: string; payload?: Record<string, unknown> }[]
+  label?: string | number
+}) {
+  if (!active || !payload?.length) return null
   return (
-    <div className="flex items-center gap-3 font-body text-[0.7rem] text-ink-muted">
-      {items.map((it) => (
-        <span key={it.label} className="inline-flex items-center gap-1.5">
-          <span className={cn("size-2.5 rounded-full", it.cls)} />
-          {it.label}
-        </span>
-      ))}
+    <div className="min-w-[140px] rounded-md border border-border-strong bg-surface px-3 py-2 shadow-deep">
+      {label != null ? (
+        <div className="mb-1.5 font-ui text-[0.72rem] font-medium text-ink">{label}</div>
+      ) : null}
+      <div className="flex flex-col gap-1">
+        {payload.map((p, i) => (
+          <div key={i} className="flex items-center gap-2 font-body text-[0.76rem]">
+            <span className="size-2 rounded-[2px]" style={{ background: p.color }} />
+            <span className="text-ink-muted">
+              {p.name ?? (p.payload?.name as string) ?? ""}
+            </span>
+            <span className="ml-auto pl-3 font-ui tabular-nums text-ink">
+              {fmtShort(Number(p.value ?? 0))} TND
+            </span>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
 
-function Th({ children, align = "left" }: { children?: ReactNode; align?: "left" | "right" }) {
+/** Team on/off filter chips (double as the chart legend). */
+function TeamToggle({ sel, onToggle }: { sel: string[]; onToggle: (id: string) => void }) {
   return (
-    <th
-      className={cn(
-        "px-4 py-2.5 font-ui text-[0.66rem] font-medium tracking-[0.08em] whitespace-nowrap text-ink-disabled uppercase",
-        align === "right" ? "text-right" : "text-left",
-      )}
-    >
-      {children}
-    </th>
+    <div className="flex flex-wrap items-center gap-1.5">
+      {TEAMS.map((t) => {
+        const on = sel.includes(t.id)
+        return (
+          <button
+            key={t.id}
+            type="button"
+            onClick={() => onToggle(t.id)}
+            aria-pressed={on}
+            className={cn(
+              "inline-flex items-center gap-1.5 rounded-pill border px-2.5 py-1 font-ui text-[0.72rem] font-medium transition-colors",
+              on
+                ? "border-border-strong text-ink"
+                : "border-border text-ink-disabled hover:text-ink-muted",
+            )}
+          >
+            <span
+              className="size-2 rounded-full transition-opacity"
+              style={{ background: t.color, opacity: on ? 1 : 0.3 }}
+            />
+            {t.name}
+          </button>
+        )
+      })}
+    </div>
   )
+}
+
+/** Compact labelled team/scope select with a colour dot. */
+function MiniSelect({
+  label,
+  value,
+  onChange,
+  dot,
+  extra,
+}: {
+  label: string
+  value: string
+  onChange: (v: string) => void
+  dot?: string
+  extra?: { value: string; label: string }[]
+}) {
+  return (
+    <div className="flex flex-col gap-1">
+      <span className="font-ui text-[0.58rem] font-medium tracking-[0.08em] text-ink-disabled uppercase">
+        {label}
+      </span>
+      <div className="flex items-center gap-2">
+        {dot ? <span className="size-2.5 shrink-0 rounded-full" style={{ background: dot }} /> : null}
+        <div className="w-[150px]">
+          <Select
+            value={value}
+            onChange={onChange}
+            options={[
+              ...(extra ?? []),
+              ...TEAMS.map((t) => ({ value: t.id, label: t.name })),
+            ]}
+          />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/** Small neutral segmented control (mensuel / cumulé). */
+function Segmented2({
+  value,
+  onChange,
+  options,
+}: {
+  value: string
+  onChange: (v: string) => void
+  options: { value: string; label: string }[]
+}) {
+  return (
+    <div className="inline-flex rounded-md border border-border p-0.5">
+      {options.map((o) => {
+        const on = o.value === value
+        return (
+          <button
+            key={o.value}
+            type="button"
+            onClick={() => onChange(o.value)}
+            className={cn(
+              "rounded-[5px] px-3 py-1 font-ui text-[0.72rem] font-medium transition-colors",
+              on ? "bg-surface-nested text-ink" : "text-ink-muted hover:text-ink",
+            )}
+          >
+            {o.label}
+          </button>
+        )
+      })}
+    </div>
+  )
+}
+
+function LegendDot({ color, label }: { color: string; label: string }) {
+  return (
+    <span className="inline-flex items-center gap-1.5 font-body text-[0.72rem] text-ink-muted">
+      <span className="size-2.5 rounded-[3px]" style={{ background: color }} />
+      {label}
+    </span>
+  )
+}
+
+/* ── helpers ─────────────────────────────────────────────────────────────── */
+/** Toggle a team id in/out of the selection, keeping at least one active. */
+function toggle(sel: string[], id: string): string[] {
+  if (sel.includes(id)) return sel.length > 1 ? sel.filter((x) => x !== id) : sel
+  return [...sel, id]
+}
+
+/** Compact axis formatter — 12000 → "12k", 15900 → "15,9k". */
+function kFmt(v: number): string {
+  if (v >= 1000) {
+    const k = Math.round(v / 100) / 10
+    return `${k.toLocaleString("fr-FR")}k`
+  }
+  return String(v)
 }

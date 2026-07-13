@@ -1,17 +1,22 @@
 import { useMemo } from "react"
-import { RotateCcw, Trash2 } from "lucide-react"
+import { RotateCcw, Trash2, X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { fmtShort, fmtFrDate } from "@/lib/format"
 import { useData } from "@/data/useData"
 import { byId, categoryPath, scopeText } from "@/features/finance/helpers"
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/components/ui/dialog"
 import { EmptyState } from "@/components/kit/EmptyState"
 
 /**
- * Side panel listing soft-deleted transactions with a « Restaurer » action per
- * row (docs §4.9). Kept out of the main flow — discoverable via the toolbar but
- * not cluttering the table.
+ * Modal listing soft-deleted transactions with a « Restaurer » action per row
+ * (docs §4.9). Kept out of the main flow — discoverable via the toolbar but not
+ * cluttering the table.
  */
 export function HistoriquePanel({
   open,
@@ -39,20 +44,33 @@ export function HistoriquePanel({
   )
 
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="right" className="w-full gap-0 border-border bg-surface-panel p-0 sm:max-w-md">
-        <SheetHeader className="border-b border-border">
-          <SheetTitle className="font-ui text-base font-medium text-ink">
-            Historique des transactions supprimées
-          </SheetTitle>
-          <SheetDescription className="font-body text-sm text-ink-muted">
-            {deleted.length
-              ? "Restaurez une transaction pour la réintégrer au tableau et aux analyses."
-              : "Les transactions supprimées apparaîtront ici."}
-          </SheetDescription>
-        </SheetHeader>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent
+        showCloseButton={false}
+        className="flex max-h-[85vh] flex-col gap-0 overflow-hidden rounded-xl border-border bg-surface p-0 sm:max-w-lg"
+      >
+        <div className="flex items-start justify-between gap-3 border-b border-border p-4">
+          <div className="min-w-0">
+            <DialogTitle className="font-ui text-base font-medium text-ink">
+              Historique des transactions supprimées
+            </DialogTitle>
+            <DialogDescription className="mt-0.5 font-body text-sm text-ink-muted">
+              {deleted.length
+                ? "Restaurez une transaction pour la réintégrer au tableau et aux analyses."
+                : "Les transactions supprimées apparaîtront ici."}
+            </DialogDescription>
+          </div>
+          <button
+            type="button"
+            onClick={() => onOpenChange(false)}
+            aria-label="Fermer"
+            className="flex size-[30px] shrink-0 items-center justify-center rounded-sm border border-border text-ink-disabled transition-colors hover:border-[var(--border-hover)] hover:text-ink"
+          >
+            <X size={15} />
+          </button>
+        </div>
 
-        <div className="flex-1 overflow-y-auto p-4">
+        <div className="min-h-0 flex-1 overflow-y-auto p-4">
           {deleted.length === 0 ? (
             <EmptyState
               icon={Trash2}
@@ -113,7 +131,7 @@ export function HistoriquePanel({
             </ul>
           )}
         </div>
-      </SheetContent>
-    </Sheet>
+      </DialogContent>
+    </Dialog>
   )
 }

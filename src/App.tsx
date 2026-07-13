@@ -17,12 +17,20 @@ import { Budget2CompareScreen } from "@/features/budget2/Budget2CompareScreen"
 import { DocumentsScreen } from "@/features/documents/DocumentsScreen"
 import { TransactionsScreen } from "@/features/finance/TransactionsScreen"
 import { DemandeTransactionScreen } from "@/features/finance/DemandeTransactionScreen"
+import { TransactionConfigScreen } from "@/features/finance/TransactionConfigScreen"
 import { CompteRenduScreen } from "@/features/compte-rendu/CompteRenduScreen"
 import { PlanificationScreen } from "@/features/planification/PlanificationScreen"
+import { ObjectifsScreen } from "@/features/objectifs/ObjectifsScreen"
+import { CategoriesScreen } from "@/features/pole-technique/CategoriesScreen"
+import { CategoryDetailScreen } from "@/features/pole-technique/CategoryDetailScreen"
+import { EducateursScreen } from "@/features/educateurs/EducateursScreen"
 
 /** Routes that have a real screen (so they skip the generic Placeholder). */
 const CUSTOM_ROUTES = new Set([
+  "/ressources-humaines/educateurs",
   "/planification",
+  "/structuration/objectifs-techniques",
+  "/pole-technique/categories",
   "/budget",
   "/budget2",
   "/documents",
@@ -64,12 +72,43 @@ export default function App() {
                 ),
               )}
 
+            {/* Ressources humaines — Éducateurs (coaches roster). */}
+            <Route
+              path="ressources-humaines/educateurs"
+              element={<EducateursScreen />}
+            />
+
             {/* Planification — month calendar of séances / matchs / réunions. */}
             <Route path="planification" element={<PlanificationScreen />} />
+
+            {/* Structuration — Objectifs techniques: reviewable objectives table. */}
+            <Route
+              path="structuration/objectifs-techniques"
+              element={<ObjectifsScreen />}
+            />
+
+            {/* Pôle Technique — Catégories: the grid, and each category's
+                detail page (welcome header + six route-linked tabs). */}
+            <Route
+              path="pole-technique/categories"
+              element={<CategoriesScreen />}
+            />
+            <Route
+              path="pole-technique/categories/:slug"
+              element={<Navigate to="resultats" replace />}
+            />
+            <Route
+              path="pole-technique/categories/:slug/:tab"
+              element={<CategoryDetailScreen />}
+            />
 
             {/* Finance — Transactions is the first real tool of the module. */}
             <Route path="finance/transactions" element={<TransactionsScreen />} />
             <Route path="finance/demande" element={<DemandeTransactionScreen />} />
+            <Route
+              path="finance/configuration-transaction"
+              element={<TransactionConfigScreen />}
+            />
 
             {/* Budget — real feature. /budget is the season picker; the
                 active season opens the config ("Nouvelle saison"). */}

@@ -20,6 +20,9 @@ import { entriesSeed, type Entry } from "@/data/seed/entries"
 import { monthsSeed, type Month } from "@/data/seed/months"
 import { documentsSeed, type Document } from "@/data/seed/documents"
 import { eventsSeed, type PlanEvent } from "@/data/seed/events"
+import { objectifsSeed, type Objectif, type ObjectifStatut } from "@/data/seed/objectifs"
+import { notificationsSeed, type AppNotif } from "@/data/seed/notifications"
+import { educateursSeed, type Educateur } from "@/data/seed/educateurs"
 import {
   budget2Reducer,
   budget2InitialState,
@@ -160,6 +163,14 @@ export type DataContextValue = {
   documents: Document[]
   /** Scheduled events shown on the Planification calendar. */
   events: PlanEvent[]
+  /** Technical objectives (Structuration ▸ Objectifs techniques). */
+  objectifs: Objectif[]
+  /** Top-bar notifications (newest first). */
+  notifications: AppNotif[]
+  /** Objective currently open in the global review modal, or null. */
+  reviewObjectifId: string | null
+  /** Éducateurs (coaches) — Ressources humaines. */
+  educateurs: Educateur[]
   /** Finance module — global config (active season + currency). */
   financeConfig: FinanceConfig
   /** Teams the Finance module can target (portée = équipe). */
@@ -188,6 +199,19 @@ export type DataContextValue = {
   addEvent: (event: Omit<PlanEvent, "id">) => string
   updateEvent: (id: string, patch: Partial<PlanEvent>) => void
   removeEvent: (id: string) => void
+  /** Create an objective (statut "En attente") + push a linked notification. */
+  addObjectif: (objectif: Omit<Objectif, "id" | "statut" | "date">) => string
+  /** Set an objective's review status (Accepté / Refusé) from the fiche modal. */
+  setObjectifStatut: (id: string, statut: ObjectifStatut) => void
+  /** Mark a notification read. */
+  markNotifRead: (id: string) => void
+  /** Open / close the global objective review modal. */
+  openObjectifReview: (id: string) => void
+  closeObjectifReview: () => void
+  /** Add an éducateur (id filled in); returns the new id. */
+  addEducateur: (edu: Omit<Educateur, "id">) => string
+  updateEducateur: (id: string, patch: Partial<Educateur>) => void
+  removeEducateur: (id: string) => void
   /** Add a transaction (id/season/flags filled in); returns the new id. */
   addTransaction: (tx: NewTransaction) => string
   /** Edit an existing transaction in place. */
@@ -243,6 +267,15 @@ export function DataProvider({ children }: { children: ReactNode }) {
   // Calendar events add / edit / remove, so plain in-memory state is enough
   // (no reducer). New rows get a uuid; seed rows keep their readable slug ids.
   const [events, setEvents] = useState<PlanEvent[]>(eventsSeed)
+  // Objectives + notifications live in plain state (add / status-change /
+  // mark-read only). Creating an objective also pushes a linked notification;
+  // reviewObjectifId drives the global review modal mounted in AppShell.
+  const [objectifs, setObjectifs] = useState<Objectif[]>(objectifsSeed)
+  const [notifications, setNotifications] = useState<AppNotif[]>(notificationsSeed)
+  const [reviewObjectifId, setReviewObjectifId] = useState<string | null>(null)
+  // Éducateurs add / edit / remove, so plain in-memory state is enough. New
+  // rows get a uuid; seed rows keep their readable slug ids.
+  const [educateurs, setEducateurs] = useState<Educateur[]>(educateursSeed)
   // Finance referential + config are read-only in this phase (managed on a
   // future admin page), so they live in plain in-memory state. Transactions
   // add / edit / soft-delete / restore, so they carry the mutating helpers.
@@ -264,6 +297,10 @@ export function DataProvider({ children }: { children: ReactNode }) {
       months,
       documents,
       events,
+      objectifs,
+      notifications,
+      reviewObjectifId,
+      educateurs,
       financeConfig,
       financeTeams,
       staff,
@@ -311,6 +348,49 @@ export function DataProvider({ children }: { children: ReactNode }) {
         ),
       removeEvent: (id) =>
         setEvents((prev) => prev.filter((event) => event.id !== id)),
+      addObjectif: (input) => {
+        const id = crypto.randomUUID()
+        const date = new Date().toLocaleDateString("fr-FR")
+        setObjectifs((prev) => [
+          { ...input, id, statut: "En attente", date },
+          ...prev,
+        ])
+        // Push a linked, unread notification so the bell reflects the new objective.
+        setNotifications((prev) => [
+          {
+            id: crypto.randomUUID(),
+            kind: "objectif",
+            title: "Objectif technique",
+            date,
+            body: `Nouvel objectif « ${input.titre} » à valider`,
+            unread: true,
+            objectifId: id,
+          },
+          ...prev,
+        ])
+        return id
+      },
+      setObjectifStatut: (id, statut) =>
+        setObjectifs((prev) =>
+          prev.map((o) => (o.id === id ? { ...o, statut } : o)),
+        ),
+      markNotifRead: (id) =>
+        setNotifications((prev) =>
+          prev.map((n) => (n.id === id ? { ...n, unread: false } : n)),
+        ),
+      openObjectifReview: (id) => setReviewObjectifId(id),
+      closeObjectifReview: () => setReviewObjectifId(null),
+      addEducateur: (edu) => {
+        const id = crypto.randomUUID()
+        setEducateurs((prev) => [{ id, ...edu }, ...prev])
+        return id
+      },
+      updateEducateur: (id, patch) =>
+        setEducateurs((prev) =>
+          prev.map((edu) => (edu.id === id ? { ...edu, ...patch } : edu)),
+        ),
+      removeEducateur: (id) =>
+        setEducateurs((prev) => prev.filter((edu) => edu.id !== id)),
       addTransaction: (tx) => {
         const id = crypto.randomUUID()
         setTransactions((prev) => [
@@ -411,6 +491,10 @@ export function DataProvider({ children }: { children: ReactNode }) {
       months,
       documents,
       events,
+      objectifs,
+      notifications,
+      reviewObjectifId,
+      educateurs,
       financeConfig,
       financeTeams,
       staff,

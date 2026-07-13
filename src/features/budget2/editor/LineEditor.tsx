@@ -14,6 +14,13 @@ import { SCOPE_LABEL } from "@/features/budget2/helpers"
 import { FormSheet } from "@/components/kit/FormSheet"
 import { Field, Select } from "@/features/finance/ui"
 import { NumInput, Segmented } from "@/features/budget/ui"
+import {
+  SubTypesField,
+  TeamRepartition,
+  defaultParts,
+  type SubType,
+  type RepartPart,
+} from "@/features/budget2/editor/LineDetails"
 
 /** Where a new/edited line belongs — fixed by the section it is added under. */
 export type LineContext = {
@@ -51,7 +58,8 @@ export function LineEditor({
   existing: BudgetLine | null
   onSaved?: (msg: string) => void
 }) {
-  const { groups, subCategories, addBudget2Line, updateBudget2Line } = useData()
+  const { groups, subCategories, financeTeams, addBudget2Line, updateBudget2Line } =
+    useData()
 
   const [groupId, setGroupId] = useState("")
   const [subId, setSubId] = useState("")
@@ -61,6 +69,10 @@ export function LineEditor({
   const [recPeriods, setRecPeriods] = useState(1)
   const [actQty, setActQty] = useState(0)
   const [actUnit, setActUnit] = useState(0)
+  // UI-only detail (not persisted yet): sub-types + per-team % split.
+  const [subTypes, setSubTypes] = useState<SubType[]>([])
+  const [repartOn, setRepartOn] = useState(false)
+  const [parts, setParts] = useState<RepartPart[]>([])
 
   const nature = context?.nature ?? "Dépense"
 
@@ -86,7 +98,17 @@ export function LineEditor({
       setActQty(0)
       setActUnit(0)
     }
+    // Detail sections always reset when the sheet (re)opens.
+    setSubTypes([])
+    setRepartOn(false)
+    setParts([])
   }, [open, existing])
+
+  // Enabling the split seeds a representative example the user can edit.
+  const toggleRepart = (v: boolean) => {
+    setRepartOn(v)
+    if (v && parts.length === 0) setParts(defaultParts())
+  }
 
   const groupOpts = useMemo(
     () =>
@@ -220,6 +242,20 @@ export function LineEditor({
             </span>
           </div>
         ) : null}
+
+        <div className="h-px bg-border" />
+
+        {/* Optional detail — sub-types + per-team split. UI preview for now. */}
+        <SubTypesField items={subTypes} onChange={setSubTypes} />
+
+        <TeamRepartition
+          teams={financeTeams}
+          enabled={repartOn}
+          onToggle={toggleRepart}
+          parts={parts}
+          onChange={setParts}
+          baseAmount={total}
+        />
       </div>
     </FormSheet>
   )
