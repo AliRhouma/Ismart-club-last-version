@@ -18,6 +18,7 @@ import {
   MessageSquare,
   Share2,
   Boxes,
+  Handshake,
   ListTodo,
   BookOpen,
   GraduationCap,
@@ -28,6 +29,9 @@ import {
   Landmark,
   ArrowLeftRight,
   Send,
+  Building2,
+  Megaphone,
+  Component,
   type LucideIcon,
 } from "lucide-react"
 
@@ -94,6 +98,7 @@ export const navTree: NavNode[] = [
   { type: "item", label: "Analyse et Suivi", path: "/analyse-et-suivi", icon: SquarePen },
   { type: "item", label: "Messagerie", path: "/messagerie", icon: MessageSquare },
   { type: "item", label: "Communauté", path: "/communaute", icon: Share2 },
+  { type: "item", label: "Sponsoring", path: "/sponsoring", icon: Handshake },
 
   {
     type: "group",
@@ -124,9 +129,46 @@ export const navTree: NavNode[] = [
       { type: "item", label: "Budget 2", path: "/budget2", icon: WalletCards },
     ],
   },
+
+  {
+    type: "item",
+    label: "Design System",
+    path: "/design-system",
+    icon: Component,
+  },
 ]
 
 /** Flattened list of every leaf route — consumed by the router. */
 export const navLeaves: NavLeaf[] = navTree.flatMap((node) =>
   node.type === "group" ? node.children : [node],
 )
+
+/**
+ * The sponsor space — same shell, its own (much shorter) nav. A sponsor signs
+ * in to follow the clubs it partners with and the campaigns it runs for them.
+ * Kept under /sponsor/* so it never collides with the club's /sponsoring/*.
+ */
+export const sponsorNavTree: NavNode[] = [
+  {
+    type: "item",
+    label: "Liste des partenaires",
+    path: "/sponsor/partenaires",
+    icon: Building2,
+  },
+  {
+    type: "item",
+    label: "Gérer les campagnes",
+    path: "/sponsor/campagnes",
+    icon: Megaphone,
+  },
+]
+
+export const sponsorNavLeaves: NavLeaf[] = sponsorNavTree.flatMap((node) =>
+  node.type === "group" ? node.children : [node],
+)
+
+/** Where each role lands after signing in. */
+export const HOME_PATH: Record<"admin" | "sponsor", string> = {
+  admin: "/",
+  sponsor: "/sponsor/partenaires",
+}

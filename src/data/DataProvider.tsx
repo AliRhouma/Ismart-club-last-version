@@ -24,6 +24,22 @@ import { objectifsSeed, type Objectif, type ObjectifStatut } from "@/data/seed/o
 import { notificationsSeed, type AppNotif } from "@/data/seed/notifications"
 import { educateursSeed, type Educateur } from "@/data/seed/educateurs"
 import {
+  SUGGESTED_OFFERS,
+  campaignsSeed,
+  offersSeed,
+  partnersSeed,
+  sponsorAccountsSeed,
+  type Campaign,
+  type Offer,
+  type Partner,
+  type SponsorAccount,
+} from "@/data/seed/sponsoring"
+import {
+  adminSession,
+  sponsorSession,
+  type Session,
+} from "@/data/seed/session"
+import {
   budget2Reducer,
   budget2InitialState,
   type Budget2State,
@@ -152,6 +168,11 @@ function reducer(state: BudgetState, action: Action): BudgetState {
 }
 
 export type DataContextValue = {
+  /** Who is signed in — `null` when signed out (the shell sends you to /connexion). */
+  session: Session | null
+  signInAsAdmin: () => void
+  signInAsSponsor: () => void
+  signOut: () => void
   budget: BudgetState
   /** Past, clôturée seasons shown (read-only) in the season picker. */
   seasons: Season[]
@@ -171,6 +192,14 @@ export type DataContextValue = {
   reviewObjectifId: string | null
   /** Éducateurs (coaches) — Ressources humaines. */
   educateurs: Educateur[]
+  /** Sponsoring offers (Or / Argent / Bronze…), sorted by the screens. */
+  offers: Offer[]
+  /** Partenaires signed on an offer (each takes one of its seats). */
+  partners: Partner[]
+  /** Sponsor-side iSmart Club accounts an admin can link a partenaire to. */
+  sponsorAccounts: SponsorAccount[]
+  /** Campaigns run by partenaires — one `en_cours` at most, plus archives. */
+  campaigns: Campaign[]
   /** Finance module — global config (active season + currency). */
   financeConfig: FinanceConfig
   /** Teams the Finance module can target (portée = équipe). */
@@ -212,6 +241,18 @@ export type DataContextValue = {
   addEducateur: (edu: Omit<Educateur, "id">) => string
   updateEducateur: (id: string, patch: Partial<Educateur>) => void
   removeEducateur: (id: string) => void
+  /** Add a sponsoring offer (id filled in); returns the new id. */
+  addOffer: (offer: Omit<Offer, "id">) => string
+  updateOffer: (id: string, patch: Partial<Offer>) => void
+  removeOffer: (id: string) => void
+  /** Clone an offer (« Copie » suffix); returns the new id. */
+  duplicateOffer: (id: string) => string
+  /** Seed the three suggested offers (Or / Argent / Bronze) at once. */
+  addSuggestedOffers: () => void
+  /** Sign a partenaire on an offer (id filled in); returns the new id. */
+  addPartner: (partner: Omit<Partner, "id">) => string
+  updatePartner: (id: string, patch: Partial<Partner>) => void
+  removePartner: (id: string) => void
   /** Add a transaction (id/season/flags filled in); returns the new id. */
   addTransaction: (tx: NewTransaction) => string
   /** Edit an existing transaction in place. */
@@ -251,6 +292,9 @@ export type DataContextValue = {
 export const DataContext = createContext<DataContextValue | null>(null)
 
 export function DataProvider({ children }: { children: ReactNode }) {
+  // Signed in as the club admin on first load; signing out sends you to the
+  // /connexion screen, where you pick the admin or the sponsor space.
+  const [session, setSession] = useState<Session | null>(adminSession)
   const [budget, dispatch] = useReducer(reducer, budgetSeed)
   // Archived seasons are read-only for now (no screen mutates them), so they
   // live in plain in-memory state rather than the budget reducer.
@@ -276,6 +320,18 @@ export function DataProvider({ children }: { children: ReactNode }) {
   // Éducateurs add / edit / remove, so plain in-memory state is enough. New
   // rows get a uuid; seed rows keep their readable slug ids.
   const [educateurs, setEducateurs] = useState<Educateur[]>(educateursSeed)
+  // Sponsoring offers — add / edit / remove / duplicate, plain in-memory state.
+  // Seed is empty: the module opens on its empty state until the club joins.
+  // Sponsoring — the club has already joined the program, so offers and their
+  // partenaires are seeded. Deleting every offer returns the module to its
+  // onboarding empty state.
+  const [offers, setOffers] = useState<Offer[]>(offersSeed)
+  const [partners, setPartners] = useState<Partner[]>(partnersSeed)
+  // Sponsor accounts are created on the sponsor's side of the product, and
+  // campaigns are read-only for now (the club views them; editing the visuals
+  // is the sponsor's job). Both stay in plain read-only state.
+  const [sponsorAccounts] = useState<SponsorAccount[]>(sponsorAccountsSeed)
+  const [campaigns] = useState<Campaign[]>(campaignsSeed)
   // Finance referential + config are read-only in this phase (managed on a
   // future admin page), so they live in plain in-memory state. Transactions
   // add / edit / soft-delete / restore, so they carry the mutating helpers.
@@ -291,6 +347,10 @@ export function DataProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo<DataContextValue>(
     () => ({
+      session,
+      signInAsAdmin: () => setSession(adminSession),
+      signInAsSponsor: () => setSession(sponsorSession),
+      signOut: () => setSession(null),
       budget,
       seasons,
       entries,
@@ -301,6 +361,10 @@ export function DataProvider({ children }: { children: ReactNode }) {
       notifications,
       reviewObjectifId,
       educateurs,
+      offers,
+      partners,
+      sponsorAccounts,
+      campaigns,
       financeConfig,
       financeTeams,
       staff,
@@ -391,6 +455,46 @@ export function DataProvider({ children }: { children: ReactNode }) {
         ),
       removeEducateur: (id) =>
         setEducateurs((prev) => prev.filter((edu) => edu.id !== id)),
+      addOffer: (offer) => {
+        const id = crypto.randomUUID()
+        setOffers((prev) => [...prev, { id, ...offer }])
+        return id
+      },
+      updateOffer: (id, patch) =>
+        setOffers((prev) =>
+          prev.map((o) => (o.id === id ? { ...o, ...patch } : o)),
+        ),
+      removeOffer: (id) => {
+        setOffers((prev) => prev.filter((o) => o.id !== id))
+        // A partenaire only exists through the offer it occupies a seat on.
+        setPartners((prev) => prev.filter((p) => p.offerId !== id))
+      },
+      duplicateOffer: (id) => {
+        const newId = crypto.randomUUID()
+        setOffers((prev) => {
+          const src = prev.find((o) => o.id === id)
+          if (!src) return prev
+          return [...prev, { ...src, id: newId, name: `${src.name} (copie)` }]
+        })
+        return newId
+      },
+      addSuggestedOffers: () =>
+        setOffers((prev) =>
+          prev.length
+            ? prev
+            : SUGGESTED_OFFERS.map((o) => ({ id: crypto.randomUUID(), ...o })),
+        ),
+      addPartner: (partner) => {
+        const id = crypto.randomUUID()
+        setPartners((prev) => [{ id, ...partner }, ...prev])
+        return id
+      },
+      updatePartner: (id, patch) =>
+        setPartners((prev) =>
+          prev.map((p) => (p.id === id ? { ...p, ...patch } : p)),
+        ),
+      removePartner: (id) =>
+        setPartners((prev) => prev.filter((p) => p.id !== id)),
       addTransaction: (tx) => {
         const id = crypto.randomUUID()
         setTransactions((prev) => [
@@ -485,6 +589,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
         dispatch2({ type: "removeGroup", id, at: new Date().toISOString() }),
     }),
     [
+      session,
       budget,
       seasons,
       entries,
@@ -495,6 +600,10 @@ export function DataProvider({ children }: { children: ReactNode }) {
       notifications,
       reviewObjectifId,
       educateurs,
+      offers,
+      partners,
+      sponsorAccounts,
+      campaigns,
       financeConfig,
       financeTeams,
       staff,

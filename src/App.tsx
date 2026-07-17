@@ -24,6 +24,22 @@ import { ObjectifsScreen } from "@/features/objectifs/ObjectifsScreen"
 import { CategoriesScreen } from "@/features/pole-technique/CategoriesScreen"
 import { CategoryDetailScreen } from "@/features/pole-technique/CategoryDetailScreen"
 import { EducateursScreen } from "@/features/educateurs/EducateursScreen"
+import { SponsoringHome } from "@/features/sponsoring/SponsoringHome"
+import { DemarrageScreen } from "@/features/sponsoring/DemarrageScreen"
+import { OffreFormScreen } from "@/features/sponsoring/OffreFormScreen"
+import { OffresScreen } from "@/features/sponsoring/OffresScreen"
+import { EmplacementsScreen } from "@/features/sponsoring/EmplacementsScreen"
+import { PartenairesScreen } from "@/features/sponsoring/PartenairesScreen"
+import { PartenaireAccueilScreen } from "@/features/sponsoring/PartenaireAccueilScreen"
+import { CampagneScreen } from "@/features/sponsoring/CampagneScreen"
+import { DesignSystemScreen } from "@/features/design-system/DesignSystemScreen"
+import { LoginScreen } from "@/features/auth/LoginScreen"
+import { PartenairesListScreen } from "@/features/sponsor/PartenairesListScreen"
+import { CampagnesScreen } from "@/features/sponsor/CampagnesScreen"
+import { NouvelleCampagneScreen } from "@/features/sponsor/NouvelleCampagneScreen"
+import { CampagneVisuelsScreen } from "@/features/sponsor/CampagneVisuelsScreen"
+import { ExplorerScreen } from "@/features/sponsor/ExplorerScreen"
+import { ClubOffresScreen } from "@/features/sponsor/ClubOffresScreen"
 
 /** Routes that have a real screen (so they skip the generic Placeholder). */
 const CUSTOM_ROUTES = new Set([
@@ -31,12 +47,14 @@ const CUSTOM_ROUTES = new Set([
   "/planification",
   "/structuration/objectifs-techniques",
   "/pole-technique/categories",
+  "/sponsoring",
   "/budget",
   "/budget2",
   "/documents",
   "/finance/transactions",
   "/finance/demande",
   "/compte-rendu",
+  "/design-system",
 ])
 
 /**
@@ -52,6 +70,10 @@ export default function App() {
           {/* Standalone light "compte rendu" report — renders OUTSIDE the app
               shell (no sidebar/topbar): it's a document about the product. */}
           <Route path="/compte-rendu" element={<CompteRenduScreen />} />
+
+          {/* Sign-in — also outside the shell: you pick a space (club admin or
+              sponsor) and the shell's nav + routes follow that role. */}
+          <Route path="/connexion" element={<LoginScreen />} />
 
           <Route element={<AppShell />}>
             {navLeaves
@@ -71,6 +93,9 @@ export default function App() {
                   />
                 ),
               )}
+
+            {/* Design System — in-app gallery of every reused component. */}
+            <Route path="design-system" element={<DesignSystemScreen />} />
 
             {/* Ressources humaines — Éducateurs (coaches roster). */}
             <Route
@@ -100,6 +125,64 @@ export default function App() {
             <Route
               path="pole-technique/categories/:slug/:tab"
               element={<CategoryDetailScreen />}
+            />
+
+            {/* Sponsoring — join flow: empty state → onboarding → offer form
+                → offers list. The module home forwards to the list once the
+                club has offers. */}
+            <Route path="sponsoring" element={<SponsoringHome />} />
+            <Route path="sponsoring/demarrage" element={<DemarrageScreen />} />
+            <Route path="sponsoring/offres" element={<OffresScreen />} />
+            <Route
+              path="sponsoring/emplacements"
+              element={<EmplacementsScreen />}
+            />
+            <Route
+              path="sponsoring/offres/nouvelle"
+              element={<OffreFormScreen />}
+            />
+            <Route
+              path="sponsoring/partenaires"
+              element={<PartenairesScreen />}
+            />
+            {/* A partenaire's accueil (campagne en cours + archives), and one
+                campaign shown across the six ad surfaces. */}
+            <Route
+              path="sponsoring/partenaires/:id"
+              element={<PartenaireAccueilScreen />}
+            />
+            <Route
+              path="sponsoring/partenaires/:id/campagnes/:campaignId"
+              element={<CampagneScreen />}
+            />
+
+            {/* Sponsor space — the company's own side of the product. Same
+                shell, its own two-item nav. Both pages are empty for now. */}
+            <Route
+              path="sponsor/partenaires"
+              element={<PartenairesListScreen />}
+            />
+            {/* Campagnes — list → wizard (club, période, objectif) → the
+                visuals editor, which is also where an existing campaign
+                opens. */}
+            <Route path="sponsor/campagnes" element={<CampagnesScreen />} />
+            <Route
+              path="sponsor/campagnes/nouvelle"
+              element={<NouvelleCampagneScreen />}
+            />
+            <Route
+              path="sponsor/campagnes/nouvelle/visuels"
+              element={<CampagneVisuelsScreen />}
+            />
+            <Route
+              path="sponsor/campagnes/:id"
+              element={<CampagneVisuelsScreen />}
+            />
+            {/* "Trouver un partenaire" — browse clubs, open a club's offers. */}
+            <Route path="sponsor/explorer" element={<ExplorerScreen />} />
+            <Route
+              path="sponsor/explorer/:slug"
+              element={<ClubOffresScreen />}
             />
 
             {/* Finance — Transactions is the first real tool of the module. */}

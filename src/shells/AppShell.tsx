@@ -1,5 +1,11 @@
 import { useEffect, useRef, useState } from "react"
-import { Outlet, useLocation, useNavigate, useSearchParams } from "react-router-dom"
+import {
+  Navigate,
+  Outlet,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom"
 import {
   Activity,
   Bell,
@@ -11,7 +17,8 @@ import {
   User,
 } from "lucide-react"
 
-import { navLeaves } from "@/lib/navigation"
+import { navLeaves, sponsorNavLeaves, HOME_PATH } from "@/lib/navigation"
+import { useData } from "@/data/useData"
 import { AppSidebar } from "@/components/AppSidebar"
 import { NotificationsMenu } from "@/components/NotificationsMenu"
 import { ObjectifReviewModal } from "@/features/objectifs/ObjectifReviewModal"
@@ -73,8 +80,10 @@ function IconAction({
  */
 function AccountMenu() {
   const navigate = useNavigate()
+  const { session, signOut } = useData()
   const [open, setOpen] = useState(false)
   const wrapRef = useRef<HTMLDivElement>(null)
+  const isSponsor = session?.role === "sponsor"
 
   useEffect(() => {
     if (!open) return
@@ -132,21 +141,24 @@ function AccountMenu() {
             </span>
             <div className="min-w-0">
               <div className="truncate font-ui text-sm font-medium text-ink">
-                Ahmed Ben Salah
+                {session?.name ?? "—"}
               </div>
               <div className="truncate font-body text-xs text-ink-muted">
-                Trésorier
+                {session?.subtitle ?? ""}
               </div>
             </div>
           </div>
 
           {/* Actions */}
           <div className="py-1.5">
-            <MenuItem
-              icon={SlidersHorizontal}
-              label="Configuration de transaction"
-              onClick={() => go("/finance/configuration-transaction")}
-            />
+            {/* Club-admin-only tool. */}
+            {!isSponsor ? (
+              <MenuItem
+                icon={SlidersHorizontal}
+                label="Configuration de transaction"
+                onClick={() => go("/finance/configuration-transaction")}
+              />
+            ) : null}
             <MenuItem icon={User} label="Mon profil" onClick={() => setOpen(false)} />
             <MenuItem icon={Settings} label="Paramètres" onClick={() => setOpen(false)} />
           </div>
@@ -156,7 +168,11 @@ function AccountMenu() {
               icon={LogOut}
               label="Se déconnecter"
               danger
-              onClick={() => setOpen(false)}
+              onClick={() => {
+                setOpen(false)
+                signOut()
+                navigate("/connexion")
+              }}
             />
           </div>
         </div>
@@ -204,17 +220,21 @@ function HeaderActions() {
   )
 }
 
-function useCurrentTitle(): string {
+function useCurrentTitle(isSponsor: boolean): string {
   const { pathname } = useLocation()
+  const leaves = isSponsor ? sponsorNavLeaves : navLeaves
   const leaf =
-    navLeaves.find((l) =>
+    leaves.find((l) =>
       l.path === "/" ? pathname === "/" : pathname.startsWith(l.path),
     ) ?? null
   return leaf?.label ?? "Page introuvable"
 }
 
 export function AppShell() {
-  const title = useCurrentTitle()
+  const { session } = useData()
+  const { pathname } = useLocation()
+  const isSponsor = session?.role === "sponsor"
+  const title = useCurrentTitle(isSponsor)
   const [params] = useSearchParams()
 
   // Embed mode (`?embed=1`) — strips the sidebar + top bar so a single screen
@@ -226,6 +246,20 @@ export function AppShell() {
         <Outlet />
       </div>
     )
+  }
+
+  // Signed out → the sign-in screen.
+  if (!session) return <Navigate to="/connexion" replace />
+
+  // The two spaces stay separate: a sponsor only ever sees /sponsor/*, and the
+  // club admin never does. Note "/sponsor/" is distinct from the club's
+  // "/sponsoring" module — the trailing slash keeps them from colliding.
+  const inSponsorArea = pathname.startsWith("/sponsor/")
+  if (isSponsor && !inSponsorArea) {
+    return <Navigate to={HOME_PATH.sponsor} replace />
+  }
+  if (!isSponsor && inSponsorArea) {
+    return <Navigate to={HOME_PATH.admin} replace />
   }
 
   return (

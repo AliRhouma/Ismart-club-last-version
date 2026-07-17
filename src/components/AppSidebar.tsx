@@ -1,7 +1,14 @@
 import { Link, useLocation } from "react-router-dom"
 import { ChevronRight } from "lucide-react"
 
-import { navTree, type NavGroup, type NavLeaf } from "@/lib/navigation"
+import {
+  navTree,
+  sponsorNavTree,
+  HOME_PATH,
+  type NavGroup,
+  type NavLeaf,
+} from "@/lib/navigation"
+import { useData } from "@/data/useData"
 import {
   Collapsible,
   CollapsibleContent,
@@ -34,10 +41,10 @@ function useIsActive() {
 }
 
 /** Brand mark — green monogram + wordmark. Wordmark hides in icon mode. */
-function BrandMark() {
+function BrandMark({ to, subtitle }: { to: string; subtitle: string }) {
   return (
     <Link
-      to="/"
+      to={to}
       className="flex min-w-0 items-center gap-2.5 outline-hidden"
       aria-label="iSmart Club — Accueil"
     >
@@ -49,7 +56,7 @@ function BrandMark() {
           iSmart Club
         </span>
         <span className="truncate font-body text-[0.68rem] text-ink-muted">
-          Plateforme club
+          {subtitle}
         </span>
       </span>
     </Link>
@@ -133,12 +140,19 @@ function NavGroupItem({
 
 export function AppSidebar() {
   const isActive = useIsActive()
+  const { session } = useData()
+
+  // The sponsor space reuses this exact shell — only the tree is shorter.
+  const isSponsor = session?.role === "sponsor"
+  const tree = isSponsor ? sponsorNavTree : navTree
+  const home = HOME_PATH[isSponsor ? "sponsor" : "admin"]
+  const subtitle = isSponsor ? "Espace sponsor" : "Plateforme club"
 
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
         <div className="flex h-10 items-center justify-between gap-2 px-1">
-          <BrandMark />
+          <BrandMark to={home} subtitle={subtitle} />
           {/* Collapse toggle — hidden in icon mode (the rail + main-bar trigger re-open it). */}
           <SidebarTrigger className="shrink-0 text-ink-muted hover:text-ink group-data-[collapsible=icon]:hidden" />
         </div>
@@ -147,7 +161,7 @@ export function AppSidebar() {
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenu>
-            {navTree.map((node) =>
+            {tree.map((node) =>
               node.type === "group" ? (
                 <NavGroupItem
                   key={node.key}

@@ -32,7 +32,6 @@ import { cn } from "@/lib/utils"
 import { fmt, fmtShort } from "@/lib/format"
 import { signed } from "@/features/budget2/suivi"
 import type { Budget2Season } from "@/data/seed/budget2"
-import { Select } from "@/features/finance/ui"
 
 /* ═══════════════════════════════════════════════════════════════════════════
  * Budget 2 — Analyse (tableau de bord visuel du trésorier).
@@ -61,6 +60,10 @@ const PREVU = "#737373" // neutral-400 — the plan / reference
 const REEL = "#0091ff" // --brand-blue-600 — the realised
 const HOME_C = "#3987e5" // domicile
 const AWAY_C = "#c98500" // extérieur
+/* Group A / Group B series — a group aggregates several teams, so it takes its
+   own fixed colour rather than any single team's. */
+const A_C = "#60a5fa" // --info
+const B_C = "#0091ff" // --brand-blue-600
 
 /* Validated categorical palette (dark surface #181818 — see dataviz validator).
    Assigned to teams in fixed order; a hidden team never repaints the others. */
@@ -199,40 +202,73 @@ export function Budget2Analyse({ season }: { season: Budget2Season }) {
 }
 
 /* ════════════════════════════════════════════════════════════════════════════
- * 1 — Comparaison de deux équipes (grouped horizontal bars, par catégorie)
+ * 1 — Comparaison de groupes d'équipes (grouped horizontal bars, par catégorie)
+ *
+ * Each side is a MULTI-selection, so any split works — 1 vs 3, 2 vs 2, 1 vs 5.
+ * Because a raw total would flatter the smaller group, a Total / Moyenne par
+ * équipe toggle makes uneven splits comparable.
  * ════════════════════════════════════════════════════════════════════════════ */
 function TeamCompareSection() {
-  const [a, setA] = useState("seniors")
-  const [b, setB] = useState("u17")
-  const teamA = teamById.get(a)!
-  const teamB = teamById.get(b)!
+  const [groupA, setGroupA] = useState<string[]>(["seniors"])
+  const [groupB, setGroupB] = useState<string[]>(["u17", "u15", "u13"])
+  const [mode, setMode] = useState<"total" | "moyenne">("total")
 
-  const data = useMemo(
-    () =>
-      CATEGORIES.map((cat, ci) => ({
-        cat,
-        a: teamCat[a][ci],
-        b: teamCat[b][ci],
-      })),
-    [a, b],
-  )
-  const totA = teamTotal(a)
-  const totB = teamTotal(b)
+  /* A team belongs to at most one group; each group keeps at least one team. */
+  const assign = (id: string, target: "A" | "B") => {
+    const [sel, setSel, other, setOther] =
+      target === "A"
+        ? ([groupA, setGroupA, groupB, setGroupB] as const)
+        : ([groupB, setGroupB, groupA, setGroupA] as const)
+    if (sel.includes(id)) {
+      if (sel.length > 1) setSel(sel.filter((x) => x !== id))
+      return
+    }
+    if (other.includes(id) && other.length <= 1) return // the other group would empty
+    setOther(other.filter((x) => x !== id))
+    setSel([...sel, id])
+  }
+
+  const data = useMemo(() => {
+    const valueOf = (ids: string[], ci: number) => {
+      const sum = ids.reduce((s, id) => s + teamCat[id][ci], 0)
+      return mode === "moyenne" ? Math.round(sum / ids.length) : sum
+    }
+    return CATEGORIES.map((cat, ci) => ({
+      cat,
+      a: valueOf(groupA, ci),
+      b: valueOf(groupB, ci),
+    }))
+  }, [groupA, groupB, mode])
+
+  const totA = data.reduce((s, r) => s + r.a, 0)
+  const totB = data.reduce((s, r) => s + r.b, 0)
   const diff = totA - totB
+  const nameOf = (ids: string[]) => ids.map((id) => teamById.get(id)!.name).join(" · ")
+  const labelA = nameOf(groupA)
+  const labelB = nameOf(groupB)
 
   return (
     <Block
       icon={GitCompareArrows}
-      title="Comparaison de deux équipes"
-      subtitle="Dépenses par catégorie — face à face"
+      title="Comparaison d'équipes"
+      subtitle="Composez deux groupes — 1 vs 3, 2 vs 2…"
       right={
-        <div className="flex items-end gap-2">
-          <MiniSelect label="Équipe A" value={a} onChange={setA} dot={teamA.color} />
-          <span className="pb-2 font-body text-[0.72rem] text-ink-disabled">vs</span>
-          <MiniSelect label="Équipe B" value={b} onChange={setB} dot={teamB.color} />
-        </div>
+        <Segmented2
+          value={mode}
+          onChange={(v) => setMode(v as "total" | "moyenne")}
+          options={[
+            { value: "total", label: "Total" },
+            { value: "moyenne", label: "Moyenne / équipe" },
+          ]}
+        />
       }
     >
+      {/* Group composers */}
+      <div className="grid grid-cols-1 gap-3 border-b border-border p-4 sm:grid-cols-2">
+        <GroupPicker label="Groupe A" color={A_C} sel={groupA} onToggle={(id) => assign(id, "A")} />
+        <GroupPicker label="Groupe B" color={B_C} sel={groupB} onToggle={(id) => assign(id, "B")} />
+      </div>
+
       <div className="grid grid-cols-1 gap-4 p-4 lg:grid-cols-[1fr_260px]">
         <div className="h-[340px]">
           <ResponsiveContainer width="100%" height="100%">
@@ -263,19 +299,19 @@ function TeamCompareSection() {
                 cursor={{ fill: "rgba(255,255,255,0.04)" }}
                 content={<ChartTooltip />}
               />
-              <Bar dataKey="a" name={teamA.name} fill={teamA.color} radius={[0, 3, 3, 0]} maxBarSize={13} />
-              <Bar dataKey="b" name={teamB.name} fill={teamB.color} radius={[0, 3, 3, 0]} maxBarSize={13} />
+              <Bar dataKey="a" name={`A · ${labelA}`} fill={A_C} radius={[0, 3, 3, 0]} maxBarSize={13} />
+              <Bar dataKey="b" name={`B · ${labelB}`} fill={B_C} radius={[0, 3, 3, 0]} maxBarSize={13} />
             </BarChart>
           </ResponsiveContainer>
         </div>
 
         {/* Face-à-face summary */}
         <div className="flex flex-col justify-center gap-3">
-          <FaceRow color={teamA.color} name={teamA.name} value={totA} />
-          <FaceRow color={teamB.color} name={teamB.name} value={totB} />
+          <FaceRow color={A_C} name={labelA} count={groupA.length} value={totA} />
+          <FaceRow color={B_C} name={labelB} count={groupB.length} value={totB} />
           <div className="mt-1 rounded-lg border border-border px-4 py-3">
             <div className="font-ui text-[0.62rem] font-medium tracking-[0.1em] text-ink-muted uppercase">
-              Différence
+              Différence {mode === "moyenne" ? "(moyenne)" : "(total)"}
             </div>
             <div
               className={cn(
@@ -288,7 +324,7 @@ function TeamCompareSection() {
             <div className="mt-1 font-body text-[0.72rem] text-ink-disabled">
               {diff === 0
                 ? "coût identique"
-                : `${teamA.name} ${diff > 0 ? "dépense plus" : "dépense moins"} que ${teamB.name}`}
+                : `Le groupe A ${diff > 0 ? "dépense plus" : "dépense moins"} que le groupe B`}
             </div>
           </div>
         </div>
@@ -297,12 +333,77 @@ function TeamCompareSection() {
   )
 }
 
-function FaceRow({ color, name, value }: { color: string; name: string; value: number }) {
+/** One side of the comparison — chips that add/remove a team from the group. */
+function GroupPicker({
+  label,
+  color,
+  sel,
+  onToggle,
+}: {
+  label: string
+  color: string
+  sel: string[]
+  onToggle: (id: string) => void
+}) {
+  return (
+    <div className="rounded-md border border-border p-3">
+      <div className="mb-2 flex items-center gap-1.5">
+        <span className="size-2.5 rounded-full" style={{ background: color }} />
+        <span
+          className="font-ui text-[0.62rem] font-medium tracking-[0.08em] uppercase"
+          style={{ color }}
+        >
+          {label}
+        </span>
+        <span className="ml-auto font-body text-[0.68rem] text-ink-disabled">
+          {sel.length} équipe{sel.length > 1 ? "s" : ""}
+        </span>
+      </div>
+      <div className="flex flex-wrap gap-1.5">
+        {TEAMS.map((t) => {
+          const on = sel.includes(t.id)
+          return (
+            <button
+              key={t.id}
+              type="button"
+              onClick={() => onToggle(t.id)}
+              aria-pressed={on}
+              className={cn(
+                "rounded-pill border px-2.5 py-1 font-ui text-[0.72rem] font-medium transition-colors",
+                on ? "text-ink" : "border-border text-ink-disabled hover:text-ink-muted",
+              )}
+              style={on ? { borderColor: color, background: `${color}1a` } : undefined}
+            >
+              {t.name}
+            </button>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+function FaceRow({
+  color,
+  name,
+  count,
+  value,
+}: {
+  color: string
+  name: string
+  count: number
+  value: number
+}) {
   return (
     <div className="flex items-center gap-2.5 rounded-md border border-border px-3.5 py-2.5">
-      <span className="size-2.5 rounded-full" style={{ background: color }} />
-      <span className="font-body text-[0.86rem] text-ink">{name}</span>
-      <span className="ml-auto font-ui text-[0.9rem] font-medium tabular-nums text-ink-subtle">
+      <span className="size-2.5 shrink-0 rounded-full" style={{ background: color }} />
+      <div className="min-w-0">
+        <div className="truncate font-body text-[0.86rem] text-ink">{name}</div>
+        <div className="font-body text-[0.66rem] text-ink-disabled">
+          {count} équipe{count > 1 ? "s" : ""}
+        </div>
+      </div>
+      <span className="ml-auto shrink-0 font-ui text-[0.9rem] font-medium tabular-nums text-ink-subtle">
         {fmtShort(value)}
       </span>
     </div>
@@ -422,9 +523,10 @@ function TeamLinesSection() {
  * 4 — Coût moyen par match : domicile vs extérieur (par équipe)
  * ════════════════════════════════════════════════════════════════════════════ */
 function HomeAwaySection() {
-  const [team, setTeam] = useState("seniors")
-  const t = teamById.get(team)!
-  const scale = t.base / 49000
+  const [sel, setSel] = useState<string[]>(["seniors"])
+  /* Several teams selected → the average match costs across them. */
+  const scale =
+    sel.reduce((s, id) => s + teamById.get(id)!.base, 0) / (sel.length * 49000)
 
   const data = useMemo(
     () =>
@@ -442,8 +544,12 @@ function HomeAwaySection() {
     <Block
       icon={Scale}
       title="Coût moyen par match — domicile vs extérieur"
-      subtitle="Poste de dépense moyen par rencontre"
-      right={<MiniSelect label="Équipe" value={team} onChange={setTeam} dot={t.color} />}
+      subtitle={
+        sel.length > 1
+          ? `Moyenne par rencontre sur ${sel.length} équipes`
+          : "Poste de dépense moyen par rencontre"
+      }
+      right={<TeamToggle sel={sel} onToggle={(id) => setSel((s) => toggle(s, id))} />}
     >
       <div className="grid grid-cols-1 gap-4 p-4 lg:grid-cols-[240px_1fr]">
         {/* KPI pair */}
@@ -505,36 +611,32 @@ function AvgCard({
  * 5 — Répartition des dépenses par catégorie (donut + liste)
  * ════════════════════════════════════════════════════════════════════════════ */
 function CategoryBreakdownSection() {
-  const [team, setTeam] = useState<"toutes" | string>("toutes")
+  const [sel, setSel] = useState<string[]>(TEAMS.map((t) => t.id))
 
   const data = useMemo(() => {
-    const vals =
-      team === "toutes"
-        ? reelByCat
-        : CATEGORIES.map((_, ci) => teamCat[team][ci])
+    const vals = CATEGORIES.map((_, ci) =>
+      sel.reduce((s, id) => s + teamCat[id][ci], 0),
+    )
     const total = vals.reduce((s, v) => s + v, 0)
     return CATEGORIES.map((name, ci) => ({
       name,
       value: vals[ci],
       color: CAT_COLORS[ci],
-      pct: Math.round((vals[ci] / total) * 100),
+      pct: total ? Math.round((vals[ci] / total) * 100) : 0,
     })).sort((x, y) => y.value - x.value)
-  }, [team])
+  }, [sel])
   const total = data.reduce((s, d) => s + d.value, 0)
 
   return (
     <Block
       icon={PieChartIcon}
       title="Répartition par catégorie"
-      subtitle="Part de chaque poste de dépense"
-      right={
-        <MiniSelect
-          label="Périmètre"
-          value={team}
-          onChange={(v) => setTeam(v)}
-          extra={[{ value: "toutes", label: "Toutes les équipes" }]}
-        />
+      subtitle={
+        sel.length === TEAMS.length
+          ? "Part de chaque poste — toutes les équipes"
+          : `Part de chaque poste — ${sel.length} équipe${sel.length > 1 ? "s" : ""}`
       }
+      right={<TeamToggle sel={sel} onToggle={(id) => setSel((s) => toggle(s, id))} />}
     >
       <div className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-[190px_1fr]">
         <div className="relative h-[190px]">
@@ -592,30 +694,35 @@ function CategoryBreakdownSection() {
  * 6 — Prévu vs Réel par catégorie (grouped horizontal bars)
  * ════════════════════════════════════════════════════════════════════════════ */
 function PlanVsRealSection() {
-  const data = useMemo(
-    () =>
-      CATEGORIES.map((cat, ci) => ({
-        cat,
-        prevu: prevuByCat[ci],
-        reel: reelByCat[ci],
-      })).sort((a, b) => b.reel - a.reel),
-    [],
-  )
-  const ecart = prevuTotal - grandTotal
+  const [sel, setSel] = useState<string[]>(TEAMS.map((t) => t.id))
+
+  const { data, totReel, totPrevu } = useMemo(() => {
+    const reel = CATEGORIES.map((_, ci) =>
+      sel.reduce((s, id) => s + teamCat[id][ci], 0),
+    )
+    const prevu = reel.map((v, ci) => round50(v * PREVU_FACTOR[ci]))
+    return {
+      data: CATEGORIES.map((cat, ci) => ({ cat, prevu: prevu[ci], reel: reel[ci] })).sort(
+        (a, b) => b.reel - a.reel,
+      ),
+      totReel: reel.reduce((s, v) => s + v, 0),
+      totPrevu: prevu.reduce((s, v) => s + v, 0),
+    }
+  }, [sel])
+  const ecart = totPrevu - totReel
 
   return (
     <Block
       icon={TrendingUp}
       title="Prévu vs Réel"
       subtitle="Par catégorie de dépense"
-      right={
-        <div className="flex items-center gap-3">
-          <LegendDot color={PREVU} label="Prévu" />
-          <LegendDot color={REEL} label="Réel" />
-        </div>
-      }
+      right={<TeamToggle sel={sel} onToggle={(id) => setSel((s) => toggle(s, id))} />}
     >
-      <div className="flex flex-col gap-3 p-4">
+      <div className="flex items-center gap-3 px-4 pt-3">
+        <LegendDot color={PREVU} label="Prévu" />
+        <LegendDot color={REEL} label="Réel" />
+      </div>
+      <div className="flex flex-col gap-3 p-4 pt-2">
         <div className="h-[300px]">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
@@ -636,8 +743,8 @@ function PlanVsRealSection() {
         </div>
         <div className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-border px-4 py-3">
           <span className="font-body text-[0.8rem] text-ink-muted">
-            Total réel <span className="tabular-nums text-ink-subtle">{fmtShort(grandTotal)}</span> sur{" "}
-            <span className="tabular-nums text-ink-subtle">{fmtShort(prevuTotal)}</span> prévu
+            Total réel <span className="tabular-nums text-ink-subtle">{fmtShort(totReel)}</span> sur{" "}
+            <span className="tabular-nums text-ink-subtle">{fmtShort(totPrevu)}</span> prévu
           </span>
           <span
             className={cn(
@@ -790,43 +897,7 @@ function TeamToggle({ sel, onToggle }: { sel: string[]; onToggle: (id: string) =
   )
 }
 
-/** Compact labelled team/scope select with a colour dot. */
-function MiniSelect({
-  label,
-  value,
-  onChange,
-  dot,
-  extra,
-}: {
-  label: string
-  value: string
-  onChange: (v: string) => void
-  dot?: string
-  extra?: { value: string; label: string }[]
-}) {
-  return (
-    <div className="flex flex-col gap-1">
-      <span className="font-ui text-[0.58rem] font-medium tracking-[0.08em] text-ink-disabled uppercase">
-        {label}
-      </span>
-      <div className="flex items-center gap-2">
-        {dot ? <span className="size-2.5 shrink-0 rounded-full" style={{ background: dot }} /> : null}
-        <div className="w-[150px]">
-          <Select
-            value={value}
-            onChange={onChange}
-            options={[
-              ...(extra ?? []),
-              ...TEAMS.map((t) => ({ value: t.id, label: t.name })),
-            ]}
-          />
-        </div>
-      </div>
-    </div>
-  )
-}
-
-/** Small neutral segmented control (mensuel / cumulé). */
+/** Small neutral segmented control (mensuel / cumulé, total / moyenne). */
 function Segmented2({
   value,
   onChange,
