@@ -153,53 +153,62 @@ export const CLUB_LISTINGS: ClubListing[] = [
 
 export type ClubOffer = {
   tier: Tier
+  /** The pack's public name, shown as the card title. */
+  name: string
   price: string
   seats: string
   description: string
-  /** Ad spaces the offer includes — literal labels. */
+  /** Bannières publicitaires the pack includes — placement + rhythm. */
   includes: string[]
 }
 
 /**
  * A club's public offers. Static and the same for every club page: this pass is
- * about the UI, not per-club data.
+ * about the UI, not per-club data. `includes` describes the bannières
+ * publicitaires each pack carries — where they run and at what rhythm.
  */
 export const CLUB_OFFERS: ClubOffer[] = [
   {
     tier: "Or",
+    name: "Pack Premium",
     price: "15 000 DT",
     seats: "4 places · 2 restantes",
     description:
-      "Partenaire principal du club, visibilité maximale sur toutes les pages.",
+      "Partenaire principal du club, visibilité maximale sur toutes les bannières.",
     includes: [
-      "Page partenaires",
-      "Bannière calendrier",
-      "Fil d'accueil",
-      "Page de match · 20 matchs",
-      "Écran d'ouverture · 6 jours",
-      "Notification push · 6 envois",
+      "Bannière page partenaires",
+      "Bannière calendrier · 100 % de rotation",
+      "Bannière fil d'accueil",
+      "Bannière page de match · 20 matchs",
+      "Bannière écran d'ouverture · 6 jours",
+      "Notification push · 6 envois / jour",
     ],
   },
   {
     tier: "Argent",
+    name: "Pack Visibilité",
     price: "5 000 DT",
     seats: "6 places · 3 restantes",
     description:
-      "Bonne visibilité sur le calendrier et le fil d'actualité du club.",
+      "Bonne visibilité sur les bannières du calendrier et du fil d'actualité.",
     includes: [
-      "Page partenaires",
-      "Bannière calendrier",
-      "Fil d'accueil",
-      "Page de match · 8 matchs",
-      "Notification push · 2 envois",
+      "Bannière page partenaires",
+      "Bannière calendrier · 50 % de rotation",
+      "Bannière fil d'accueil",
+      "Bannière page de match · 8 matchs",
+      "Notification push · 2 envois / jour",
     ],
   },
   {
     tier: "Bronze",
+    name: "Pack Essentiel",
     price: "1 200 DT",
     seats: "12 places · 9 restantes",
     description:
-      "Présence dans l'annuaire du club et sur la bannière du calendrier.",
-    includes: ["Page partenaires", "Bannière calendrier"],
+      "Présence sur la bannière de l'annuaire et du calendrier du club.",
+    includes: [
+      "Bannière page partenaires",
+      "Bannière calendrier · 20 % de rotation",
+    ],
   },
 ]

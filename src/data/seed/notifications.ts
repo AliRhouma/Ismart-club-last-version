@@ -6,7 +6,7 @@
  * modal.
  */
 
-export type NotifKind = "fiche" | "reponse" | "charte" | "objectif"
+export type NotifKind = "fiche" | "reponse" | "charte" | "objectif" | "demande"
 
 export type AppNotif = {
   id: string

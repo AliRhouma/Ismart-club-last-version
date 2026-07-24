@@ -58,6 +58,7 @@ export function EmplacementCard({
   slotKey,
   headerRight,
   footer,
+  badge,
   children,
 }: {
   slotKey: SlotKey
@@ -65,6 +66,12 @@ export function EmplacementCard({
   headerRight?: ReactNode
   /** Optional block under the mock (stats row, link row…). */
   footer?: ReactNode
+  /**
+   * Overrides the badge shown next to the title. `undefined` keeps the default
+   * allocation badge (Toujours visible / En rotation…); pass a node to replace
+   * it (e.g. a visibility percentage), or `null` to hide it.
+   */
+  badge?: ReactNode
   children: ReactNode
 }) {
   const def = SLOT_DEFS.find((s) => s.key === slotKey)!
@@ -81,7 +88,11 @@ export function EmplacementCard({
             <h2 className="font-ui text-[0.95rem] font-medium text-ink">
               {def.label}
             </h2>
-            <AllocBadge allocation={def.allocation} />
+            {badge === undefined ? (
+              <AllocBadge allocation={def.allocation} />
+            ) : (
+              badge
+            )}
           </div>
           <p className="mt-0.5 font-body text-[0.8rem] leading-snug text-ink-muted">
             {def.description}

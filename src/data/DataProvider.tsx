@@ -20,6 +20,8 @@ import { entriesSeed, type Entry } from "@/data/seed/entries"
 import { monthsSeed, type Month } from "@/data/seed/months"
 import { documentsSeed, type Document } from "@/data/seed/documents"
 import { eventsSeed, type PlanEvent } from "@/data/seed/events"
+import { seanceDetailsSeed, type SeanceDetail } from "@/data/seed/seances"
+import { matchDetailsSeed, type MatchDetail } from "@/data/seed/matches"
 import { objectifsSeed, type Objectif, type ObjectifStatut } from "@/data/seed/objectifs"
 import { notificationsSeed, type AppNotif } from "@/data/seed/notifications"
 import { educateursSeed, type Educateur } from "@/data/seed/educateurs"
@@ -39,6 +41,10 @@ import {
   sponsorSession,
   type Session,
 } from "@/data/seed/session"
+import {
+  offerRequestsSeed,
+  type OfferRequest,
+} from "@/data/seed/offerRequests"
 import {
   budget2Reducer,
   budget2InitialState,
@@ -184,6 +190,10 @@ export type DataContextValue = {
   documents: Document[]
   /** Scheduled events shown on the Planification calendar. */
   events: PlanEvent[]
+  /** Session detail (header + procédés) behind a séance card, keyed by event id. */
+  seanceDetails: SeanceDetail[]
+  /** Match detail (header + convocation / consignes / debrief) behind a match card. */
+  matchDetails: MatchDetail[]
   /** Technical objectives (Structuration ▸ Objectifs techniques). */
   objectifs: Objectif[]
   /** Top-bar notifications (newest first). */
@@ -200,6 +210,8 @@ export type DataContextValue = {
   sponsorAccounts: SponsorAccount[]
   /** Campaigns run by partenaires — one `en_cours` at most, plus archives. */
   campaigns: Campaign[]
+  /** Custom sponsoring requests sent by sponsors (Sponsoring ▸ Demandes). */
+  offerRequests: OfferRequest[]
   /** Finance module — global config (active season + currency). */
   financeConfig: FinanceConfig
   /** Teams the Finance module can target (portée = équipe). */
@@ -253,6 +265,18 @@ export type DataContextValue = {
   addPartner: (partner: Omit<Partner, "id">) => string
   updatePartner: (id: string, patch: Partial<Partner>) => void
   removePartner: (id: string) => void
+  /**
+   * Submit a custom sponsoring request (id/status/price/date filled in);
+   * pushes an unread admin notification. Returns the new id.
+   */
+  addOfferRequest: (
+    request: Omit<
+      OfferRequest,
+      "id" | "status" | "price" | "decisionNote" | "createdAt"
+    >,
+  ) => string
+  /** Admin decision on a request (accept + price, or refuse). */
+  updateOfferRequest: (id: string, patch: Partial<OfferRequest>) => void
   /** Add a transaction (id/season/flags filled in); returns the new id. */
   addTransaction: (tx: NewTransaction) => string
   /** Edit an existing transaction in place. */
@@ -311,6 +335,12 @@ export function DataProvider({ children }: { children: ReactNode }) {
   // Calendar events add / edit / remove, so plain in-memory state is enough
   // (no reducer). New rows get a uuid; seed rows keep their readable slug ids.
   const [events, setEvents] = useState<PlanEvent[]>(eventsSeed)
+  // Séance details are read-only for now (the coach views the plan; editing the
+  // procédé library is a future job), so plain in-memory state is enough.
+  const [seanceDetails] = useState<SeanceDetail[]>(seanceDetailsSeed)
+  // Match details are read-only for now (the club views the briefing / debrief;
+  // editing convocations & présences is a future job), like séance details.
+  const [matchDetails] = useState<MatchDetail[]>(matchDetailsSeed)
   // Objectives + notifications live in plain state (add / status-change /
   // mark-read only). Creating an objective also pushes a linked notification;
   // reviewObjectifId drives the global review modal mounted in AppShell.
@@ -332,6 +362,10 @@ export function DataProvider({ children }: { children: ReactNode }) {
   // is the sponsor's job). Both stay in plain read-only state.
   const [sponsorAccounts] = useState<SponsorAccount[]>(sponsorAccountsSeed)
   const [campaigns] = useState<Campaign[]>(campaignsSeed)
+  // Custom sponsoring requests — a sponsor submits from a club's offers page,
+  // the admin accepts (with a price) or refuses from Sponsoring ▸ Demandes.
+  const [offerRequests, setOfferRequests] =
+    useState<OfferRequest[]>(offerRequestsSeed)
   // Finance referential + config are read-only in this phase (managed on a
   // future admin page), so they live in plain in-memory state. Transactions
   // add / edit / soft-delete / restore, so they carry the mutating helpers.
@@ -357,6 +391,8 @@ export function DataProvider({ children }: { children: ReactNode }) {
       months,
       documents,
       events,
+      seanceDetails,
+      matchDetails,
       objectifs,
       notifications,
       reviewObjectifId,
@@ -365,6 +401,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
       partners,
       sponsorAccounts,
       campaigns,
+      offerRequests,
       financeConfig,
       financeTeams,
       staff,
@@ -495,6 +532,38 @@ export function DataProvider({ children }: { children: ReactNode }) {
         ),
       removePartner: (id) =>
         setPartners((prev) => prev.filter((p) => p.id !== id)),
+      addOfferRequest: (request) => {
+        const id = crypto.randomUUID()
+        const date = new Date().toLocaleDateString("fr-FR")
+        setOfferRequests((prev) => [
+          {
+            ...request,
+            id,
+            status: "en_attente",
+            price: null,
+            decisionNote: "",
+            createdAt: date,
+          },
+          ...prev,
+        ])
+        // Notify the club admin so the bell reflects the new request.
+        setNotifications((prev) => [
+          {
+            id: crypto.randomUUID(),
+            kind: "demande",
+            title: "Demande de sponsoring",
+            date,
+            body: `${request.company || "Un sponsor"} souhaite une offre sur mesure`,
+            unread: true,
+          },
+          ...prev,
+        ])
+        return id
+      },
+      updateOfferRequest: (id, patch) =>
+        setOfferRequests((prev) =>
+          prev.map((r) => (r.id === id ? { ...r, ...patch } : r)),
+        ),
       addTransaction: (tx) => {
         const id = crypto.randomUUID()
         setTransactions((prev) => [
@@ -596,6 +665,8 @@ export function DataProvider({ children }: { children: ReactNode }) {
       months,
       documents,
       events,
+      seanceDetails,
+      matchDetails,
       objectifs,
       notifications,
       reviewObjectifId,
@@ -604,6 +675,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
       partners,
       sponsorAccounts,
       campaigns,
+      offerRequests,
       financeConfig,
       financeTeams,
       staff,

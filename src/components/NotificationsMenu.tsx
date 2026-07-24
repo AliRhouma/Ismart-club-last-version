@@ -1,14 +1,19 @@
 import { useEffect, useRef, useState } from "react"
 import {
   Bell,
+  ExternalLink,
   FileText,
+  Handshake,
   MessageSquareReply,
   ScrollText,
   Target,
+  X,
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { useData } from "@/data/useData"
+import { useSponsorAds } from "@/data/useSponsorAds"
+import { SponsorLogo } from "@/features/messagerie/SponsoredConversation"
 import type { AppNotif } from "@/data/seed/notifications"
 
 /**
@@ -24,6 +29,7 @@ const KIND_ICON = {
   reponse: MessageSquareReply,
   charte: ScrollText,
   objectif: Target,
+  demande: Handshake,
 } as const
 
 const TABS = [
@@ -75,10 +81,63 @@ function NotifRow({
   )
 }
 
+/**
+ * Sponsored push notification — the `notification` ad slot come to life. Sits at
+ * the top of the feed, fed by the same live-campaign pool as the other ad
+ * placements (useSponsorAds). Distinct "Sponsorisé" styling, dismissible, links
+ * out. Purely presentational — it isn't stored and doesn't affect the count.
+ */
+function SponsoredNotifRow({
+  onDismiss,
+}: {
+  onDismiss: () => void
+}) {
+  const ad = useSponsorAds()[0]
+  if (!ad) return null
+  return (
+    <a
+      href={ad.link}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group/ad flex w-full items-start gap-3 px-4 py-3 text-left transition-colors hover:bg-surface-hover"
+    >
+      <SponsorLogo ad={ad} size={36} />
+      <span className="min-w-0 flex-1">
+        <span className="flex items-center justify-between gap-2">
+          <span className="truncate font-ui text-sm font-semibold text-ink">
+            {ad.partner}
+          </span>
+          <span className="shrink-0 rounded-pill border border-brand-blue-600/30 bg-brand-blue-600/10 px-1.5 py-0.5 font-ui text-[0.56rem] font-medium tracking-[0.06em] text-brand-blue-600 uppercase">
+            Sponsorisé
+          </span>
+        </span>
+        <span className="mt-1 block text-sm text-ink-muted">{ad.headline}</span>
+        <span className="mt-1.5 inline-flex items-center gap-1 font-ui text-xs font-medium text-info">
+          Découvrir
+          <ExternalLink size={12} />
+        </span>
+      </span>
+      <button
+        type="button"
+        aria-label="Masquer la publicité"
+        onClick={(e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          onDismiss()
+        }}
+        className="-mr-1 -mt-1 flex size-6 shrink-0 items-center justify-center rounded-md text-ink-disabled transition-colors hover:bg-surface-hover hover:text-ink"
+      >
+        <X size={13} />
+      </button>
+    </a>
+  )
+}
+
 export function NotificationsMenu() {
   const { notifications, markNotifRead, openObjectifReview } = useData()
   const [open, setOpen] = useState(false)
   const [tab, setTab] = useState<(typeof TABS)[number]["key"]>("tous")
+  const [adDismissed, setAdDismissed] = useState(false)
   const wrapRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -163,6 +222,11 @@ export function NotificationsMenu() {
           </div>
 
           <div className="max-h-[min(460px,60vh)] divide-y divide-border overflow-y-auto">
+            {/* Sponsored push — top of the feed, "Tous" tab only. */}
+            {tab === "tous" && !adDismissed ? (
+              <SponsoredNotifRow onDismiss={() => setAdDismissed(true)} />
+            ) : null}
+
             {rows.length > 0 ? (
               rows.map((n) => (
                 <NotifRow key={n.id} notif={n} onSelect={handleSelect} />

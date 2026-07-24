@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom"
-import { Search, CalendarClock, Wallet, ChevronRight } from "lucide-react"
+import { Link, useNavigate } from "react-router-dom"
+import { Search, CalendarClock, Wallet, ChevronRight, Megaphone } from "lucide-react"
 
 import { PARTNERSHIPS, TIER_COLOR, type Partnership } from "@/features/sponsor/mock"
 import { PageHeader } from "@/components/kit/PageHeader"
@@ -49,6 +49,7 @@ export function PartenairesListScreen() {
 }
 
 function PartnershipCard({ partnership: p }: { partnership: Partnership }) {
+  const navigate = useNavigate()
   const tone =
     p.status === "Actif"
       ? "success"
@@ -57,7 +58,18 @@ function PartnershipCard({ partnership: p }: { partnership: Partnership }) {
         : "danger"
 
   return (
-    <div className="flex flex-col rounded-lg border border-border transition-colors hover:border-border-strong">
+    <div
+      role="link"
+      tabIndex={0}
+      onClick={() => navigate(`/sponsor/campagnes?club=${p.slug}`)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault()
+          navigate(`/sponsor/campagnes?club=${p.slug}`)
+        }
+      }}
+      className="group flex cursor-pointer flex-col rounded-lg border border-border transition-colors hover:border-border-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue-600/50"
+    >
       {/* Club identity */}
       <div className="flex items-start gap-3 px-4 pt-4">
         <Avatar name={p.club} size="lg" />
@@ -86,12 +98,17 @@ function PartnershipCard({ partnership: p }: { partnership: Partnership }) {
       </div>
 
       {/* Footer */}
-      <div className="mt-4 border-t border-border px-4 py-3">
+      <div className="mt-4 flex items-center justify-between gap-3 border-t border-border px-4 py-3">
+        <span className="inline-flex items-center gap-1.5 font-ui text-[0.8rem] font-medium text-ink-muted transition-colors group-hover:text-brand-blue-600">
+          <Megaphone size={14} />
+          Voir les campagnes
+        </span>
         <Link
           to={`/sponsor/explorer/${p.slug}`}
-          className="inline-flex w-full items-center justify-center gap-1.5 rounded-md border border-input px-3 py-2 font-ui text-[0.82rem] font-medium text-ink transition-colors hover:border-border-strong hover:bg-accent"
+          onClick={(e) => e.stopPropagation()}
+          className="inline-flex items-center gap-1 rounded-md px-2 py-1 font-ui text-[0.78rem] font-medium text-ink-subtle transition-colors hover:bg-accent hover:text-ink"
         >
-          Voir les offres du club
+          Offres du club
           <ChevronRight size={14} />
         </Link>
       </div>

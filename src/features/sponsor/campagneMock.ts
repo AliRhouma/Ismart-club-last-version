@@ -56,6 +56,34 @@ export const OBJECTIFS = [
 
 export type ObjectifKey = (typeof OBJECTIFS)[number]["key"]
 
+/**
+ * The visual dimension each ad space expects — the rule shown next to every
+ * slot so the sponsor sends artwork at the right size. Literal display text
+ * (the prototype never validates an upload).
+ */
+export const SLOT_DIMENSIONS: Record<SlotKey, string> = {
+  partners_page: "400 × 400 px · logo carré",
+  calendar_banner: "1200 × 300 px · format 4:1",
+  home_feed: "1200 × 675 px · format 16:9",
+  match_detail: "1080 × 340 px · bannière",
+  splash: "1080 × 1920 px · plein écran vertical",
+  notification: "256 × 256 px · icône carrée",
+}
+
+/**
+ * The visibility share a sponsor gets on each ad space — the display percentage
+ * that replaces the space's allocation label on the review page. Literal text
+ * (the prototype computes nothing).
+ */
+export const SLOT_SHARE: Record<SlotKey, string> = {
+  partners_page: "100 %",
+  calendar_banner: "20 %",
+  home_feed: "16 %",
+  match_detail: "25 %",
+  splash: "50 %",
+  notification: "10 %",
+}
+
 /** One ad space of a draft: the visual and the link behind it. */
 export type DraftSlot = {
   key: SlotKey
@@ -226,5 +254,162 @@ export const SPONSOR_CAMPAIGNS: SponsorCampaign[] = [
     color: "#e5844b",
     status: "Terminée",
     filled: "5/5 espaces",
+  },
+]
+
+/* ── Demandes de campagne (côté club / admin) ───────────────────────────── */
+
+/**
+ * A campaign request = what a sponsor sends when it finishes the "Demande de
+ * campagne" flow. The club reviews it before anything goes live: it sees every
+ * visual and its resources, then approves or refuses (with a justification).
+ *
+ * Static UI pass, like the rest of the sponsor mock: the seed below is what the
+ * club's "Demandes de campagne" inbox opens on. Approving / refusing updates
+ * local screen state only — nothing persists.
+ */
+export type RequestStatus = "en_attente" | "approuvee" | "refusee"
+
+/** One requested ad space: its visual (filename), accroche and link. */
+export type RequestSlot = {
+  key: SlotKey
+  headline: string
+  /** Filename of the sent visual, or "" if the sponsor left it empty. */
+  image: string
+  link: string
+}
+
+export type CampaignRequest = {
+  id: string
+  /** Requesting company. */
+  sponsor: string
+  sector: string
+  club: string
+  tier: Tier
+  name: string
+  period: string
+  /** Literal display date the request was sent. */
+  submittedAt: string
+  /** Creative colour (raw hex — product data, like the tier colours). */
+  color: string
+  slots: RequestSlot[]
+  status: RequestStatus
+  /** Filled when the club refuses — the reason sent back to the sponsor. */
+  justification?: string
+}
+
+/** Build a request's slots from the tier, filling the given headlines. */
+function requestSlots(
+  tier: Tier,
+  filled: { headline: string; link: string }[],
+): RequestSlot[] {
+  return TIER_SLOTS[tier].map((key, i) =>
+    filled[i]
+      ? {
+          key,
+          headline: filled[i].headline,
+          image: `${key}-visuel.png`,
+          link: filled[i].link,
+        }
+      : { key, headline: "", image: "", link: "" },
+  )
+}
+
+/**
+ * The club's inbox — varied on purpose: three awaiting review (a full Or, a
+ * partial Argent, a two-space Bronze), one already approved and one refused
+ * with its justification, so both terminal states show.
+ */
+export const CAMPAIGN_REQUESTS: CampaignRequest[] = [
+  {
+    id: "req-ooredoo-jeunes",
+    sponsor: "Ooredoo Tunisie",
+    sector: "Télécom",
+    club: "iSmart Club Tunis",
+    tier: "Or",
+    name: "Forfait Jeunes 2026",
+    period: "15 juin → 15 sept 2026",
+    submittedAt: "20 juillet 2026",
+    color: "#e5484d",
+    status: "en_attente",
+    slots: requestSlots("Or", [
+      { headline: "Ooredoo — Partenaire télécom", link: "https://ooredoo.tn" },
+      { headline: "Forfait Jeunes — 30 Go", link: "https://ooredoo.tn/jeunes" },
+      { headline: "Restez connectés au club", link: "https://ooredoo.tn/jeunes" },
+      { headline: "Match présenté par Ooredoo", link: "https://ooredoo.tn" },
+      { headline: "L'énergie des champions", link: "https://ooredoo.tn/jeunes" },
+      { headline: "30 Go offerts aux U15", link: "https://ooredoo.tn/offre" },
+    ]),
+  },
+  {
+    id: "req-biat-epargne",
+    sponsor: "BIAT",
+    sector: "Banque",
+    club: "iSmart Club Tunis",
+    tier: "Argent",
+    name: "Épargne Junior",
+    period: "1 sept → 31 déc 2026",
+    submittedAt: "22 juillet 2026",
+    color: "#0091ff",
+    status: "en_attente",
+    slots: requestSlots("Argent", [
+      { headline: "BIAT — Partenaire du club", link: "https://biat.com.tn" },
+      { headline: "Ouvrez un livret Junior", link: "https://biat.com.tn/junior" },
+      { headline: "Épargner, ça s'apprend jeune", link: "https://biat.com.tn/junior" },
+    ]),
+  },
+  {
+    id: "req-pharmacie-rentree",
+    sponsor: "Pharmacie Centrale El Menzah",
+    sector: "Santé",
+    club: "iSmart Club Tunis",
+    tier: "Bronze",
+    name: "Bilan de rentrée",
+    period: "1 sept → 30 sept 2026",
+    submittedAt: "23 juillet 2026",
+    color: "#14b8a6",
+    status: "en_attente",
+    slots: requestSlots("Bronze", [
+      { headline: "Pharmacie El Menzah — à vos côtés", link: "https://pharmacie-elmenzah.tn" },
+      { headline: "Bilan sportif de rentrée", link: "https://pharmacie-elmenzah.tn/rentree" },
+    ]),
+  },
+  {
+    id: "req-sartex-maillots",
+    sponsor: "Sartex Sport — équipementier officiel",
+    sector: "Équipementier",
+    club: "iSmart Club Tunis",
+    tier: "Or",
+    name: "Nouveaux maillots 2026",
+    period: "1 août → 30 nov 2026",
+    submittedAt: "12 juillet 2026",
+    color: "#7f77dd",
+    status: "approuvee",
+    slots: requestSlots("Or", [
+      { headline: "Sartex — Équipementier officiel", link: "https://sartex.tn" },
+      { headline: "Le nouveau maillot est là", link: "https://sartex.tn/maillots" },
+      { headline: "Portez les couleurs du club", link: "https://sartex.tn/maillots" },
+      { headline: "Match présenté par Sartex", link: "https://sartex.tn" },
+      { headline: "Collection 2026", link: "https://sartex.tn/maillots" },
+      { headline: "-20 % sur le maillot domicile", link: "https://sartex.tn/offre" },
+    ]),
+  },
+  {
+    id: "req-garage-promo",
+    sponsor: "Garage Auto Plus",
+    sector: "Automobile",
+    club: "iSmart Club Tunis",
+    tier: "Bronze",
+    name: "Révision avant l'hiver",
+    period: "1 oct → 31 oct 2026",
+    submittedAt: "8 juillet 2026",
+    color: "#e5844b",
+    status: "refusee",
+    justification:
+      "Le visuel de la bannière calendrier ne respecte pas le format demandé (1200 × 300 px) et le lien renvoie vers une page indisponible. Merci de renvoyer une demande corrigée.",
+    slots: requestSlots("Bronze", [
+      { headline: "Garage Auto Plus — El Menzah", link: "https://autoplus.tn" },
+      { headline: "Révision hiver dès 90 DT", link: "https://autoplus.tn/hiver" },
+    ]),
   },
 ]

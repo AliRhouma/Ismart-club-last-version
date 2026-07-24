@@ -6,11 +6,14 @@ import {
   Trophy,
   Smartphone,
   Bell,
+  List,
+  Dumbbell,
+  MessageSquare,
   type LucideIcon,
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
-import type { SlotKey } from "@/data/seed/sponsoring"
+import type { SlotKey, SpaceKey } from "@/data/seed/sponsoring"
 
 /* ── Toggle switch (selected = blue, per design rule 3) ─────────────────── */
 export function Switch({
@@ -88,6 +91,16 @@ export const SLOT_ICON: Record<SlotKey, LucideIcon> = {
   match_detail: Trophy,
   splash: Smartphone,
   notification: Bell,
+}
+
+/* ── Icon per offer ad space (offer form + offer cards) ─────────────────── */
+export const SPACE_ICON: Record<SpaceKey, LucideIcon> = {
+  calendar: CalendarDays,
+  match_list: List,
+  match_detail: Trophy,
+  session_detail: Dumbbell,
+  notification: Bell,
+  messagerie: MessageSquare,
 }
 
 /* ── Always-visible explanation card (NOT a tooltip) ────────────────────── */

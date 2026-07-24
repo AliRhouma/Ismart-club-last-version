@@ -31,6 +31,7 @@ import {
   Send,
   Building2,
   Megaphone,
+  Inbox,
   Component,
   type LucideIcon,
 } from "lucide-react"
@@ -78,6 +79,7 @@ export const navTree: NavNode[] = [
   },
 
   { type: "item", label: "Planification", path: "/planification", icon: Calendar },
+  { type: "item", label: "Résultats", path: "/resultats", icon: Trophy },
 
   {
     type: "group",
@@ -160,6 +162,12 @@ export const sponsorNavTree: NavNode[] = [
     label: "Gérer les campagnes",
     path: "/sponsor/campagnes",
     icon: Megaphone,
+  },
+  {
+    type: "item",
+    label: "Mes demandes",
+    path: "/sponsor/demandes",
+    icon: Inbox,
   },
 ]
 

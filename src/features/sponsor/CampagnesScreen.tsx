@@ -1,11 +1,11 @@
-import { Link } from "react-router-dom"
-import { Megaphone, Plus, ChevronRight, Layers, Target } from "lucide-react"
+import { Link, useSearchParams } from "react-router-dom"
+import { Megaphone, Plus, ChevronRight, Layers, Target, X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { PageHeader } from "@/components/kit/PageHeader"
 import { EmptyState } from "@/components/kit/EmptyState"
 import { TierBadge } from "@/features/sponsoring/ui"
-import { TIER_COLOR } from "@/features/sponsor/mock"
+import { TIER_COLOR, PARTNERSHIPS } from "@/features/sponsor/mock"
 import {
   SPONSOR_CAMPAIGNS,
   type SponsorCampaign,
@@ -13,35 +13,77 @@ import {
 
 /**
  * Sponsor space — "Gérer les campagnes". The company's own campaign list, and
- * the entry point of the creation flow (club → période → objectif → visuels).
+ * the entry point of the request flow (club → période → visuels → demande).
  *
- * Static UI pass: the cards are seed data and creating a campaign walks the
+ * Static UI pass: the cards are seed data and requesting a campaign walks the
  * wizard without persisting anything.
  */
 export function CampagnesScreen() {
-  const campaigns = SPONSOR_CAMPAIGNS
+  const [params, setParams] = useSearchParams()
+
+  // Optional ?club=<slug> filter — set when arriving from a partner card.
+  const clubSlug = params.get("club")
+  const partner = clubSlug
+    ? PARTNERSHIPS.find((p) => p.slug === clubSlug)
+    : undefined
+
+  const campaigns = partner
+    ? SPONSOR_CAMPAIGNS.filter((c) => c.club === partner.club)
+    : SPONSOR_CAMPAIGNS
+
+  const clearFilter = () => {
+    params.delete("club")
+    setParams(params, { replace: true })
+  }
 
   return (
     <>
       <PageHeader
         title="Gérer les campagnes"
-        subtitle="Vos visuels et leur diffusion dans les espaces publicitaires du club."
+        subtitle={
+          partner
+            ? `Vos campagnes menées avec ${partner.club}.`
+            : "Vos visuels et leur diffusion dans les espaces publicitaires du club."
+        }
         actions={
           <Link
             to="/sponsor/campagnes/nouvelle"
             className="inline-flex items-center gap-1.5 rounded-md bg-brand px-4 py-2 font-ui text-sm font-medium text-ink-inverted shadow-glow transition-colors hover:bg-brand-dim"
           >
-            <Plus size={16} /> Nouvelle campagne
+            <Plus size={16} /> Demander une campagne
           </Link>
         }
       />
+
+      {/* Active partner filter — a removable chip when arriving from a card. */}
+      {partner && (
+        <div className="mt-5 flex items-center gap-2">
+          <span className="font-body text-[0.8rem] text-ink-muted">
+            Filtré par partenaire :
+          </span>
+          <button
+            type="button"
+            onClick={clearFilter}
+            className="inline-flex items-center gap-1.5 rounded-pill border border-brand-blue-600/30 bg-brand-blue-600/10 px-3 py-1 font-ui text-[0.78rem] font-medium text-brand-blue-600 transition-colors hover:bg-brand-blue-600/20"
+          >
+            {partner.club}
+            <X size={13} />
+          </button>
+        </div>
+      )}
 
       {campaigns.length === 0 ? (
         <div className="mt-6 rounded-lg border border-border">
           <EmptyState
             icon={Megaphone}
-            title="Aucune campagne"
-            description="Une fois qu'un club vous attribue une offre, vous pourrez créer vos campagnes et suivre leurs vues et leurs clics ici."
+            title={
+              partner ? "Aucune campagne avec ce partenaire" : "Aucune campagne"
+            }
+            description={
+              partner
+                ? `Vous n'avez encore lancé aucune campagne avec ${partner.club}. Démarrez-en une pour la voir ici.`
+                : "Une fois qu'un club vous attribue une offre, vous pourrez créer vos campagnes et suivre leurs vues et leurs clics ici."
+            }
           />
         </div>
       ) : (

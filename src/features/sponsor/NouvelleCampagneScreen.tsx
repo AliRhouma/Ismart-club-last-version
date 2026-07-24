@@ -17,8 +17,6 @@ import { TIER_COLOR, type Partnership } from "@/features/sponsor/mock"
 import {
   blankDraft,
   slotsForTier,
-  DRAFT_COLORS,
-  OBJECTIFS,
   SELECTABLE_CLUBS,
   TIER_SLOTS,
   type CampaignDraft,
@@ -28,14 +26,15 @@ const inputCls =
   "w-full rounded-md border border-input bg-transparent px-3.5 py-2.5 font-body text-sm text-ink outline-none transition-colors placeholder:text-ink-disabled focus:border-border-focus"
 
 /**
- * Sponsor space — campaign creation, in two steps on one page:
+ * Sponsor space — campaign request, in two steps on one page:
  *
  *   1. Le club — you can only run a campaign on a club that granted you an
  *      offer, so the club is picked first: it decides which ad spaces exist.
- *   2. La campagne — name, période, objectif, couleur.
+ *   2. La période — name and diffusion dates.
  *
- * "Créer" hands the draft to the editor through the router's `state`. Nothing
- * is stored and no dates are computed — the fields are literal display text.
+ * "Continuer" hands the draft to the visuals step through the router's `state`.
+ * Nothing is stored and no dates are computed — the fields are literal display
+ * text; the sponsor sends the whole thing as a request the club then reviews.
  */
 export function NouvelleCampagneScreen() {
   const navigate = useNavigate()
@@ -64,8 +63,8 @@ export function NouvelleCampagneScreen() {
     <div className="mx-auto max-w-3xl">
       <BackButton to="/sponsor/campagnes" label="Retour aux campagnes" />
       <PageHeader
-        title="Nouvelle campagne"
-        subtitle="Choisissez le club, puis la période et l'objectif. Vous placerez vos visuels juste après."
+        title="Demande de campagne"
+        subtitle="Choisissez le club et la période. Vous placerez vos visuels juste après, puis enverrez la demande au club."
       />
 
       <Steps step={step} />
@@ -148,73 +147,6 @@ export function NouvelleCampagneScreen() {
                   />
                 </Field>
               </div>
-
-              <Field
-                label="Couleur du visuel"
-                hint="Sert d'aperçu tant que vos images ne sont pas envoyées."
-              >
-                <div className="flex items-center gap-2.5">
-                  {DRAFT_COLORS.map((c) => (
-                    <button
-                      key={c}
-                      type="button"
-                      aria-label={`Couleur ${c}`}
-                      onClick={() => set({ color: c })}
-                      className={cn(
-                        "flex size-8 items-center justify-center rounded-md border transition-colors",
-                        draft.color === c
-                          ? "border-info"
-                          : "border-transparent hover:border-border-strong",
-                      )}
-                    >
-                      <span
-                        className="flex size-[22px] items-center justify-center rounded-[5px]"
-                        style={{ backgroundColor: c }}
-                      >
-                        {draft.color === c ? (
-                          <Check size={13} className="text-white" />
-                        ) : null}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-              </Field>
-            </div>
-          </div>
-
-          <div>
-            <SectionTitle>Objectif</SectionTitle>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              {OBJECTIFS.map((o) => (
-                <button
-                  key={o.key}
-                  type="button"
-                  onClick={() => set({ objectif: o.key })}
-                  className={cn(
-                    "rounded-lg border px-4 py-3.5 text-left transition-colors",
-                    draft.objectif === o.key
-                      ? "border-info bg-info/5"
-                      : "border-border hover:border-border-strong hover:bg-surface-hover",
-                  )}
-                >
-                  <div className="flex items-center justify-between gap-2">
-                    <span
-                      className={cn(
-                        "font-ui text-[0.85rem] font-medium",
-                        draft.objectif === o.key ? "text-info" : "text-ink",
-                      )}
-                    >
-                      {o.label}
-                    </span>
-                    {draft.objectif === o.key ? (
-                      <Check size={14} className="shrink-0 text-info" />
-                    ) : null}
-                  </div>
-                  <p className="mt-1 font-body text-[0.74rem] leading-snug text-ink-muted">
-                    {o.hint}
-                  </p>
-                </button>
-              ))}
             </div>
           </div>
 
@@ -230,7 +162,7 @@ export function NouvelleCampagneScreen() {
               onClick={create}
               className="inline-flex shrink-0 items-center gap-1.5 rounded-md bg-brand px-4 py-2 font-ui text-sm font-medium text-ink-inverted shadow-glow transition-colors hover:bg-brand-dim disabled:cursor-not-allowed disabled:opacity-45 disabled:shadow-none"
             >
-              Créer la campagne <ArrowRight size={16} />
+              Continuer <ArrowRight size={16} />
             </button>
           </div>
         </div>
@@ -243,7 +175,7 @@ export function NouvelleCampagneScreen() {
 function Steps({ step }: { step: 1 | 2 }) {
   const items = [
     { n: 1, label: "Le club" },
-    { n: 2, label: "Période & objectif" },
+    { n: 2, label: "La période" },
     { n: 3, label: "Les visuels" },
   ]
   return (

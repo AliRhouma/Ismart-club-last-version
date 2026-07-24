@@ -4,7 +4,6 @@ import {
   ArrowRight,
   Check,
   Handshake,
-  LayoutTemplate,
   Link2,
   Link2Off,
   MoreVertical,
@@ -16,7 +15,7 @@ import {
 import { cn } from "@/lib/utils"
 import { useData } from "@/data/useData"
 import type { Offer, Partner } from "@/data/seed/sponsoring"
-import { PageHeader } from "@/components/kit/PageHeader"
+import { SponsoringShell } from "@/features/sponsoring/SponsoringShell"
 import { EmptyState } from "@/components/kit/EmptyState"
 import { ConfirmDialog } from "@/components/kit/ConfirmDialog"
 import { Avatar } from "@/components/kit/Avatar"
@@ -62,11 +61,10 @@ export function PartenairesScreen() {
   // No offers at all → the module isn't set up yet; send the admin there first.
   if (offers.length === 0) {
     return (
-      <>
-        <PageHeader
-          title="Partenaires"
-          subtitle="Les entreprises qui soutiennent le club."
-        />
+      <SponsoringShell
+        active="partenaires"
+        subtitle="Les entreprises qui soutiennent le club."
+      >
         <div className="mt-6 rounded-lg border border-border">
           <EmptyState
             icon={Handshake}
@@ -83,26 +81,15 @@ export function PartenairesScreen() {
             }
           />
         </div>
-      </>
+      </SponsoringShell>
     )
   }
 
   return (
-    <>
-      <PageHeader
-        title="Partenaires"
-        subtitle="Les entreprises qui soutiennent le club, par offre signée."
-        actions={
-          <button
-            type="button"
-            onClick={() => navigate("/sponsoring/offres")}
-            className="inline-flex items-center gap-1.5 rounded-md border border-input px-4 py-2 font-ui text-sm font-medium text-ink transition-colors hover:border-border-strong hover:bg-accent"
-          >
-            <LayoutTemplate size={16} /> Offres de sponsoring
-          </button>
-        }
-      />
-
+    <SponsoringShell
+      active="partenaires"
+      subtitle="Les entreprises qui soutiennent le club, par offre signée."
+    >
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
         <Stat label="Partenaires" value={partners.length} />
         <Stat label="Places occupées" value={`${partners.length} / ${totalSeats}`} />
@@ -253,7 +240,7 @@ export function PartenairesScreen() {
           <span className="font-body text-[0.84rem] text-ink">{toast.msg}</span>
         </div>
       ) : null}
-    </>
+    </SponsoringShell>
   )
 }
 

@@ -22,7 +22,7 @@ export function SponsoringHome() {
   const navigate = useNavigate()
 
   if (offers.length > 0) {
-    return <Navigate to="/sponsoring/offres" replace />
+    return <Navigate to="/sponsoring/partenaires" replace />
   }
 
   return (

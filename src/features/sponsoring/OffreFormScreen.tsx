@@ -1,21 +1,24 @@
 import { useMemo, useState, type ReactNode } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
-import { Check, AlertTriangle, ExternalLink } from "lucide-react"
+import { Check } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { useData } from "@/data/useData"
 import {
-  SLOT_DEFS,
-  PRESET_COLORS,
+  OFFER_SPACES,
   blankOffer,
   sharePerSponsor,
+  shareValue,
+  perDayValue,
   pct,
   type Offer,
-  type OfferSlot,
-  type SlotKey,
+  type OfferSpace,
+  type SpaceKey,
+  type SpaceKind,
 } from "@/data/seed/sponsoring"
 import { BackButton } from "@/components/kit/BackButton"
-import { Switch, TierBadge, ExplainCard, SectionTitle } from "@/features/sponsoring/ui"
+import { Switch, TierBadge, SectionTitle, SPACE_ICON } from "@/features/sponsoring/ui"
+import { OfferSpacePreview } from "@/features/sponsoring/offerSpaceMocks"
 
 const inputCls =
   "w-full rounded-md border border-input bg-transparent px-3.5 py-2.5 font-body text-sm text-ink outline-none transition-colors placeholder:text-ink-disabled focus:border-border-focus"
@@ -84,11 +87,86 @@ function Num({
 }
 
 /**
+ * Auto / manual value for one ad space. Shows the computed value by default
+ * (the "Auto" pill lit); clicking it hands editing to the club, which can type
+ * an override; clicking it again returns to auto. `share` spaces show a %,
+ * `perDay` spaces a "/ jour" rhythm.
+ */
+function ValueControl({
+  kind,
+  manual,
+  autoValue,
+  onChange,
+}: {
+  kind: SpaceKind
+  manual: number | null
+  autoValue: number
+  onChange: (v: number | null) => void
+}) {
+  const isAuto = manual === null
+  const suffix = kind === "share" ? "%" : "/ jour"
+  const autoLabel =
+    kind === "share"
+      ? autoValue.toLocaleString("fr-FR", {
+          minimumFractionDigits: 1,
+          maximumFractionDigits: 1,
+        })
+      : String(autoValue)
+
+  return (
+    <div className="flex items-center gap-2">
+      <div className="relative w-[124px]">
+        {isAuto ? (
+          <div className="flex items-center justify-end gap-1 rounded-md border border-border bg-surface-nested px-3 py-2 font-body text-sm text-ink-muted tabular-nums">
+            <span>{autoLabel}</span>
+            <span className="text-[0.72rem] text-ink-disabled">{suffix}</span>
+          </div>
+        ) : (
+          <>
+            <input
+              type="number"
+              min={0}
+              value={String(manual)}
+              onChange={(e) =>
+                onChange(e.target.value === "" ? 0 : Number(e.target.value))
+              }
+              className="w-full rounded-md border border-input bg-transparent px-3 py-2 pr-14 text-right font-body text-sm text-ink tabular-nums outline-none transition-colors focus:border-border-focus"
+            />
+            <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 font-body text-[0.72rem] text-ink-disabled">
+              {suffix}
+            </span>
+          </>
+        )}
+      </div>
+      <button
+        type="button"
+        onClick={() => onChange(isAuto ? autoValue : null)}
+        aria-pressed={isAuto}
+        title={
+          isAuto
+            ? "Valeur automatique — cliquez pour saisir une valeur manuelle"
+            : "Revenir à la valeur automatique"
+        }
+        className={cn(
+          "rounded-pill border px-2.5 py-1 font-ui text-[0.64rem] font-medium tracking-[0.06em] uppercase transition-colors",
+          isAuto
+            ? "border-brand-blue-600/30 bg-brand-blue-600/10 text-brand-blue-600"
+            : "border-border text-ink-muted hover:border-border-strong hover:text-ink",
+        )}
+      >
+        Auto
+      </button>
+    </div>
+  )
+}
+
+/**
  * Screen 3 — offer creation / edit form + sticky live preview.
  *
  * The only real math in the prototype: the rotation share of each sponsor is
  * points / Σ(points × seats) across ALL offers (existing ones plus this draft).
- * It recomputes on every keystroke of `points` or `seats`.
+ * It recomputes on every keystroke of `points` or `seats`, and feeds the auto
+ * value of every `share` ad space.
  * Referenced the Budget config screen (two-column + sticky) and the Objectif
  * modal (field styling) to stay on-brand.
  */
@@ -109,7 +187,7 @@ export function OffreFormScreen() {
     val: Omit<Offer, "id">[K],
   ) => setDraft((d) => ({ ...d, [key]: val }))
 
-  const setSlot = (key: SlotKey, patch: Partial<OfferSlot>) =>
+  const setSpace = (key: SpaceKey, patch: Partial<OfferSpace>) =>
     setDraft((d) => ({
       ...d,
       slots: { ...d.slots, [key]: { ...d.slots[key], ...patch } },
@@ -143,7 +221,7 @@ export function OffreFormScreen() {
       <BackButton to="/sponsoring/offres" label="Retour aux offres" />
 
       <h1 className="font-ui text-2xl font-semibold text-ink">
-        {editing ? "Modifier l'offre" : "Nouvelle offre"}
+        {editing ? "Modifier le pack" : "Nouveau pack"}
       </h1>
       <p className="mt-1.5 font-body text-sm text-ink-muted">
         Une formule de partenariat : ses droits, ses places et sa visibilité.
@@ -156,13 +234,10 @@ export function OffreFormScreen() {
           <section>
             <SectionTitle>Identité</SectionTitle>
             <div className="flex flex-col gap-4">
-              <Field
-                label="Nom de l'offre"
-                hint="Le nom que verront vos partenaires."
-              >
+              <Field label="Nom du pack" hint="Le nom que verront vos partenaires.">
                 <input
                   className={inputCls}
-                  placeholder="Or"
+                  placeholder="Or, Argent, Bronze…"
                   value={draft.name}
                   onChange={(e) => set("name", e.target.value)}
                 />
@@ -176,29 +251,6 @@ export function OffreFormScreen() {
                   value={draft.description}
                   onChange={(e) => set("description", e.target.value)}
                 />
-              </Field>
-
-              <Field label="Couleur du badge">
-                <div className="flex items-center gap-2.5">
-                  {PRESET_COLORS.map((c) => {
-                    const active = draft.color === c
-                    return (
-                      <button
-                        key={c}
-                        type="button"
-                        aria-label={`Couleur ${c}`}
-                        onClick={() => set("color", c)}
-                        className={cn(
-                          "size-8 rounded-full transition-transform",
-                          active
-                            ? "ring-2 ring-ink ring-offset-2 ring-offset-background"
-                            : "hover:scale-110",
-                        )}
-                        style={{ backgroundColor: c }}
-                      />
-                    )
-                  })}
-                </div>
               </Field>
 
               <Field
@@ -217,8 +269,9 @@ export function OffreFormScreen() {
             </div>
           </section>
 
-          {/* Places disponibles */}
-          <section>
+          {/* Places disponibles — temporairement masqué (les places gardent
+              leur valeur par défaut, utilisée dans le calcul de visibilité). */}
+          {/* <section>
             <SectionTitle>Places disponibles</SectionTitle>
             <div className="flex flex-col gap-3.5">
               <Field label="Nombre de places">
@@ -245,188 +298,73 @@ export function OffreFormScreen() {
                 </p>
               </ExplainCard>
             </div>
-          </section>
+          </section> */}
 
-          {/* Points de priorité */}
+          {/* Espaces publicitaires — one visual card per space */}
           <section>
-            <SectionTitle>Points de priorité</SectionTitle>
-            <div className="flex flex-col gap-3.5">
-              <Field label="Points de priorité">
-                <Num
-                  value={draft.points}
-                  onChange={(v) => set("points", v ?? 1)}
-                  min={1}
-                  suffix="points"
-                />
-              </Field>
-              <ExplainCard title="À quoi servent les points ?">
-                <p>
-                  Les points définissent le poids d'un partenaire dans la
-                  rotation des espaces publicitaires. Ils ne sont pas un
-                  pourcentage : c'est le rapport entre les offres qui compte.
-                </p>
-                <p>
-                  Une offre à 100 points est vue 10 fois plus souvent qu'une
-                  offre à 10 points.
-                </p>
-                <p>
-                  Le pourcentage exact est calculé automatiquement en fonction
-                  de toutes vos offres et de leurs places. Il apparaît dans
-                  l'aperçu à droite.
-                </p>
-                <p className="italic text-ink-disabled">
-                  Repère : Or 100 · Argent 40 · Bronze 10.
-                </p>
-              </ExplainCard>
-            </div>
-          </section>
+            <SectionTitle>Espaces publicitaires</SectionTitle>
 
-          {/* Espaces publicitaires */}
-          <section>
-            <SectionTitle
-              hint={
-                /* New tab: keeps the in-progress draft intact. */
-                <a
-                  href="/sponsoring/emplacements"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-1 font-ui text-[0.72rem] font-medium text-info normal-case transition-opacity hover:opacity-80"
-                >
-                  <ExternalLink size={12} /> Voir les espaces
-                </a>
-              }
-            >
-              Espaces publicitaires
-            </SectionTitle>
-            <div className="overflow-hidden rounded-lg border border-border">
-              {SLOT_DEFS.map((slot, i) => {
-                const s = draft.slots[slot.key]
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              {OFFER_SPACES.map((space) => {
+                const s = draft.slots[space.key]
+                const Icon = SPACE_ICON[space.key]
+                // Auto value: share % from the rotation, or the space's daily
+                // default. Rounded to one decimal so a manual seed reads clean.
+                const autoValue =
+                  space.kind === "share"
+                    ? Math.round(share * 1000) / 10
+                    : space.autoPerDay ?? 0
                 return (
-                  <div key={slot.key}>
-                    <div
-                      className={cn(
-                        "flex items-start gap-3.5 px-4 py-3.5",
-                        i > 0 && "border-t border-border",
-                      )}
-                    >
-                      <div className="pt-0.5">
-                        <Switch
-                          checked={s.enabled}
-                          onChange={(v) => setSlot(slot.key, { enabled: v })}
-                          label={slot.label}
-                        />
-                      </div>
+                  <div
+                    key={space.key}
+                    className={cn(
+                      "flex flex-col rounded-xl border border-border p-4 transition-opacity",
+                      !s.enabled && "opacity-55",
+                    )}
+                  >
+                    {/* Header — icon + label/description + enable switch */}
+                    <div className="flex items-start gap-2.5">
+                      <span className="flex size-8 shrink-0 items-center justify-center rounded-md bg-surface-nested text-ink-subtle">
+                        <Icon size={15} />
+                      </span>
                       <div className="min-w-0 flex-1">
                         <div className="font-body text-[0.86rem] text-ink">
-                          {slot.label}
+                          {space.label}
                         </div>
-                        <div className="font-body text-[0.75rem] leading-snug text-ink-muted">
-                          {slot.description}
+                        <div className="font-body text-[0.72rem] leading-snug text-ink-muted">
+                          {space.description}
                         </div>
                       </div>
-
-                      {/* Right control, only when enabled */}
-                      {s.enabled ? (
-                        <div className="shrink-0 pt-0.5">
-                          {slot.allocation === "cumulative" ? (
-                            <span className="inline-flex items-center rounded-pill border border-border bg-accent px-2.5 py-1 font-ui text-[0.66rem] font-medium tracking-[0.04em] text-ink-muted uppercase">
-                              Toujours visible
-                            </span>
-                          ) : slot.allocation === "rotational" ? (
-                            <span className="inline-flex items-center rounded-pill border border-brand-blue-600/30 bg-brand-blue-600/10 px-2.5 py-1 font-ui text-[0.72rem] font-medium text-brand-blue-600 tabular-nums">
-                              {pct(share)}
-                            </span>
-                          ) : (
-                            <div className="w-[150px]">
-                              <Num
-                                value={s.qty}
-                                onChange={(v) =>
-                                  setSlot(slot.key, { qty: v ?? 0 })
-                                }
-                                min={0}
-                                suffix={slot.unit}
-                              />
-                            </div>
-                          )}
-                        </div>
-                      ) : null}
+                      <Switch
+                        checked={s.enabled}
+                        onChange={(v) => setSpace(space.key, { enabled: v })}
+                        label={space.label}
+                      />
                     </div>
 
-                    {slot.key === "notification" && s.enabled ? (
-                      <div className="flex items-start gap-2 border-t border-border bg-warning/5 px-4 py-2.5">
-                        <AlertTriangle
-                          size={14}
-                          className="mt-0.5 shrink-0 text-warning"
-                        />
-                        <p className="font-body text-[0.75rem] leading-snug text-warning">
-                          Les notifications sont l'espace le plus intrusif.
-                          Limitez-les pour préserver l'expérience des familles.
-                        </p>
-                      </div>
-                    ) : null}
+                    {/* Visual mock, like the gallery page */}
+                    <div className="mt-4 flex justify-center">
+                      <OfferSpacePreview
+                        spaceKey={space.key}
+                        color={draft.color}
+                      />
+                    </div>
+
+                    {/* Value control */}
+                    <div className="mt-4 flex items-center justify-between border-t border-border pt-3">
+                      <span className="font-ui text-[0.68rem] font-medium tracking-[0.04em] text-ink-muted uppercase">
+                        {space.kind === "share" ? "Visibilité" : "Fréquence"}
+                      </span>
+                      <ValueControl
+                        kind={space.kind}
+                        manual={s.manual}
+                        autoValue={autoValue}
+                        onChange={(v) => setSpace(space.key, { manual: v })}
+                      />
+                    </div>
                   </div>
                 )
               })}
-            </div>
-          </section>
-
-          {/* Règles */}
-          <section>
-            <SectionTitle>Règles</SectionTitle>
-            <div className="flex flex-col gap-4">
-              <div className="rounded-lg border border-border px-4 py-3.5">
-                <div className="flex items-start gap-3.5">
-                  <div className="pt-0.5">
-                    <Switch
-                      checked={draft.exclusive}
-                      onChange={(v) => set("exclusive", v)}
-                      label="Exclusivité de catégorie"
-                    />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <div className="font-body text-[0.86rem] text-ink">
-                      Exclusivité de catégorie
-                    </div>
-                    <div className="font-body text-[0.75rem] leading-snug text-ink-muted">
-                      Aucun autre sponsor de cette catégorie ne pourra signer
-                      tant que ce contrat est actif.
-                    </div>
-                  </div>
-                </div>
-                {draft.exclusive ? (
-                  <div className="mt-3.5 pl-[52px]">
-                    <Field label="Catégorie">
-                      <input
-                        className={inputCls}
-                        placeholder="Équipementier"
-                        value={draft.exclusiveCategory}
-                        onChange={(e) =>
-                          set("exclusiveCategory", e.target.value)
-                        }
-                      />
-                    </Field>
-                  </div>
-                ) : null}
-              </div>
-
-              <div className="flex items-start gap-3.5 rounded-lg border border-border px-4 py-3.5">
-                <div className="pt-0.5">
-                  <Switch
-                    checked={draft.appearsInDirectory}
-                    onChange={(v) => set("appearsInDirectory", v)}
-                    label="Afficher dans la page partenaires"
-                  />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="font-body text-[0.86rem] text-ink">
-                    Afficher dans la page partenaires
-                  </div>
-                  <div className="font-body text-[0.75rem] leading-snug text-ink-muted">
-                    Désactivez pour les annonceurs ponctuels qui ne sont pas des
-                    partenaires du club.
-                  </div>
-                </div>
-              </div>
             </div>
           </section>
 
@@ -445,7 +383,7 @@ export function OffreFormScreen() {
               className="inline-flex items-center gap-1.5 rounded-md bg-brand px-5 py-2 font-ui text-sm font-medium text-ink-inverted shadow-glow transition-colors hover:bg-brand-dim"
             >
               <Check size={16} />
-              {editing ? "Enregistrer" : "Créer l'offre"}
+              {editing ? "Enregistrer" : "Créer le pack"}
             </button>
           </div>
         </div>
@@ -466,8 +404,11 @@ function PreviewPanel({
   draft: Omit<Offer, "id">
   share: number
 }) {
-  const rotational = SLOT_DEFS.filter(
-    (s) => s.allocation === "rotational" && draft.slots[s.key].enabled,
+  const shareSpaces = OFFER_SPACES.filter(
+    (s) => s.kind === "share" && draft.slots[s.key].enabled,
+  )
+  const sendSpaces = OFFER_SPACES.filter(
+    (s) => s.kind === "perDay" && draft.slots[s.key].enabled,
   )
 
   return (
@@ -481,7 +422,7 @@ function PreviewPanel({
       <div className="flex flex-col gap-5 px-5 py-5">
         {/* Tier badge card, as a sponsor would see it */}
         <div className="rounded-lg border border-border px-4 py-4">
-          <TierBadge name={draft.name || "Nom de l'offre"} color={draft.color} />
+          <TierBadge name={draft.name || "Nouveau pack"} color={draft.color} />
           <div className="mt-3 flex items-baseline justify-between">
             <span className="font-display text-xl font-semibold text-ink tabular-nums">
               {draft.price === null
@@ -500,43 +441,64 @@ function PreviewPanel({
           </div>
         </div>
 
-        {/* Visibilité par partenaire */}
+        {/* Visibilité par partenaire (rotated spaces) */}
         <div>
           <h3 className="font-ui text-[0.7rem] font-medium tracking-[0.08em] text-ink-muted uppercase">
             Visibilité par partenaire
           </h3>
-          {rotational.length === 0 ? (
+          {shareSpaces.length === 0 ? (
             <p className="mt-2.5 font-body text-[0.78rem] text-ink-disabled">
-              Activez un espace en rotation (bannière calendrier, fil d'accueil)
-              pour voir la visibilité par partenaire.
+              Activez un espace en rotation (calendrier, matchs, séances) pour
+              voir la visibilité par partenaire.
             </p>
           ) : (
             <div className="mt-3 flex flex-col gap-3">
-              {rotational.map((s) => (
-                <div key={s.key}>
-                  <div className="flex items-center justify-between font-body text-[0.78rem]">
-                    <span className="text-ink-subtle">{s.label}</span>
-                    <span className="text-ink tabular-nums">{pct(share)}</span>
+              {shareSpaces.map((s) => {
+                const frac = shareValue(draft.slots[s.key], share)
+                return (
+                  <div key={s.key}>
+                    <div className="flex items-center justify-between font-body text-[0.78rem]">
+                      <span className="text-ink-subtle">{s.label}</span>
+                      <span className="text-ink tabular-nums">{pct(frac)}</span>
+                    </div>
+                    <div className="mt-1.5 h-[6px] overflow-hidden rounded bg-accent">
+                      <div
+                        className="h-full rounded bg-info transition-[width] duration-300"
+                        style={{ width: `${Math.min(frac * 100, 100)}%` }}
+                      />
+                    </div>
                   </div>
-                  <div className="mt-1.5 h-[6px] overflow-hidden rounded bg-accent">
-                    <div
-                      className="h-full rounded bg-info transition-[width] duration-300"
-                      style={{ width: `${Math.min(share * 100, 100)}%` }}
-                    />
-                  </div>
+                )
+              })}
+            </div>
+          )}
+        </div>
+
+        {/* Fréquence d'envoi (perDay spaces) */}
+        {sendSpaces.length > 0 ? (
+          <div className="border-t border-border pt-4">
+            <h3 className="font-ui text-[0.7rem] font-medium tracking-[0.08em] text-ink-muted uppercase">
+              Fréquence d'envoi
+            </h3>
+            <div className="mt-3 flex flex-col gap-2">
+              {sendSpaces.map((s) => (
+                <div
+                  key={s.key}
+                  className="flex items-center justify-between font-body text-[0.78rem]"
+                >
+                  <span className="text-ink-subtle">{s.label}</span>
+                  <span className="text-ink tabular-nums">
+                    {perDayValue(draft.slots[s.key], s)} / jour
+                  </span>
                 </div>
               ))}
             </div>
-          )}
-          <p className="mt-3 font-body text-[0.72rem] leading-snug text-ink-disabled">
-            Calculé à partir de vos offres actuelles. Ce pourcentage évolue si
-            vous ajoutez d'autres offres ou d'autres places.
-          </p>
-        </div>
+          </div>
+        ) : null}
 
         <p className="border-t border-border pt-4 font-body text-[0.72rem] text-ink-disabled/70">
-          Garantie contractuelle : {pct(share)} minimum par partenaire{" "}
-          {draft.name || "Or"}.
+          Calculé à partir de vos offres actuelles. Ces valeurs évoluent si vous
+          ajoutez d'autres offres ou d'autres places.
         </p>
       </div>
     </div>

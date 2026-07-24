@@ -6,36 +6,31 @@ import {
   Pencil,
   Copy,
   Trash2,
-  Lock,
   Check,
-  UserPlus,
   LayoutTemplate,
-  Users,
+  Sparkles,
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { useData } from "@/data/useData"
 import {
-  SLOT_DEFS,
-  SLOT_BY_KEY,
+  OFFER_SPACES,
   pool,
-  sharePerSponsor,
   sharePerTier,
   pct,
   type Offer,
 } from "@/data/seed/sponsoring"
-import { PageHeader } from "@/components/kit/PageHeader"
+import { SponsoringShell } from "@/features/sponsoring/SponsoringShell"
 import { EmptyState } from "@/components/kit/EmptyState"
 import { ConfirmDialog } from "@/components/kit/ConfirmDialog"
 import { Stat } from "@/features/budget/ui"
-import { TierBadge, SLOT_ICON } from "@/features/sponsoring/ui"
+import { SPACE_ICON } from "@/features/sponsoring/ui"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { PartnerFormModal } from "@/features/sponsoring/PartnerFormModal"
 import { Handshake } from "lucide-react"
 
 /**
@@ -46,11 +41,13 @@ import { Handshake } from "lucide-react"
 export function OffresScreen() {
   const navigate = useNavigate()
   const location = useLocation()
-  const { offers, partners, removeOffer, duplicateOffer } = useData()
+  const { offers, partners, offerRequests, removeOffer, duplicateOffer } =
+    useData()
+  const pendingRequests = offerRequests.filter(
+    (r) => r.status === "en_attente",
+  ).length
 
   const [confirm, setConfirm] = useState<Offer | null>(null)
-  /** Offer whose "Ajouter un partenaire" modal is open, or null. */
-  const [partnerFor, setPartnerFor] = useState<Offer | null>(null)
 
   // Toast is handed over from the form via navigation state; show once, then
   // clear the state so a refresh doesn't replay it.
@@ -78,36 +75,40 @@ export function OffresScreen() {
     partners.filter((p) => p.offerId === offerId).length
 
   return (
-    <>
-      <PageHeader
-        title="Offres de sponsoring"
-        subtitle="Vos formules de partenariat et la visibilité qu'elles donnent."
-        actions={
-          <>
-            <button
-              type="button"
-              onClick={() => navigate("/sponsoring/partenaires")}
-              className="inline-flex items-center gap-1.5 rounded-md border border-input px-4 py-2 font-ui text-sm font-medium text-ink transition-colors hover:border-border-strong hover:bg-accent"
-            >
-              <Users size={16} /> Partenaires
-            </button>
-            <button
-              type="button"
-              onClick={() => navigate("/sponsoring/emplacements")}
-              className="inline-flex items-center gap-1.5 rounded-md border border-input px-4 py-2 font-ui text-sm font-medium text-ink transition-colors hover:border-border-strong hover:bg-accent"
-            >
-              <LayoutTemplate size={16} /> Espaces publicitaires
-            </button>
-            <button
-              type="button"
-              onClick={() => navigate("/sponsoring/offres/nouvelle")}
-              className="inline-flex items-center gap-1.5 rounded-md bg-brand px-4 py-2 font-ui text-sm font-medium text-ink-inverted shadow-glow transition-colors hover:bg-brand-dim"
-            >
-              <Plus size={16} /> Nouvelle offre
-            </button>
-          </>
-        }
-      />
+    <SponsoringShell
+      active="packs"
+      subtitle="Vos formules de partenariat et la visibilité qu'elles donnent."
+      actions={
+        <>
+          <button
+            type="button"
+            onClick={() => navigate("/sponsoring/emplacements")}
+            className="inline-flex items-center gap-1.5 rounded-md border border-input px-4 py-2 font-ui text-sm font-medium text-ink transition-colors hover:border-border-strong hover:bg-accent"
+          >
+            <LayoutTemplate size={16} /> Espaces publicitaires
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate("/sponsoring/demandes-sur-mesure")}
+            className="inline-flex items-center gap-1.5 rounded-md border border-input px-4 py-2 font-ui text-sm font-medium text-ink transition-colors hover:border-border-strong hover:bg-accent"
+          >
+            <Sparkles size={16} /> Sur mesure
+            {pendingRequests > 0 ? (
+              <span className="inline-flex min-w-5 items-center justify-center rounded-full bg-info/15 px-1.5 py-0.5 font-ui text-[0.68rem] font-medium text-info tabular-nums">
+                {pendingRequests}
+              </span>
+            ) : null}
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate("/sponsoring/offres/nouvelle")}
+            className="inline-flex items-center gap-1.5 rounded-md bg-brand px-4 py-2 font-ui text-sm font-medium text-ink-inverted shadow-glow transition-colors hover:bg-brand-dim"
+          >
+            <Plus size={16} /> Nouveau pack
+          </button>
+        </>
+      }
+    >
 
       {/* Summary strip */}
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
@@ -128,7 +129,7 @@ export function OffresScreen() {
                 onClick={() => navigate("/sponsoring/offres/nouvelle")}
                 className="inline-flex items-center gap-1.5 rounded-md bg-brand px-4 py-2 font-ui text-sm font-medium text-ink-inverted shadow-glow transition-colors hover:bg-brand-dim"
               >
-                <Plus size={16} /> Nouvelle offre
+                <Plus size={16} /> Nouveau pack
               </button>
             }
           />
@@ -141,8 +142,6 @@ export function OffresScreen() {
               <OfferCard
                 key={offer.id}
                 offer={offer}
-                taken={takenFor(offer.id)}
-                share={sharePerSponsor(offer, offers)}
                 onEdit={() =>
                   navigate(`/sponsoring/offres/nouvelle?edit=${offer.id}`)
                 }
@@ -151,7 +150,6 @@ export function OffresScreen() {
                   notify("Offre dupliquée")
                 }}
                 onDelete={() => setConfirm(offer)}
-                onAddPartner={() => setPartnerFor(offer)}
               />
             ))}
 
@@ -165,7 +163,7 @@ export function OffresScreen() {
                 <Plus size={18} />
               </span>
               <span className="font-ui text-[0.82rem] font-medium">
-                Ajouter une offre
+                Nouveau pack
               </span>
             </button>
           </div>
@@ -200,16 +198,6 @@ export function OffresScreen() {
         }}
       />
 
-      {/* "Ajouter un partenaire" — name + description + compte sponsor */}
-      {partnerFor ? (
-        <PartnerFormModal
-          offer={partnerFor}
-          editing={null}
-          onClose={() => setPartnerFor(null)}
-          onSaved={notify}
-        />
-      ) : null}
-
       {toast ? (
         <div
           key={toast.id}
@@ -222,36 +210,30 @@ export function OffresScreen() {
           <span className="font-body text-[0.84rem] text-ink">{toast.msg}</span>
         </div>
       ) : null}
-    </>
+    </SponsoringShell>
   )
 }
 
 /* ── Offer card ─────────────────────────────────────────────────────────── */
 function OfferCard({
   offer,
-  taken,
-  share,
   onEdit,
   onDuplicate,
   onDelete,
-  onAddPartner,
 }: {
   offer: Offer
-  /** Seats already filled by partenaires. */
-  taken: number
-  share: number
   onEdit: () => void
   onDuplicate: () => void
   onDelete: () => void
-  onAddPartner: () => void
 }) {
-  const enabledSlots = SLOT_DEFS.filter((s) => offer.slots[s.key].enabled)
-  const full = taken >= offer.seats
+  const enabledSlots = OFFER_SPACES.filter((s) => offer.slots[s.key].enabled)
 
   return (
     <div className="flex flex-col rounded-lg border border-border transition-colors hover:border-border-strong">
       <div className="flex items-start justify-between gap-2 px-4 pt-4">
-        <TierBadge name={offer.name} color={offer.color} />
+        <h3 className="min-w-0 truncate font-ui text-base font-semibold text-ink">
+          {offer.name}
+        </h3>
         <CardMenu
           onEdit={onEdit}
           onDuplicate={onDuplicate}
@@ -272,44 +254,17 @@ function OfferCard({
         </div>
       </div>
 
-      {/* Occupancy */}
-      <div className="px-4 pt-3.5">
-        <div className="flex items-center justify-between font-body text-[0.75rem] text-ink-muted">
-          <span>
-            {taken} / {offer.seats} places occupées
-          </span>
-          {full ? (
-            <span className="font-ui text-[0.66rem] font-medium tracking-[0.06em] text-warning uppercase">
-              Complet
-            </span>
-          ) : null}
-        </div>
-        <div className="mt-1.5 h-[6px] overflow-hidden rounded bg-accent">
-          <div
-            className={cn(
-              "h-full rounded transition-[width] duration-300",
-              full ? "bg-warning" : "bg-info",
-            )}
-            style={{ width: `${Math.min((taken / offer.seats) * 100, 100)}%` }}
-          />
-        </div>
-      </div>
-
-      {/* Per-sponsor visibility */}
-      <div className="px-4 pt-3">
-        <span className="font-body text-[0.78rem] text-ink-subtle tabular-nums">
-          {pct(share)}{" "}
-          <span className="text-ink-muted">de visibilité par partenaire</span>
-        </span>
-      </div>
+      {offer.description ? (
+        <p className="mt-3 line-clamp-2 px-4 font-body text-[0.78rem] leading-relaxed text-ink-muted">
+          {offer.description}
+        </p>
+      ) : null}
 
       {/* Slot icons */}
-      <div className="flex flex-wrap items-center gap-1.5 px-4 pt-3.5">
+      <div className="flex flex-wrap items-center gap-1.5 px-4 pb-4 pt-4">
         <TooltipProvider delayDuration={100}>
           {enabledSlots.map((s) => {
-            const Icon = SLOT_ICON[s.key]
-            const slot = offer.slots[s.key]
-            const detail = s.unit ? ` · ${slot.qty} ${s.unit}` : ""
+            const Icon = SPACE_ICON[s.key]
             return (
               <Tooltip key={s.key}>
                 <TooltipTrigger asChild>
@@ -317,38 +272,11 @@ function OfferCard({
                     <Icon size={15} />
                   </span>
                 </TooltipTrigger>
-                <TooltipContent>
-                  {s.label}
-                  {detail}
-                </TooltipContent>
+                <TooltipContent>{s.label}</TooltipContent>
               </Tooltip>
             )
           })}
         </TooltipProvider>
-      </div>
-
-      {/* Exclusivité chip */}
-      {offer.exclusive ? (
-        <div className="px-4 pt-3">
-          <span className="inline-flex items-center gap-1.5 rounded-pill border border-warning/25 bg-warning/10 px-2.5 py-0.5 font-ui text-[0.66rem] font-medium tracking-[0.04em] text-warning uppercase">
-            <Lock size={11} />
-            Exclusivité{offer.exclusiveCategory ? ` · ${offer.exclusiveCategory}` : ""}
-          </span>
-        </div>
-      ) : null}
-
-      {/* Footer action */}
-      <div className="mt-4 border-t border-border px-4 py-3">
-        <button
-          type="button"
-          onClick={onAddPartner}
-          disabled={full}
-          title={full ? "Toutes les places de cette offre sont prises" : undefined}
-          className="inline-flex w-full items-center justify-center gap-1.5 rounded-md border border-input px-3 py-2 font-ui text-[0.82rem] font-medium text-ink transition-colors hover:border-border-strong hover:bg-accent disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:border-input disabled:hover:bg-transparent"
-        >
-          <UserPlus size={15} />{" "}
-          {full ? "Places complètes" : "Ajouter un partenaire"}
-        </button>
       </div>
     </div>
   )
@@ -487,10 +415,9 @@ function RepartitionCard({ offers }: { offers: Offer[] }) {
       </div>
 
       <p className="mt-4 font-body text-[0.74rem] leading-snug text-ink-disabled">
-        Cette répartition s'applique aux espaces en rotation (bannière
-        calendrier, fil d'accueil). Espaces réservés :{" "}
-        {SLOT_BY_KEY.match_detail.label.toLowerCase()} et{" "}
-        {SLOT_BY_KEY.splash.label.toLowerCase()} sont facturés à l'unité.
+        Cette répartition s'applique aux espaces en rotation (calendrier, liste
+        des matchs, pages de match et de séances). Les notifications et la
+        messagerie se règlent séparément, en nombre d'envois par jour.
       </p>
     </div>
   )

@@ -85,11 +85,92 @@ export const SLOT_BY_KEY: Record<SlotKey, SlotDef> = Object.fromEntries(
   SLOT_DEFS.map((s) => [s.key, s]),
 ) as Record<SlotKey, SlotDef>
 
-/** One offer's configuration of a single slot. */
-export type OfferSlot = {
+/* ── Offer ad spaces (offer form + offer cards) ─────────────────────────── */
+
+/**
+ * The ad spaces an offer grants, as composed on the "Nouvelle offre" form.
+ * Intentionally decoupled from the campaign/gallery `SlotKey` taxonomy above —
+ * this is the club-facing list of what an offer is made of.
+ *
+ *   • share  — a rotated placement → an auto visibility % per partner
+ *   • perDay — a send placement    → an auto number of sends per day
+ *
+ * Both auto values are computed; both can be overridden manually, per offer.
+ */
+export type SpaceKind = "share" | "perDay"
+
+export type SpaceKey =
+  | "calendar"
+  | "match_list"
+  | "match_detail"
+  | "session_detail"
+  | "notification"
+  | "messagerie"
+
+export type SpaceDef = {
+  key: SpaceKey
+  label: string
+  description: string
+  kind: SpaceKind
+  /** Auto default (sends / day) for perDay spaces. */
+  autoPerDay?: number
+}
+
+/** The catalogue of offer ad spaces, in display order. */
+export const OFFER_SPACES: SpaceDef[] = [
+  {
+    key: "calendar",
+    label: "Dans le calendrier",
+    description: "Bannière en haut du calendrier des parents et joueurs.",
+    kind: "share",
+  },
+  {
+    key: "match_list",
+    label: "Dans la liste des matchs",
+    description: "Encart sponsorisé dans la liste des matchs.",
+    kind: "share",
+  },
+  {
+    key: "match_detail",
+    label: "Dans les pages de match",
+    description: "Mention « présenté par… » sur la page d'un match.",
+    kind: "share",
+  },
+  {
+    key: "session_detail",
+    label: "Dans les pages de séances",
+    description: "Encart sponsorisé sur la page d'une séance.",
+    kind: "share",
+  },
+  {
+    key: "notification",
+    label: "Notifications",
+    description: "Message poussé aux parents et joueurs.",
+    kind: "perDay",
+    autoPerDay: 1,
+  },
+  {
+    key: "messagerie",
+    label: "Messagerie",
+    description: "Message sponsorisé dans la messagerie du club.",
+    kind: "perDay",
+    autoPerDay: 2,
+  },
+]
+
+export const SPACE_BY_KEY: Record<SpaceKey, SpaceDef> = Object.fromEntries(
+  OFFER_SPACES.map((s) => [s.key, s]),
+) as Record<SpaceKey, SpaceDef>
+
+/** One offer's configuration of a single ad space. */
+export type OfferSpace = {
   enabled: boolean
-  /** Booked/quota quantity; ignored for cumulative/rotational slots. */
-  qty: number
+  /**
+   * Manual override. `null` = auto: a share space shows its computed %, a
+   * perDay space shows its default rhythm. A number overrides that value —
+   * percentage points for `share`, sends/day for `perDay`.
+   */
+  manual: number | null
 }
 
 export type Offer = {
@@ -104,7 +185,7 @@ export type Offer = {
   seats: number
   /** Priority weight in the rotation of shared spaces. */
   points: number
-  slots: Record<SlotKey, OfferSlot>
+  slots: Record<SpaceKey, OfferSpace>
   exclusive: boolean
   exclusiveCategory: string
   appearsInDirectory: boolean
@@ -124,15 +205,15 @@ export const PRESET_COLORS: string[] = [
   "#E5844B", // ambre
 ]
 
-/** All slots disabled, with sensible default quantities. */
-export function emptySlots(): Record<SlotKey, OfferSlot> {
+/** Every space enabled on auto — the natural starting point for a new offer. */
+export function defaultSpaces(): Record<SpaceKey, OfferSpace> {
   return {
-    partners_page: { enabled: false, qty: 0 },
-    calendar_banner: { enabled: false, qty: 0 },
-    home_feed: { enabled: false, qty: 0 },
-    match_detail: { enabled: false, qty: 4 },
-    splash: { enabled: false, qty: 2 },
-    notification: { enabled: false, qty: 2 },
+    calendar: { enabled: true, manual: null },
+    match_list: { enabled: true, manual: null },
+    match_detail: { enabled: true, manual: null },
+    session_detail: { enabled: true, manual: null },
+    notification: { enabled: true, manual: null },
+    messagerie: { enabled: true, manual: null },
   }
 }
 
@@ -145,22 +226,26 @@ export function blankOffer(): Omit<Offer, "id"> {
     price: null,
     seats: 4,
     points: 100,
-    slots: emptySlots(),
+    slots: defaultSpaces(),
     exclusive: false,
     exclusiveCategory: "",
     appearsInDirectory: true,
   }
 }
 
-/** Helper to build a seed offer's slot map from a partial spec. */
-function slots(
-  spec: Partial<Record<SlotKey, boolean | number>>,
-): Record<SlotKey, OfferSlot> {
-  const base = emptySlots()
-  for (const key of Object.keys(spec) as SlotKey[]) {
+/**
+ * Helper to build a seed offer's space map from a partial spec:
+ *   number → enabled, manual override · false → disabled · (omitted) → auto.
+ */
+function spaces(
+  spec: Partial<Record<SpaceKey, boolean | number>>,
+): Record<SpaceKey, OfferSpace> {
+  const base = defaultSpaces()
+  for (const key of Object.keys(spec) as SpaceKey[]) {
     const v = spec[key]
-    if (typeof v === "number") base[key] = { enabled: true, qty: v }
-    else if (v) base[key] = { ...base[key], enabled: true }
+    if (v === undefined) continue
+    if (typeof v === "number") base[key] = { enabled: true, manual: v }
+    else base[key] = { enabled: v, manual: null }
   }
   return base
 }
@@ -181,14 +266,8 @@ export const SUGGESTED_OFFERS: Omit<Offer, "id">[] = [
     price: 15000,
     seats: 4,
     points: 100,
-    slots: slots({
-      partners_page: true,
-      calendar_banner: true,
-      home_feed: true,
-      match_detail: 20,
-      splash: 6,
-      notification: 6,
-    }),
+    // All spaces on auto, with the notification rhythm forced up manually.
+    slots: spaces({ notification: 3 }),
     exclusive: true,
     exclusiveCategory: "Équipementier",
     appearsInDirectory: true,
@@ -201,12 +280,10 @@ export const SUGGESTED_OFFERS: Omit<Offer, "id">[] = [
     price: 5000,
     seats: 6,
     points: 40,
-    slots: slots({
-      partners_page: true,
-      calendar_banner: true,
-      home_feed: true,
-      match_detail: 8,
-      notification: 2,
+    slots: spaces({
+      session_detail: false,
+      messagerie: false,
+      notification: 1,
     }),
     exclusive: false,
     exclusiveCategory: "",
@@ -220,9 +297,11 @@ export const SUGGESTED_OFFERS: Omit<Offer, "id">[] = [
     price: 1200,
     seats: 12,
     points: 10,
-    slots: slots({
-      partners_page: true,
-      calendar_banner: true,
+    slots: spaces({
+      match_detail: false,
+      session_detail: false,
+      notification: false,
+      messagerie: false,
     }),
     exclusive: false,
     exclusiveCategory: "",
@@ -680,6 +759,16 @@ export function sharePerTier(
 ): number {
   const p = pool(offers)
   return p ? (offer.points * offer.seats) / p : 0
+}
+
+/** Effective visibility fraction of a `share` space: manual % or auto share. */
+export function shareValue(space: OfferSpace, autoShare: number): number {
+  return space.manual !== null ? space.manual / 100 : autoShare
+}
+
+/** Effective sends/day of a `perDay` space: manual override or auto default. */
+export function perDayValue(space: OfferSpace, def: SpaceDef): number {
+  return space.manual ?? def.autoPerDay ?? 0
 }
 
 /** "13.2 %" — one decimal, French formatting. */

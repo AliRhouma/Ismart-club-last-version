@@ -5,7 +5,8 @@ import {
   ImageIcon,
   Link2,
   Pencil,
-  Rocket,
+  Ruler,
+  Send,
   Upload,
   Smartphone,
 } from "lucide-react"
@@ -33,7 +34,7 @@ import { Creative, EditableCreative, IconButton } from "@/features/sponsoring/ca
 import {
   CAMPAIGN_HEADLINES,
   draftFromCampaign,
-  OBJECTIFS,
+  SLOT_DIMENSIONS,
   SPONSOR_CAMPAIGNS,
   type CampaignDraft,
   type DraftSlot,
@@ -46,9 +47,12 @@ const inputCls =
  * Sponsor space — step 3: place a visual in each ad space the club's offer
  * grants, exactly as "Espaces publicitaires" shows them. Empty slots read
  * "Espace disponible"; filling one draws the creative in the real surface.
+ * Each space states the dimension its visual must respect.
  *
  * The draft arrives through the router's `state` (no store — see campagneMock).
- * Editing a slot opens the centered modal: visuel + accroche + lien.
+ * Editing a slot opens the centered modal: visuel + accroche + lien. "Envoyer
+ * la demande" sends the whole thing to the club, which reviews it before it
+ * goes live.
  */
 export function CampagneVisuelsScreen() {
   const navigate = useNavigate()
@@ -73,7 +77,6 @@ export function CampagneVisuelsScreen() {
   const isNew = !existing
 
   const filled = draft.slots.filter((s) => s.image !== "").length
-  const objectif = OBJECTIFS.find((o) => o.key === draft.objectif)!
 
   const saveSlot = (key: SlotKey, patch: Partial<DraftSlot>) =>
     setDraft((d) =>
@@ -110,8 +113,7 @@ export function CampagneVisuelsScreen() {
             {draft.name}
           </h1>
           <p className="mt-1.5 font-body text-sm text-ink-muted">
-            {draft.club} · {objectif.label} · {draft.slots.length} espaces
-            publicitaires
+            {draft.club} · {draft.slots.length} espaces publicitaires
           </p>
         </div>
 
@@ -126,7 +128,7 @@ export function CampagneVisuelsScreen() {
           >
             {isNew ? (
               <>
-                <Rocket size={16} /> Lancer la campagne
+                <Send size={16} /> Envoyer la demande
               </>
             ) : (
               <>
@@ -148,7 +150,8 @@ export function CampagneVisuelsScreen() {
 
       <p className="mt-6 font-body text-sm text-ink-muted">
         Cliquez sur un espace pour y placer votre visuel et le lien ouvert au
-        clic. Les espaces laissés vides ne diffuseront rien.
+        clic. Respectez la dimension indiquée sur chaque espace. Les espaces
+        laissés vides ne diffuseront rien.
       </p>
 
       {/* ── The surfaces the tier grants ──────────────────────────────── */}
@@ -158,21 +161,24 @@ export function CampagneVisuelsScreen() {
             key={slot.key}
             slotKey={slot.key}
             headerRight={
-              slot.image ? (
-                <IconButton
-                  icon={Pencil}
-                  label="Modifier cet espace"
-                  onClick={() => setEditing(slot.key)}
-                />
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => setEditing(slot.key)}
-                  className="inline-flex items-center gap-1.5 rounded-sm border border-input px-2.5 py-1.5 font-ui text-[0.72rem] font-medium text-ink transition-colors hover:border-border-strong hover:bg-surface-hover"
-                >
-                  <Upload size={12} /> Ajouter
-                </button>
-              )
+              <div className="flex items-center gap-2">
+                <DimensionChip slotKey={slot.key} />
+                {slot.image ? (
+                  <IconButton
+                    icon={Pencil}
+                    label="Modifier cet espace"
+                    onClick={() => setEditing(slot.key)}
+                  />
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setEditing(slot.key)}
+                    className="inline-flex items-center gap-1.5 rounded-sm border border-input px-2.5 py-1.5 font-ui text-[0.72rem] font-medium text-ink transition-colors hover:border-border-strong hover:bg-surface-hover"
+                  >
+                    <Upload size={12} /> Ajouter
+                  </button>
+                )}
+              </div>
             }
             footer={
               slot.image ? (
@@ -206,12 +212,16 @@ export function CampagneVisuelsScreen() {
         />
       ) : null}
 
-      {/* ── Launch confirmation ───────────────────────────────────────── */}
+      {/* ── Request-sent confirmation ─────────────────────────────────── */}
       <FormSheet
         open={done}
         onOpenChange={setDone}
-        title={isNew ? "Campagne lancée" : "Modifications enregistrées"}
-        description={`${draft.name} sera diffusée sur ${draft.club} du ${draft.startDate || "—"} au ${draft.endDate || "—"}.`}
+        title={isNew ? "Demande envoyée" : "Modifications enregistrées"}
+        description={
+          isNew
+            ? `Votre demande pour « ${draft.name} » a été envoyée à ${draft.club}.`
+            : `${draft.name} sera diffusée sur ${draft.club} du ${draft.startDate || "—"} au ${draft.endDate || "—"}.`
+        }
         submitLabel="Voir mes campagnes"
         cancelLabel="Continuer à éditer"
         onSubmit={() => navigate("/sponsor/campagnes")}
@@ -222,8 +232,10 @@ export function CampagneVisuelsScreen() {
           </span>
           <p className="font-body text-[0.8rem] leading-relaxed text-ink-muted">
             {filled} espace{filled > 1 ? "s" : ""} sur {draft.slots.length}{" "}
-            porte{filled > 1 ? "nt" : ""} un visuel. Le club validera vos
-            créations avant la mise en ligne.
+            porte{filled > 1 ? "nt" : ""} un visuel.{" "}
+            {isNew
+              ? "Le club va examiner votre demande — visuels et ressources — puis l'approuver ou la refuser avec un motif."
+              : "Le club validera vos créations avant la mise en ligne."}
           </p>
         </div>
       </FormSheet>
@@ -257,6 +269,15 @@ function SlotModal({
       onSubmit={() => onSave({ image, headline, link })}
     >
       <div className="flex flex-col gap-5">
+        {/* The dimension rule for this exact space, stated before the upload. */}
+        <div className="flex items-center gap-2 rounded-md border border-border bg-surface-nested px-3 py-2.5">
+          <Ruler size={14} className="shrink-0 text-info" />
+          <span className="font-body text-[0.78rem] text-ink-subtle">
+            Dimension requise :{" "}
+            <span className="text-ink">{SLOT_DIMENSIONS[slot.key]}</span>
+          </span>
+        </div>
+
         {/* Not a <label>: a wrapping label would steal the upload button's
             accessible name. */}
         <ModalField label="Visuel" hint="PNG ou JPG, 2 Mo maximum." plain>
@@ -319,6 +340,19 @@ function SlotModal({
         </ModalField>
       </div>
     </FormSheet>
+  )
+}
+
+/* ── The dimension rule for a space, shown on its card header ────────────── */
+function DimensionChip({ slotKey }: { slotKey: SlotKey }) {
+  return (
+    <span
+      title={`Dimension requise : ${SLOT_DIMENSIONS[slotKey]}`}
+      className="inline-flex items-center gap-1.5 rounded-sm border border-border bg-surface-nested px-2 py-1 font-body text-[0.68rem] whitespace-nowrap text-ink-muted"
+    >
+      <Ruler size={11} className="shrink-0 text-ink-disabled" />
+      {SLOT_DIMENSIONS[slotKey]}
+    </span>
   )
 }
 

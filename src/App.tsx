@@ -20,6 +20,10 @@ import { DemandeTransactionScreen } from "@/features/finance/DemandeTransactionS
 import { TransactionConfigScreen } from "@/features/finance/TransactionConfigScreen"
 import { CompteRenduScreen } from "@/features/compte-rendu/CompteRenduScreen"
 import { PlanificationScreen } from "@/features/planification/PlanificationScreen"
+import { SeanceScreen } from "@/features/planification/SeanceScreen"
+import { MatchScreen } from "@/features/planification/MatchScreen"
+import { ResultatsScreen } from "@/features/resultats/ResultatsScreen"
+import { MessagerieScreen } from "@/features/messagerie/MessagerieScreen"
 import { ObjectifsScreen } from "@/features/objectifs/ObjectifsScreen"
 import { CategoriesScreen } from "@/features/pole-technique/CategoriesScreen"
 import { CategoryDetailScreen } from "@/features/pole-technique/CategoryDetailScreen"
@@ -28,11 +32,16 @@ import { SponsoringHome } from "@/features/sponsoring/SponsoringHome"
 import { DemarrageScreen } from "@/features/sponsoring/DemarrageScreen"
 import { OffreFormScreen } from "@/features/sponsoring/OffreFormScreen"
 import { OffresScreen } from "@/features/sponsoring/OffresScreen"
+import { OffreRequestsScreen } from "@/features/sponsoring/OffreRequestsScreen"
+import { RequestEditScreen } from "@/features/sponsoring/RequestEditScreen"
 import { EmplacementsScreen } from "@/features/sponsoring/EmplacementsScreen"
 import { PartenairesScreen } from "@/features/sponsoring/PartenairesScreen"
 import { PartenaireAccueilScreen } from "@/features/sponsoring/PartenaireAccueilScreen"
 import { CampagneScreen } from "@/features/sponsoring/CampagneScreen"
+import { CampagnesScreen as SponsoringCampagnesScreen } from "@/features/sponsoring/CampagnesScreen"
+import { DemandesCampagneScreen } from "@/features/sponsoring/DemandesCampagneScreen"
 import { DesignSystemScreen } from "@/features/design-system/DesignSystemScreen"
+import { AccueilScreen } from "@/features/accueil/AccueilScreen"
 import { LoginScreen } from "@/features/auth/LoginScreen"
 import { PartenairesListScreen } from "@/features/sponsor/PartenairesListScreen"
 import { CampagnesScreen } from "@/features/sponsor/CampagnesScreen"
@@ -40,11 +49,16 @@ import { NouvelleCampagneScreen } from "@/features/sponsor/NouvelleCampagneScree
 import { CampagneVisuelsScreen } from "@/features/sponsor/CampagneVisuelsScreen"
 import { ExplorerScreen } from "@/features/sponsor/ExplorerScreen"
 import { ClubOffresScreen } from "@/features/sponsor/ClubOffresScreen"
+import { CustomOfferScreen } from "@/features/sponsor/CustomOfferScreen"
+import { DemandesSurMesureScreen } from "@/features/sponsor/DemandesSurMesureScreen"
 
 /** Routes that have a real screen (so they skip the generic Placeholder). */
 const CUSTOM_ROUTES = new Set([
+  "/",
   "/ressources-humaines/educateurs",
   "/planification",
+  "/resultats",
+  "/messagerie",
   "/structuration/objectifs-techniques",
   "/pole-technique/categories",
   "/sponsoring",
@@ -76,6 +90,9 @@ export default function App() {
           <Route path="/connexion" element={<LoginScreen />} />
 
           <Route element={<AppShell />}>
+            {/* Accueil — quick-access grid of the club's modules. */}
+            <Route index element={<AccueilScreen />} />
+
             {navLeaves
               .filter((leaf) => !CUSTOM_ROUTES.has(leaf.path))
               .map((leaf) =>
@@ -103,8 +120,36 @@ export default function App() {
               element={<EducateursScreen />}
             />
 
-            {/* Planification — month calendar of séances / matchs / réunions. */}
+            {/* Planification — month calendar of séances / matchs / réunions.
+                A séance card opens its session page (header + procédé tabs). */}
             <Route path="planification" element={<PlanificationScreen />} />
+            <Route
+              path="planification/seance/:id"
+              element={<Navigate to="procede" replace />}
+            />
+            <Route
+              path="planification/seance/:id/:tab"
+              element={<SeanceScreen />}
+            />
+            {/* A match card opens its match page — tabs differ before vs after
+                the game (convocation/consignes vs debrief). */}
+            <Route
+              path="planification/match/:id"
+              element={<MatchScreen />}
+            />
+            <Route
+              path="planification/match/:id/:tab"
+              element={<MatchScreen />}
+            />
+
+            {/* Résultats — list of played matches with their final scores,
+                catégorie and poule. A result card is clickable (hover) but
+                doesn't route anywhere yet. */}
+            <Route path="resultats" element={<ResultatsScreen />} />
+
+            {/* Messagerie — two-pane chat: conversation list + chat, three
+                conversation types (groupes / sessions / matchs) via tabs. */}
+            <Route path="messagerie" element={<MessagerieScreen />} />
 
             {/* Structuration — Objectifs techniques: reviewable objectives table. */}
             <Route
@@ -132,7 +177,24 @@ export default function App() {
                 club has offers. */}
             <Route path="sponsoring" element={<SponsoringHome />} />
             <Route path="sponsoring/demarrage" element={<DemarrageScreen />} />
+            {/* Packs tab — the offers list (kept at /offres so existing links
+                hold; the tab bar labels it "Packs"). */}
             <Route path="sponsoring/offres" element={<OffresScreen />} />
+            {/* Campagnes tab — every partenaire's live + archived campaigns. */}
+            <Route
+              path="sponsoring/campagnes"
+              element={<SponsoringCampagnesScreen />}
+            />
+            {/* Demandes sur mesure — the club's inbox of custom sponsoring
+                requests sent by sponsors; accept (with a price) or refuse. */}
+            <Route
+              path="sponsoring/demandes-sur-mesure"
+              element={<OffreRequestsScreen />}
+            />
+            <Route
+              path="sponsoring/demandes-sur-mesure/:id/modifier"
+              element={<RequestEditScreen />}
+            />
             <Route
               path="sponsoring/emplacements"
               element={<EmplacementsScreen />}
@@ -140,6 +202,12 @@ export default function App() {
             <Route
               path="sponsoring/offres/nouvelle"
               element={<OffreFormScreen />}
+            />
+            {/* Demandes de campagne — the club's inbox of sponsor campaign
+                requests: review the visuals, then approve or refuse. */}
+            <Route
+              path="sponsoring/demandes"
+              element={<DemandesCampagneScreen />}
             />
             <Route
               path="sponsoring/partenaires"
@@ -166,6 +234,9 @@ export default function App() {
                 visuals editor, which is also where an existing campaign
                 opens. */}
             <Route path="sponsor/campagnes" element={<CampagnesScreen />} />
+            {/* Mes demandes — the sponsor's custom-offer requests + their
+                status (accepted / refused / counter-proposal). */}
+            <Route path="sponsor/demandes" element={<DemandesSurMesureScreen />} />
             <Route
               path="sponsor/campagnes/nouvelle"
               element={<NouvelleCampagneScreen />}
@@ -183,6 +254,11 @@ export default function App() {
             <Route
               path="sponsor/explorer/:slug"
               element={<ClubOffresScreen />}
+            />
+            {/* Custom-offer request — the sponsor composes its own package. */}
+            <Route
+              path="sponsor/explorer/:slug/sur-mesure"
+              element={<CustomOfferScreen />}
             />
 
             {/* Finance — Transactions is the first real tool of the module. */}

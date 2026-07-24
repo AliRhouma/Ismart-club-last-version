@@ -85,9 +85,46 @@ export const eventsSeed: PlanEvent[] = [
     date: "2026-07-14",
     start: "08:00",
     end: "12:00",
-    title: "Match 206",
+    title: "iSmart Minimes vs AS Marsa",
     category: "Minime",
-    detail: "Minime vs Match206",
+    detail: "iSmart Minimes vs AS Marsa",
+    location: "Stade municipal",
+  },
+  // Juillet 2026 — a FINISHED match with the full debrief ("après le match").
+  {
+    id: "ev-match-fcb",
+    type: "match",
+    date: "2026-07-18",
+    start: "17:00",
+    end: "19:00",
+    title: "Real Madrid vs FC Barcelone",
+    category: "Senior",
+    detail: "Real Madrid vs FC Barcelone",
+    location: "Stade municipal",
+  },
+  // Juillet 2026 — an UPCOMING match, not started yet ("avant le coup d'envoi").
+  {
+    id: "ev-match-bayern",
+    type: "match",
+    date: "2026-07-30",
+    start: "18:30",
+    end: "20:30",
+    title: "Real Madrid vs Bayern",
+    category: "Senior",
+    detail: "Real Madrid vs Bayern",
+    location: "Stade municipal",
+  },
+  // The brief's featured example (Real Madrid vs Bayer FC, 9 mai 2026) — sits in
+  // May so the header reads exactly as specified; reachable by paging back.
+  {
+    id: "ev-match-real",
+    type: "match",
+    date: "2026-05-09",
+    start: "14:00",
+    end: "16:00",
+    title: "Real Madrid vs Bayer FC",
+    category: "Senior",
+    detail: "Real Madrid vs Bayer FC",
     location: "Stade municipal",
   },
   // Sits on the current day (9 Juil 2026) so the “aujourd’hui” cell has content.
