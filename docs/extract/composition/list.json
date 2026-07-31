@@ -1,0 +1,442 @@
+[
+  {
+    "id": "a296a15b-dd3e-41d3-bee1-4b701d04e4a3",
+    "title": "U10 - 2-4-1 ",
+    "description": "",
+    "sourceLanguage": "fr",
+    "translations": {},
+    "categoryId": "c6fe37a9-ab2f-493b-a619-d09f8ee93fde",
+    "category": {
+      "id": "c6fe37a9-ab2f-493b-a619-d09f8ee93fde",
+      "name": "U10",
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+      "description": "",
+      "picture": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae\\general\\5.png-1754322893961-810945686.png",
+      "gender": "MALE",
+      "colors": [
+        "#64748B",
+        "#EA580C"
+      ],
+      "automaticConvocation": false,
+      "convocationLeadHours": null
+    },
+    "categoryGroups": [
+      {
+        "id": "2c209aec-770f-4773-86b8-e8f53e07c8b3",
+        "name": "Groupe A",
+        "description": "",
+        "picture": null,
+        "categoryId": "c6fe37a9-ab2f-493b-a619-d09f8ee93fde",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+      }
+    ],
+    "creatorId": "5d3bd2a9-05ed-4d8a-8975-600b3c25b95e",
+    "gameId": null,
+    "preview": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/game-lineups/image-1762280144040-20434115.png",
+    "stadium": null,
+    "formationId": null,
+    "game": null,
+    "playersLineup": [],
+    "createdAt": "2025-11-04T18:15:44.054Z"
+  },
+  {
+    "id": "d667b53c-e88e-4886-ad77-170ec5f37dc3",
+    "title": "3-3-1",
+    "description": "",
+    "sourceLanguage": "fr",
+    "translations": {},
+    "categoryId": "c6fe37a9-ab2f-493b-a619-d09f8ee93fde",
+    "category": {
+      "id": "c6fe37a9-ab2f-493b-a619-d09f8ee93fde",
+      "name": "U10",
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+      "description": "",
+      "picture": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae\\general\\5.png-1754322893961-810945686.png",
+      "gender": "MALE",
+      "colors": [
+        "#64748B",
+        "#EA580C"
+      ],
+      "automaticConvocation": false,
+      "convocationLeadHours": null
+    },
+    "categoryGroups": [
+      {
+        "id": "2c209aec-770f-4773-86b8-e8f53e07c8b3",
+        "name": "Groupe A",
+        "description": "",
+        "picture": null,
+        "categoryId": "c6fe37a9-ab2f-493b-a619-d09f8ee93fde",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+      }
+    ],
+    "creatorId": "5d3bd2a9-05ed-4d8a-8975-600b3c25b95e",
+    "gameId": null,
+    "preview": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/game-lineups/image-1762354889357-619450673.png",
+    "stadium": null,
+    "formationId": null,
+    "game": null,
+    "playersLineup": [],
+    "createdAt": "2025-11-05T15:01:29.374Z"
+  },
+  {
+    "id": "843f7399-f3ab-4390-8b28-37869b171b66",
+    "title": "4-3-3",
+    "description": "",
+    "sourceLanguage": "fr",
+    "translations": {},
+    "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+    "category": {
+      "id": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+      "name": "FFF",
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+      "description": null,
+      "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021836347-935196374.jpg",
+      "gender": "MALE",
+      "colors": [
+        "#0060FD",
+        "#991B1B"
+      ],
+      "automaticConvocation": false,
+      "convocationLeadHours": null
+    },
+    "categoryGroups": [
+      {
+        "id": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "name": "Groupe A",
+        "description": null,
+        "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021363950-303102182.jpg",
+        "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+      }
+    ],
+    "creatorId": "5d3bd2a9-05ed-4d8a-8975-600b3c25b95e",
+    "gameId": null,
+    "preview": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/game-lineups/image-1778808837138-221436007.png",
+    "stadium": "/game-match/up-half-stadium-leaned.png",
+    "formationId": null,
+    "game": null,
+    "playersLineup": [
+      {
+        "playerId": "e82c1000-7216-4e27-81dd-7c4ab21127e9",
+        "gameLineupId": "843f7399-f3ab-4390-8b28-37869b171b66",
+        "coords": {
+          "x": 338.21875,
+          "y": 102
+        },
+        "isSub": false,
+        "player": {
+          "userId": "e82c1000-7216-4e27-81dd-7c4ab21127e9",
+          "post": "GB",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "e82c1000-7216-4e27-81dd-7c4ab21127e9",
+            "email": null,
+            "firstName": "Mike",
+            "lastName": "Maignan",
+            "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/maignan.jpg-1772018136854-446059239.jpg",
+            "phone": "",
+            "address": "",
+            "city": "",
+            "birthdate": "1995-07-02T00:00:00.000Z",
+            "birthPlace": "Cayenne (Guyane)",
+            "nationality": null
+          }
+        }
+      },
+      {
+        "playerId": "ba2ec1d4-dfb2-4c41-a191-cca66bd6f651",
+        "gameLineupId": "843f7399-f3ab-4390-8b28-37869b171b66",
+        "coords": {
+          "x": 484.21875,
+          "y": 155
+        },
+        "isSub": false,
+        "player": {
+          "userId": "ba2ec1d4-dfb2-4c41-a191-cca66bd6f651",
+          "post": "DC",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "ba2ec1d4-dfb2-4c41-a191-cca66bd6f651",
+            "email": null,
+            "firstName": "Dayot",
+            "lastName": "Upamecano",
+            "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/upamecano.jpg-1772017847572-141518690.jpg",
+            "phone": "",
+            "address": "",
+            "city": "",
+            "birthdate": "1998-10-26T00:00:00.000Z",
+            "birthPlace": "Évreux (France)",
+            "nationality": null
+          }
+        }
+      },
+      {
+        "playerId": "e0a43cea-c3d8-4bc6-838a-8ffc2da02b69",
+        "gameLineupId": "843f7399-f3ab-4390-8b28-37869b171b66",
+        "coords": {
+          "x": 348.21875,
+          "y": 252
+        },
+        "isSub": false,
+        "player": {
+          "userId": "e0a43cea-c3d8-4bc6-838a-8ffc2da02b69",
+          "post": "MDC",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "e0a43cea-c3d8-4bc6-838a-8ffc2da02b69",
+            "email": null,
+            "firstName": "Eduardo",
+            "lastName": "Camavinga",
+            "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/cama.jpg-1772017975809-391784380.jpg",
+            "phone": "",
+            "address": "",
+            "city": "",
+            "birthdate": "2002-11-09T00:00:00.000Z",
+            "birthPlace": "Cabinda (Angola)",
+            "nationality": null
+          }
+        }
+      },
+      {
+        "playerId": "8677f30e-9c71-45c6-99d5-72612e671a7b",
+        "gameLineupId": "843f7399-f3ab-4390-8b28-37869b171b66",
+        "coords": {
+          "x": 117.21875,
+          "y": 352
+        },
+        "isSub": false,
+        "player": {
+          "userId": "8677f30e-9c71-45c6-99d5-72612e671a7b",
+          "post": "AD",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "8677f30e-9c71-45c6-99d5-72612e671a7b",
+            "email": null,
+            "firstName": "Ousmane",
+            "lastName": "Dembélé",
+            "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/dembele.jpg-1772018209365-301426615.jpg",
+            "phone": "",
+            "address": "",
+            "city": "",
+            "birthdate": "1997-05-14T00:00:00.000Z",
+            "birthPlace": "Vernon (France)",
+            "nationality": null
+          }
+        }
+      },
+      {
+        "playerId": "f0e69228-e3a7-46df-9232-c3f5b6c37e2a",
+        "gameLineupId": "843f7399-f3ab-4390-8b28-37869b171b66",
+        "coords": {
+          "x": 589.21875,
+          "y": 166
+        },
+        "isSub": false,
+        "player": {
+          "userId": "f0e69228-e3a7-46df-9232-c3f5b6c37e2a",
+          "post": "LG",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "f0e69228-e3a7-46df-9232-c3f5b6c37e2a",
+            "email": null,
+            "firstName": "Theo",
+            "lastName": "Hernandez",
+            "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/theo.jpg-1772018322296-879174532.jpg",
+            "phone": "",
+            "address": "",
+            "city": "",
+            "birthdate": "1997-10-05T00:00:00.000Z",
+            "birthPlace": "Marseille (France)",
+            "nationality": null
+          }
+        }
+      },
+      {
+        "playerId": "9d5e3635-9b08-4dad-9e3e-24789bbbfca2",
+        "gameLineupId": "843f7399-f3ab-4390-8b28-37869b171b66",
+        "coords": {
+          "x": 585.21875,
+          "y": 357
+        },
+        "isSub": false,
+        "player": {
+          "userId": "9d5e3635-9b08-4dad-9e3e-24789bbbfca2",
+          "post": "AD",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "9d5e3635-9b08-4dad-9e3e-24789bbbfca2",
+            "email": null,
+            "firstName": "Kingsley",
+            "lastName": "Coman",
+            "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/coman.jpg-1772018017187-823824322.jpg",
+            "phone": "",
+            "address": "",
+            "city": "",
+            "birthdate": "1996-06-12T00:00:00.000Z",
+            "birthPlace": "Paris (France)",
+            "nationality": null
+          }
+        }
+      },
+      {
+        "playerId": "dd342e9a-debc-41e2-b4e0-c2641ceeef45",
+        "gameLineupId": "843f7399-f3ab-4390-8b28-37869b171b66",
+        "coords": {
+          "x": 353.21875,
+          "y": 376
+        },
+        "isSub": false,
+        "player": {
+          "userId": "dd342e9a-debc-41e2-b4e0-c2641ceeef45",
+          "post": "AG",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "dd342e9a-debc-41e2-b4e0-c2641ceeef45",
+            "email": null,
+            "firstName": "Kylian",
+            "lastName": "Mbappé",
+            "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/kyks.jpg-1772018036179-544380539.jpg",
+            "phone": "",
+            "address": "",
+            "city": "",
+            "birthdate": "1998-12-19T00:00:00.000Z",
+            "birthPlace": "Paris (France)",
+            "nationality": null
+          }
+        }
+      },
+      {
+        "playerId": "f18b0d8a-1136-4a21-a501-3c0f9b9de351",
+        "gameLineupId": "843f7399-f3ab-4390-8b28-37869b171b66",
+        "coords": {
+          "x": 231.21875,
+          "y": 278
+        },
+        "isSub": false,
+        "player": {
+          "userId": "f18b0d8a-1136-4a21-a501-3c0f9b9de351",
+          "post": "MOC",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "f18b0d8a-1136-4a21-a501-3c0f9b9de351",
+            "email": null,
+            "firstName": "Antoine ",
+            "lastName": "Griezmann",
+            "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/griezmann.jpg-1772019557570-523688009.jpg",
+            "phone": "",
+            "address": "",
+            "city": "",
+            "birthdate": "1992-03-21T00:00:00.000Z",
+            "birthPlace": null,
+            "nationality": null
+          }
+        }
+      },
+      {
+        "playerId": "ab87d260-95fe-4e39-9e9f-a57b71bffb69",
+        "gameLineupId": "843f7399-f3ab-4390-8b28-37869b171b66",
+        "coords": {
+          "x": 447.21875,
+          "y": 279
+        },
+        "isSub": false,
+        "player": {
+          "userId": "ab87d260-95fe-4e39-9e9f-a57b71bffb69",
+          "post": "MDC",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "ab87d260-95fe-4e39-9e9f-a57b71bffb69",
+            "email": null,
+            "firstName": "Aurélien",
+            "lastName": "Tchouaméni",
+            "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/tchoua.jpg-1772017810040-66339328.jpg",
+            "phone": "",
+            "address": "",
+            "city": "",
+            "birthdate": "2000-01-26T00:00:00.000Z",
+            "birthPlace": "Rouen (France)",
+            "nationality": null
+          }
+        }
+      },
+      {
+        "playerId": "3371025e-6592-49e7-9a9d-611a799d438c",
+        "gameLineupId": "843f7399-f3ab-4390-8b28-37869b171b66",
+        "coords": {
+          "x": 211.21875,
+          "y": 158
+        },
+        "isSub": false,
+        "player": {
+          "userId": "3371025e-6592-49e7-9a9d-611a799d438c",
+          "post": "DC",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "3371025e-6592-49e7-9a9d-611a799d438c",
+            "email": null,
+            "firstName": "William",
+            "lastName": "Saliba",
+            "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/saliba.jpg-1772018372018-816808238.jpg",
+            "phone": "",
+            "address": "",
+            "city": "",
+            "birthdate": "2001-03-23T00:00:00.000Z",
+            "birthPlace": "Bondy (France)",
+            "nationality": null
+          }
+        }
+      },
+      {
+        "playerId": "1bf0fd8a-dcbd-4d16-82f1-6840abe11af9",
+        "gameLineupId": "843f7399-f3ab-4390-8b28-37869b171b66",
+        "coords": {
+          "x": 109.21875,
+          "y": 110
+        },
+        "isSub": false,
+        "player": {
+          "userId": "1bf0fd8a-dcbd-4d16-82f1-6840abe11af9",
+          "post": "LD",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "1bf0fd8a-dcbd-4d16-82f1-6840abe11af9",
+            "email": null,
+            "firstName": "Jules",
+            "lastName": "Koundé",
+            "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/kounde.jpg-1772018002697-124957233.jpg",
+            "phone": "",
+            "address": "",
+            "city": "",
+            "birthdate": "1998-11-11T00:00:00.000Z",
+            "birthPlace": "Paris (France)",
+            "nationality": null
+          }
+        }
+      }
+    ],
+    "createdAt": "2026-02-25T16:33:50.320Z"
+  }
+]

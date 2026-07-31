@@ -19,6 +19,41 @@ import { seasonsSeed, type Season } from "@/data/seed/seasons"
 import { entriesSeed, type Entry } from "@/data/seed/entries"
 import { monthsSeed, type Month } from "@/data/seed/months"
 import { documentsSeed, type Document } from "@/data/seed/documents"
+import {
+  categoriesSeed,
+  type Categorie,
+} from "@/data/seed/categories"
+import {
+  projetsDeJeuSeed,
+  type ProjetDeJeu,
+} from "@/data/seed/projetsDeJeu"
+import {
+  compositionsSeed,
+  type Composition,
+} from "@/data/seed/compositions"
+import {
+  SAISONS,
+  SAISON_ACTIVE,
+  SEANCES_PAR_SEMAINE,
+  programmeVierge,
+  renumeroterSessions,
+  programmesAnnuelsSeed,
+  seancesClubSeed,
+  type ProgSession,
+  type ProgrammeAnnuel,
+  type ProgrammeScope,
+  type SeanceClub,
+} from "@/data/seed/programmation"
+import {
+  procedeGroupesSeed,
+  procedePhasesSeed,
+  procedePrincipesSeed,
+  procedesSeed,
+  type ProcedeGroupe,
+  type ProcedeItem,
+  type ProcedePhase,
+  type ProcedePrincipe,
+} from "@/data/seed/procedes"
 import { eventsSeed, type PlanEvent } from "@/data/seed/events"
 import { seanceDetailsSeed, type SeanceDetail } from "@/data/seed/seances"
 import { matchDetailsSeed, type MatchDetail } from "@/data/seed/matches"
@@ -188,6 +223,28 @@ export type DataContextValue = {
   months: Month[]
   /** Club documents catalogue (newest first). */
   documents: Document[]
+  /** Procédés taxonomy — groupes ▸ phases ▸ principes (read-only referential). */
+  procedeGroupes: ProcedeGroupe[]
+  procedePhases: ProcedePhase[]
+  procedePrincipes: ProcedePrincipe[]
+  /** The club's procédés library (Pôle technique ▸ Procédés). */
+  procedes: ProcedeItem[]
+  /** Seasons the programme annuel can be scoped to. */
+  saisons: string[]
+  /** Every programme annuel of the club (one per saison × catégorie × groupe). */
+  programmesAnnuels: ProgrammeAnnuel[]
+  /** The saison × catégorie × groupe the Programmation screen is showing. */
+  programmeScope: ProgrammeScope
+  /** Programme of the active scope — null when that combination has none yet. */
+  programmeAnnuel: ProgrammeAnnuel | null
+  /** Séances of the club (Pôle technique ▸ Séances), oldest first. */
+  seancesClub: SeanceClub[]
+  /** Playing models (Pôle technique ▸ Projet de jeu). */
+  projetsDeJeu: ProjetDeJeu[]
+  /** Saved line-ups (Pôle technique ▸ Composition). */
+  compositions: Composition[]
+  /** Age groups with their effectif, groupes and calendrier (▸ Catégories). */
+  categories: Categorie[]
   /** Scheduled events shown on the Planification calendar. */
   events: PlanEvent[]
   /** Session detail (header + procédés) behind a séance card, keyed by event id. */
@@ -236,6 +293,38 @@ export type DataContextValue = {
   /** Add a document; returns the new id so the caller can open its editor. */
   addDocument: (doc: Omit<Document, "id">) => string
   removeDocument: (id: string) => void
+  /** Add a procédé to the library; returns the new id so the caller can open it. */
+  addProcede: (procede: Omit<ProcedeItem, "id">) => string
+  updateProcede: (id: string, patch: Partial<ProcedeItem>) => void
+  removeProcede: (id: string) => void
+  /** Point the Programmation screen at another saison / catégorie / groupe. */
+  setProgrammeScope: (patch: Partial<ProgrammeScope>) => void
+  /** Start a blank programme for the active scope; returns its id. */
+  creerProgrammeAnnuel: () => string
+  /** Retarget one slot of the programme annuel (principe / special). */
+  updateProgSession: (id: string, patch: Partial<ProgSession>) => void
+  /** Append a semaine (and its séances placeholder) to a programme annuel. */
+  addProgSemaine: (programmeId: string) => void
+  /** Add one séance placeholder at the end of a semaine. */
+  addProgSession: (programmeId: string, semaine: number) => void
+  /** Remove one séance placeholder (a slot already planned is left alone). */
+  removeProgSession: (id: string) => void
+  /** Remove a whole semaine and the séances placeholder it holds. */
+  removeProgSemaine: (programmeId: string, semaine: number) => void
+  /** Turn a programme slot into a real séance and link the two. Returns its id. */
+  planifierSeance: (sessionId: string) => string
+  addSeance: (seance: Omit<SeanceClub, "id">) => string
+  updateSeance: (id: string, patch: Partial<SeanceClub>) => void
+  /** Delete a séance and unlink it from its programme slot. */
+  removeSeance: (id: string) => void
+  /** Add a catégorie; returns the new id so the caller can open it. */
+  addCategorie: (categorie: Omit<Categorie, "id">) => string
+  updateCategorie: (id: string, patch: Partial<Categorie>) => void
+  removeCategorie: (id: string) => void
+  /** Add a composition; returns the new id so the caller can open its board. */
+  addComposition: (composition: Omit<Composition, "id">) => string
+  updateComposition: (id: string, patch: Partial<Composition>) => void
+  removeComposition: (id: string) => void
   /** Add a calendar event; returns the new id. */
   addEvent: (event: Omit<PlanEvent, "id">) => string
   updateEvent: (id: string, patch: Partial<PlanEvent>) => void
@@ -265,6 +354,10 @@ export type DataContextValue = {
   addPartner: (partner: Omit<Partner, "id">) => string
   updatePartner: (id: string, patch: Partial<Partner>) => void
   removePartner: (id: string) => void
+  /** Create a campaign for a partenaire (id filled in); returns the new id. */
+  addCampaign: (campaign: Omit<Campaign, "id">) => string
+  updateCampaign: (id: string, patch: Partial<Campaign>) => void
+  removeCampaign: (id: string) => void
   /**
    * Submit a custom sponsoring request (id/status/price/date filled in);
    * pushes an unread admin notification. Returns the new id.
@@ -332,6 +425,35 @@ export function DataProvider({ children }: { children: ReactNode }) {
   // Documents only add/remove (the editor is a placeholder), so plain state is
   // enough. New documents go to the front (most recent first).
   const [documents, setDocuments] = useState<Document[]>(documentsSeed)
+  // Procédés: the taxonomy (groupes ▸ phases ▸ principes) is a fixed
+  // referential, only the library itself add / edit / removes. New procédés go
+  // to the front so a freshly created one leads its principe's grid.
+  const [procedeGroupes] = useState<ProcedeGroupe[]>(procedeGroupesSeed)
+  const [procedePhases] = useState<ProcedePhase[]>(procedePhasesSeed)
+  const [procedePrincipes] = useState<ProcedePrincipe[]>(procedePrincipesSeed)
+  const [procedes, setProcedes] = useState<ProcedeItem[]>(procedesSeed)
+  // Programme annuel + the séances that realise it. They mutate together
+  // (planifier / supprimer a séance re-links its programme slot), so they sit
+  // side by side in plain in-memory state.
+  const [programmesAnnuels, setProgrammesAnnuels] = useState<ProgrammeAnnuel[]>(
+    programmesAnnuelsSeed,
+  )
+  // Which programme the Programmation screen is looking at. It is UI scope, but
+  // it lives here so the screen keeps its selection across navigation.
+  const [programmeScope, setScope] = useState<ProgrammeScope>({
+    saison: SAISON_ACTIVE,
+    categorieId: "fff",
+    groupeId: "fff-groupe-a",
+  })
+  const [seancesClub, setSeancesClub] = useState<SeanceClub[]>(seancesClubSeed)
+  // Projets de jeu are read-only for now (the club consults its model; editing
+  // the étapes is a future job). Compositions add / edit / remove.
+  const [projetsDeJeu] = useState<ProjetDeJeu[]>(projetsDeJeuSeed)
+  const [compositions, setCompositions] =
+    useState<Composition[]>(compositionsSeed)
+  // Catégories add / edit / remove. New rows get a uuid; seed rows keep their
+  // readable slug ids (the URL of a catégorie is its id).
+  const [categories, setCategories] = useState<Categorie[]>(categoriesSeed)
   // Calendar events add / edit / remove, so plain in-memory state is enough
   // (no reducer). New rows get a uuid; seed rows keep their readable slug ids.
   const [events, setEvents] = useState<PlanEvent[]>(eventsSeed)
@@ -357,11 +479,11 @@ export function DataProvider({ children }: { children: ReactNode }) {
   // onboarding empty state.
   const [offers, setOffers] = useState<Offer[]>(offersSeed)
   const [partners, setPartners] = useState<Partner[]>(partnersSeed)
-  // Sponsor accounts are created on the sponsor's side of the product, and
-  // campaigns are read-only for now (the club views them; editing the visuals
-  // is the sponsor's job). Both stay in plain read-only state.
+  // Sponsor accounts are created on the sponsor's side of the product, so they
+  // stay read-only. Campaigns mutate: the club admin creates them himself for
+  // a partenaire (Sponsoring ▸ Campagnes ▸ Nouvelle campagne).
   const [sponsorAccounts] = useState<SponsorAccount[]>(sponsorAccountsSeed)
-  const [campaigns] = useState<Campaign[]>(campaignsSeed)
+  const [campaigns, setCampaigns] = useState<Campaign[]>(campaignsSeed)
   // Custom sponsoring requests — a sponsor submits from a club's offers page,
   // the admin accepts (with a price) or refuses from Sponsoring ▸ Demandes.
   const [offerRequests, setOfferRequests] =
@@ -379,6 +501,18 @@ export function DataProvider({ children }: { children: ReactNode }) {
   // timestamps are minted here and passed in, keeping the reducer pure.
   const [budget2, dispatch2] = useReducer(budget2Reducer, budget2InitialState)
 
+  // The programme of the active scope — derived, never stored.
+  const programmeAnnuel = useMemo(
+    () =>
+      programmesAnnuels.find(
+        (p) =>
+          p.saison === programmeScope.saison &&
+          p.categorieId === programmeScope.categorieId &&
+          p.groupeId === programmeScope.groupeId,
+      ) ?? null,
+    [programmesAnnuels, programmeScope],
+  )
+
   const value = useMemo<DataContextValue>(
     () => ({
       session,
@@ -390,6 +524,18 @@ export function DataProvider({ children }: { children: ReactNode }) {
       entries,
       months,
       documents,
+      procedeGroupes,
+      procedePhases,
+      procedePrincipes,
+      procedes,
+      saisons: SAISONS,
+      programmesAnnuels,
+      programmeScope,
+      programmeAnnuel,
+      seancesClub,
+      projetsDeJeu,
+      compositions,
+      categories,
       events,
       seanceDetails,
       matchDetails,
@@ -438,6 +584,235 @@ export function DataProvider({ children }: { children: ReactNode }) {
       },
       removeDocument: (id) =>
         setDocuments((prev) => prev.filter((doc) => doc.id !== id)),
+      addProcede: (procede) => {
+        const id = crypto.randomUUID()
+        setProcedes((prev) => [{ id, ...procede }, ...prev])
+        return id
+      },
+      updateProcede: (id, patch) =>
+        setProcedes((prev) =>
+          prev.map((p) => (p.id === id ? { ...p, ...patch } : p)),
+        ),
+      removeProcede: (id) =>
+        setProcedes((prev) => prev.filter((p) => p.id !== id)),
+      setProgrammeScope: (patch) =>
+        setScope((prev) => {
+          const next = { ...prev, ...patch }
+          // Changing catégorie invalidates the groupe — fall back to its first.
+          if (patch.categorieId && !patch.groupeId) {
+            const cat = categories.find((c) => c.id === patch.categorieId)
+            next.groupeId = cat?.groupes[0]?.id ?? ""
+          }
+          return next
+        }),
+      creerProgrammeAnnuel: () => {
+        const id = crypto.randomUUID()
+        const cat = categories.find((c) => c.id === programmeScope.categorieId)
+        const groupe = cat?.groupes.find((g) => g.id === programmeScope.groupeId)
+        setProgrammesAnnuels((prev) =>
+          prev.some(
+            (p) =>
+              p.saison === programmeScope.saison &&
+              p.categorieId === programmeScope.categorieId &&
+              p.groupeId === programmeScope.groupeId,
+          )
+            ? prev
+            : [
+                ...prev,
+                programmeVierge(id, {
+                  ...programmeScope,
+                  categorie: cat?.nom ?? "",
+                  groupe: groupe?.nom ?? "",
+                }),
+              ],
+        )
+        return id
+      },
+      updateProgSession: (id, patch) =>
+        setProgrammesAnnuels((prev) =>
+          prev.map((prog) =>
+            prog.sessions.some((s) => s.id === id)
+              ? {
+                  ...prog,
+                  sessions: prog.sessions.map((s) =>
+                    s.id === id ? { ...s, ...patch } : s,
+                  ),
+                }
+              : prog,
+          ),
+        ),
+      // Edit mode of the Programmation screen — the coach shapes the season
+      // itself: a semaine is a group of séance placeholders, so adding one adds
+      // the club's weekly rhythm and removing the last slot removes the week.
+      addProgSemaine: (programmeId) =>
+        setProgrammesAnnuels((prev) =>
+          prev.map((prog) => {
+            if (prog.id !== programmeId) return prog
+            const semaine =
+              prog.sessions.reduce((max, s) => Math.max(max, s.semaine), 0) + 1
+            const ajouts: ProgSession[] = Array.from(
+              { length: SEANCES_PAR_SEMAINE },
+              (_, index) => ({
+                id: crypto.randomUUID(),
+                semaine,
+                numero: 0,
+                index,
+              }),
+            )
+            return {
+              ...prog,
+              sessions: renumeroterSessions([...prog.sessions, ...ajouts]),
+            }
+          }),
+        ),
+      addProgSession: (programmeId, semaine) =>
+        setProgrammesAnnuels((prev) =>
+          prev.map((prog) =>
+            prog.id === programmeId
+              ? {
+                  ...prog,
+                  sessions: renumeroterSessions([
+                    ...prog.sessions,
+                    {
+                      id: crypto.randomUUID(),
+                      semaine,
+                      numero: 0,
+                      // Last of its week — renumbering densifies the index.
+                      index: prog.sessions.filter((s) => s.semaine === semaine)
+                        .length,
+                    },
+                  ]),
+                }
+              : prog,
+          ),
+        ),
+      removeProgSession: (id) =>
+        setProgrammesAnnuels((prev) =>
+          prev.map((prog) => {
+            const slot = prog.sessions.find((s) => s.id === id)
+            // A planned slot stays: its séance would be left with no line.
+            if (!slot || slot.seanceId) return prog
+            return {
+              ...prog,
+              sessions: renumeroterSessions(
+                prog.sessions.filter((s) => s.id !== id),
+              ),
+            }
+          }),
+        ),
+      removeProgSemaine: (programmeId, semaine) =>
+        setProgrammesAnnuels((prev) =>
+          prev.map((prog) => {
+            if (prog.id !== programmeId) return prog
+            const slots = prog.sessions.filter((s) => s.semaine === semaine)
+            if (!slots.length || slots.some((s) => s.seanceId)) return prog
+            return {
+              ...prog,
+              sessions: renumeroterSessions(
+                prog.sessions.filter((s) => s.semaine !== semaine),
+              ),
+            }
+          }),
+        ),
+      planifierSeance: (sessionId) => {
+        const id = crypto.randomUUID()
+        setProgrammesAnnuels((prev) => {
+          const prog = prev.find((p) =>
+            p.sessions.some((s) => s.id === sessionId),
+          )
+          const slot = prog?.sessions.find((s) => s.id === sessionId)
+          if (!prog || !slot || slot.seanceId) return prev
+          // The séance inherits the slot's principe, week and installation —
+          // planning is "make this programme line real", not a fresh form.
+          setSeancesClub((rows) =>
+            [
+              ...rows,
+              {
+                id,
+                numero: slot.numero,
+                date: new Date(
+                  Date.UTC(2025, 6, 1) + (slot.semaine - 1) * 7 * 864e5,
+                ).toISOString(),
+                categorie: prog.categorie,
+                groupe: prog.groupe,
+                statut: "À venir" as const,
+                brouillon: true,
+                duree: "60",
+                installation: slot.installation,
+                principeId: slot.principeId,
+                special: slot.special,
+                effectif: 0,
+                rpeCible: 0,
+                materiel: [],
+                procedeIds: [],
+                securiteVerifiee: false,
+                hydratationVerifiee: false,
+              },
+            ].sort((a, b) => a.date.localeCompare(b.date)),
+          )
+          return prev.map((p) =>
+            p.id === prog.id
+              ? {
+                  ...p,
+                  sessions: p.sessions.map((s) =>
+                    s.id === sessionId ? { ...s, seanceId: id } : s,
+                  ),
+                }
+              : p,
+          )
+        })
+        return id
+      },
+      addSeance: (seance) => {
+        const id = crypto.randomUUID()
+        setSeancesClub((prev) =>
+          [...prev, { id, ...seance }].sort((a, b) =>
+            a.date.localeCompare(b.date),
+          ),
+        )
+        return id
+      },
+      updateSeance: (id, patch) =>
+        setSeancesClub((prev) =>
+          prev.map((s) => (s.id === id ? { ...s, ...patch } : s)),
+        ),
+      addCategorie: (categorie) => {
+        const id = crypto.randomUUID()
+        setCategories((prev) => [...prev, { id, ...categorie }])
+        return id
+      },
+      updateCategorie: (id, patch) =>
+        setCategories((prev) =>
+          prev.map((c) => (c.id === id ? { ...c, ...patch } : c)),
+        ),
+      removeCategorie: (id) =>
+        setCategories((prev) => prev.filter((c) => c.id !== id)),
+      addComposition: (composition) => {
+        const id = crypto.randomUUID()
+        setCompositions((prev) => [{ id, ...composition }, ...prev])
+        return id
+      },
+      updateComposition: (id, patch) =>
+        setCompositions((prev) =>
+          prev.map((c) => (c.id === id ? { ...c, ...patch } : c)),
+        ),
+      removeComposition: (id) =>
+        setCompositions((prev) => prev.filter((c) => c.id !== id)),
+      removeSeance: (id) => {
+        setSeancesClub((prev) => prev.filter((s) => s.id !== id))
+        setProgrammesAnnuels((prev) =>
+          prev.map((prog) =>
+            prog.sessions.some((s) => s.seanceId === id)
+              ? {
+                  ...prog,
+                  sessions: prog.sessions.map((s) =>
+                    s.seanceId === id ? { ...s, seanceId: undefined } : s,
+                  ),
+                }
+              : prog,
+          ),
+        )
+      },
       addEvent: (event) => {
         const id = crypto.randomUUID()
         setEvents((prev) => [...prev, { id, ...event }])
@@ -532,6 +907,18 @@ export function DataProvider({ children }: { children: ReactNode }) {
         ),
       removePartner: (id) =>
         setPartners((prev) => prev.filter((p) => p.id !== id)),
+      addCampaign: (campaign) => {
+        const id = crypto.randomUUID()
+        // Newest first, so a freshly created campaign leads its partenaire's list.
+        setCampaigns((prev) => [{ id, ...campaign }, ...prev])
+        return id
+      },
+      updateCampaign: (id, patch) =>
+        setCampaigns((prev) =>
+          prev.map((c) => (c.id === id ? { ...c, ...patch } : c)),
+        ),
+      removeCampaign: (id) =>
+        setCampaigns((prev) => prev.filter((c) => c.id !== id)),
       addOfferRequest: (request) => {
         const id = crypto.randomUUID()
         const date = new Date().toLocaleDateString("fr-FR")
@@ -664,6 +1051,17 @@ export function DataProvider({ children }: { children: ReactNode }) {
       entries,
       months,
       documents,
+      procedeGroupes,
+      procedePhases,
+      procedePrincipes,
+      procedes,
+      programmesAnnuels,
+      programmeScope,
+      programmeAnnuel,
+      seancesClub,
+      projetsDeJeu,
+      compositions,
+      categories,
       events,
       seanceDetails,
       matchDetails,

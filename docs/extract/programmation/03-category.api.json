@@ -1,0 +1,10 @@
+[
+  {
+    "url": "/annual-programs/ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e/c78e159f-f829-49ef-9bdb-55341592bb66/annual-programs?",
+    "body": "[{\"bannerOne\":null,\"bannerTwo\":null,\"categoryId\":\"c78e159f-f829-49ef-9bdb-55341592bb66\",\"seasonId\":\"ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e\",\"categoryGroups\":[{\"id\":\"edde6494-5401-4a61-995d-0733cdf12bc8\",\"name\":\"GROUPE A\",\"description\":\"\",\"picture\":null,\"categoryId\":\"c78e159f-f829-49ef-9bdb-55341592bb66\",\"seasonId\":\"ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e\"}],\"isImported\":false,\"isVisible\":false,\"id\":\"dd9c5b79-2af1-4828-8b3e-107662a8bdfb\",\"createdById\":null,\"createdAt\":\"2026-05-04T14:10:09.701Z\",\"updatedAt\":\"2026-05-04T14:10:09.701Z\"}]"
+  },
+  {
+    "url": "/categories/c78e159f-f829-49ef-9bdb-55341592bb66/groups?seasonId=ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "body": "[{\"id\":\"edde6494-5401-4a61-995d-0733cdf12bc8\",\"name\":\"GROUPE A\",\"description\":\"\",\"categoryId\":\"c78e159f-f829-49ef-9bdb-55341592bb66\",\"picture\":null,\"seasonId\":\"ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e\"}]"
+  }
+]

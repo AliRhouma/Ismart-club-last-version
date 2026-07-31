@@ -8,13 +8,16 @@ import {
   Link2Off,
   Megaphone,
   MousePointerClick,
+  Plus,
   Radio,
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { fmtFrLong } from "@/lib/format"
 import { useData } from "@/data/useData"
 import {
   campaignTotals,
+  contractSpan,
   num,
   SLOT_BY_KEY,
   type Campaign,
@@ -22,7 +25,7 @@ import {
 import { EmptyState } from "@/components/kit/EmptyState"
 import { BackButton } from "@/components/kit/BackButton"
 import { Avatar } from "@/components/kit/Avatar"
-import { TierBadge, SLOT_ICON } from "@/features/sponsoring/ui"
+import { SLOT_ICON } from "@/features/sponsoring/ui"
 
 /**
  * Screen — a partenaire's accueil. The one question it answers: what is this
@@ -47,6 +50,8 @@ export function PartenaireAccueilScreen() {
     ? sponsorAccounts.find((a) => a.id === partner.accountId) ?? null
     : null
 
+  const contract = contractSpan(partner.startDate, partner.endDate)
+
   const mine = campaigns.filter((c) => c.partnerId === partner.id)
   const running = mine.find((c) => c.status === "en_cours") ?? null
   const archived = mine.filter((c) => c.status === "archivee")
@@ -64,7 +69,11 @@ export function PartenaireAccueilScreen() {
               {partner.name}
             </h1>
             <div className="mt-2 flex flex-wrap items-center gap-2">
-              {offer ? <TierBadge name={offer.name} color={offer.color} size="sm" /> : null}
+              {offer ? (
+                <span className="font-body text-[0.78rem] text-ink-muted">
+                  {offer.name}
+                </span>
+              ) : null}
               {account ? (
                 <span className="inline-flex items-center gap-1.5 rounded-pill border border-brand-blue-600/30 bg-brand-blue-600/10 px-2.5 py-1 font-ui text-[0.7rem] font-medium text-brand-blue-600">
                   <Link2 size={12} />
@@ -77,6 +86,24 @@ export function PartenaireAccueilScreen() {
                 </span>
               )}
             </div>
+            {/* Le contrat : la date en neutre, l'échéance en couleur. */}
+            {contract ? (
+              <p className="mt-2.5 flex flex-wrap items-center gap-1.5 font-body text-[0.78rem] text-ink-muted">
+                <CalendarRange size={13} className="text-ink-disabled" />
+                Du {fmtFrLong(partner.startDate)} au{" "}
+                {fmtFrLong(partner.endDate)}
+                <span
+                  className={cn(
+                    "text-ink-disabled",
+                    contract.tone === "over" && "text-danger",
+                    contract.tone === "soon" && "text-warning",
+                  )}
+                >
+                  · {contract.status}
+                </span>
+              </p>
+            ) : null}
+
             {partner.description ? (
               <p className="mt-3 max-w-xl font-body text-sm leading-relaxed text-ink-muted">
                 {partner.description}
@@ -108,6 +135,19 @@ export function PartenaireAccueilScreen() {
               icon={Megaphone}
               title="Aucune campagne en cours"
               description={`${partner.name} n'a rien en diffusion. Ses espaces publicitaires restent vides tant qu'une campagne n'est pas lancée.`}
+              action={
+                <button
+                  type="button"
+                  onClick={() =>
+                    navigate(
+                      `/sponsoring/campagnes/nouvelle?partenaire=${partner.id}`,
+                    )
+                  }
+                  className="inline-flex items-center gap-1.5 rounded-md bg-brand px-4 py-2 font-ui text-sm font-medium text-ink-inverted shadow-glow transition-colors hover:bg-brand-dim"
+                >
+                  <Plus size={16} /> Créer une campagne
+                </button>
+              }
             />
           </div>
         )}
@@ -198,17 +238,7 @@ function RunningCard({
       >
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="min-w-0">
-            <div className="flex items-center gap-2.5">
-              <span className="inline-flex items-center gap-1.5 rounded-pill border border-success/25 bg-success/10 px-2.5 py-0.5 font-ui text-[0.62rem] font-medium tracking-[0.06em] text-success uppercase">
-                <span className="size-1.5 rounded-full bg-success" />
-                En diffusion
-              </span>
-              <span
-                className="size-2.5 rounded-full"
-                style={{ backgroundColor: campaign.color }}
-              />
-            </div>
-            <h3 className="mt-2.5 font-ui text-lg font-medium text-ink transition-colors group-hover:text-brand-blue-600">
+            <h3 className="font-ui text-lg font-medium text-ink transition-colors group-hover:text-brand-blue-600">
               {campaign.name}
             </h3>
           </div>
@@ -286,18 +316,7 @@ function ArchiveCard({
       />
 
       <div className="relative z-10 flex flex-1 flex-col px-4 py-4">
-        <div className="flex items-start justify-between gap-2">
-          <span className="inline-flex items-center gap-1.5 rounded-pill border border-border bg-accent px-2.5 py-0.5 font-ui text-[0.6rem] font-medium tracking-[0.06em] text-ink-muted uppercase">
-            <Archive size={10} />
-            Archivée
-          </span>
-          <span
-            className="mt-1 size-2.5 shrink-0 rounded-full"
-            style={{ backgroundColor: campaign.color }}
-          />
-        </div>
-
-        <h3 className="mt-3 font-ui text-[0.95rem] font-medium text-ink transition-colors group-hover:text-brand-blue-600">
+        <h3 className="font-ui text-[0.95rem] font-medium text-ink transition-colors group-hover:text-brand-blue-600">
           {campaign.name}
         </h3>
         <p className="mt-1 font-body text-[0.72rem] text-ink-muted">

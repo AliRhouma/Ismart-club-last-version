@@ -1,3 +1,5 @@
+import { fmtFrLong, parseFrLong, todayISO } from "@/lib/format"
+
 /**
  * Sponsoring module — data slice.
  *
@@ -399,11 +401,136 @@ export type Partner = {
   name: string
   description: string
   accountId: string | null
+  /**
+   * Contract period — how long the partenaire holds its seat. ISO, so the form
+   * reads it straight into `<input type="date">` and the screens format it.
+   */
+  startDate: string
+  endDate: string
 }
 
-/** A blank draft for the partenaire form. */
+/** A blank draft for the partenaire form: starts today, runs a season. */
 export function blankPartner(offerId: string): Omit<Partner, "id"> {
-  return { offerId, name: "", description: "", accountId: null }
+  const start = todayISO()
+  return {
+    offerId,
+    name: "",
+    description: "",
+    accountId: null,
+    startDate: start,
+    endDate: applyContractPreset(CONTRACT_PRESETS[1], start).end,
+  }
+}
+
+/* ── Durée du partenariat ───────────────────────────────────────────────── */
+
+/**
+ * A contract length offered as a one-click preset in the partenaire form.
+ * `months` = added to the start date. `null` = snap to the sporting season
+ * (1 septembre → 30 juin), the way a club actually counts a year.
+ */
+export type ContractPreset = { key: string; label: string; months: number | null }
+
+export const CONTRACT_PRESETS: ContractPreset[] = [
+  { key: "6m", label: "6 mois", months: 6 },
+  { key: "1a", label: "1 an", months: 12 },
+  { key: "2a", label: "2 ans", months: 24 },
+  { key: "3a", label: "3 ans", months: 36 },
+  { key: "saison", label: "Saison sportive", months: null },
+]
+
+/** ISO of a Date, local — the form's inputs speak ISO. */
+function isoOf(d: Date): string {
+  const p = (x: number) => String(x).padStart(2, "0")
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`
+}
+
+/**
+ * The période a preset implies from a given start.
+ *
+ * A "1 an" contract ends the DAY BEFORE its anniversary (1 août 2026 →
+ * 31 juillet 2027), which is how a contract is actually written. The season
+ * preset ignores the start day and snaps to the 1 septembre → 30 juin of the
+ * season that start falls in.
+ */
+export function applyContractPreset(
+  preset: ContractPreset,
+  startISO: string,
+): { start: string; end: string } {
+  const start = new Date(`${startISO || todayISO()}T00:00:00`)
+
+  if (preset.months === null) {
+    // A season runs 1 sept → 30 juin. Juillet/août are the off-season, when a
+    // club signs for the season ABOUT to open — so they count forward; the rest
+    // of the year sits inside the season that opened last September.
+    const year =
+      start.getMonth() >= 6 ? start.getFullYear() : start.getFullYear() - 1
+    return { start: `${year}-09-01`, end: `${year + 1}-06-30` }
+  }
+
+  const end = new Date(start)
+  end.setMonth(end.getMonth() + preset.months)
+  end.setDate(end.getDate() - 1)
+  return { start: isoOf(start), end: isoOf(end) }
+}
+
+/** Which preset a période matches, if any — so the chips show as selected. */
+export function matchContractPreset(
+  startISO: string,
+  endISO: string,
+): string | null {
+  if (!startISO || !endISO) return null
+  const hit = CONTRACT_PRESETS.find((p) => {
+    const { start, end } = applyContractPreset(p, startISO)
+    return start === startISO && end === endISO
+  })
+  return hit?.key ?? null
+}
+
+/**
+ * Display values of a contract période: its human length and where it stands
+ * today. Computed in render, never stored (CLAUDE.md: derived values).
+ */
+export function contractSpan(
+  startISO: string,
+  endISO: string,
+): {
+  valid: boolean
+  days: number
+  /** "12 mois · 365 jours" */
+  label: string
+  /** "Se termine dans 45 jours" / "Expiré depuis 12 jours" / "Démarre dans 8 jours" */
+  status: string
+  tone: "ok" | "soon" | "over" | "future"
+} | null {
+  if (!startISO || !endISO) return null
+  const start = Date.parse(`${startISO}T00:00:00`)
+  const end = Date.parse(`${endISO}T00:00:00`)
+  if (Number.isNaN(start) || Number.isNaN(end)) return null
+
+  const valid = end >= start
+  const days = Math.round((end - start) / 86_400_000) + 1
+  const months = Math.max(1, Math.round(days / 30))
+  const today = Date.now()
+  const left = Math.ceil((end - today) / 86_400_000)
+  const toStart = Math.ceil((start - today) / 86_400_000)
+
+  const [status, tone]: [string, "ok" | "soon" | "over" | "future"] =
+    today < start
+      ? [`Démarre dans ${toStart} jour${toStart > 1 ? "s" : ""}`, "future"]
+      : left < 0
+        ? [`Expiré depuis ${-left} jour${-left > 1 ? "s" : ""}`, "over"]
+        : left <= 60
+          ? [`Se termine dans ${left} jour${left > 1 ? "s" : ""}`, "soon"]
+          : [`Se termine dans ${left} jours`, "ok"]
+
+  return {
+    valid,
+    days,
+    label: `${months} mois · ${days} jours`,
+    status,
+    tone,
+  }
 }
 
 /**
@@ -424,6 +551,9 @@ export const offersSeed: Offer[] = SUGGESTED_OFFERS.map((o, i) => ({
  * example (account linked, campaigns running and archived), Ooredoo is a second
  * Or partner with a lighter history, and the pharmacy is the realistic edge case
  * — signed on the cheapest tier, no account yet, nothing running.
+ *
+ * Their contract periods are spread the same way: one comfortable, one about to
+ * expire, one already past its end and waiting on a renewal.
  */
 export const partnersSeed: Partner[] = [
   {
@@ -433,6 +563,8 @@ export const partnersSeed: Partner[] = [
     description:
       "Partenaire principal du club depuis 2019. Présent sur les maillots et sur l'ensemble des espaces de l'app.",
     accountId: "account-delice",
+    startDate: "2025-09-01",
+    endDate: "2027-06-30",
   },
   {
     id: "partner-ooredoo",
@@ -441,6 +573,8 @@ export const partnersSeed: Partner[] = [
     description:
       "Partenaire télécom, sponsor du tournoi de jeunes et de la billetterie.",
     accountId: "account-ooredoo",
+    startDate: "2026-01-01",
+    endDate: "2026-08-31",
   },
   {
     id: "partner-pharmacie",
@@ -448,6 +582,8 @@ export const partnersSeed: Partner[] = [
     name: "Pharmacie Centrale El Menzah",
     description: "",
     accountId: null,
+    startDate: "2025-07-01",
+    endDate: "2026-06-30",
   },
 ]
 
@@ -518,6 +654,193 @@ export function campaignTotals(campaign: Campaign): {
 /** "1 284 302" — French thousands separators. */
 export function num(n: number): string {
   return n.toLocaleString("fr-FR")
+}
+
+/* ── Créer une campagne côté club (admin) ───────────────────────────────── */
+
+/**
+ * Creative colour presets for the campaign form. Raw hex, like the tier
+ * colours: this is the sponsor's artwork colour (product data), not chrome.
+ */
+export const CAMPAIGN_COLORS: string[] = [
+  "#0091ff", // saphir
+  "#7f77dd", // violet
+  "#14b8a6", // sarcelle
+  "#e5484d", // rouge
+  "#e5844b", // ambre
+  "#9aa4b2", // gris
+]
+
+/** One ad space as composed on the form (before it becomes a CampaignSlot). */
+export type DraftSlot = { enabled: boolean; headline: string }
+
+/**
+ * What the admin fills in. Dates are ISO here (they come from `<input
+ * type="date">`); `buildCampaign` turns them into the pre-formatted French
+ * strings the campaign screens read.
+ */
+export type CampaignDraft = {
+  partnerId: string
+  name: string
+  start: string
+  end: string
+  /** Destination of every creative — one link for the whole campaign. */
+  link: string
+  color: string
+  slots: Record<SlotKey, DraftSlot>
+}
+
+/** A blank draft: the three always-on surfaces pre-selected. */
+export function blankCampaignDraft(partnerId: string): CampaignDraft {
+  const on = new Set<SlotKey>(["partners_page", "calendar_banner", "home_feed"])
+  return {
+    partnerId,
+    name: "",
+    start: "",
+    end: "",
+    link: "https://",
+    color: CAMPAIGN_COLORS[0],
+    slots: Object.fromEntries(
+      SLOT_DEFS.map((s) => [s.key, { enabled: on.has(s.key), headline: "" }]),
+    ) as Record<SlotKey, DraftSlot>,
+  }
+}
+
+/** Whole days between two ISO dates, inclusive of both ends. */
+function daysBetween(startISO: string, endISO: string): number {
+  const ms = Date.parse(endISO) - Date.parse(startISO)
+  return Number.isNaN(ms) ? 0 : Math.round(ms / 86_400_000) + 1
+}
+
+/**
+ * The display values a période implies: its labels, its span, how far along it
+ * is and whether it is still running. Shared by campaign creation and the
+ * "Modifier la configuration" modal so both read the dates the same way.
+ */
+export function campaignPeriod(
+  startISO: string,
+  endISO: string,
+): Pick<
+  Campaign,
+  "status" | "startDate" | "endDate" | "duration" | "progress" | "remaining"
+> {
+  const days = Math.max(1, daysBetween(startISO, endISO))
+  const months = Math.max(1, Math.round(days / 30))
+  const today = Date.now()
+  const start = Date.parse(startISO)
+  const end = Date.parse(endISO)
+
+  const elapsed = (today - start) / Math.max(1, end - start)
+  const progress = Math.min(100, Math.max(0, Math.round(elapsed * 100)))
+
+  const left = Math.ceil((end - today) / 86_400_000)
+  const toStart = Math.ceil((start - today) / 86_400_000)
+
+  return {
+    // A period already over is filed straight into the archives.
+    status: today > end ? "archivee" : "en_cours",
+    startDate: fmtFrLong(startISO),
+    endDate: fmtFrLong(endISO),
+    duration: `${months} mois · ${days} jours`,
+    progress,
+    remaining:
+      today < start
+        ? `Démarre dans ${toStart} jours`
+        : today > end
+          ? ""
+          : `${Math.max(0, left)} jours restants`,
+  }
+}
+
+/**
+ * Turn a filled form into a campaign record.
+ *
+ * The only computed values are display ones (duration label, elapsed %, days
+ * left) — the same arithmetic the seed rows hard-code. Views and clicks start
+ * at zero: nothing has been served yet.
+ */
+export function buildCampaign(draft: CampaignDraft): Omit<Campaign, "id"> {
+  return {
+    partnerId: draft.partnerId,
+    name: draft.name.trim() || "Campagne sans nom",
+    ...campaignPeriod(draft.start, draft.end),
+    color: draft.color,
+    slots: SLOT_DEFS.filter((def) => draft.slots[def.key].enabled).map((def) => ({
+      key: def.key,
+      // An empty accroche falls back to the campaign's own name.
+      headline: draft.slots[def.key].headline.trim() || draft.name.trim(),
+      link: draft.link.trim(),
+      views: 0,
+      clicks: 0,
+    })),
+  }
+}
+
+/* ── Modifier la configuration d'une campagne ───────────────────────────── */
+
+/** One ad space as composed on the config modal (link is per space here). */
+export type EditSlot = { enabled: boolean; headline: string; link: string }
+
+/** What the config modal edits: everything but the partenaire and the figures. */
+export type CampaignEdit = {
+  name: string
+  /** ISO, for the date inputs. */
+  start: string
+  end: string
+  color: string
+  slots: Record<SlotKey, EditSlot>
+}
+
+/** Read an existing campaign back into an editable draft. */
+export function campaignEditDraft(campaign: Campaign): CampaignEdit {
+  const bySlot = new Map(campaign.slots.map((s) => [s.key, s]))
+  return {
+    name: campaign.name,
+    start: parseFrLong(campaign.startDate),
+    end: parseFrLong(campaign.endDate),
+    color: campaign.color,
+    slots: Object.fromEntries(
+      SLOT_DEFS.map((def) => {
+        const slot = bySlot.get(def.key)
+        return [
+          def.key,
+          {
+            enabled: Boolean(slot),
+            headline: slot?.headline ?? "",
+            // A space added here inherits the campaign's existing destination.
+            link: slot?.link ?? campaign.slots[0]?.link ?? "https://",
+          },
+        ]
+      }),
+    ) as Record<SlotKey, EditSlot>,
+  }
+}
+
+/**
+ * Fold an edited draft back onto a campaign. The figures are never touched: a
+ * space kept on keeps its vues / clics, a space switched on starts at zero.
+ */
+export function applyCampaignEdit(
+  campaign: Campaign,
+  edit: CampaignEdit,
+): Partial<Campaign> {
+  const bySlot = new Map(campaign.slots.map((s) => [s.key, s]))
+  return {
+    name: edit.name.trim() || campaign.name,
+    ...campaignPeriod(edit.start, edit.end),
+    color: edit.color,
+    slots: SLOT_DEFS.filter((def) => edit.slots[def.key].enabled).map((def) => {
+      const previous = bySlot.get(def.key)
+      const draft = edit.slots[def.key]
+      return {
+        key: def.key,
+        headline: draft.headline.trim() || edit.name.trim(),
+        link: draft.link.trim(),
+        views: previous?.views ?? 0,
+        clicks: previous?.clicks ?? 0,
+      }
+    }),
+  }
 }
 
 export const campaignsSeed: Campaign[] = [

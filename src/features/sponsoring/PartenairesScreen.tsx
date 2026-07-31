@@ -3,33 +3,41 @@ import { useNavigate } from "react-router-dom"
 import {
   ArrowRight,
   Check,
+  ChevronDown,
   Handshake,
-  Link2,
-  Link2Off,
   MoreVertical,
   Pencil,
   Plus,
+  Sparkles,
   Trash2,
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { fmtFrLong } from "@/lib/format"
 import { useData } from "@/data/useData"
-import type { Offer, Partner } from "@/data/seed/sponsoring"
+import { contractSpan, type Offer, type Partner } from "@/data/seed/sponsoring"
 import { SponsoringShell } from "@/features/sponsoring/SponsoringShell"
 import { EmptyState } from "@/components/kit/EmptyState"
 import { ConfirmDialog } from "@/components/kit/ConfirmDialog"
 import { Avatar } from "@/components/kit/Avatar"
+import { DataTable, type Column } from "@/components/kit/DataTable"
 import { Stat } from "@/features/budget/ui"
-import { TierBadge } from "@/features/sponsoring/ui"
 import { PartnerFormModal } from "@/features/sponsoring/PartnerFormModal"
 
+/** One flat row of the partners table — a partenaire joined to its pack + account. */
+type Row = {
+  partner: Partner
+  offer: Offer | null
+  packName: string
+  accountName: string | null
+}
+
 /**
- * Screen 5 — partenaires, grouped by the offer they signed.
+ * Screen 5 — partenaires, as one flat table.
  *
- * The grouping is the point: an admin reads this page to answer "which tiers are
- * full and which still have seats to sell", so every tier shows even when empty,
- * with its remaining seats as the call to action.
- * References OffresScreen (cards, menu, toast) and EducateursScreen (roster rows).
+ * Every partenaire on a single list; the pack it signed shows as plain text (no
+ * colour, no tier badge). References EducateursScreen (roster rows) and the
+ * DataTable kit.
  */
 export function PartenairesScreen() {
   const navigate = useNavigate()
@@ -49,14 +57,132 @@ export function PartenairesScreen() {
     return () => clearTimeout(t)
   }, [toast])
 
+  const offerById = useMemo(
+    () => new Map(offers.map((o) => [o.id, o])),
+    [offers],
+  )
   const accountById = useMemo(
     () => new Map(sponsorAccounts.map((a) => [a.id, a])),
     [sponsorAccounts],
   )
 
-  const sortedOffers = [...offers].sort((a, b) => b.points - a.points)
   const totalSeats = offers.reduce((s, o) => s + o.seats, 0)
   const linked = partners.filter((p) => p.accountId).length
+
+  // Flat rows, ordered by pack rank then partner name.
+  const rows = useMemo<Row[]>(() => {
+    return partners
+      .map((partner) => {
+        const offer = offerById.get(partner.offerId) ?? null
+        const account = partner.accountId
+          ? accountById.get(partner.accountId) ?? null
+          : null
+        return {
+          partner,
+          offer,
+          packName: offer?.name ?? "—",
+          accountName: account?.company ?? null,
+        }
+      })
+      .sort(
+        (a, b) =>
+          (b.offer?.points ?? 0) - (a.offer?.points ?? 0) ||
+          a.partner.name.localeCompare(b.partner.name),
+      )
+  }, [partners, offerById, accountById])
+
+  const columns: Column<Row>[] = [
+    {
+      id: "partner",
+      header: "Partenaire",
+      cell: (row) => (
+        <div className="flex items-start gap-3">
+          <Avatar name={row.partner.name} size="md" />
+          <div className="min-w-0">
+            <button
+              type="button"
+              onClick={() =>
+                navigate(`/sponsoring/partenaires/${row.partner.id}`)
+              }
+              className="group/name inline-flex items-center gap-1.5 text-left font-body text-[0.88rem] text-ink transition-colors hover:text-brand-blue-600"
+            >
+              {row.partner.name}
+              <ArrowRight
+                size={13}
+                className="opacity-0 transition-opacity group-hover/name:opacity-100"
+              />
+            </button>
+            {row.partner.description ? (
+              <p className="mt-0.5 line-clamp-1 font-body text-[0.76rem] text-ink-muted">
+                {row.partner.description}
+              </p>
+            ) : (
+              <p className="mt-0.5 font-body text-[0.76rem] text-ink-disabled italic">
+                Pas encore de description
+              </p>
+            )}
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "pack",
+      header: "Pack",
+      // Plain text — no colour, no tier badge.
+      cell: (row) => <span className="text-ink-subtle">{row.packName}</span>,
+    },
+    {
+      id: "periode",
+      header: "Période",
+      // Un contrat qui expire est le vrai signal de cette table : la date reste
+      // neutre, c'est l'échéance qui prend la couleur.
+      cell: (row) => {
+        const span = contractSpan(row.partner.startDate, row.partner.endDate)
+        if (!span) return <span className="text-ink-disabled">Non définie</span>
+        return (
+          <div className="min-w-0">
+            <div className="text-ink-subtle">
+              Jusqu'au {fmtFrLong(row.partner.endDate)}
+            </div>
+            <div
+              className={cn(
+                "mt-0.5 font-body text-[0.74rem]",
+                span.tone === "over" && "text-danger",
+                span.tone === "soon" && "text-warning",
+                (span.tone === "ok" || span.tone === "future") &&
+                  "text-ink-disabled",
+              )}
+            >
+              {span.status}
+            </div>
+          </div>
+        )
+      },
+    },
+    {
+      id: "account",
+      header: "Compte rattaché",
+      cell: (row) =>
+        row.accountName ? (
+          <span className="text-ink-subtle">{row.accountName}</span>
+        ) : (
+          <span className="text-ink-disabled">Aucun compte</span>
+        ),
+    },
+    {
+      id: "actions",
+      header: "",
+      align: "right",
+      width: "56px",
+      cell: (row) =>
+        row.offer ? (
+          <RowMenu
+            onEdit={() => setForm({ offer: row.offer!, editing: row.partner })}
+            onDelete={() => setConfirm(row.partner)}
+          />
+        ) : null,
+    },
+  ]
 
   // No offers at all → the module isn't set up yet; send the admin there first.
   if (offers.length === 0) {
@@ -88,7 +214,15 @@ export function PartenairesScreen() {
   return (
     <SponsoringShell
       active="partenaires"
-      subtitle="Les entreprises qui soutiennent le club, par offre signée."
+      subtitle="Les entreprises qui soutiennent le club."
+      actions={
+        <AddPartnerMenu
+          offers={offers}
+          partners={partners}
+          onPick={(offer) => setForm({ offer, editing: null })}
+          onSurMesure={() => navigate("/sponsoring/demandes-sur-mesure")}
+        />
+      }
     >
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
         <Stat label="Partenaires" value={partners.length} />
@@ -96,108 +230,17 @@ export function PartenairesScreen() {
         <Stat label="Comptes rattachés" value={`${linked} / ${partners.length}`} />
       </div>
 
-      <div className="mt-8 flex flex-col gap-8">
-        {sortedOffers.map((offer) => {
-          const rows = partners.filter((p) => p.offerId === offer.id)
-          const free = offer.seats - rows.length
-
-          return (
-            <section key={offer.id}>
-              <div className="flex items-center justify-between gap-3 border-b border-border pb-2.5">
-                <div className="flex items-center gap-3">
-                  <TierBadge name={offer.name} color={offer.color} size="sm" />
-                  <span className="font-body text-[0.78rem] text-ink-muted tabular-nums">
-                    {rows.length} / {offer.seats} places occupées
-                  </span>
-                </div>
-                <button
-                  type="button"
-                  disabled={free <= 0}
-                  onClick={() => setForm({ offer, editing: null })}
-                  className="inline-flex items-center gap-1.5 rounded-sm px-2 py-1 font-ui text-[0.75rem] font-medium tracking-[0.04em] text-info uppercase transition-colors hover:bg-surface-hover disabled:cursor-not-allowed disabled:text-ink-disabled disabled:hover:bg-transparent"
-                >
-                  <Plus size={13} />
-                  {free > 0 ? "Ajouter un partenaire" : "Complet"}
-                </button>
-              </div>
-
-              {rows.length === 0 ? (
-                <button
-                  type="button"
-                  onClick={() => setForm({ offer, editing: null })}
-                  className="mt-3 flex w-full items-center justify-center gap-2 rounded-lg border border-dashed border-border-strong px-4 py-8 font-body text-[0.8rem] text-ink-muted transition-colors hover:border-info hover:text-info"
-                >
-                  <Plus size={15} />
-                  Aucun partenaire sur cette offre — {offer.seats} place
-                  {offer.seats > 1 ? "s" : ""} à vendre
-                </button>
-              ) : (
-                <div className="mt-3 overflow-hidden rounded-lg border border-border">
-                  {rows.map((partner, i) => {
-                    const account = partner.accountId
-                      ? accountById.get(partner.accountId) ?? null
-                      : null
-                    return (
-                      <div
-                        key={partner.id}
-                        className={cn(
-                          "flex items-start gap-3.5 px-4 py-3.5 transition-colors hover:bg-surface-hover",
-                          i > 0 && "border-t border-border",
-                        )}
-                      >
-                        <Avatar name={partner.name} size="md" />
-
-                        <div className="min-w-0 flex-1">
-                          <button
-                            type="button"
-                            onClick={() =>
-                              navigate(`/sponsoring/partenaires/${partner.id}`)
-                            }
-                            className="group/name inline-flex items-center gap-1.5 text-left font-body text-[0.88rem] text-ink transition-colors hover:text-brand-blue-600"
-                          >
-                            {partner.name}
-                            <ArrowRight
-                              size={13}
-                              className="opacity-0 transition-opacity group-hover/name:opacity-100"
-                            />
-                          </button>
-                          {partner.description ? (
-                            <p className="mt-0.5 line-clamp-2 font-body text-[0.76rem] leading-snug text-ink-muted">
-                              {partner.description}
-                            </p>
-                          ) : (
-                            <p className="mt-0.5 font-body text-[0.76rem] text-ink-disabled italic">
-                              Pas encore de description
-                            </p>
-                          )}
-                        </div>
-
-                        <div className="hidden shrink-0 sm:block">
-                          {account ? (
-                            <span className="inline-flex items-center gap-1.5 rounded-pill border border-brand-blue-600/30 bg-brand-blue-600/10 px-2.5 py-1 font-ui text-[0.7rem] font-medium text-brand-blue-600">
-                              <Link2 size={12} />
-                              {account.company}
-                            </span>
-                          ) : (
-                            <span className="inline-flex items-center gap-1.5 rounded-pill border border-border px-2.5 py-1 font-ui text-[0.7rem] font-medium text-ink-disabled">
-                              <Link2Off size={12} />
-                              Aucun compte
-                            </span>
-                          )}
-                        </div>
-
-                        <RowMenu
-                          onEdit={() => setForm({ offer, editing: partner })}
-                          onDelete={() => setConfirm(partner)}
-                        />
-                      </div>
-                    )
-                  })}
-                </div>
-              )}
-            </section>
-          )
-        })}
+      <div className="mt-8">
+        <DataTable
+          columns={columns}
+          data={rows}
+          getRowId={(row) => row.partner.id}
+          empty={{
+            icon: Handshake,
+            title: "Aucun partenaire",
+            description: "Ajoutez le premier partenaire du club.",
+          }}
+        />
       </div>
 
       {/* ── Overlays ──────────────────────────────────────────────────── */}
@@ -244,6 +287,96 @@ export function PartenairesScreen() {
   )
 }
 
+/* ── "Ajouter un partenaire" → pick which pack (plain text menu) ─────────── */
+function AddPartnerMenu({
+  offers,
+  partners,
+  onPick,
+  onSurMesure,
+}: {
+  offers: Offer[]
+  partners: Partner[]
+  onPick: (offer: Offer) => void
+  onSurMesure: () => void
+}) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!open) return
+    const onDown = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+    }
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false)
+    document.addEventListener("mousedown", onDown)
+    document.addEventListener("keydown", onKey)
+    return () => {
+      document.removeEventListener("mousedown", onDown)
+      document.removeEventListener("keydown", onKey)
+    }
+  }, [open])
+
+  const sorted = [...offers].sort((a, b) => b.points - a.points)
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        className="inline-flex items-center gap-1.5 rounded-md bg-brand px-4 py-2 font-ui text-sm font-medium text-ink-inverted shadow-glow transition-colors hover:bg-brand-dim"
+      >
+        <Plus size={16} /> Ajouter un partenaire
+        <ChevronDown size={14} className={cn("transition-transform", open && "rotate-180")} />
+      </button>
+
+      {open ? (
+        <div className="absolute right-0 z-30 mt-1.5 w-[240px] overflow-hidden rounded-lg border border-border bg-surface py-1 shadow-deep">
+          <div className="px-3.5 py-2 font-ui text-[0.66rem] font-medium tracking-[0.08em] text-ink-disabled uppercase">
+            Choisir un pack
+          </div>
+          {sorted.map((offer) => {
+            const taken = partners.filter((p) => p.offerId === offer.id).length
+            const free = offer.seats - taken
+            return (
+              <button
+                key={offer.id}
+                type="button"
+                disabled={free <= 0}
+                onClick={() => {
+                  setOpen(false)
+                  onPick(offer)
+                }}
+                className="flex w-full items-center justify-between gap-3 px-3.5 py-2 text-left font-body text-[0.84rem] text-ink-subtle transition-colors hover:bg-surface-hover hover:text-ink disabled:cursor-not-allowed disabled:text-ink-disabled disabled:hover:bg-transparent"
+              >
+                <span className="truncate">{offer.name}</span>
+                <span className="shrink-0 font-body text-[0.72rem] text-ink-muted tabular-nums">
+                  {free > 0 ? `${free} place${free > 1 ? "s" : ""}` : "Complet"}
+                </span>
+              </button>
+            )
+          })}
+
+          {/* Sur mesure — a partenaire outside the standard packs; opens the
+              custom-request flow. */}
+          <div className="mt-1 border-t border-border pt-1">
+            <button
+              type="button"
+              onClick={() => {
+                setOpen(false)
+                onSurMesure()
+              }}
+              className="flex w-full items-center gap-2.5 px-3.5 py-2 text-left font-body text-[0.84rem] text-info transition-colors hover:bg-surface-hover"
+            >
+              <Sparkles size={15} className="shrink-0" />
+              Sur mesure
+            </button>
+          </div>
+        </div>
+      ) : null}
+    </div>
+  )
+}
+
 /* ── Row overflow menu (Modifier / Retirer) ─────────────────────────────── */
 function RowMenu({
   onEdit,
@@ -275,7 +408,7 @@ function RowMenu({
   }
 
   return (
-    <div ref={ref} className="relative shrink-0">
+    <div ref={ref} className="relative inline-block shrink-0 text-left">
       <button
         type="button"
         aria-label="Actions"

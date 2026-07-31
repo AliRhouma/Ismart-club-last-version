@@ -265,9 +265,12 @@ export function AppShell() {
   return (
     <SidebarProvider defaultOpen={readSidebarDefaultOpen()}>
       <AppSidebar />
-      <SidebarInset>
+      {/* Viewport-height inset so the content area below is the real scroll
+          container — otherwise `position: sticky` inside a screen has no
+          scrollport to stick to and simply scrolls away. */}
+      <SidebarInset className="h-svh overflow-hidden">
         {/* App top bar — deep surface, fixed height, matches the design system. */}
-        <header className="sticky top-0 z-10 flex h-12 shrink-0 items-center gap-2 border-b border-border bg-surface-deep px-4">
+        <header className="z-10 flex h-12 shrink-0 items-center gap-2 border-b border-border bg-surface-deep px-4">
           <SidebarTrigger className="text-ink-muted hover:text-ink" />
           <Separator
             orientation="vertical"
@@ -281,7 +284,7 @@ export function AppShell() {
         </header>
 
         {/* Scrollable main content area. */}
-        <div className="flex-1 overflow-auto px-6 py-6 md:px-8">
+        <div className="min-h-0 flex-1 overflow-auto px-6 py-6 md:px-8">
           <Outlet />
         </div>
       </SidebarInset>

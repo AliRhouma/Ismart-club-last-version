@@ -42,6 +42,23 @@ export const fmtMonthYear = (key: string) => {
   return `${cap(FR_MONTHS_FULL[m - 1] ?? "")} ${y}`
 }
 
+/** "2026-06-01" → "1 juin 2026" (long, campaign dates). */
+export const fmtFrLong = (iso: string) => {
+  const [y, m, d] = iso.split("-").map(Number)
+  if (!y || !m || !d) return iso
+  return `${d} ${FR_MONTHS_FULL[m - 1] ?? ""} ${y}`
+}
+
+/** "1 juin 2026" → "2026-06-01" (reverse of fmtFrLong). "" if unparsable. */
+export const parseFrLong = (label: string) => {
+  const m = label.trim().toLowerCase().match(/^(\d{1,2})\s+(\S+)\s+(\d{4})$/)
+  if (!m) return ""
+  const month = FR_MONTHS_FULL.indexOf(m[2])
+  if (month < 0) return ""
+  const p = (x: number) => String(x).padStart(2, "0")
+  return `${m[3]}-${p(month + 1)}-${p(Number(m[1]))}`
+}
+
 /** "2025-08-13" → "mercredi, 13 août" (day-group header). */
 export const fmtDayLong = (iso: string) => {
   const [y, m, d] = iso.split("-").map(Number)

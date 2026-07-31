@@ -1,12 +1,11 @@
-import type { ReactNode } from "react"
-import { Navigate, useParams } from "react-router-dom"
+import { useEffect, useState, type ReactNode } from "react"
+import { Navigate, useLocation, useParams } from "react-router-dom"
 import {
-  Archive,
-  CalendarRange,
   Eye,
-  ImageIcon,
+  FileDown,
   MousePointerClick,
   Pencil,
+  SlidersHorizontal,
 } from "lucide-react"
 
 import {
@@ -38,6 +37,9 @@ import {
   LinkRow,
   SlotStats,
 } from "@/features/sponsoring/campaignUi"
+import { Toast } from "@/features/sponsoring/ui"
+import { CampagneConfigModal } from "@/features/sponsoring/CampagneConfigModal"
+import { exportCampaignKpisPdf } from "@/features/sponsoring/campaignPdf"
 
 /**
  * Screen — one campaign, in the same six-surface layout as "Espaces
@@ -54,6 +56,16 @@ import {
 export function CampagneScreen() {
   const { id, campaignId } = useParams<{ id: string; campaignId: string }>()
   const { partners, campaigns } = useData()
+
+  // Landing here straight after "Créer la campagne" carries its confirmation.
+  const { state } = useLocation() as { state: { toast?: string } | null }
+  const [toast, setToast] = useState<string | null>(state?.toast ?? null)
+  const [editing, setEditing] = useState(false)
+  useEffect(() => {
+    if (!toast) return
+    const t = setTimeout(() => setToast(null), 3000)
+    return () => clearTimeout(t)
+  }, [toast])
 
   const partner = partners.find((p) => p.id === id) ?? null
   const campaign = campaigns.find((c) => c.id === campaignId) ?? null
@@ -75,46 +87,46 @@ export function CampagneScreen() {
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="min-w-0">
           <div className="flex items-center gap-2.5">
-            {running ? (
-              <span className="inline-flex items-center gap-1.5 rounded-pill border border-success/25 bg-success/10 px-2.5 py-0.5 font-ui text-[0.62rem] font-medium tracking-[0.06em] text-success uppercase">
-                <span className="size-1.5 rounded-full bg-success" />
-                En diffusion
-              </span>
-            ) : (
-              <span className="inline-flex items-center gap-1.5 rounded-pill border border-border bg-accent px-2.5 py-0.5 font-ui text-[0.62rem] font-medium tracking-[0.06em] text-ink-muted uppercase">
-                <Archive size={10} />
-                Archivée
-              </span>
-            )}
             <span
-              className="size-2.5 rounded-full"
+              className="size-2.5 shrink-0 rounded-full"
               style={{ backgroundColor: campaign.color }}
             />
+            <h1 className="font-ui text-2xl font-semibold text-ink">
+              {campaign.name}
+            </h1>
           </div>
-          <h1 className="mt-2.5 font-ui text-2xl font-semibold text-ink">
-            {campaign.name}
-          </h1>
           <p className="mt-1.5 font-body text-sm text-ink-muted">
             {partner.name} · {campaign.slots.length} espaces publicitaires
           </p>
         </div>
 
-        {running ? (
-          <div className="flex shrink-0 items-center gap-2">
+        {/* On an archive the numbers are the whole point, so exporting them
+            takes the primary slot and the config drops to secondary. */}
+        <div className="flex shrink-0 items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setEditing(true)}
+            className={
+              running
+                ? "inline-flex items-center gap-1.5 rounded-md bg-brand px-4 py-2 font-ui text-sm font-medium text-ink-inverted shadow-glow transition-colors hover:bg-brand-dim"
+                : "inline-flex items-center gap-1.5 rounded-md border border-input px-4 py-2 font-ui text-sm font-medium text-ink transition-colors hover:border-border-strong hover:bg-accent"
+            }
+          >
+            <SlidersHorizontal size={16} /> Modifier la configuration
+          </button>
+          {!running ? (
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 rounded-md border border-input px-4 py-2 font-ui text-sm font-medium text-ink transition-colors hover:border-border-strong hover:bg-accent"
-            >
-              <CalendarRange size={16} /> Modifier les dates
-            </button>
-            <button
-              type="button"
+              onClick={() => {
+                const file = exportCampaignKpisPdf(campaign, partner.name)
+                setToast(`KPIs exportés — ${file}`)
+              }}
               className="inline-flex items-center gap-1.5 rounded-md bg-brand px-4 py-2 font-ui text-sm font-medium text-ink-inverted shadow-glow transition-colors hover:bg-brand-dim"
             >
-              <ImageIcon size={16} /> Remplacer les visuels
+              <FileDown size={16} /> Exporter les KPIs (PDF)
             </button>
-          </div>
-        ) : null}
+          ) : null}
+        </div>
       </div>
 
       {/* ── The band at the top: dates for a live one, numbers for an
@@ -167,7 +179,11 @@ export function CampagneScreen() {
             slotKey={slot.key}
             headerRight={
               running ? (
-                <IconButton icon={Pencil} label="Modifier cet espace" />
+                <IconButton
+                  icon={Pencil}
+                  label="Modifier cet espace"
+                  onClick={() => setEditing(true)}
+                />
               ) : (
                 <span className="font-body text-[0.72rem] text-ink-disabled tabular-nums">
                   {num(slot.views)} vues
@@ -203,6 +219,17 @@ export function CampagneScreen() {
           </EmplacementCard>
         ))}
       </div>
+
+      {editing ? (
+        <CampagneConfigModal
+          campaign={campaign}
+          partnerName={partner.name}
+          onClose={() => setEditing(false)}
+          onSaved={setToast}
+        />
+      ) : null}
+
+      {toast ? <Toast msg={toast} /> : null}
     </div>
   )
 }

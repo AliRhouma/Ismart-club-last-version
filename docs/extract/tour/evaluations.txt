@@ -1,0 +1,56 @@
+Evaluations
+Créer une évaluation
+Evaluation individuelle
+Evaluation de groupe
+Notes de match
+Compétition
+U6
+U7
+U8
+U9
+U12
+U14
+U15
+U16
+U17
+U19
+U20
+U18
+SENIOR
+U11
+U13
+U10
+FFF
+Note globale
+Dominante Athlétique
+Entrainement
+FFF
+VAMEVAL
+Vitesse 5M
+Vitesse 40M
+Dominante Technique
+Entrainement
+FFF
+Frappe à l'arrêt
+Passes courtes
+Poids
+Autre
+U6
+U7
+U8
+U9
+U12
+U14
+U15
+U16
+U17
+U19
+U20
+U18
+SENIOR
+U11
+U13
+U10
+Senior
+FFF
+Poids

@@ -1,0 +1,89 @@
+{
+  "0ae26e6b-071c-450e-8f89-b90f822ce7b4": [
+    {
+      "id": "c98df277-c391-4692-95f1-3f9859ad85d9",
+      "name": "Groupe A",
+      "description": null,
+      "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+      "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021363950-303102182.jpg",
+      "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+    },
+    {
+      "id": "c3ca020f-9b3f-4624-aa0e-e2e1470e0ffc",
+      "name": "Groupe B",
+      "description": "",
+      "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+      "picture": null,
+      "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+    }
+  ],
+  "ef227767-5bfb-4b03-8dcd-fcb6ff99996b": [
+    {
+      "id": "6378ce1c-407a-4fb6-92ee-c0ee32f286cf",
+      "name": "Groupe A",
+      "description": null,
+      "categoryId": "ef227767-5bfb-4b03-8dcd-fcb6ff99996b",
+      "picture": "https://pprodback.ismart-club.com/public/category-avatar.png",
+      "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+    }
+  ],
+  "ae6c7288-0ca2-4363-8366-907da8bfddbf": [],
+  "c6fe37a9-ab2f-493b-a619-d09f8ee93fde": [
+    {
+      "id": "2c209aec-770f-4773-86b8-e8f53e07c8b3",
+      "name": "Groupe A",
+      "description": "",
+      "categoryId": "c6fe37a9-ab2f-493b-a619-d09f8ee93fde",
+      "picture": null,
+      "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+    },
+    {
+      "id": "8b358294-58d9-44da-8231-74acb1d85047",
+      "name": "Groupe B",
+      "description": "",
+      "categoryId": "c6fe37a9-ab2f-493b-a619-d09f8ee93fde",
+      "picture": null,
+      "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+    },
+    {
+      "id": "929242df-f023-4c3c-a90e-5325269ed57d",
+      "name": "Groupe C",
+      "description": "",
+      "categoryId": "c6fe37a9-ab2f-493b-a619-d09f8ee93fde",
+      "picture": null,
+      "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+    }
+  ],
+  "def28afd-d963-43a3-9f38-3f8e31cd1565": [
+    {
+      "id": "d348d4fb-8306-449b-8342-771f5bfe9622",
+      "name": "Groupe A",
+      "description": "",
+      "categoryId": "def28afd-d963-43a3-9f38-3f8e31cd1565",
+      "picture": null,
+      "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+    }
+  ],
+  "d1911d1a-c11a-4b7d-ab65-8ea490c48a7c": [],
+  "c78e159f-f829-49ef-9bdb-55341592bb66": [
+    {
+      "id": "edde6494-5401-4a61-995d-0733cdf12bc8",
+      "name": "GROUPE A",
+      "description": "",
+      "categoryId": "c78e159f-f829-49ef-9bdb-55341592bb66",
+      "picture": null,
+      "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+    }
+  ],
+  "2471e159-492a-44a3-976b-414e81d3395e": [],
+  "5fd3b08a-8bb0-4ee6-aa0b-9a4a201995c0": [],
+  "538670b5-e899-43fb-82b2-2e67f0cc56a0": [],
+  "c8e213c4-31d6-4ab1-a099-7c25eca53b95": [],
+  "29e986de-e0c9-457c-bc63-975d3e7b1e6a": [],
+  "82c7de63-a446-48d6-be79-3d1dd33aaedb": [],
+  "b58381ee-d225-4888-85bd-213127b837b9": [],
+  "7908cb9d-c2fd-443f-b652-f75477fb5799": [],
+  "9c725f34-976a-4fe2-b757-c468d44beb55": [],
+  "a3856aad-c3ca-4ecc-a0a4-556adac8ec01": [],
+  "6bb0d2d3-1da3-4e54-b944-6d9e48bf512a": []
+}

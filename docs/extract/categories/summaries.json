@@ -1,0 +1,337 @@
+{
+  "c98df277-c391-4692-95f1-3f9859ad85d9": [
+    {
+      "id": "1bbba334-2cd6-4394-80f4-e3d1a1490628",
+      "place": "HOME",
+      "scoreHome": 6,
+      "scoreAway": 1,
+      "homeTeam": null,
+      "awayTeam": null
+    },
+    {
+      "id": "d506b7ad-696e-4e7b-875f-a6c68654baec",
+      "place": "HOME",
+      "scoreHome": 3,
+      "scoreAway": 0,
+      "homeTeam": null,
+      "awayTeam": null
+    },
+    {
+      "id": "3037afaa-6334-4567-b008-a58a0071bc99",
+      "place": "HOME",
+      "scoreHome": 2,
+      "scoreAway": 0,
+      "homeTeam": null,
+      "awayTeam": null
+    },
+    {
+      "id": "c2c2597f-cf2b-41a3-8d66-c9442309f5dd",
+      "place": "HOME",
+      "scoreHome": 0,
+      "scoreAway": 0,
+      "homeTeam": null,
+      "awayTeam": null
+    },
+    {
+      "id": "33699311-6ce0-4ec6-8a65-a6edd008de1d",
+      "place": "HOME",
+      "scoreHome": 2,
+      "scoreAway": 1,
+      "homeTeam": null,
+      "awayTeam": null
+    },
+    {
+      "id": "1d7a9824-bc19-4eff-a870-70c542bc9e6e",
+      "place": "HOME",
+      "scoreHome": 2,
+      "scoreAway": 0,
+      "homeTeam": null,
+      "awayTeam": null
+    },
+    {
+      "id": "37796b0a-dce4-4a2b-85a4-3c872a75114a",
+      "place": "HOME",
+      "scoreHome": 1,
+      "scoreAway": 1,
+      "homeTeam": null,
+      "awayTeam": null
+    },
+    {
+      "id": "fe0460ee-ab04-44f6-9942-0aed7a2b11ae",
+      "place": "HOME",
+      "scoreHome": 2,
+      "scoreAway": 1,
+      "homeTeam": null,
+      "awayTeam": null
+    }
+  ],
+  "c3ca020f-9b3f-4624-aa0e-e2e1470e0ffc": [],
+  "6378ce1c-407a-4fb6-92ee-c0ee32f286cf": [
+    {
+      "id": "6445a1f6-23fe-49dd-aaae-bd8ea849c022",
+      "place": "AWAY",
+      "scoreHome": 2,
+      "scoreAway": 2,
+      "homeTeam": {
+        "teamId": "65681"
+      },
+      "awayTeam": {
+        "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae"
+      }
+    },
+    {
+      "id": "bbf8efef-71db-4282-bd07-64bda9ec7cd5",
+      "place": "HOME",
+      "scoreHome": 5,
+      "scoreAway": 2,
+      "homeTeam": {
+        "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae"
+      },
+      "awayTeam": {
+        "teamId": "15851"
+      }
+    },
+    {
+      "id": "5717c333-9dec-404f-976d-3d4efcac7cad",
+      "place": "HOME",
+      "scoreHome": 2,
+      "scoreAway": 0,
+      "homeTeam": {
+        "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae"
+      },
+      "awayTeam": {
+        "teamId": "6501"
+      }
+    },
+    {
+      "id": "db2ec95d-1c93-4906-8856-7f527b5c9330",
+      "place": "AWAY",
+      "scoreHome": 0,
+      "scoreAway": 0,
+      "homeTeam": {
+        "teamId": "102791"
+      },
+      "awayTeam": {
+        "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae"
+      }
+    },
+    {
+      "id": "d8f14bd0-01f1-4198-b0a1-ea649ae939bb",
+      "place": "HOME",
+      "scoreHome": 1,
+      "scoreAway": 0,
+      "homeTeam": {
+        "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae"
+      },
+      "awayTeam": {
+        "teamId": "1053701"
+      }
+    },
+    {
+      "id": "f0d180bc-5af0-4735-b6f1-2b46029374d9",
+      "place": "HOME",
+      "scoreHome": 0,
+      "scoreAway": 2,
+      "homeTeam": {
+        "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae"
+      },
+      "awayTeam": {
+        "teamId": "6162"
+      }
+    },
+    {
+      "id": "6dd5f4a3-a7e3-4873-9777-72695ee48bf6",
+      "place": "AWAY",
+      "scoreHome": 5,
+      "scoreAway": 2,
+      "homeTeam": {
+        "teamId": "1135511"
+      },
+      "awayTeam": {
+        "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae"
+      }
+    },
+    {
+      "id": "5ffda656-ebc1-4e59-9f1d-a2f280598612",
+      "place": "AWAY",
+      "scoreHome": 0,
+      "scoreAway": 1,
+      "homeTeam": {
+        "teamId": "34641"
+      },
+      "awayTeam": {
+        "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae"
+      }
+    },
+    {
+      "id": "6f1f240f-b140-4d97-9e10-a9f7453279fd",
+      "place": "AWAY",
+      "scoreHome": 0,
+      "scoreAway": 1,
+      "homeTeam": {
+        "teamId": "15851"
+      },
+      "awayTeam": {
+        "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae"
+      }
+    },
+    {
+      "id": "e9209ea2-7744-428e-a338-fdbb759b39e6",
+      "place": "HOME",
+      "scoreHome": 4,
+      "scoreAway": 2,
+      "homeTeam": {
+        "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae"
+      },
+      "awayTeam": {
+        "teamId": "65681"
+      }
+    },
+    {
+      "id": "3cae7ee5-1cc0-4db4-8228-abe07f7ca907",
+      "place": "AWAY",
+      "scoreHome": 0,
+      "scoreAway": 0,
+      "homeTeam": {
+        "teamId": "6501"
+      },
+      "awayTeam": {
+        "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae"
+      }
+    },
+    {
+      "id": "10096372-8b66-4181-9cbc-ae52af2603c5",
+      "place": "HOME",
+      "scoreHome": 1,
+      "scoreAway": 0,
+      "homeTeam": {
+        "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae"
+      },
+      "awayTeam": {
+        "teamId": "102791"
+      }
+    },
+    {
+      "id": "d07b8bab-89e5-41b8-8227-84908d7c782e",
+      "place": "AWAY",
+      "scoreHome": 2,
+      "scoreAway": 3,
+      "homeTeam": {
+        "teamId": "5011"
+      },
+      "awayTeam": {
+        "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae"
+      }
+    },
+    {
+      "id": "352f827a-5763-4f3e-832f-a03d1ccc9f08",
+      "place": "HOME",
+      "scoreHome": 4,
+      "scoreAway": 1,
+      "homeTeam": {
+        "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae"
+      },
+      "awayTeam": {
+        "teamId": "123271"
+      }
+    },
+    {
+      "id": "0b236efe-1b97-4f15-9cf3-34a550917290",
+      "place": "AWAY",
+      "scoreHome": 2,
+      "scoreAway": 2,
+      "homeTeam": {
+        "teamId": "97532"
+      },
+      "awayTeam": {
+        "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae"
+      }
+    }
+  ],
+  "2c209aec-770f-4773-86b8-e8f53e07c8b3": [
+    {
+      "id": "58e0756e-18fe-450f-8632-14098fb6c36a",
+      "place": "HOME",
+      "scoreHome": 3,
+      "scoreAway": 1,
+      "homeTeam": null,
+      "awayTeam": null
+    },
+    {
+      "id": "84512679-6065-4a9d-aebe-782df958ef19",
+      "place": "HOME",
+      "scoreHome": 3,
+      "scoreAway": 2,
+      "homeTeam": null,
+      "awayTeam": null
+    },
+    {
+      "id": "7e41d99d-f92a-4424-999a-4762aa7f4e5e",
+      "place": "HOME",
+      "scoreHome": 2,
+      "scoreAway": 1,
+      "homeTeam": null,
+      "awayTeam": null
+    },
+    {
+      "id": "3380ec84-d1b8-48ed-9eba-18382c280397",
+      "place": "HOME",
+      "scoreHome": 1,
+      "scoreAway": 1,
+      "homeTeam": null,
+      "awayTeam": null
+    },
+    {
+      "id": "812da65d-9684-46dd-9b43-7b8ee164b372",
+      "place": "HOME",
+      "scoreHome": 1,
+      "scoreAway": 0,
+      "homeTeam": null,
+      "awayTeam": null
+    },
+    {
+      "id": "9b4f6061-add9-4941-b9e3-a5c3db5909bb",
+      "place": "HOME",
+      "scoreHome": 1,
+      "scoreAway": 1,
+      "homeTeam": null,
+      "awayTeam": null
+    },
+    {
+      "id": "8f7d8e53-becf-4116-8a41-52cc5de97a3b",
+      "place": "AWAY",
+      "scoreHome": 0,
+      "scoreAway": 0,
+      "homeTeam": null,
+      "awayTeam": null
+    },
+    {
+      "id": "3372a26a-a145-4ec8-a809-7c9ebec5f227",
+      "place": "HOME",
+      "scoreHome": 4,
+      "scoreAway": 1,
+      "homeTeam": null,
+      "awayTeam": null
+    },
+    {
+      "id": "c2e3c13f-2e6f-40a0-964a-d58d058a6020",
+      "place": "HOME",
+      "scoreHome": 1,
+      "scoreAway": 2,
+      "homeTeam": null,
+      "awayTeam": null
+    },
+    {
+      "id": "618b7625-5c0b-4327-92c5-a0bdd39c94a7",
+      "place": "HOME",
+      "scoreHome": 0,
+      "scoreAway": 0,
+      "homeTeam": null,
+      "awayTeam": null
+    }
+  ],
+  "8b358294-58d9-44da-8231-74acb1d85047": [],
+  "929242df-f023-4c3c-a90e-5325269ed57d": [],
+  "d348d4fb-8306-449b-8342-771f5bfe9622": [],
+  "edde6494-5401-4a61-995d-0733cdf12bc8": []
+}

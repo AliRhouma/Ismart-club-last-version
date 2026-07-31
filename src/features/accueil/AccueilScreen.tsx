@@ -4,7 +4,7 @@ import {
   Layers,
   CalendarDays,
   PlayCircle,
-  Gamepad2,
+  Shapes,
   ClipboardList,
   BarChart3,
   MessageSquare,
@@ -60,8 +60,8 @@ const MODULES: Module[] = [
   {
     label: "Procédés",
     description: "Créer et gérer les tactiques",
-    icon: Gamepad2,
-    path: "/pole-technique/consignes",
+    icon: Shapes,
+    path: "/pole-technique/procedes",
   },
   {
     label: "Séances",

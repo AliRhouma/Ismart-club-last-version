@@ -1,0 +1,3243 @@
+{
+  "c98df277-c391-4692-95f1-3f9859ad85d9": {
+    "id": "c98df277-c391-4692-95f1-3f9859ad85d9",
+    "name": "Groupe A",
+    "description": null,
+    "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+    "category": {
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae"
+    },
+    "players": [
+      {
+        "playerId": "e82c1000-7216-4e27-81dd-7c4ab21127e9",
+        "categoryGroupId": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-03T14:33:20.924Z",
+        "player": {
+          "userId": "e82c1000-7216-4e27-81dd-7c4ab21127e9",
+          "post": "GB",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "e82c1000-7216-4e27-81dd-7c4ab21127e9",
+            "email": null,
+            "firstName": "Mike",
+            "lastName": "Maignan",
+            "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/maignan.jpg-1772018136854-446059239.jpg",
+            "phone": "",
+            "address": "",
+            "city": "",
+            "birthdate": "1995-07-02T00:00:00.000Z",
+            "birthPlace": "Cayenne (Guyane)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "e82c1000-7216-4e27-81dd-7c4ab21127e9",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                7,
+                0,
+                0,
+                2,
+                0,
+                9
+              ],
+              "presenceLastMonth": [
+                7,
+                0,
+                0,
+                2,
+                0,
+                9
+              ],
+              "presenceCurrentSeason": [
+                7,
+                0,
+                0,
+                2,
+                0,
+                9
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "3371025e-6592-49e7-9a9d-611a799d438c",
+        "categoryGroupId": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-03T14:33:20.991Z",
+        "player": {
+          "userId": "3371025e-6592-49e7-9a9d-611a799d438c",
+          "post": "DC",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "3371025e-6592-49e7-9a9d-611a799d438c",
+            "email": null,
+            "firstName": "William",
+            "lastName": "Saliba",
+            "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/saliba.jpg-1772018372018-816808238.jpg",
+            "phone": "",
+            "address": "",
+            "city": "",
+            "birthdate": "2001-03-23T00:00:00.000Z",
+            "birthPlace": "Bondy (France)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "3371025e-6592-49e7-9a9d-611a799d438c",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                10,
+                0,
+                0,
+                0,
+                0,
+                10
+              ],
+              "presenceLastMonth": [
+                10,
+                0,
+                0,
+                0,
+                0,
+                10
+              ],
+              "presenceCurrentSeason": [
+                10,
+                0,
+                0,
+                0,
+                0,
+                10
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "ba2ec1d4-dfb2-4c41-a191-cca66bd6f651",
+        "categoryGroupId": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-03T14:33:21.009Z",
+        "player": {
+          "userId": "ba2ec1d4-dfb2-4c41-a191-cca66bd6f651",
+          "post": "DC",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "ba2ec1d4-dfb2-4c41-a191-cca66bd6f651",
+            "email": null,
+            "firstName": "Dayot",
+            "lastName": "Upamecano",
+            "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/upamecano.jpg-1772017847572-141518690.jpg",
+            "phone": "",
+            "address": "",
+            "city": "",
+            "birthdate": "1998-10-26T00:00:00.000Z",
+            "birthPlace": "Évreux (France)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "ba2ec1d4-dfb2-4c41-a191-cca66bd6f651",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                10,
+                0,
+                0,
+                0,
+                0,
+                10
+              ],
+              "presenceLastMonth": [
+                10,
+                0,
+                0,
+                0,
+                0,
+                10
+              ],
+              "presenceCurrentSeason": [
+                10,
+                0,
+                0,
+                0,
+                0,
+                10
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "1bf0fd8a-dcbd-4d16-82f1-6840abe11af9",
+        "categoryGroupId": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-03T14:33:21.068Z",
+        "player": {
+          "userId": "1bf0fd8a-dcbd-4d16-82f1-6840abe11af9",
+          "post": "LD",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "1bf0fd8a-dcbd-4d16-82f1-6840abe11af9",
+            "email": null,
+            "firstName": "Jules",
+            "lastName": "Koundé",
+            "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/kounde.jpg-1772018002697-124957233.jpg",
+            "phone": "",
+            "address": "",
+            "city": "",
+            "birthdate": "1998-11-11T00:00:00.000Z",
+            "birthPlace": "Paris (France)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "1bf0fd8a-dcbd-4d16-82f1-6840abe11af9",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                9,
+                0,
+                0,
+                0,
+                0,
+                9
+              ],
+              "presenceLastMonth": [
+                9,
+                0,
+                0,
+                0,
+                0,
+                9
+              ],
+              "presenceCurrentSeason": [
+                9,
+                0,
+                0,
+                0,
+                0,
+                9
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "e0a43cea-c3d8-4bc6-838a-8ffc2da02b69",
+        "categoryGroupId": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-03T14:33:21.118Z",
+        "player": {
+          "userId": "e0a43cea-c3d8-4bc6-838a-8ffc2da02b69",
+          "post": "MDC",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "e0a43cea-c3d8-4bc6-838a-8ffc2da02b69",
+            "email": null,
+            "firstName": "Eduardo",
+            "lastName": "Camavinga",
+            "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/cama.jpg-1772017975809-391784380.jpg",
+            "phone": "",
+            "address": "",
+            "city": "",
+            "birthdate": "2002-11-09T00:00:00.000Z",
+            "birthPlace": "Cabinda (Angola)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "e0a43cea-c3d8-4bc6-838a-8ffc2da02b69",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                10,
+                0,
+                0,
+                0,
+                0,
+                10
+              ],
+              "presenceLastMonth": [
+                10,
+                0,
+                0,
+                0,
+                0,
+                10
+              ],
+              "presenceCurrentSeason": [
+                10,
+                0,
+                0,
+                0,
+                0,
+                10
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "aecc135d-1643-4441-b2b2-625e23d4c455",
+        "categoryGroupId": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-03T14:33:21.127Z",
+        "player": {
+          "userId": "aecc135d-1643-4441-b2b2-625e23d4c455",
+          "post": "MDC",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "aecc135d-1643-4441-b2b2-625e23d4c455",
+            "email": null,
+            "firstName": "Adrien",
+            "lastName": "Rabiot",
+            "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/rabiot.jpg-1772017796447-833725344.jpg",
+            "phone": "",
+            "address": "",
+            "city": "",
+            "birthdate": "1995-04-02T00:00:00.000Z",
+            "birthPlace": "Saint-Maurice (France)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "aecc135d-1643-4441-b2b2-625e23d4c455",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                7,
+                0,
+                1,
+                0,
+                0,
+                8
+              ],
+              "presenceLastMonth": [
+                7,
+                0,
+                1,
+                0,
+                0,
+                8
+              ],
+              "presenceCurrentSeason": [
+                7,
+                0,
+                1,
+                0,
+                0,
+                8
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "8677f30e-9c71-45c6-99d5-72612e671a7b",
+        "categoryGroupId": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-03T14:33:21.182Z",
+        "player": {
+          "userId": "8677f30e-9c71-45c6-99d5-72612e671a7b",
+          "post": "AD",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "8677f30e-9c71-45c6-99d5-72612e671a7b",
+            "email": null,
+            "firstName": "Ousmane",
+            "lastName": "Dembélé",
+            "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/dembele.jpg-1772018209365-301426615.jpg",
+            "phone": "",
+            "address": "",
+            "city": "",
+            "birthdate": "1997-05-14T00:00:00.000Z",
+            "birthPlace": "Vernon (France)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "8677f30e-9c71-45c6-99d5-72612e671a7b",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                8,
+                0,
+                0,
+                0,
+                0,
+                8
+              ],
+              "presenceLastMonth": [
+                8,
+                0,
+                0,
+                0,
+                0,
+                8
+              ],
+              "presenceCurrentSeason": [
+                8,
+                0,
+                0,
+                0,
+                0,
+                8
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "0eec7485-b80b-4ee8-81ea-b9459f78fb05",
+        "categoryGroupId": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-03T14:33:21.225Z",
+        "player": {
+          "userId": "0eec7485-b80b-4ee8-81ea-b9459f78fb05",
+          "post": "AT",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "0eec7485-b80b-4ee8-81ea-b9459f78fb05",
+            "email": null,
+            "firstName": "Marcus",
+            "lastName": "Thuram",
+            "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/thuram.jpg-1772018121098-67325843.jpg",
+            "phone": "",
+            "address": "",
+            "city": "",
+            "birthdate": "1997-08-05T00:00:00.000Z",
+            "birthPlace": "Parme (Italie)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "0eec7485-b80b-4ee8-81ea-b9459f78fb05",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                9,
+                0,
+                0,
+                0,
+                1,
+                10
+              ],
+              "presenceLastMonth": [
+                9,
+                0,
+                0,
+                0,
+                1,
+                10
+              ],
+              "presenceCurrentSeason": [
+                9,
+                0,
+                0,
+                0,
+                1,
+                10
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "756677e0-5e31-4ace-92f7-268e769fe715",
+        "categoryGroupId": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-03T14:33:21.234Z",
+        "player": {
+          "userId": "756677e0-5e31-4ace-92f7-268e769fe715",
+          "post": "AT",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "756677e0-5e31-4ace-92f7-268e769fe715",
+            "email": null,
+            "firstName": "Randal",
+            "lastName": "Muani",
+            "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/kolo.jpg-1772018230204-164326326.jpg",
+            "phone": "",
+            "address": "",
+            "city": "",
+            "birthdate": "1998-12-04T00:00:00.000Z",
+            "birthPlace": "Bondy (France)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "756677e0-5e31-4ace-92f7-268e769fe715",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                10,
+                0,
+                0,
+                0,
+                0,
+                10
+              ],
+              "presenceLastMonth": [
+                10,
+                0,
+                0,
+                0,
+                0,
+                10
+              ],
+              "presenceCurrentSeason": [
+                10,
+                0,
+                0,
+                0,
+                0,
+                10
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "80202010-232d-4cf3-a00b-52040d1dbf5c",
+        "categoryGroupId": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-03T16:29:37.557Z",
+        "player": {
+          "userId": "80202010-232d-4cf3-a00b-52040d1dbf5c",
+          "post": "GB",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "80202010-232d-4cf3-a00b-52040d1dbf5c",
+            "email": null,
+            "firstName": "Brice",
+            "lastName": "Samba",
+            "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/football-brice-samba-1.jpg-1772016431350-970184889.jpg",
+            "phone": "",
+            "address": "",
+            "city": "",
+            "birthdate": "1994-04-24T00:00:00.000Z",
+            "birthPlace": "Sedan (France)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "80202010-232d-4cf3-a00b-52040d1dbf5c",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                9,
+                0,
+                0,
+                0,
+                0,
+                9
+              ],
+              "presenceLastMonth": [
+                9,
+                0,
+                0,
+                0,
+                0,
+                9
+              ],
+              "presenceCurrentSeason": [
+                9,
+                0,
+                0,
+                0,
+                0,
+                9
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "780bd5e1-cefc-4cd0-a03f-5cdbcbc13871",
+        "categoryGroupId": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-03T16:29:37.608Z",
+        "player": {
+          "userId": "780bd5e1-cefc-4cd0-a03f-5cdbcbc13871",
+          "post": "DC",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "780bd5e1-cefc-4cd0-a03f-5cdbcbc13871",
+            "email": null,
+            "firstName": "Ibrahima",
+            "lastName": "Konaté",
+            "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/konate.jpg-1772017990559-83097058.jpg",
+            "phone": "",
+            "address": "",
+            "city": "",
+            "birthdate": "1999-05-24T00:00:00.000Z",
+            "birthPlace": "Paris (France)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "780bd5e1-cefc-4cd0-a03f-5cdbcbc13871",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                6,
+                0,
+                1,
+                0,
+                0,
+                7
+              ],
+              "presenceLastMonth": [
+                6,
+                0,
+                1,
+                0,
+                0,
+                7
+              ],
+              "presenceCurrentSeason": [
+                6,
+                0,
+                1,
+                0,
+                0,
+                7
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "f0e69228-e3a7-46df-9232-c3f5b6c37e2a",
+        "categoryGroupId": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-03T16:29:37.639Z",
+        "player": {
+          "userId": "f0e69228-e3a7-46df-9232-c3f5b6c37e2a",
+          "post": "LG",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "f0e69228-e3a7-46df-9232-c3f5b6c37e2a",
+            "email": null,
+            "firstName": "Theo",
+            "lastName": "Hernandez",
+            "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/theo.jpg-1772018322296-879174532.jpg",
+            "phone": "",
+            "address": "",
+            "city": "",
+            "birthdate": "1997-10-05T00:00:00.000Z",
+            "birthPlace": "Marseille (France)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "f0e69228-e3a7-46df-9232-c3f5b6c37e2a",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                10,
+                0,
+                0,
+                0,
+                0,
+                10
+              ],
+              "presenceLastMonth": [
+                10,
+                0,
+                0,
+                0,
+                0,
+                10
+              ],
+              "presenceCurrentSeason": [
+                10,
+                0,
+                0,
+                0,
+                0,
+                10
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "e48e07df-7627-48b2-acc8-0d9aa727da14",
+        "categoryGroupId": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-03T16:29:37.672Z",
+        "player": {
+          "userId": "e48e07df-7627-48b2-acc8-0d9aa727da14",
+          "post": "LD",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "e48e07df-7627-48b2-acc8-0d9aa727da14",
+            "email": null,
+            "firstName": "Benjamin",
+            "lastName": "Pavard",
+            "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/pavard.jpg-1772017825051-852987309.jpg",
+            "phone": "",
+            "address": "",
+            "city": "",
+            "birthdate": "1996-03-27T00:00:00.000Z",
+            "birthPlace": "Maubeuge (France)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "e48e07df-7627-48b2-acc8-0d9aa727da14",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                10,
+                0,
+                0,
+                0,
+                0,
+                10
+              ],
+              "presenceLastMonth": [
+                10,
+                0,
+                0,
+                0,
+                0,
+                10
+              ],
+              "presenceCurrentSeason": [
+                10,
+                0,
+                0,
+                0,
+                0,
+                10
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "ab87d260-95fe-4e39-9e9f-a57b71bffb69",
+        "categoryGroupId": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-03T16:29:37.692Z",
+        "player": {
+          "userId": "ab87d260-95fe-4e39-9e9f-a57b71bffb69",
+          "post": "MDC",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "ab87d260-95fe-4e39-9e9f-a57b71bffb69",
+            "email": null,
+            "firstName": "Aurélien",
+            "lastName": "Tchouaméni",
+            "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/tchoua.jpg-1772017810040-66339328.jpg",
+            "phone": "",
+            "address": "",
+            "city": "",
+            "birthdate": "2000-01-26T00:00:00.000Z",
+            "birthPlace": "Rouen (France)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "ab87d260-95fe-4e39-9e9f-a57b71bffb69",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                10,
+                0,
+                0,
+                0,
+                0,
+                10
+              ],
+              "presenceLastMonth": [
+                10,
+                0,
+                0,
+                0,
+                0,
+                10
+              ],
+              "presenceCurrentSeason": [
+                10,
+                0,
+                0,
+                0,
+                0,
+                10
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "49e698e8-a141-4b36-81e8-4fad6a487553",
+        "categoryGroupId": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-03T16:29:37.704Z",
+        "player": {
+          "userId": "49e698e8-a141-4b36-81e8-4fad6a487553",
+          "post": "MDC",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "49e698e8-a141-4b36-81e8-4fad6a487553",
+            "email": null,
+            "firstName": "Youssouf",
+            "lastName": "Fofana",
+            "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/fofana.jpg-1772018398165-71450195.jpg",
+            "phone": "",
+            "address": "",
+            "city": "",
+            "birthdate": "1999-01-09T00:00:00.000Z",
+            "birthPlace": "Paris (France)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "49e698e8-a141-4b36-81e8-4fad6a487553",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                9,
+                0,
+                0,
+                0,
+                0,
+                9
+              ],
+              "presenceLastMonth": [
+                9,
+                0,
+                0,
+                0,
+                0,
+                9
+              ],
+              "presenceCurrentSeason": [
+                9,
+                0,
+                0,
+                0,
+                0,
+                9
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "9d5e3635-9b08-4dad-9e3e-24789bbbfca2",
+        "categoryGroupId": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-03T16:29:37.785Z",
+        "player": {
+          "userId": "9d5e3635-9b08-4dad-9e3e-24789bbbfca2",
+          "post": "AD",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "9d5e3635-9b08-4dad-9e3e-24789bbbfca2",
+            "email": null,
+            "firstName": "Kingsley",
+            "lastName": "Coman",
+            "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/coman.jpg-1772018017187-823824322.jpg",
+            "phone": "",
+            "address": "",
+            "city": "",
+            "birthdate": "1996-06-12T00:00:00.000Z",
+            "birthPlace": "Paris (France)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "9d5e3635-9b08-4dad-9e3e-24789bbbfca2",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                8,
+                0,
+                1,
+                0,
+                0,
+                9
+              ],
+              "presenceLastMonth": [
+                8,
+                0,
+                1,
+                0,
+                0,
+                9
+              ],
+              "presenceCurrentSeason": [
+                8,
+                0,
+                1,
+                0,
+                0,
+                9
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "dd342e9a-debc-41e2-b4e0-c2641ceeef45",
+        "categoryGroupId": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-03T16:29:37.795Z",
+        "player": {
+          "userId": "dd342e9a-debc-41e2-b4e0-c2641ceeef45",
+          "post": "AG",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "dd342e9a-debc-41e2-b4e0-c2641ceeef45",
+            "email": null,
+            "firstName": "Kylian",
+            "lastName": "Mbappé",
+            "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/kyks.jpg-1772018036179-544380539.jpg",
+            "phone": "",
+            "address": "",
+            "city": "",
+            "birthdate": "1998-12-19T00:00:00.000Z",
+            "birthPlace": "Paris (France)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "dd342e9a-debc-41e2-b4e0-c2641ceeef45",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                10,
+                0,
+                0,
+                0,
+                0,
+                10
+              ],
+              "presenceLastMonth": [
+                10,
+                0,
+                0,
+                0,
+                0,
+                10
+              ],
+              "presenceCurrentSeason": [
+                10,
+                0,
+                0,
+                0,
+                0,
+                10
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "c46e45e8-23b6-4804-b2fd-1e5d58b78303",
+        "categoryGroupId": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-03T16:29:37.804Z",
+        "player": {
+          "userId": "c46e45e8-23b6-4804-b2fd-1e5d58b78303",
+          "post": "AG",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "c46e45e8-23b6-4804-b2fd-1e5d58b78303",
+            "email": null,
+            "firstName": "Bradley",
+            "lastName": "Barcola",
+            "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/barcola.jpg-1772017474101-929806112.jpg",
+            "phone": "",
+            "address": "",
+            "city": "",
+            "birthdate": "2002-09-01T00:00:00.000Z",
+            "birthPlace": "Villeurbanne (France)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "c46e45e8-23b6-4804-b2fd-1e5d58b78303",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                9,
+                0,
+                0,
+                0,
+                0,
+                9
+              ],
+              "presenceLastMonth": [
+                9,
+                0,
+                0,
+                0,
+                0,
+                9
+              ],
+              "presenceCurrentSeason": [
+                9,
+                0,
+                0,
+                0,
+                0,
+                9
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "d3dcbfff-1ecf-4164-ab6d-39e43d6c989d",
+        "categoryGroupId": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-25T11:37:13.932Z",
+        "player": {
+          "userId": "d3dcbfff-1ecf-4164-ab6d-39e43d6c989d",
+          "post": "GB",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "d3dcbfff-1ecf-4164-ab6d-39e43d6c989d",
+            "email": null,
+            "firstName": "Alphonse ",
+            "lastName": "Areola",
+            "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/aerola.jpg-1772019406328-613657647.jpg",
+            "phone": "",
+            "address": "",
+            "city": "",
+            "birthdate": "1993-02-27T00:00:00.000Z",
+            "birthPlace": null,
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "d3dcbfff-1ecf-4164-ab6d-39e43d6c989d",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                10,
+                0,
+                0,
+                0,
+                0,
+                10
+              ],
+              "presenceLastMonth": [
+                10,
+                0,
+                0,
+                0,
+                0,
+                10
+              ],
+              "presenceCurrentSeason": [
+                10,
+                0,
+                0,
+                0,
+                0,
+                10
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "6c2483fe-a3c3-4541-a39e-32a90f19c559",
+        "categoryGroupId": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-25T11:38:25.341Z",
+        "player": {
+          "userId": "6c2483fe-a3c3-4541-a39e-32a90f19c559",
+          "post": "LD",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "6c2483fe-a3c3-4541-a39e-32a90f19c559",
+            "email": null,
+            "firstName": "Jonathan ",
+            "lastName": "Clauss",
+            "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/clauss.jpg-1772019502359-800443381.jpg",
+            "phone": "",
+            "address": "",
+            "city": "",
+            "birthdate": "1992-09-25T00:00:00.000Z",
+            "birthPlace": null,
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "6c2483fe-a3c3-4541-a39e-32a90f19c559",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                9,
+                1,
+                0,
+                0,
+                0,
+                10
+              ],
+              "presenceLastMonth": [
+                9,
+                1,
+                0,
+                0,
+                0,
+                10
+              ],
+              "presenceCurrentSeason": [
+                9,
+                1,
+                0,
+                0,
+                0,
+                10
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "f18b0d8a-1136-4a21-a501-3c0f9b9de351",
+        "categoryGroupId": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-25T11:39:19.053Z",
+        "player": {
+          "userId": "f18b0d8a-1136-4a21-a501-3c0f9b9de351",
+          "post": "MOC",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "f18b0d8a-1136-4a21-a501-3c0f9b9de351",
+            "email": null,
+            "firstName": "Antoine ",
+            "lastName": "Griezmann",
+            "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/griezmann.jpg-1772019557570-523688009.jpg",
+            "phone": "",
+            "address": "",
+            "city": "",
+            "birthdate": "1992-03-21T00:00:00.000Z",
+            "birthPlace": null,
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "f18b0d8a-1136-4a21-a501-3c0f9b9de351",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                8,
+                0,
+                1,
+                0,
+                1,
+                10
+              ],
+              "presenceLastMonth": [
+                8,
+                0,
+                1,
+                0,
+                1,
+                10
+              ],
+              "presenceCurrentSeason": [
+                8,
+                0,
+                1,
+                0,
+                1,
+                10
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "08b05fa9-e541-488d-8a28-0661dda0ed77",
+        "categoryGroupId": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-25T11:40:17.679Z",
+        "player": {
+          "userId": "08b05fa9-e541-488d-8a28-0661dda0ed77",
+          "post": "BU",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "08b05fa9-e541-488d-8a28-0661dda0ed77",
+            "email": null,
+            "firstName": "Olivier ",
+            "lastName": "Giroud",
+            "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/giroud.jpg-1772019616627-88113715.jpg",
+            "phone": "",
+            "address": "",
+            "city": "",
+            "birthdate": "1986-09-30T00:00:00.000Z",
+            "birthPlace": null,
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "08b05fa9-e541-488d-8a28-0661dda0ed77",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                9,
+                0,
+                0,
+                0,
+                0,
+                9
+              ],
+              "presenceLastMonth": [
+                9,
+                0,
+                0,
+                0,
+                0,
+                9
+              ],
+              "presenceCurrentSeason": [
+                9,
+                0,
+                0,
+                0,
+                0,
+                9
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "a3705f1a-2041-4b6d-ba54-0a40e497c2aa",
+        "categoryGroupId": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-25T11:41:15.007Z",
+        "player": {
+          "userId": "a3705f1a-2041-4b6d-ba54-0a40e497c2aa",
+          "post": "MDC",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "a3705f1a-2041-4b6d-ba54-0a40e497c2aa",
+            "email": null,
+            "firstName": "N’Golo ",
+            "lastName": "Kanté",
+            "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/kante.jpg-1772019673703-176717000.jpg",
+            "phone": "",
+            "address": "",
+            "city": "",
+            "birthdate": "1991-03-25T00:00:00.000Z",
+            "birthPlace": null,
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "a3705f1a-2041-4b6d-ba54-0a40e497c2aa",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                9,
+                1,
+                0,
+                0,
+                0,
+                10
+              ],
+              "presenceLastMonth": [
+                9,
+                1,
+                0,
+                0,
+                0,
+                10
+              ],
+              "presenceCurrentSeason": [
+                9,
+                1,
+                0,
+                0,
+                0,
+                10
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "ca15dda9-f984-40c8-9753-f252ec74ff8d",
+        "categoryGroupId": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-25T11:43:02.566Z",
+        "player": {
+          "userId": "ca15dda9-f984-40c8-9753-f252ec74ff8d",
+          "post": "LG",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "ca15dda9-f984-40c8-9753-f252ec74ff8d",
+            "email": null,
+            "firstName": "Ferland",
+            "lastName": "Mendy",
+            "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/mendy.jpg-1772019781300-909754618.jpg",
+            "phone": "",
+            "address": "",
+            "city": "",
+            "birthdate": "1995-06-08T00:00:00.000Z",
+            "birthPlace": null,
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "ca15dda9-f984-40c8-9753-f252ec74ff8d",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                10,
+                0,
+                0,
+                0,
+                0,
+                10
+              ],
+              "presenceLastMonth": [
+                10,
+                0,
+                0,
+                0,
+                0,
+                10
+              ],
+              "presenceCurrentSeason": [
+                10,
+                0,
+                0,
+                0,
+                0,
+                10
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "79918f95-9fa3-4c22-acac-7a18382c593b",
+        "categoryGroupId": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-25T11:44:05.427Z",
+        "player": {
+          "userId": "79918f95-9fa3-4c22-acac-7a18382c593b",
+          "post": "MDC",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "79918f95-9fa3-4c22-acac-7a18382c593b",
+            "email": null,
+            "firstName": "Warren",
+            "lastName": "Zaïre-Emery",
+            "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/warren.jpg-1772019844518-525760585.jpg",
+            "phone": "",
+            "address": "",
+            "city": "",
+            "birthdate": "2006-03-08T00:00:00.000Z",
+            "birthPlace": null,
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "79918f95-9fa3-4c22-acac-7a18382c593b",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                10,
+                0,
+                0,
+                0,
+                0,
+                10
+              ],
+              "presenceLastMonth": [
+                10,
+                0,
+                0,
+                0,
+                0,
+                10
+              ],
+              "presenceCurrentSeason": [
+                10,
+                0,
+                0,
+                0,
+                0,
+                10
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      }
+    ],
+    "trainers": [
+      {
+        "trainerId": "c2326f81-2411-4ad3-94bd-ecb08efacd62",
+        "categoryGroupId": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-25T12:09:11.369Z",
+        "trainer": {
+          "userId": "c2326f81-2411-4ad3-94bd-ecb08efacd62",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "user": {
+            "id": "c2326f81-2411-4ad3-94bd-ecb08efacd62",
+            "email": "deschamps@ismart-club.com",
+            "firstName": "Didier ",
+            "lastName": "Deschamps",
+            "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/deschamps.jpg-1772021335378-699691971.jpg",
+            "phone": "",
+            "address": "",
+            "city": "",
+            "birthdate": "1968-10-15T00:00:00.000Z",
+            "birthPlace": null,
+            "nationality": null
+          }
+        }
+      },
+      {
+        "trainerId": "69ed24b8-e5db-465e-978c-d9e872df2d44",
+        "categoryGroupId": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-25T12:10:53.865Z",
+        "trainer": {
+          "userId": "69ed24b8-e5db-465e-978c-d9e872df2d44",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "user": {
+            "id": "69ed24b8-e5db-465e-978c-d9e872df2d44",
+            "email": "stephan@ismart-club.com",
+            "firstName": "Guy ",
+            "lastName": "Stéphan",
+            "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/stephan.jpg-1772021436411-175034673.jpg",
+            "phone": "",
+            "address": "",
+            "city": "",
+            "birthdate": "1957-10-15T00:00:00.000Z",
+            "birthPlace": null,
+            "nationality": null
+          }
+        }
+      }
+    ],
+    "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021363950-303102182.jpg",
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "adminsList": []
+  },
+  "c3ca020f-9b3f-4624-aa0e-e2e1470e0ffc": {
+    "id": "c3ca020f-9b3f-4624-aa0e-e2e1470e0ffc",
+    "name": "Groupe B",
+    "description": "",
+    "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+    "category": {
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae"
+    },
+    "players": [],
+    "trainers": [],
+    "picture": null,
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "adminsList": []
+  },
+  "6378ce1c-407a-4fb6-92ee-c0ee32f286cf": {
+    "id": "6378ce1c-407a-4fb6-92ee-c0ee32f286cf",
+    "name": "Groupe A",
+    "description": null,
+    "categoryId": "ef227767-5bfb-4b03-8dcd-fcb6ff99996b",
+    "category": {
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae"
+    },
+    "players": [
+      {
+        "playerId": "d8d39d3e-b9e2-4eb5-ab44-71904898513f",
+        "categoryGroupId": "6378ce1c-407a-4fb6-92ee-c0ee32f286cf",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-02T16:19:00.334Z",
+        "player": {
+          "userId": "d8d39d3e-b9e2-4eb5-ab44-71904898513f",
+          "post": "GB",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "d8d39d3e-b9e2-4eb5-ab44-71904898513f",
+            "email": null,
+            "firstName": "Mike",
+            "lastName": "Maignan",
+            "picture": "https://pprodback.ismart-club.com/public/player-avatar.png",
+            "phone": null,
+            "address": null,
+            "city": null,
+            "birthdate": "1995-07-02T00:00:00.000Z",
+            "birthPlace": "Cayenne (Guyane)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "d8d39d3e-b9e2-4eb5-ab44-71904898513f",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceLastMonth": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceCurrentSeason": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "7ed62639-af67-4122-a11e-8a28e099df43",
+        "categoryGroupId": "6378ce1c-407a-4fb6-92ee-c0ee32f286cf",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-02T16:19:00.363Z",
+        "player": {
+          "userId": "7ed62639-af67-4122-a11e-8a28e099df43",
+          "post": "GB",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "7ed62639-af67-4122-a11e-8a28e099df43",
+            "email": null,
+            "firstName": "Brice",
+            "lastName": "Samba",
+            "picture": "https://pprodback.ismart-club.com/public/player-avatar.png",
+            "phone": null,
+            "address": null,
+            "city": null,
+            "birthdate": "1994-04-24T00:00:00.000Z",
+            "birthPlace": "Sedan (France)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "7ed62639-af67-4122-a11e-8a28e099df43",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceLastMonth": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceCurrentSeason": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "a1ff85bd-cf90-4d03-b9da-a3f3790fd069",
+        "categoryGroupId": "6378ce1c-407a-4fb6-92ee-c0ee32f286cf",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-02T16:19:00.380Z",
+        "player": {
+          "userId": "a1ff85bd-cf90-4d03-b9da-a3f3790fd069",
+          "post": "GB",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "a1ff85bd-cf90-4d03-b9da-a3f3790fd069",
+            "email": null,
+            "firstName": "Lucas",
+            "lastName": "Chevalier",
+            "picture": "https://pprodback.ismart-club.com/public/player-avatar.png",
+            "phone": null,
+            "address": null,
+            "city": null,
+            "birthdate": "2001-11-05T00:00:00.000Z",
+            "birthPlace": "Calais (France)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "a1ff85bd-cf90-4d03-b9da-a3f3790fd069",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceLastMonth": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceCurrentSeason": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "d07322d7-9aef-4cdc-8585-47f8c418c4fa",
+        "categoryGroupId": "6378ce1c-407a-4fb6-92ee-c0ee32f286cf",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-02T16:19:00.392Z",
+        "player": {
+          "userId": "d07322d7-9aef-4cdc-8585-47f8c418c4fa",
+          "post": "DC",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "d07322d7-9aef-4cdc-8585-47f8c418c4fa",
+            "email": null,
+            "firstName": "William",
+            "lastName": "Saliba",
+            "picture": "https://pprodback.ismart-club.com/public/player-avatar.png",
+            "phone": null,
+            "address": null,
+            "city": null,
+            "birthdate": "2001-03-23T00:00:00.000Z",
+            "birthPlace": "Bondy (France)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "d07322d7-9aef-4cdc-8585-47f8c418c4fa",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceLastMonth": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceCurrentSeason": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "7d08bd29-343e-4a08-ba68-49bcac88688c",
+        "categoryGroupId": "6378ce1c-407a-4fb6-92ee-c0ee32f286cf",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-02T16:19:00.405Z",
+        "player": {
+          "userId": "7d08bd29-343e-4a08-ba68-49bcac88688c",
+          "post": "DC",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "7d08bd29-343e-4a08-ba68-49bcac88688c",
+            "email": null,
+            "firstName": "Dayot",
+            "lastName": "Upamecano",
+            "picture": "https://pprodback.ismart-club.com/public/player-avatar.png",
+            "phone": null,
+            "address": null,
+            "city": null,
+            "birthdate": "1998-10-26T00:00:00.000Z",
+            "birthPlace": "Évreux (France)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "7d08bd29-343e-4a08-ba68-49bcac88688c",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceLastMonth": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceCurrentSeason": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "5c1763d8-dd9a-438d-9165-f74ee48b294f",
+        "categoryGroupId": "6378ce1c-407a-4fb6-92ee-c0ee32f286cf",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-02T16:19:00.416Z",
+        "player": {
+          "userId": "5c1763d8-dd9a-438d-9165-f74ee48b294f",
+          "post": "DC",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "5c1763d8-dd9a-438d-9165-f74ee48b294f",
+            "email": null,
+            "firstName": "Ibrahima",
+            "lastName": "Konaté",
+            "picture": "https://pprodback.ismart-club.com/public/player-avatar.png",
+            "phone": null,
+            "address": null,
+            "city": null,
+            "birthdate": "1999-05-24T00:00:00.000Z",
+            "birthPlace": "Paris (France)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "5c1763d8-dd9a-438d-9165-f74ee48b294f",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceLastMonth": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceCurrentSeason": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "c21f1f5a-bd19-4321-a79a-90b03b2e7d4d",
+        "categoryGroupId": "6378ce1c-407a-4fb6-92ee-c0ee32f286cf",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-02T16:19:00.428Z",
+        "player": {
+          "userId": "c21f1f5a-bd19-4321-a79a-90b03b2e7d4d",
+          "post": "DC",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "c21f1f5a-bd19-4321-a79a-90b03b2e7d4d",
+            "email": null,
+            "firstName": "Benoît",
+            "lastName": "Badiashile",
+            "picture": "https://pprodback.ismart-club.com/public/player-avatar.png",
+            "phone": null,
+            "address": null,
+            "city": null,
+            "birthdate": "2001-03-25T00:00:00.000Z",
+            "birthPlace": "Limoges (France)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "c21f1f5a-bd19-4321-a79a-90b03b2e7d4d",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceLastMonth": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceCurrentSeason": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "336861ed-9002-43be-9bd3-38afded33073",
+        "categoryGroupId": "6378ce1c-407a-4fb6-92ee-c0ee32f286cf",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-02T16:19:00.440Z",
+        "player": {
+          "userId": "336861ed-9002-43be-9bd3-38afded33073",
+          "post": "LG",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "336861ed-9002-43be-9bd3-38afded33073",
+            "email": null,
+            "firstName": "Theo",
+            "lastName": "Hernandez",
+            "picture": "https://pprodback.ismart-club.com/public/player-avatar.png",
+            "phone": null,
+            "address": null,
+            "city": null,
+            "birthdate": "1997-10-05T00:00:00.000Z",
+            "birthPlace": "Marseille (France)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "336861ed-9002-43be-9bd3-38afded33073",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceLastMonth": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceCurrentSeason": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "f50b1a41-5908-4c24-a300-096dd57e0b9d",
+        "categoryGroupId": "6378ce1c-407a-4fb6-92ee-c0ee32f286cf",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-02T16:19:00.450Z",
+        "player": {
+          "userId": "f50b1a41-5908-4c24-a300-096dd57e0b9d",
+          "post": "LG",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "f50b1a41-5908-4c24-a300-096dd57e0b9d",
+            "email": null,
+            "firstName": "Lucas",
+            "lastName": "Hernandez",
+            "picture": "https://pprodback.ismart-club.com/public/player-avatar.png",
+            "phone": null,
+            "address": null,
+            "city": null,
+            "birthdate": "1996-02-13T00:00:00.000Z",
+            "birthPlace": "Marseille (France)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "f50b1a41-5908-4c24-a300-096dd57e0b9d",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceLastMonth": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceCurrentSeason": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "d8b525d2-aa24-4eee-a52b-20ea8c425b79",
+        "categoryGroupId": "6378ce1c-407a-4fb6-92ee-c0ee32f286cf",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-02T16:19:00.461Z",
+        "player": {
+          "userId": "d8b525d2-aa24-4eee-a52b-20ea8c425b79",
+          "post": "LD",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "d8b525d2-aa24-4eee-a52b-20ea8c425b79",
+            "email": null,
+            "firstName": "Jules",
+            "lastName": "Koundé",
+            "picture": "https://pprodback.ismart-club.com/public/player-avatar.png",
+            "phone": null,
+            "address": null,
+            "city": null,
+            "birthdate": "1998-11-11T00:00:00.000Z",
+            "birthPlace": "Paris (France)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "d8b525d2-aa24-4eee-a52b-20ea8c425b79",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceLastMonth": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceCurrentSeason": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "709368f1-e9b7-4cf4-8223-2547590a7e82",
+        "categoryGroupId": "6378ce1c-407a-4fb6-92ee-c0ee32f286cf",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-02T16:19:00.472Z",
+        "player": {
+          "userId": "709368f1-e9b7-4cf4-8223-2547590a7e82",
+          "post": "LD",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "709368f1-e9b7-4cf4-8223-2547590a7e82",
+            "email": null,
+            "firstName": "Benjamin",
+            "lastName": "Pavard",
+            "picture": "https://pprodback.ismart-club.com/public/player-avatar.png",
+            "phone": null,
+            "address": null,
+            "city": null,
+            "birthdate": "1996-03-27T00:00:00.000Z",
+            "birthPlace": "Maubeuge (France)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "709368f1-e9b7-4cf4-8223-2547590a7e82",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceLastMonth": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceCurrentSeason": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "e9e50e22-f12d-4c61-a515-f764dbcd9580",
+        "categoryGroupId": "6378ce1c-407a-4fb6-92ee-c0ee32f286cf",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-02T16:19:00.482Z",
+        "player": {
+          "userId": "e9e50e22-f12d-4c61-a515-f764dbcd9580",
+          "post": "LD",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "e9e50e22-f12d-4c61-a515-f764dbcd9580",
+            "email": null,
+            "firstName": "Malo",
+            "lastName": "Gusto",
+            "picture": "https://pprodback.ismart-club.com/public/player-avatar.png",
+            "phone": null,
+            "address": null,
+            "city": null,
+            "birthdate": "2003-05-18T00:00:00.000Z",
+            "birthPlace": "Décines-Charpieu (France)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "e9e50e22-f12d-4c61-a515-f764dbcd9580",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceLastMonth": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceCurrentSeason": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "fe4e3518-5be4-4b08-8bb4-0f7fdab40b81",
+        "categoryGroupId": "6378ce1c-407a-4fb6-92ee-c0ee32f286cf",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-02T16:19:00.492Z",
+        "player": {
+          "userId": "fe4e3518-5be4-4b08-8bb4-0f7fdab40b81",
+          "post": "MDC",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "fe4e3518-5be4-4b08-8bb4-0f7fdab40b81",
+            "email": null,
+            "firstName": "Aurélien",
+            "lastName": "Tchouaméni",
+            "picture": "https://pprodback.ismart-club.com/public/player-avatar.png",
+            "phone": null,
+            "address": null,
+            "city": null,
+            "birthdate": "2000-01-26T00:00:00.000Z",
+            "birthPlace": "Rouen (France)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "fe4e3518-5be4-4b08-8bb4-0f7fdab40b81",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceLastMonth": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceCurrentSeason": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "c0cc582e-d6e6-4508-af5c-cc0f1007447e",
+        "categoryGroupId": "6378ce1c-407a-4fb6-92ee-c0ee32f286cf",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-02T16:19:00.503Z",
+        "player": {
+          "userId": "c0cc582e-d6e6-4508-af5c-cc0f1007447e",
+          "post": "MDC",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "c0cc582e-d6e6-4508-af5c-cc0f1007447e",
+            "email": null,
+            "firstName": "Youssouf",
+            "lastName": "Fofana",
+            "picture": "https://pprodback.ismart-club.com/public/player-avatar.png",
+            "phone": null,
+            "address": null,
+            "city": null,
+            "birthdate": "1999-01-09T00:00:00.000Z",
+            "birthPlace": "Paris (France)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "c0cc582e-d6e6-4508-af5c-cc0f1007447e",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceLastMonth": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceCurrentSeason": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "9b37333a-b7fd-4b5c-9767-739abaa49536",
+        "categoryGroupId": "6378ce1c-407a-4fb6-92ee-c0ee32f286cf",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-02T16:19:00.512Z",
+        "player": {
+          "userId": "9b37333a-b7fd-4b5c-9767-739abaa49536",
+          "post": "MDC",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "9b37333a-b7fd-4b5c-9767-739abaa49536",
+            "email": null,
+            "firstName": "Eduardo",
+            "lastName": "Camavinga",
+            "picture": "https://pprodback.ismart-club.com/public/player-avatar.png",
+            "phone": null,
+            "address": null,
+            "city": null,
+            "birthdate": "2002-11-09T00:00:00.000Z",
+            "birthPlace": "Cabinda (Angola)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "9b37333a-b7fd-4b5c-9767-739abaa49536",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceLastMonth": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceCurrentSeason": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "45d540fc-d555-48ed-9e1e-489ab6716d8d",
+        "categoryGroupId": "6378ce1c-407a-4fb6-92ee-c0ee32f286cf",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-02T16:19:00.521Z",
+        "player": {
+          "userId": "45d540fc-d555-48ed-9e1e-489ab6716d8d",
+          "post": "MDC",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "45d540fc-d555-48ed-9e1e-489ab6716d8d",
+            "email": null,
+            "firstName": "Adrien",
+            "lastName": "Rabiot",
+            "picture": "https://pprodback.ismart-club.com/public/player-avatar.png",
+            "phone": null,
+            "address": null,
+            "city": null,
+            "birthdate": "1995-04-02T00:00:00.000Z",
+            "birthPlace": "Saint-Maurice (France)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "45d540fc-d555-48ed-9e1e-489ab6716d8d",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceLastMonth": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceCurrentSeason": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "84c6ffc9-8e9f-4bab-8002-e4b696a295fa",
+        "categoryGroupId": "6378ce1c-407a-4fb6-92ee-c0ee32f286cf",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-02T16:19:00.531Z",
+        "player": {
+          "userId": "84c6ffc9-8e9f-4bab-8002-e4b696a295fa",
+          "post": "MDC",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "84c6ffc9-8e9f-4bab-8002-e4b696a295fa",
+            "email": null,
+            "firstName": "Manu",
+            "lastName": "Koné",
+            "picture": "https://pprodback.ismart-club.com/public/player-avatar.png",
+            "phone": null,
+            "address": null,
+            "city": null,
+            "birthdate": "2001-05-16T00:00:00.000Z",
+            "birthPlace": "Colombes (France)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "84c6ffc9-8e9f-4bab-8002-e4b696a295fa",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceLastMonth": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceCurrentSeason": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "26213097-64bc-4793-8773-9291ca0d2e55",
+        "categoryGroupId": "6378ce1c-407a-4fb6-92ee-c0ee32f286cf",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-02T16:19:00.543Z",
+        "player": {
+          "userId": "26213097-64bc-4793-8773-9291ca0d2e55",
+          "post": "MOC",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "26213097-64bc-4793-8773-9291ca0d2e55",
+            "email": null,
+            "firstName": "Christopher",
+            "lastName": "Nkunku",
+            "picture": "https://pprodback.ismart-club.com/public/player-avatar.png",
+            "phone": null,
+            "address": null,
+            "city": null,
+            "birthdate": "1997-11-13T00:00:00.000Z",
+            "birthPlace": "Lagny-sur-Marne (France)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "26213097-64bc-4793-8773-9291ca0d2e55",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceLastMonth": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceCurrentSeason": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "a1c88eac-9ba1-44e7-b41d-9d50393a2493",
+        "categoryGroupId": "6378ce1c-407a-4fb6-92ee-c0ee32f286cf",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-02T16:19:00.555Z",
+        "player": {
+          "userId": "a1c88eac-9ba1-44e7-b41d-9d50393a2493",
+          "post": "MOC",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "a1c88eac-9ba1-44e7-b41d-9d50393a2493",
+            "email": null,
+            "firstName": "Rayan",
+            "lastName": "Cherki",
+            "picture": "https://pprodback.ismart-club.com/public/player-avatar.png",
+            "phone": null,
+            "address": null,
+            "city": null,
+            "birthdate": "2003-08-16T00:00:00.000Z",
+            "birthPlace": "Lyon (France)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "a1c88eac-9ba1-44e7-b41d-9d50393a2493",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceLastMonth": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceCurrentSeason": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "d9082997-6444-41a1-b883-834d56175cf3",
+        "categoryGroupId": "6378ce1c-407a-4fb6-92ee-c0ee32f286cf",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-02T16:19:00.564Z",
+        "player": {
+          "userId": "d9082997-6444-41a1-b883-834d56175cf3",
+          "post": "MOC",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "d9082997-6444-41a1-b883-834d56175cf3",
+            "email": null,
+            "firstName": "Désiré",
+            "lastName": "Doué",
+            "picture": "https://pprodback.ismart-club.com/public/player-avatar.png",
+            "phone": null,
+            "address": null,
+            "city": null,
+            "birthdate": "2005-06-02T00:00:00.000Z",
+            "birthPlace": "Angers (France)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "d9082997-6444-41a1-b883-834d56175cf3",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceLastMonth": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceCurrentSeason": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "8b132b7c-d80e-418f-94fc-98200dc3da22",
+        "categoryGroupId": "6378ce1c-407a-4fb6-92ee-c0ee32f286cf",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-02T16:19:00.575Z",
+        "player": {
+          "userId": "8b132b7c-d80e-418f-94fc-98200dc3da22",
+          "post": "AD",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "8b132b7c-d80e-418f-94fc-98200dc3da22",
+            "email": null,
+            "firstName": "Ousmane",
+            "lastName": "Dembélé",
+            "picture": "https://pprodback.ismart-club.com/public/player-avatar.png",
+            "phone": null,
+            "address": null,
+            "city": null,
+            "birthdate": "1997-05-14T00:00:00.000Z",
+            "birthPlace": "Vernon (France)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "8b132b7c-d80e-418f-94fc-98200dc3da22",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceLastMonth": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceCurrentSeason": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "65685e99-dec3-44c3-93cd-eafa83e2e230",
+        "categoryGroupId": "6378ce1c-407a-4fb6-92ee-c0ee32f286cf",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-02T16:19:00.587Z",
+        "player": {
+          "userId": "65685e99-dec3-44c3-93cd-eafa83e2e230",
+          "post": "AD",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "65685e99-dec3-44c3-93cd-eafa83e2e230",
+            "email": null,
+            "firstName": "Kingsley",
+            "lastName": "Coman",
+            "picture": "https://pprodback.ismart-club.com/public/player-avatar.png",
+            "phone": null,
+            "address": null,
+            "city": null,
+            "birthdate": "1996-06-12T00:00:00.000Z",
+            "birthPlace": "Paris (France)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "65685e99-dec3-44c3-93cd-eafa83e2e230",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceLastMonth": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceCurrentSeason": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "6faa8291-00c3-406a-a3ce-e621e296f13d",
+        "categoryGroupId": "6378ce1c-407a-4fb6-92ee-c0ee32f286cf",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-02T16:19:00.600Z",
+        "player": {
+          "userId": "6faa8291-00c3-406a-a3ce-e621e296f13d",
+          "post": "AG",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "6faa8291-00c3-406a-a3ce-e621e296f13d",
+            "email": null,
+            "firstName": "Kylian",
+            "lastName": "Mbappé",
+            "picture": "https://pprodback.ismart-club.com/public/player-avatar.png",
+            "phone": null,
+            "address": null,
+            "city": null,
+            "birthdate": "1998-12-19T00:00:00.000Z",
+            "birthPlace": "Paris (France)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "6faa8291-00c3-406a-a3ce-e621e296f13d",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceLastMonth": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceCurrentSeason": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "6184050e-0bec-4ec6-bcf7-5aa42fe3efd7",
+        "categoryGroupId": "6378ce1c-407a-4fb6-92ee-c0ee32f286cf",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-02T16:19:00.611Z",
+        "player": {
+          "userId": "6184050e-0bec-4ec6-bcf7-5aa42fe3efd7",
+          "post": "AG",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "6184050e-0bec-4ec6-bcf7-5aa42fe3efd7",
+            "email": null,
+            "firstName": "Bradley",
+            "lastName": "Barcola",
+            "picture": "https://pprodback.ismart-club.com/public/player-avatar.png",
+            "phone": null,
+            "address": null,
+            "city": null,
+            "birthdate": "2002-09-01T00:00:00.000Z",
+            "birthPlace": "Villeurbanne (France)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "6184050e-0bec-4ec6-bcf7-5aa42fe3efd7",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceLastMonth": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceCurrentSeason": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "955009c0-3726-421f-9894-0181c843f4ac",
+        "categoryGroupId": "6378ce1c-407a-4fb6-92ee-c0ee32f286cf",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-02T16:19:00.621Z",
+        "player": {
+          "userId": "955009c0-3726-421f-9894-0181c843f4ac",
+          "post": "AT",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "955009c0-3726-421f-9894-0181c843f4ac",
+            "email": null,
+            "firstName": "Marcus",
+            "lastName": "Thuram",
+            "picture": "https://pprodback.ismart-club.com/public/player-avatar.png",
+            "phone": null,
+            "address": null,
+            "city": null,
+            "birthdate": "1997-08-05T00:00:00.000Z",
+            "birthPlace": "Parme (Italie)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "955009c0-3726-421f-9894-0181c843f4ac",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceLastMonth": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceCurrentSeason": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "11ba2fcb-240f-4a9c-ac63-f08a1684d440",
+        "categoryGroupId": "6378ce1c-407a-4fb6-92ee-c0ee32f286cf",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-02T16:19:00.631Z",
+        "player": {
+          "userId": "11ba2fcb-240f-4a9c-ac63-f08a1684d440",
+          "post": "AT",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "11ba2fcb-240f-4a9c-ac63-f08a1684d440",
+            "email": null,
+            "firstName": "Randal",
+            "lastName": "Muani",
+            "picture": "https://pprodback.ismart-club.com/public/player-avatar.png",
+            "phone": null,
+            "address": null,
+            "city": null,
+            "birthdate": "1998-12-04T00:00:00.000Z",
+            "birthPlace": "Bondy (France)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "11ba2fcb-240f-4a9c-ac63-f08a1684d440",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceLastMonth": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceCurrentSeason": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "6a471caa-b6af-4313-baf3-f5ee17e16023",
+        "categoryGroupId": "6378ce1c-407a-4fb6-92ee-c0ee32f286cf",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-02T16:19:00.642Z",
+        "player": {
+          "userId": "6a471caa-b6af-4313-baf3-f5ee17e16023",
+          "post": "AT",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "6a471caa-b6af-4313-baf3-f5ee17e16023",
+            "email": null,
+            "firstName": "Hugo",
+            "lastName": "Ekitike",
+            "picture": "https://pprodback.ismart-club.com/public/player-avatar.png",
+            "phone": null,
+            "address": null,
+            "city": null,
+            "birthdate": "2002-06-19T00:00:00.000Z",
+            "birthPlace": "Reims (France)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "6a471caa-b6af-4313-baf3-f5ee17e16023",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceLastMonth": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceCurrentSeason": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      },
+      {
+        "playerId": "ce6406b6-29c2-44c6-afbe-438811b96b6d",
+        "categoryGroupId": "6378ce1c-407a-4fb6-92ee-c0ee32f286cf",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2026-02-02T16:19:00.650Z",
+        "player": {
+          "userId": "ce6406b6-29c2-44c6-afbe-438811b96b6d",
+          "post": "DC",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "gender": "MALE",
+          "user": {
+            "id": "ce6406b6-29c2-44c6-afbe-438811b96b6d",
+            "email": null,
+            "firstName": "Wesley",
+            "lastName": "Fofana",
+            "picture": "https://pprodback.ismart-club.com/public/player-avatar.png",
+            "phone": null,
+            "address": null,
+            "city": null,
+            "birthdate": "2000-12-16T00:00:00.000Z",
+            "birthPlace": "Marseille (France)",
+            "nationality": null
+          },
+          "stats": [
+            {
+              "playerId": "ce6406b6-29c2-44c6-afbe-438811b96b6d",
+              "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+              "presenceLastWeek": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceLastMonth": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "presenceCurrentSeason": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "fifaCard": []
+            }
+          ]
+        }
+      }
+    ],
+    "trainers": [],
+    "picture": "https://pprodback.ismart-club.com/public/category-avatar.png",
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "adminsList": []
+  },
+  "2c209aec-770f-4773-86b8-e8f53e07c8b3": {
+    "id": "2c209aec-770f-4773-86b8-e8f53e07c8b3",
+    "name": "Groupe A",
+    "description": "",
+    "categoryId": "c6fe37a9-ab2f-493b-a619-d09f8ee93fde",
+    "category": {
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae"
+    },
+    "players": [],
+    "trainers": [
+      {
+        "trainerId": "509e5d0f-6860-4af8-91ae-cab64bd3e56a",
+        "categoryGroupId": "2c209aec-770f-4773-86b8-e8f53e07c8b3",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+        "date": "2025-10-21T16:56:16.856Z",
+        "trainer": {
+          "userId": "509e5d0f-6860-4af8-91ae-cab64bd3e56a",
+          "licenceNumber": null,
+          "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+          "user": {
+            "id": "509e5d0f-6860-4af8-91ae-cab64bd3e56a",
+            "email": "testcoach@ismart-club.com",
+            "firstName": "Coach",
+            "lastName": "Test",
+            "picture": null,
+            "phone": "",
+            "address": "",
+            "city": "",
+            "birthdate": null,
+            "birthPlace": null,
+            "nationality": null
+          }
+        }
+      }
+    ],
+    "picture": null,
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "adminsList": [
+      {
+        "role": {
+          "name": "Dirigeant ",
+          "id": "25da1335-66cd-4c4b-ba14-d49d6441676f"
+        },
+        "admins": [
+          {
+            "id": "94ab3f33-a69c-4ea6-baff-266300388b0e",
+            "firstName": "Papa",
+            "lastName": "Test",
+            "picture": null,
+            "phone": ""
+          }
+        ]
+      }
+    ]
+  },
+  "8b358294-58d9-44da-8231-74acb1d85047": {
+    "id": "8b358294-58d9-44da-8231-74acb1d85047",
+    "name": "Groupe B",
+    "description": "",
+    "categoryId": "c6fe37a9-ab2f-493b-a619-d09f8ee93fde",
+    "category": {
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae"
+    },
+    "players": [],
+    "trainers": [],
+    "picture": null,
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "adminsList": []
+  },
+  "929242df-f023-4c3c-a90e-5325269ed57d": {
+    "id": "929242df-f023-4c3c-a90e-5325269ed57d",
+    "name": "Groupe C",
+    "description": "",
+    "categoryId": "c6fe37a9-ab2f-493b-a619-d09f8ee93fde",
+    "category": {
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae"
+    },
+    "players": [],
+    "trainers": [],
+    "picture": null,
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "adminsList": []
+  },
+  "d348d4fb-8306-449b-8342-771f5bfe9622": {
+    "id": "d348d4fb-8306-449b-8342-771f5bfe9622",
+    "name": "Groupe A",
+    "description": "",
+    "categoryId": "def28afd-d963-43a3-9f38-3f8e31cd1565",
+    "category": {
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae"
+    },
+    "players": [],
+    "trainers": [],
+    "picture": null,
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "adminsList": [
+      {
+        "role": {
+          "name": "Dirigeant ",
+          "id": "25da1335-66cd-4c4b-ba14-d49d6441676f"
+        },
+        "admins": [
+          {
+            "id": "94ab3f33-a69c-4ea6-baff-266300388b0e",
+            "firstName": "Papa",
+            "lastName": "Test",
+            "picture": null,
+            "phone": ""
+          }
+        ]
+      }
+    ]
+  },
+  "edde6494-5401-4a61-995d-0733cdf12bc8": {
+    "id": "edde6494-5401-4a61-995d-0733cdf12bc8",
+    "name": "GROUPE A",
+    "description": "",
+    "categoryId": "c78e159f-f829-49ef-9bdb-55341592bb66",
+    "category": {
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae"
+    },
+    "players": [],
+    "trainers": [],
+    "picture": null,
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "adminsList": []
+  }
+}

@@ -1,0 +1,32 @@
+Budget
+Nouveau Budget
+Historique
+Budget Recettes
+0
+Réel Recettes
+0
+Budget Dépenses
+0
+Réel Dépenses
+0
+Répartition du Budget
+Répartition prévisionnelle
+Vue mensuelle
+Vue globale
+Comparaison prévisionnel vs réel
+2025 - 2026
+2025-07
+2025-08
+2025-09
+2025-10
+2025-11
+2025-12
+2026-01
+2026-02
+2026-03
+2026-04
+2026-05
+2026-06
+Budget RecettesRéel RecettesBudget DépensesRéel Dépenses
+Aucun budget trouvé
+2025-07

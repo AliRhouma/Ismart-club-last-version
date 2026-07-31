@@ -2,6 +2,7 @@ import type { ReactNode } from "react"
 import {
   BookUser,
   CalendarDays,
+  Check,
   Newspaper,
   Trophy,
   Smartphone,
@@ -119,6 +120,34 @@ export function ExplainCard({
       <div className="mt-1.5 flex flex-col gap-1.5 font-body text-[0.8rem] leading-relaxed text-ink-muted">
         {children}
       </div>
+    </div>
+  )
+}
+
+/* ── Confirmation toast (same one the partenaires / offres screens use) ──── */
+export function Toast({
+  msg,
+  id,
+  /** Lets a screen lift the toast over a docked panel of its own. */
+  className,
+}: {
+  msg: string
+  id?: number | string
+  className?: string
+}) {
+  return (
+    <div
+      key={id}
+      role="status"
+      className={cn(
+        "animate-toast-in fixed right-5 bottom-5 z-[120] flex items-center gap-2.5 rounded-md border border-success/30 bg-surface px-4 py-3 shadow-deep",
+        className,
+      )}
+    >
+      <span className="flex size-6 items-center justify-center rounded-full bg-success/15 text-success">
+        <Check size={14} />
+      </span>
+      <span className="font-body text-[0.84rem] text-ink">{msg}</span>
     </div>
   )
 }

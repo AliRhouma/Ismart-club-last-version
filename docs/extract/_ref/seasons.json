@@ -1,0 +1,26 @@
+[
+  {
+    "id": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "name": "2025 - 2026",
+    "endDate": "2026-06-30T00:00:00.000Z",
+    "startDate": "2025-07-01T00:00:00.000Z",
+    "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+    "createdAt": "2025-10-20T16:36:26.222Z",
+    "updatedAt": "2025-10-22T08:58:57.011Z",
+    "type": "MAIN_PERIOD",
+    "isArchived": false,
+    "isCurrent": true
+  },
+  {
+    "id": "ee40d143-aa63-4063-acca-43a3939af5f6",
+    "name": "2024 - 2025",
+    "endDate": "2025-06-30T00:00:00.000Z",
+    "startDate": "2024-07-01T00:00:00.000Z",
+    "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+    "createdAt": "2025-06-21T23:21:49.942Z",
+    "updatedAt": "2025-11-13T16:24:28.404Z",
+    "type": "NORMAL_PERIOD",
+    "isArchived": false,
+    "isCurrent": false
+  }
+]

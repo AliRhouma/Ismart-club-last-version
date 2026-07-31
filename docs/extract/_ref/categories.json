@@ -1,0 +1,251 @@
+[
+  {
+    "id": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+    "name": "FFF",
+    "description": null,
+    "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021836347-935196374.jpg",
+    "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+    "automaticConvocation": false,
+    "convocationLeadHours": null,
+    "gender": "MALE",
+    "colors": [
+      "#0060FD",
+      "#991B1B"
+    ]
+  },
+  {
+    "id": "ef227767-5bfb-4b03-8dcd-fcb6ff99996b",
+    "name": "Senior",
+    "description": null,
+    "picture": "https://pprodback.ismart-club.com/public/category-avatar.png",
+    "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+    "automaticConvocation": false,
+    "convocationLeadHours": null,
+    "gender": "MALE",
+    "colors": []
+  },
+  {
+    "id": "ae6c7288-0ca2-4363-8366-907da8bfddbf",
+    "name": "SENIOR",
+    "description": "",
+    "picture": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae\\general\\16.png-1754323163461-878003652.png",
+    "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+    "automaticConvocation": false,
+    "convocationLeadHours": null,
+    "gender": "MALE",
+    "colors": [
+      "#0EA5E9",
+      "#15803D"
+    ]
+  },
+  {
+    "id": "c6fe37a9-ab2f-493b-a619-d09f8ee93fde",
+    "name": "U10",
+    "description": "",
+    "picture": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae\\general\\5.png-1754322893961-810945686.png",
+    "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+    "automaticConvocation": false,
+    "convocationLeadHours": null,
+    "gender": "MALE",
+    "colors": [
+      "#64748B",
+      "#EA580C"
+    ]
+  },
+  {
+    "id": "def28afd-d963-43a3-9f38-3f8e31cd1565",
+    "name": "U11",
+    "description": "",
+    "picture": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae\\general\\6.png-1754322907057-544170566.png",
+    "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+    "automaticConvocation": false,
+    "convocationLeadHours": null,
+    "gender": "MALE",
+    "colors": [
+      "#0EA5E9",
+      "#15803D"
+    ]
+  },
+  {
+    "id": "d1911d1a-c11a-4b7d-ab65-8ea490c48a7c",
+    "name": "U12",
+    "description": "",
+    "picture": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae\\general\\7.png-1754322920667-286316013.png",
+    "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+    "automaticConvocation": false,
+    "convocationLeadHours": null,
+    "gender": "MALE",
+    "colors": [
+      "#0EA5E9",
+      "#15803D"
+    ]
+  },
+  {
+    "id": "c78e159f-f829-49ef-9bdb-55341592bb66",
+    "name": "U13",
+    "description": "",
+    "picture": null,
+    "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+    "automaticConvocation": false,
+    "convocationLeadHours": null,
+    "gender": "MALE",
+    "colors": [
+      "#0EA5E9",
+      "#15803D"
+    ]
+  },
+  {
+    "id": "2471e159-492a-44a3-976b-414e81d3395e",
+    "name": "U14",
+    "description": "U14",
+    "picture": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae\\general\\9.png-1754323062013-295621441.png",
+    "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+    "automaticConvocation": false,
+    "convocationLeadHours": null,
+    "gender": "MALE",
+    "colors": [
+      "#0EA5E9",
+      "#15803D"
+    ]
+  },
+  {
+    "id": "5fd3b08a-8bb0-4ee6-aa0b-9a4a201995c0",
+    "name": "U15",
+    "description": "",
+    "picture": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae\\general\\10.png-1754323076614-814600344.png",
+    "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+    "automaticConvocation": false,
+    "convocationLeadHours": null,
+    "gender": "MALE",
+    "colors": [
+      "#0EA5E9",
+      "#15803D"
+    ]
+  },
+  {
+    "id": "538670b5-e899-43fb-82b2-2e67f0cc56a0",
+    "name": "U16",
+    "description": "",
+    "picture": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae\\general\\11.png-1754323086053-65692200.png",
+    "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+    "automaticConvocation": false,
+    "convocationLeadHours": null,
+    "gender": "MALE",
+    "colors": [
+      "#0EA5E9",
+      "#15803D"
+    ]
+  },
+  {
+    "id": "c8e213c4-31d6-4ab1-a099-7c25eca53b95",
+    "name": "U17",
+    "description": "",
+    "picture": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae\\general\\12.png-1754323101225-784886866.png",
+    "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+    "automaticConvocation": false,
+    "convocationLeadHours": null,
+    "gender": "MALE",
+    "colors": [
+      "#0EA5E9",
+      "#15803D"
+    ]
+  },
+  {
+    "id": "29e986de-e0c9-457c-bc63-975d3e7b1e6a",
+    "name": "U18",
+    "description": "",
+    "picture": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae\\general\\13.png-1754323187015-987359258.png",
+    "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+    "automaticConvocation": false,
+    "convocationLeadHours": null,
+    "gender": "MALE",
+    "colors": [
+      "#0EA5E9",
+      "#15803D"
+    ]
+  },
+  {
+    "id": "82c7de63-a446-48d6-be79-3d1dd33aaedb",
+    "name": "U19",
+    "description": "",
+    "picture": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae\\general\\14.png-1754323115040-305448228.png",
+    "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+    "automaticConvocation": false,
+    "convocationLeadHours": null,
+    "gender": "MALE",
+    "colors": [
+      "#0EA5E9",
+      "#15803D"
+    ]
+  },
+  {
+    "id": "b58381ee-d225-4888-85bd-213127b837b9",
+    "name": "U20",
+    "description": "",
+    "picture": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae\\general\\15.png-1754323151188-640267117.png",
+    "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+    "automaticConvocation": false,
+    "convocationLeadHours": null,
+    "gender": "MALE",
+    "colors": [
+      "#0EA5E9",
+      "#15803D"
+    ]
+  },
+  {
+    "id": "7908cb9d-c2fd-443f-b652-f75477fb5799",
+    "name": "U6",
+    "description": "",
+    "picture": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae\\general\\1.png-1754322798437-483678449.png",
+    "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+    "automaticConvocation": false,
+    "convocationLeadHours": null,
+    "gender": "MALE",
+    "colors": [
+      "#0EA5E9",
+      "#15803D"
+    ]
+  },
+  {
+    "id": "9c725f34-976a-4fe2-b757-c468d44beb55",
+    "name": "U7",
+    "description": "",
+    "picture": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae\\general\\2.png-1754322847886-68719602.png",
+    "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+    "automaticConvocation": false,
+    "convocationLeadHours": null,
+    "gender": "MALE",
+    "colors": [
+      "#0EA5E9",
+      "#15803D"
+    ]
+  },
+  {
+    "id": "a3856aad-c3ca-4ecc-a0a4-556adac8ec01",
+    "name": "U8",
+    "description": "",
+    "picture": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae\\general\\3.png-1754322866089-18853424.png",
+    "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+    "automaticConvocation": false,
+    "convocationLeadHours": null,
+    "gender": "MALE",
+    "colors": [
+      "#0EA5E9",
+      "#15803D"
+    ]
+  },
+  {
+    "id": "6bb0d2d3-1da3-4e54-b944-6d9e48bf512a",
+    "name": "U9",
+    "description": "",
+    "picture": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae\\general\\4.png-1754322879694-974281937.png",
+    "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+    "automaticConvocation": false,
+    "convocationLeadHours": null,
+    "gender": "MALE",
+    "colors": [
+      "#0EA5E9",
+      "#15803D"
+    ]
+  }
+]

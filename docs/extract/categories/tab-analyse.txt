@@ -1,0 +1,403 @@
+Accueil
+Ressources humaines
+Planification
+Catégories
+Importer des données
+Données Ouvertes
+Pôle Technique
+Analyse et Suivi
+Messagerie
+Communauté
+Structuration
+Finances
+Courrier sortant
+Retour
+Bienvenue à la page de
+FFF(2025 - 2026)
+Informations du groupe
+Joueurs: 25
+Educateurs: 2
+Groupes: 2
+Résultats
+Groupes
+Séances
+Analyse
+Programme annuel
+Personnalisé
+Présence
+Compétition
+Evaluation
+Progression
+Performances
+Analyse IA
+Saison
+Saison 2025 - 2026
+Période
+01 juil. 2025 - 30 juin 2026
+Groupes
+Groupe A
+Groupe B
+Évolution de la présence
+Oct.
+Oct.
+Oct.
+Oct.
+Oct.
+Oct.
+Oct.
+Févr.
+Févr.
+Juin
+0
+25
+50
+100
+Présent
+Absence justifiée
+Absent
+Retard
+Blessé
+Distribution de la présence
+95.2%
+95.2%
+Présent (95.2%)
+Absent (1.2%)
+Absence justifiée (0.8%)
+Retard (1.6%)
+Blessé (1.2%)
+Présences des joueurs
+Nom & Email
+	
+Poste
+	
+PRE
+	
+RTD
+	
+JUS
+	
+ABS
+	
+BLS
+	
+Séances
+
+
+Mike Maignan
+	GB	
+13(87%)
+	
+0(0%)
+	
+2(13%)
+	
+0(0%)
+	
+0(0%)
+	
+
+
+William Saliba
+	DC	
+15(100%)
+	
+0(0%)
+	
+0(0%)
+	
+0(0%)
+	
+0(0%)
+	
+
+
+Dayot Upamecano
+	DC	
+14(93%)
+	
+0(0%)
+	
+0(0%)
+	
+0(0%)
+	
+1(7%)
+	
+
+
+Jules Koundé
+	LD	
+15(100%)
+	
+0(0%)
+	
+0(0%)
+	
+0(0%)
+	
+0(0%)
+	
+
+
+Eduardo Camavinga
+	MDC	
+15(100%)
+	
+0(0%)
+	
+0(0%)
+	
+0(0%)
+	
+0(0%)
+	
+
+
+Adrien Rabiot
+	MDC	
+13(87%)
+	
+1(7%)
+	
+0(0%)
+	
+1(7%)
+	
+0(0%)
+	
+
+
+Ousmane Dembélé
+	AD	
+15(100%)
+	
+0(0%)
+	
+0(0%)
+	
+0(0%)
+	
+0(0%)
+	
+
+
+Marcus Thuram
+	AT	
+14(93%)
+	
+0(0%)
+	
+0(0%)
+	
+0(0%)
+	
+1(7%)
+	
+
+
+Randal Muani
+	AT	
+15(100%)
+	
+0(0%)
+	
+0(0%)
+	
+0(0%)
+	
+0(0%)
+	
+
+
+Brice Samba
+	GB	
+15(100%)
+	
+0(0%)
+	
+0(0%)
+	
+0(0%)
+	
+0(0%)
+	
+Afficher 10
+Page 1
+Historique de la présence
+Séances & Matchs
+	
+Date et heure
+	
+PRÉSENT
+	
+Retard
+	
+ABSENT
+	
+ABSENCE JUSTIFIÉE
+
+
+Séance N°85
+	
+15/06/2026
+18:00
+	
+25
+(100%)
+	
+0
+(0%)
+	
+0
+(0%)
+	
+0
+(0%)
+
+
+Match
+VS Moldavie
+	
+01/05/2026
+11:00
+	
+N/A
+	
+N/A
+	
+N/A
+	
+N/A
+
+
+Match
+VS Roumanie
+	
+01/03/2026
+12:00
+	
+N/A
+	
+N/A
+	
+N/A
+	
+N/A
+
+
+Séance N°47
+	
+18/02/2026
+19:00
+	
+25
+(100%)
+	
+0
+(0%)
+	
+0
+(0%)
+	
+0
+(0%)
+
+
+Séance N°46
+	
+16/02/2026
+19:00
+	
+25
+(100%)
+	
+0
+(0%)
+	
+0
+(0%)
+	
+0
+(0%)
+
+
+Match
+VS Hongrie
+	
+01/01/2026
+12:00
+	
+N/A
+	
+N/A
+	
+N/A
+	
+N/A
+
+
+Match
+VS Estonie
+	
+01/12/2025
+12:00
+	
+N/A
+	
+N/A
+	
+N/A
+	
+N/A
+
+
+Match
+VS Italie
+	
+22/11/2025
+20:00
+	
+N/A
+	
+N/A
+	
+N/A
+	
+N/A
+
+
+Match
+VS Suisse
+	
+15/11/2025
+20:00
+	
+N/A
+	
+N/A
+	
+N/A
+	
+N/A
+
+
+Match
+VS Danemark
+	
+25/10/2025
+19:00
+	
+25
+(100%)
+	
+0
+(0%)
+	
+0
+(0%)
+	
+0
+(0%)
+Afficher 10
+Page 1
+0

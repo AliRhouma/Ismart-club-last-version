@@ -1,0 +1,496 @@
+[
+  {
+    "id": "8ca4ef34-4e72-421d-b523-1d081ffda86d",
+    "name": "Modèle de jeu de position",
+    "description": "Le jeu de position met l'accent sur la maîtrise du ballon pour contrôler le rythme du match et déséquilibrer l'adversaire. Les joueurs doivent être techniquement solides et bien coordonnés pour construire des actions à travers des passes courtes et des mouvements précis",
+    "sourceLanguage": "fr",
+    "translations": {},
+    "categories": [
+      {
+        "id": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+        "name": "FFF",
+        "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+        "description": null,
+        "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021836347-935196374.jpg",
+        "gender": "MALE",
+        "colors": [
+          "#0060FD",
+          "#991B1B"
+        ],
+        "automaticConvocation": false,
+        "convocationLeadHours": null
+      }
+    ],
+    "isActive": true,
+    "season": {
+      "id": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+      "name": "2025 - 2026",
+      "endDate": "2026-06-30T00:00:00.000Z",
+      "startDate": "2025-07-01T00:00:00.000Z",
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+      "type": "MAIN_PERIOD",
+      "isArchived": false,
+      "isCurrent": true
+    },
+    "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/game-projects/image-1782231375927-152219310.png",
+    "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "createdById": null,
+    "isImported": false
+  },
+  {
+    "id": "fd003547-8710-48ca-a842-0f3fbb0fc573",
+    "name": "PROJET DE JEU U10/U11",
+    "description": "Foot à 8",
+    "sourceLanguage": "fr",
+    "translations": {},
+    "categories": [
+      {
+        "id": "d1911d1a-c11a-4b7d-ab65-8ea490c48a7c",
+        "name": "U12",
+        "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+        "description": "",
+        "picture": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae\\general\\7.png-1754322920667-286316013.png",
+        "gender": "MALE",
+        "colors": [
+          "#0EA5E9",
+          "#15803D"
+        ],
+        "automaticConvocation": false,
+        "convocationLeadHours": null
+      },
+      {
+        "id": "def28afd-d963-43a3-9f38-3f8e31cd1565",
+        "name": "U11",
+        "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+        "description": "",
+        "picture": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae\\general\\6.png-1754322907057-544170566.png",
+        "gender": "MALE",
+        "colors": [
+          "#0EA5E9",
+          "#15803D"
+        ],
+        "automaticConvocation": false,
+        "convocationLeadHours": null
+      },
+      {
+        "id": "c6fe37a9-ab2f-493b-a619-d09f8ee93fde",
+        "name": "U10",
+        "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+        "description": "",
+        "picture": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae\\general\\5.png-1754322893961-810945686.png",
+        "gender": "MALE",
+        "colors": [
+          "#64748B",
+          "#EA580C"
+        ],
+        "automaticConvocation": false,
+        "convocationLeadHours": null
+      }
+    ],
+    "isActive": true,
+    "season": {
+      "id": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+      "name": "2025 - 2026",
+      "endDate": "2026-06-30T00:00:00.000Z",
+      "startDate": "2025-07-01T00:00:00.000Z",
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+      "type": "MAIN_PERIOD",
+      "isArchived": false,
+      "isCurrent": true
+    },
+    "picture": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae\\game-projects\\image.png-1754564348906-260336976.png",
+    "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "createdById": null,
+    "isImported": false
+  },
+  {
+    "id": "83106161-3686-4575-85df-c67304ef99df",
+    "name": "PROJET DE JEU U14/U17",
+    "description": "Foot à 11",
+    "sourceLanguage": "fr",
+    "translations": {},
+    "categories": [],
+    "isActive": true,
+    "season": {
+      "id": "ee40d143-aa63-4063-acca-43a3939af5f6",
+      "name": "2024 - 2025",
+      "endDate": "2025-06-30T00:00:00.000Z",
+      "startDate": "2024-07-01T00:00:00.000Z",
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+      "type": "NORMAL_PERIOD",
+      "isArchived": false,
+      "isCurrent": false
+    },
+    "picture": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae\\game-projects\\image.png-1755158801329-338836795.png",
+    "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+    "seasonId": "ee40d143-aa63-4063-acca-43a3939af5f6",
+    "createdById": null,
+    "isImported": false
+  },
+  {
+    "id": "969d2432-c2bd-433d-8b72-4455835e0288",
+    "name": "PROJET DE JEU U12/U13",
+    "description": "Foot à 8",
+    "sourceLanguage": "fr",
+    "translations": {},
+    "categories": [
+      {
+        "id": "c78e159f-f829-49ef-9bdb-55341592bb66",
+        "name": "U13",
+        "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+        "description": "",
+        "picture": null,
+        "gender": "MALE",
+        "colors": [
+          "#0EA5E9",
+          "#15803D"
+        ],
+        "automaticConvocation": false,
+        "convocationLeadHours": null
+      }
+    ],
+    "isActive": true,
+    "season": {
+      "id": "ee40d143-aa63-4063-acca-43a3939af5f6",
+      "name": "2024 - 2025",
+      "endDate": "2025-06-30T00:00:00.000Z",
+      "startDate": "2024-07-01T00:00:00.000Z",
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+      "type": "NORMAL_PERIOD",
+      "isArchived": false,
+      "isCurrent": false
+    },
+    "picture": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae\\game-projects\\image.png-1754564348903-258440294.png",
+    "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+    "seasonId": "ee40d143-aa63-4063-acca-43a3939af5f6",
+    "createdById": null,
+    "isImported": false
+  },
+  {
+    "id": "ced2dea6-f5d6-4f5d-a882-97c6d8edee9a",
+    "name": "PROJET DE JEU U14/U17",
+    "description": "Foot à 11",
+    "sourceLanguage": "fr",
+    "translations": {},
+    "categories": [
+      {
+        "id": "2471e159-492a-44a3-976b-414e81d3395e",
+        "name": "U14",
+        "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+        "description": "U14",
+        "picture": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae\\general\\9.png-1754323062013-295621441.png",
+        "gender": "MALE",
+        "colors": [
+          "#0EA5E9",
+          "#15803D"
+        ],
+        "automaticConvocation": false,
+        "convocationLeadHours": null
+      },
+      {
+        "id": "5fd3b08a-8bb0-4ee6-aa0b-9a4a201995c0",
+        "name": "U15",
+        "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+        "description": "",
+        "picture": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae\\general\\10.png-1754323076614-814600344.png",
+        "gender": "MALE",
+        "colors": [
+          "#0EA5E9",
+          "#15803D"
+        ],
+        "automaticConvocation": false,
+        "convocationLeadHours": null
+      },
+      {
+        "id": "538670b5-e899-43fb-82b2-2e67f0cc56a0",
+        "name": "U16",
+        "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+        "description": "",
+        "picture": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae\\general\\11.png-1754323086053-65692200.png",
+        "gender": "MALE",
+        "colors": [
+          "#0EA5E9",
+          "#15803D"
+        ],
+        "automaticConvocation": false,
+        "convocationLeadHours": null
+      },
+      {
+        "id": "c8e213c4-31d6-4ab1-a099-7c25eca53b95",
+        "name": "U17",
+        "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+        "description": "",
+        "picture": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae\\general\\12.png-1754323101225-784886866.png",
+        "gender": "MALE",
+        "colors": [
+          "#0EA5E9",
+          "#15803D"
+        ],
+        "automaticConvocation": false,
+        "convocationLeadHours": null
+      }
+    ],
+    "isActive": true,
+    "season": {
+      "id": "ee40d143-aa63-4063-acca-43a3939af5f6",
+      "name": "2024 - 2025",
+      "endDate": "2025-06-30T00:00:00.000Z",
+      "startDate": "2024-07-01T00:00:00.000Z",
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+      "type": "NORMAL_PERIOD",
+      "isArchived": false,
+      "isCurrent": false
+    },
+    "picture": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae\\game-projects\\image.png-1755158801329-338836795.png",
+    "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+    "seasonId": "ee40d143-aa63-4063-acca-43a3939af5f6",
+    "createdById": null,
+    "isImported": false
+  },
+  {
+    "id": "3cc80d6e-ba1a-4eb0-86d2-72a33651a930",
+    "name": "PROJET DE JEU U10/U11",
+    "description": "Foot à 8",
+    "sourceLanguage": "fr",
+    "translations": {},
+    "categories": [],
+    "isActive": true,
+    "season": {
+      "id": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+      "name": "2025 - 2026",
+      "endDate": "2026-06-30T00:00:00.000Z",
+      "startDate": "2025-07-01T00:00:00.000Z",
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+      "type": "MAIN_PERIOD",
+      "isArchived": false,
+      "isCurrent": true
+    },
+    "picture": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/game-projects/image-1762947183653-951611828.png",
+    "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "createdById": null,
+    "isImported": false
+  },
+  {
+    "id": "658fa463-4c96-4131-8840-b61d3d68d83f",
+    "name": "Projet de jeu - Foot à 5 ",
+    "description": "Mise en place du projet de jeu pour le foot à 5 ",
+    "sourceLanguage": "fr",
+    "translations": {},
+    "categories": [],
+    "isActive": false,
+    "season": null,
+    "picture": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/game-projects/image-1762785637741-129480804.png",
+    "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+    "seasonId": null,
+    "createdById": null,
+    "isImported": false
+  },
+  {
+    "id": "0b8aeecd-dbbe-4b8e-8c54-688d01159ae9",
+    "name": "Projet de jeu - Foot à 8 ",
+    "description": "Mise en place du projet de jeu pour les équipes de foot à 8",
+    "sourceLanguage": "fr",
+    "translations": {},
+    "categories": [],
+    "isActive": false,
+    "season": null,
+    "picture": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/game-projects/image-1762785525514-984756351.png",
+    "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+    "seasonId": null,
+    "createdById": null,
+    "isImported": false
+  },
+  {
+    "id": "bdaa3ae8-f425-4dbb-9d68-3cab33f50640",
+    "name": "PROJET DE JEU U6/U7 ",
+    "description": "FOOT À 5 ",
+    "sourceLanguage": "fr",
+    "translations": {},
+    "categories": [
+      {
+        "id": "7908cb9d-c2fd-443f-b652-f75477fb5799",
+        "name": "U6",
+        "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+        "description": "",
+        "picture": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae\\general\\1.png-1754322798437-483678449.png",
+        "gender": "MALE",
+        "colors": [
+          "#0EA5E9",
+          "#15803D"
+        ],
+        "automaticConvocation": false,
+        "convocationLeadHours": null
+      },
+      {
+        "id": "9c725f34-976a-4fe2-b757-c468d44beb55",
+        "name": "U7",
+        "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+        "description": "",
+        "picture": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae\\general\\2.png-1754322847886-68719602.png",
+        "gender": "MALE",
+        "colors": [
+          "#0EA5E9",
+          "#15803D"
+        ],
+        "automaticConvocation": false,
+        "convocationLeadHours": null
+      }
+    ],
+    "isActive": true,
+    "season": {
+      "id": "ee40d143-aa63-4063-acca-43a3939af5f6",
+      "name": "2024 - 2025",
+      "endDate": "2025-06-30T00:00:00.000Z",
+      "startDate": "2024-07-01T00:00:00.000Z",
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+      "type": "NORMAL_PERIOD",
+      "isArchived": false,
+      "isCurrent": false
+    },
+    "picture": "https://ismartclubback.imaxit.fr/public/8a85a436-affb-47f5-bc88-f0cb68bf6080\\game-projects\\image.png-1752767104911-307885926.png",
+    "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+    "seasonId": "ee40d143-aa63-4063-acca-43a3939af5f6",
+    "createdById": null,
+    "isImported": false
+  },
+  {
+    "id": "21d3a259-1005-4dd4-83a5-b4c00334d710",
+    "name": "PROJET DE JEU U8/U9",
+    "description": "Foot à 5",
+    "sourceLanguage": "fr",
+    "translations": {},
+    "categories": [
+      {
+        "id": "a3856aad-c3ca-4ecc-a0a4-556adac8ec01",
+        "name": "U8",
+        "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+        "description": "",
+        "picture": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae\\general\\3.png-1754322866089-18853424.png",
+        "gender": "MALE",
+        "colors": [
+          "#0EA5E9",
+          "#15803D"
+        ],
+        "automaticConvocation": false,
+        "convocationLeadHours": null
+      },
+      {
+        "id": "6bb0d2d3-1da3-4e54-b944-6d9e48bf512a",
+        "name": "U9",
+        "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+        "description": "",
+        "picture": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae\\general\\4.png-1754322879694-974281937.png",
+        "gender": "MALE",
+        "colors": [
+          "#0EA5E9",
+          "#15803D"
+        ],
+        "automaticConvocation": false,
+        "convocationLeadHours": null
+      }
+    ],
+    "isActive": true,
+    "season": {
+      "id": "ee40d143-aa63-4063-acca-43a3939af5f6",
+      "name": "2024 - 2025",
+      "endDate": "2025-06-30T00:00:00.000Z",
+      "startDate": "2024-07-01T00:00:00.000Z",
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+      "type": "NORMAL_PERIOD",
+      "isArchived": false,
+      "isCurrent": false
+    },
+    "picture": "https://ismartclubback.imaxit.fr/public/8a85a436-affb-47f5-bc88-f0cb68bf6080\\game-projects\\image.png-1753091247055-504526636.png",
+    "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+    "seasonId": "ee40d143-aa63-4063-acca-43a3939af5f6",
+    "createdById": null,
+    "isImported": false
+  },
+  {
+    "id": "48accbb0-8608-433b-8357-dbd7a0d2fa47",
+    "name": "Projet de jeu - Foot à 11",
+    "description": "Mise en place du projet de jeu pour le foot à 11",
+    "sourceLanguage": "fr",
+    "translations": {},
+    "categories": [
+      {
+        "id": "2471e159-492a-44a3-976b-414e81d3395e",
+        "name": "U14",
+        "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+        "description": "U14",
+        "picture": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae\\general\\9.png-1754323062013-295621441.png",
+        "gender": "MALE",
+        "colors": [
+          "#0EA5E9",
+          "#15803D"
+        ],
+        "automaticConvocation": false,
+        "convocationLeadHours": null
+      }
+    ],
+    "isActive": false,
+    "season": {
+      "id": "ee40d143-aa63-4063-acca-43a3939af5f6",
+      "name": "2024 - 2025",
+      "endDate": "2025-06-30T00:00:00.000Z",
+      "startDate": "2024-07-01T00:00:00.000Z",
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+      "type": "NORMAL_PERIOD",
+      "isArchived": false,
+      "isCurrent": false
+    },
+    "picture": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae\\game-projects\\image.png-1751301875078-617789433.jpg",
+    "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+    "seasonId": "ee40d143-aa63-4063-acca-43a3939af5f6",
+    "createdById": null,
+    "isImported": false
+  },
+  {
+    "id": "9b939a82-736b-4344-af12-0a68df4f23ce",
+    "name": "Modèle de jeu direct ",
+    "description": "Le jeu direct privilégie la simplicité et la rapidité pour atteindre le but adverse. Il repose sur des passes longues, des déviations, et une recherche constante de profondeur pour exploiter les espaces et mettre rapidement les attaquants en position de marquer",
+    "sourceLanguage": "fr",
+    "translations": {},
+    "categories": [],
+    "isActive": false,
+    "season": null,
+    "picture": "https://back.ismart-club.com/public/5f047ed7-3f45-4fd8-9bb6-67250c98cd91\\game-projects\\image.png-1750549966407-178096061.jpg",
+    "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+    "seasonId": null,
+    "createdById": null,
+    "isImported": false
+  },
+  {
+    "id": "5eb0aefe-ae70-46f0-880d-09f2bed6db4b",
+    "name": "Modèle de jeu de transition  ",
+    "description": "Ce modèle est axé sur la rapidité et l'efficacité après une récupération du ballon. Il vise à exploiter les déséquilibres laissés par l’adversaire lors de ses phases offensives, en lançant rapidement des attaques avec des passes verticales et des courses rapides",
+    "sourceLanguage": "fr",
+    "translations": {},
+    "categories": [],
+    "isActive": false,
+    "season": null,
+    "picture": "https://back.ismart-club.com/public/5f047ed7-3f45-4fd8-9bb6-67250c98cd91\\game-projects\\image.png-1750549967521-104521765.jpg",
+    "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+    "seasonId": null,
+    "createdById": null,
+    "isImported": false
+  },
+  {
+    "id": "2c93b051-94a2-4dfa-aebe-d5fac07a5850",
+    "name": "Modèle de jeu contre-pressing ",
+    "description": "Le contre-pressing repose sur un pressing intense et coordonné dans la moitié de terrain adverse. L’objectif est de récupérer le ballon rapidement pour créer des occasions près du but adverse, tout en empêchant l'adversaire de construire son jeu",
+    "sourceLanguage": "fr",
+    "translations": {},
+    "categories": [],
+    "isActive": false,
+    "season": null,
+    "picture": "https://back.ismart-club.com/public/5f047ed7-3f45-4fd8-9bb6-67250c98cd91\\game-projects\\image.png-1750549964314-619459411.jpg",
+    "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+    "seasonId": null,
+    "createdById": null,
+    "isImported": false
+  }
+]

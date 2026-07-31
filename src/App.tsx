@@ -27,6 +27,15 @@ import { MessagerieScreen } from "@/features/messagerie/MessagerieScreen"
 import { ObjectifsScreen } from "@/features/objectifs/ObjectifsScreen"
 import { CategoriesScreen } from "@/features/pole-technique/CategoriesScreen"
 import { CategoryDetailScreen } from "@/features/pole-technique/CategoryDetailScreen"
+import { ProcedesScreen } from "@/features/pole-technique/ProcedesScreen"
+import { ProcedeDetailScreen } from "@/features/pole-technique/ProcedeDetailScreen"
+import { ProgrammationScreen } from "@/features/pole-technique/ProgrammationScreen"
+import { SeancesScreen } from "@/features/pole-technique/SeancesScreen"
+import { SeanceDetailScreen } from "@/features/pole-technique/SeanceDetailScreen"
+import { ProjetsDeJeuScreen } from "@/features/pole-technique/ProjetsDeJeuScreen"
+import { ProjetDeJeuDetailScreen } from "@/features/pole-technique/ProjetDeJeuDetailScreen"
+import { CompositionsScreen } from "@/features/pole-technique/CompositionsScreen"
+import { CompositionDetailScreen } from "@/features/pole-technique/CompositionDetailScreen"
 import { EducateursScreen } from "@/features/educateurs/EducateursScreen"
 import { SponsoringHome } from "@/features/sponsoring/SponsoringHome"
 import { DemarrageScreen } from "@/features/sponsoring/DemarrageScreen"
@@ -39,10 +48,12 @@ import { PartenairesScreen } from "@/features/sponsoring/PartenairesScreen"
 import { PartenaireAccueilScreen } from "@/features/sponsoring/PartenaireAccueilScreen"
 import { CampagneScreen } from "@/features/sponsoring/CampagneScreen"
 import { CampagnesScreen as SponsoringCampagnesScreen } from "@/features/sponsoring/CampagnesScreen"
+import { NouvelleCampagneScreen as NouvelleCampagneAdminScreen } from "@/features/sponsoring/NouvelleCampagneScreen"
 import { DemandesCampagneScreen } from "@/features/sponsoring/DemandesCampagneScreen"
 import { DesignSystemScreen } from "@/features/design-system/DesignSystemScreen"
 import { AccueilScreen } from "@/features/accueil/AccueilScreen"
 import { LoginScreen } from "@/features/auth/LoginScreen"
+import { LandingScreen } from "@/features/landing/LandingScreen"
 import { PartenairesListScreen } from "@/features/sponsor/PartenairesListScreen"
 import { CampagnesScreen } from "@/features/sponsor/CampagnesScreen"
 import { NouvelleCampagneScreen } from "@/features/sponsor/NouvelleCampagneScreen"
@@ -61,6 +72,11 @@ const CUSTOM_ROUTES = new Set([
   "/messagerie",
   "/structuration/objectifs-techniques",
   "/pole-technique/categories",
+  "/pole-technique/procedes",
+  "/pole-technique/programmation",
+  "/pole-technique/seances",
+  "/pole-technique/projet-de-jeu",
+  "/pole-technique/composition",
   "/sponsoring",
   "/budget",
   "/budget2",
@@ -88,6 +104,11 @@ export default function App() {
           {/* Sign-in — also outside the shell: you pick a space (club admin or
               sponsor) and the shell's nav + routes follow that role. */}
           <Route path="/connexion" element={<LoginScreen />} />
+
+          {/* Public marketing page — its own URL, outside the shell, and on the
+              iSmart Coach landing design system (Bebas / Syne / DM Sans), not
+              the app's. Styles are scoped under `.lp` so the two don't mix. */}
+          <Route path="/landing" element={<LandingScreen />} />
 
           <Route element={<AppShell />}>
             {/* Accueil — quick-access grid of the club's modules. */}
@@ -165,11 +186,53 @@ export default function App() {
             />
             <Route
               path="pole-technique/categories/:slug"
-              element={<Navigate to="resultats" replace />}
+              element={<Navigate to="effectif" replace />}
             />
             <Route
               path="pole-technique/categories/:slug/:tab"
               element={<CategoryDetailScreen />}
+            />
+
+            {/* Pôle Technique — Procédés: the tactical library (taxonomy rail +
+                filtered grid) and one procédé's full fiche. */}
+            <Route
+              path="pole-technique/procedes"
+              element={<ProcedesScreen />}
+            />
+            <Route
+              path="pole-technique/procedes/:id"
+              element={<ProcedeDetailScreen />}
+            />
+
+            {/* Pôle Technique — Programmation: the annual plan, and the séances
+                that realise it (planning a slot creates the séance). */}
+            <Route
+              path="pole-technique/programmation"
+              element={<ProgrammationScreen />}
+            />
+            <Route path="pole-technique/seances" element={<SeancesScreen />} />
+            <Route
+              path="pole-technique/seances/:id"
+              element={<SeanceDetailScreen />}
+            />
+
+            {/* Pôle Technique — Projet de jeu (the club's playing models) and
+                Composition (saved line-ups on a pitch board). */}
+            <Route
+              path="pole-technique/projet-de-jeu"
+              element={<ProjetsDeJeuScreen />}
+            />
+            <Route
+              path="pole-technique/projet-de-jeu/:id"
+              element={<ProjetDeJeuDetailScreen />}
+            />
+            <Route
+              path="pole-technique/composition"
+              element={<CompositionsScreen />}
+            />
+            <Route
+              path="pole-technique/composition/:id"
+              element={<CompositionDetailScreen />}
             />
 
             {/* Sponsoring — join flow: empty state → onboarding → offer form
@@ -184,6 +247,12 @@ export default function App() {
             <Route
               path="sponsoring/campagnes"
               element={<SponsoringCampagnesScreen />}
+            />
+            {/* The club creates a campaign itself, for one of its partenaires
+                (partenaire → période → espaces & accroches). */}
+            <Route
+              path="sponsoring/campagnes/nouvelle"
+              element={<NouvelleCampagneAdminScreen />}
             />
             {/* Demandes sur mesure — the club's inbox of custom sponsoring
                 requests sent by sponsors; accept (with a price) or refuse. */}

@@ -1,0 +1,455 @@
+[
+  {
+    "id": "2be133e7-5ef1-4fe3-9771-19c4182b8b50",
+    "name": "On a le ballon",
+    "index": 0,
+    "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+    "type": "PRINCIPLE",
+    "translations": {},
+    "sourceLanguage": "fr",
+    "tacticalPhases": [
+      {
+        "id": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+        "groupId": "2be133e7-5ef1-4fe3-9771-19c4182b8b50",
+        "name": "Conserver - Progresser",
+        "index": 0,
+        "translations": {},
+        "sourceLanguage": "fr",
+        "_count": {
+          "tactics": 117,
+          "programSessions": 244
+        },
+        "tacticalPrinciples": [
+          {
+            "id": "8b277085-6ccb-423d-b274-af14239e0b38",
+            "name": "Créer et utiliser des espaces",
+            "index": 0,
+            "color": "#1E3A8A",
+            "translations": {},
+            "sourceLanguage": "fr",
+            "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+            "_count": {
+              "tactics": 84,
+              "programSessions": 148
+            },
+            "categories": []
+          },
+          {
+            "id": "5dba1497-7dd3-40bd-bdcc-39de7ab697d5",
+            "name": "Jouer dans les intervalles et entres les lignes",
+            "index": 1,
+            "color": "#4338CA",
+            "translations": {},
+            "sourceLanguage": "fr",
+            "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+            "_count": {
+              "tactics": 33,
+              "programSessions": 96
+            },
+            "categories": []
+          }
+        ]
+      },
+      {
+        "id": "ceb7cae0-c323-4c65-93d5-041482a0f36f",
+        "groupId": "2be133e7-5ef1-4fe3-9771-19c4182b8b50",
+        "name": "Déséquilibrer - Finir",
+        "index": 1,
+        "translations": {},
+        "sourceLanguage": "fr",
+        "_count": {
+          "tactics": 118,
+          "programSessions": 266
+        },
+        "tacticalPrinciples": [
+          {
+            "id": "4e100b7b-e041-4ce7-81ba-f72aa9b023e5",
+            "name": "Jouer à l'opposé après avoir fixé collectivement",
+            "index": 0,
+            "color": "#0060FD",
+            "translations": {},
+            "sourceLanguage": "fr",
+            "tacticalPhaseId": "ceb7cae0-c323-4c65-93d5-041482a0f36f",
+            "_count": {
+              "tactics": 22,
+              "programSessions": 48
+            },
+            "categories": []
+          },
+          {
+            "id": "7b538e25-c85a-44e6-9dd7-8689b30293d9",
+            "name": "Jouer combiné pour créer un surnombre",
+            "index": 1,
+            "color": "#0EA5E9",
+            "translations": {},
+            "sourceLanguage": "fr",
+            "tacticalPhaseId": "ceb7cae0-c323-4c65-93d5-041482a0f36f",
+            "_count": {
+              "tactics": 42,
+              "programSessions": 85
+            },
+            "categories": []
+          },
+          {
+            "id": "175614b4-6425-4e7a-a77f-e344496824f0",
+            "name": "Se démarquer pour fixer et éliminer, passer ou finir",
+            "index": 2,
+            "color": "#6366F1",
+            "translations": {},
+            "sourceLanguage": "fr",
+            "tacticalPhaseId": "ceb7cae0-c323-4c65-93d5-041482a0f36f",
+            "_count": {
+              "tactics": 54,
+              "programSessions": 133
+            },
+            "categories": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "a008fbb4-a242-4c7b-a08a-c4e932c981e6",
+    "name": "On n'a pas le ballon",
+    "index": 1,
+    "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+    "type": "PRINCIPLE",
+    "translations": {},
+    "sourceLanguage": "fr",
+    "tacticalPhases": [
+      {
+        "id": "fc233f55-c7cc-4b4f-8ce6-b24240f6691b",
+        "groupId": "a008fbb4-a242-4c7b-a08a-c4e932c981e6",
+        "name": "S'opposer à la progression",
+        "index": 0,
+        "translations": {},
+        "sourceLanguage": "fr",
+        "_count": {
+          "tactics": 57,
+          "programSessions": 95
+        },
+        "tacticalPrinciples": [
+          {
+            "id": "77ad6acc-6098-4b94-bb7e-95aaba3878fd",
+            "name": "Freiner la progression de l'adversaire, organiser et reorganiser les alignements",
+            "index": 0,
+            "color": "#FCA5A5",
+            "translations": {},
+            "sourceLanguage": "fr",
+            "tacticalPhaseId": "fc233f55-c7cc-4b4f-8ce6-b24240f6691b",
+            "_count": {
+              "tactics": 58,
+              "programSessions": 95
+            },
+            "categories": []
+          }
+        ]
+      },
+      {
+        "id": "a2558e40-0de7-4bc7-9084-0a9ea5d71342",
+        "groupId": "a008fbb4-a242-4c7b-a08a-c4e932c981e6",
+        "name": "S'organiser pour protéger son but",
+        "index": 1,
+        "translations": {},
+        "sourceLanguage": "fr",
+        "_count": {
+          "tactics": 73,
+          "programSessions": 102
+        },
+        "tacticalPrinciples": [
+          {
+            "id": "3081c9df-0a3b-49ad-b0ea-e14d8c3a0628",
+            "name": "Densifier et être actif dans le CJD",
+            "index": 0,
+            "color": "#EF4444",
+            "translations": {},
+            "sourceLanguage": "fr",
+            "tacticalPhaseId": "a2558e40-0de7-4bc7-9084-0a9ea5d71342",
+            "_count": {
+              "tactics": 19,
+              "programSessions": 16
+            },
+            "categories": []
+          },
+          {
+            "id": "ff19e7c5-e2ff-4e57-802f-14b70ba9c7ca",
+            "name": "S'organiser en desequilibre",
+            "index": 1,
+            "color": "#DC2626",
+            "translations": {},
+            "sourceLanguage": "fr",
+            "tacticalPhaseId": "a2558e40-0de7-4bc7-9084-0a9ea5d71342",
+            "_count": {
+              "tactics": 31,
+              "programSessions": 27
+            },
+            "categories": []
+          },
+          {
+            "id": "54832115-bd3d-4496-8e24-5e38529c569a",
+            "name": "Défendre son but, récupérer ou dégager le ballon",
+            "index": 2,
+            "color": "#991B1B",
+            "translations": {},
+            "sourceLanguage": "fr",
+            "tacticalPhaseId": "a2558e40-0de7-4bc7-9084-0a9ea5d71342",
+            "_count": {
+              "tactics": 22,
+              "programSessions": 59
+            },
+            "categories": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "e58a74f6-0578-4c98-868d-95b6910b6925",
+    "name": "Procédés complémentaires",
+    "index": 2,
+    "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+    "type": "COMPLEMENTARY",
+    "translations": {},
+    "sourceLanguage": "fr",
+    "tacticalPhases": [
+      {
+        "id": "55af2481-93b3-4676-968c-a7229ac03e44",
+        "groupId": "e58a74f6-0578-4c98-868d-95b6910b6925",
+        "name": "Exercices spécifiques",
+        "index": 0,
+        "translations": {},
+        "sourceLanguage": "fr",
+        "_count": {
+          "tactics": 27,
+          "programSessions": 0
+        },
+        "tacticalPrinciples": [
+          {
+            "id": "5869fdbe-9ff7-4579-a19d-d4b7b218be72",
+            "name": "Finition",
+            "index": 0,
+            "color": "#9A3412",
+            "translations": {},
+            "sourceLanguage": "fr",
+            "tacticalPhaseId": "55af2481-93b3-4676-968c-a7229ac03e44",
+            "_count": {
+              "tactics": 21,
+              "programSessions": 0
+            },
+            "categories": []
+          },
+          {
+            "id": "fae27885-9270-48a0-80ea-87a763699bef",
+            "name": "Gardien de but",
+            "index": 1,
+            "color": "#EA580C",
+            "translations": {},
+            "sourceLanguage": "fr",
+            "tacticalPhaseId": "55af2481-93b3-4676-968c-a7229ac03e44",
+            "_count": {
+              "tactics": 0,
+              "programSessions": 0
+            },
+            "categories": []
+          },
+          {
+            "id": "672885ba-73e0-40c9-a2f4-6662ec5f3c2f",
+            "name": "Techniques Défensives",
+            "index": 2,
+            "color": "#F97316",
+            "translations": {},
+            "sourceLanguage": "fr",
+            "tacticalPhaseId": "55af2481-93b3-4676-968c-a7229ac03e44",
+            "_count": {
+              "tactics": 2,
+              "programSessions": 0
+            },
+            "categories": []
+          },
+          {
+            "id": "5f5b8a88-ba0f-4737-96ca-03fe2a995d65",
+            "name": "Prises de balle",
+            "index": 3,
+            "color": "#FCA5A5",
+            "translations": {},
+            "sourceLanguage": "fr",
+            "tacticalPhaseId": "55af2481-93b3-4676-968c-a7229ac03e44",
+            "_count": {
+              "tactics": 2,
+              "programSessions": 0
+            },
+            "categories": []
+          },
+          {
+            "id": "93ca2d14-62b3-490a-8e60-2fdb42b74d27",
+            "name": "Dribbles",
+            "index": 4,
+            "color": "#FDBA74",
+            "translations": {},
+            "sourceLanguage": "fr",
+            "tacticalPhaseId": "55af2481-93b3-4676-968c-a7229ac03e44",
+            "_count": {
+              "tactics": 2,
+              "programSessions": 0
+            },
+            "categories": []
+          }
+        ]
+      },
+      {
+        "id": "98235fae-640f-4ecb-ae89-62044a50d1ac",
+        "groupId": "e58a74f6-0578-4c98-868d-95b6910b6925",
+        "name": "Préparation athlétique",
+        "index": 1,
+        "translations": {},
+        "sourceLanguage": "fr",
+        "_count": {
+          "tactics": 20,
+          "programSessions": 0
+        },
+        "tacticalPrinciples": [
+          {
+            "id": "68870dab-405b-4a9d-938f-680d15374d2f",
+            "name": "Endurance",
+            "index": 0,
+            "color": "#166534",
+            "translations": {},
+            "sourceLanguage": "fr",
+            "tacticalPhaseId": "98235fae-640f-4ecb-ae89-62044a50d1ac",
+            "_count": {
+              "tactics": 14,
+              "programSessions": 0
+            },
+            "categories": []
+          },
+          {
+            "id": "85cdeda4-17bb-45da-af07-f0fad6ee5f16",
+            "name": "Vitesse",
+            "index": 1,
+            "color": "#15803D",
+            "translations": {},
+            "sourceLanguage": "fr",
+            "tacticalPhaseId": "98235fae-640f-4ecb-ae89-62044a50d1ac",
+            "_count": {
+              "tactics": 3,
+              "programSessions": 0
+            },
+            "categories": []
+          },
+          {
+            "id": "f755d053-d444-4119-9d55-be58e591ab6d",
+            "name": "Coordination motrice",
+            "index": 2,
+            "color": "#22C55E",
+            "translations": {},
+            "sourceLanguage": "fr",
+            "tacticalPhaseId": "98235fae-640f-4ecb-ae89-62044a50d1ac",
+            "_count": {
+              "tactics": 3,
+              "programSessions": 0
+            },
+            "categories": []
+          }
+        ]
+      },
+      {
+        "id": "ef230503-f7a4-493c-a97a-daab9734bd73",
+        "groupId": "e58a74f6-0578-4c98-868d-95b6910b6925",
+        "name": "Divers",
+        "index": 2,
+        "translations": {},
+        "sourceLanguage": "fr",
+        "_count": {
+          "tactics": 105,
+          "programSessions": 0
+        },
+        "tacticalPrinciples": [
+          {
+            "id": "ed45fde9-5f20-4bc0-b5b5-d34b6b85f045",
+            "name": "Exercices d'echauffements",
+            "index": 0,
+            "color": "#831843",
+            "translations": {},
+            "sourceLanguage": "fr",
+            "tacticalPhaseId": "ef230503-f7a4-493c-a97a-daab9734bd73",
+            "_count": {
+              "tactics": 58,
+              "programSessions": 0
+            },
+            "categories": []
+          },
+          {
+            "id": "acbcc342-e540-4c48-b46d-a671ae4d10f1",
+            "name": "Jeux d'éveil",
+            "index": 1,
+            "color": "#DB2777",
+            "translations": {},
+            "sourceLanguage": "fr",
+            "tacticalPhaseId": "ef230503-f7a4-493c-a97a-daab9734bd73",
+            "_count": {
+              "tactics": 18,
+              "programSessions": 0
+            },
+            "categories": []
+          },
+          {
+            "id": "22c87495-c27d-4962-a92a-ff1e54b7f142",
+            "name": "Jonglage",
+            "index": 2,
+            "color": "#EC4899",
+            "translations": {},
+            "sourceLanguage": "fr",
+            "tacticalPhaseId": "ef230503-f7a4-493c-a97a-daab9734bd73",
+            "_count": {
+              "tactics": 2,
+              "programSessions": 0
+            },
+            "categories": []
+          },
+          {
+            "id": "24b06f99-c838-4e1e-85ac-21cc98c03a1d",
+            "name": "Coups de pieds arrêtés",
+            "index": 3,
+            "color": "#64748B",
+            "translations": {},
+            "sourceLanguage": "fr",
+            "tacticalPhaseId": "ef230503-f7a4-493c-a97a-daab9734bd73",
+            "_count": {
+              "tactics": 6,
+              "programSessions": 0
+            },
+            "categories": []
+          },
+          {
+            "id": "71a60013-e2ca-442a-8bb6-ac1e34daf1a6",
+            "name": "Cohésion",
+            "index": 4,
+            "color": "#10B981",
+            "translations": {},
+            "sourceLanguage": "fr",
+            "tacticalPhaseId": "ef230503-f7a4-493c-a97a-daab9734bd73",
+            "_count": {
+              "tactics": 7,
+              "programSessions": 0
+            },
+            "categories": []
+          },
+          {
+            "id": "59cfe9a8-2dd7-4333-8086-f56fa5e07046",
+            "name": "Evaluation",
+            "index": 5,
+            "color": "#FCA5A5",
+            "translations": {},
+            "sourceLanguage": "fr",
+            "tacticalPhaseId": "ef230503-f7a4-493c-a97a-daab9734bd73",
+            "_count": {
+              "tactics": 14,
+              "programSessions": 0
+            },
+            "categories": []
+          }
+        ]
+      }
+    ]
+  }
+]

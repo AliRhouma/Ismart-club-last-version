@@ -1,0 +1,323 @@
+[
+  {
+    "id": "2be133e7-5ef1-4fe3-9771-19c4182b8b50",
+    "name": "On a le ballon",
+    "type": "PRINCIPLE",
+    "phases": [
+      {
+        "id": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+        "name": "Conserver - Progresser",
+        "counts": {
+          "tactics": 117,
+          "programSessions": 244
+        },
+        "principles": [
+          {
+            "id": "8b277085-6ccb-423d-b274-af14239e0b38",
+            "name": "Créer et utiliser des espaces",
+            "color": "#1E3A8A",
+            "counts": {
+              "tactics": 84,
+              "programSessions": 148
+            },
+            "tactics": 84
+          },
+          {
+            "id": "5dba1497-7dd3-40bd-bdcc-39de7ab697d5",
+            "name": "Jouer dans les intervalles et entres les lignes",
+            "color": "#4338CA",
+            "counts": {
+              "tactics": 33,
+              "programSessions": 96
+            },
+            "tactics": 33
+          }
+        ]
+      },
+      {
+        "id": "ceb7cae0-c323-4c65-93d5-041482a0f36f",
+        "name": "Déséquilibrer - Finir",
+        "counts": {
+          "tactics": 118,
+          "programSessions": 266
+        },
+        "principles": [
+          {
+            "id": "4e100b7b-e041-4ce7-81ba-f72aa9b023e5",
+            "name": "Jouer à l'opposé après avoir fixé collectivement",
+            "color": "#0060FD",
+            "counts": {
+              "tactics": 22,
+              "programSessions": 48
+            },
+            "tactics": 22
+          },
+          {
+            "id": "7b538e25-c85a-44e6-9dd7-8689b30293d9",
+            "name": "Jouer combiné pour créer un surnombre",
+            "color": "#0EA5E9",
+            "counts": {
+              "tactics": 42,
+              "programSessions": 85
+            },
+            "tactics": 42
+          },
+          {
+            "id": "175614b4-6425-4e7a-a77f-e344496824f0",
+            "name": "Se démarquer pour fixer et éliminer, passer ou finir",
+            "color": "#6366F1",
+            "counts": {
+              "tactics": 54,
+              "programSessions": 133
+            },
+            "tactics": 54
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "a008fbb4-a242-4c7b-a08a-c4e932c981e6",
+    "name": "On n'a pas le ballon",
+    "type": "PRINCIPLE",
+    "phases": [
+      {
+        "id": "fc233f55-c7cc-4b4f-8ce6-b24240f6691b",
+        "name": "S'opposer à la progression",
+        "counts": {
+          "tactics": 57,
+          "programSessions": 95
+        },
+        "principles": [
+          {
+            "id": "77ad6acc-6098-4b94-bb7e-95aaba3878fd",
+            "name": "Freiner la progression de l'adversaire, organiser et reorganiser les alignements",
+            "color": "#FCA5A5",
+            "counts": {
+              "tactics": 58,
+              "programSessions": 95
+            },
+            "tactics": 57
+          }
+        ]
+      },
+      {
+        "id": "a2558e40-0de7-4bc7-9084-0a9ea5d71342",
+        "name": "S'organiser pour protéger son but",
+        "counts": {
+          "tactics": 73,
+          "programSessions": 102
+        },
+        "principles": [
+          {
+            "id": "3081c9df-0a3b-49ad-b0ea-e14d8c3a0628",
+            "name": "Densifier et être actif dans le CJD",
+            "color": "#EF4444",
+            "counts": {
+              "tactics": 19,
+              "programSessions": 16
+            },
+            "tactics": 19
+          },
+          {
+            "id": "ff19e7c5-e2ff-4e57-802f-14b70ba9c7ca",
+            "name": "S'organiser en desequilibre",
+            "color": "#DC2626",
+            "counts": {
+              "tactics": 31,
+              "programSessions": 27
+            },
+            "tactics": 31
+          },
+          {
+            "id": "54832115-bd3d-4496-8e24-5e38529c569a",
+            "name": "Défendre son but, récupérer ou dégager le ballon",
+            "color": "#991B1B",
+            "counts": {
+              "tactics": 22,
+              "programSessions": 59
+            },
+            "tactics": 22
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "e58a74f6-0578-4c98-868d-95b6910b6925",
+    "name": "Procédés complémentaires",
+    "type": "COMPLEMENTARY",
+    "phases": [
+      {
+        "id": "55af2481-93b3-4676-968c-a7229ac03e44",
+        "name": "Exercices spécifiques",
+        "counts": {
+          "tactics": 27,
+          "programSessions": 0
+        },
+        "principles": [
+          {
+            "id": "5869fdbe-9ff7-4579-a19d-d4b7b218be72",
+            "name": "Finition",
+            "color": "#9A3412",
+            "counts": {
+              "tactics": 21,
+              "programSessions": 0
+            },
+            "tactics": 21
+          },
+          {
+            "id": "fae27885-9270-48a0-80ea-87a763699bef",
+            "name": "Gardien de but",
+            "color": "#EA580C",
+            "counts": {
+              "tactics": 0,
+              "programSessions": 0
+            },
+            "tactics": 0
+          },
+          {
+            "id": "672885ba-73e0-40c9-a2f4-6662ec5f3c2f",
+            "name": "Techniques Défensives",
+            "color": "#F97316",
+            "counts": {
+              "tactics": 2,
+              "programSessions": 0
+            },
+            "tactics": 2
+          },
+          {
+            "id": "5f5b8a88-ba0f-4737-96ca-03fe2a995d65",
+            "name": "Prises de balle",
+            "color": "#FCA5A5",
+            "counts": {
+              "tactics": 2,
+              "programSessions": 0
+            },
+            "tactics": 2
+          },
+          {
+            "id": "93ca2d14-62b3-490a-8e60-2fdb42b74d27",
+            "name": "Dribbles",
+            "color": "#FDBA74",
+            "counts": {
+              "tactics": 2,
+              "programSessions": 0
+            },
+            "tactics": 2
+          }
+        ]
+      },
+      {
+        "id": "98235fae-640f-4ecb-ae89-62044a50d1ac",
+        "name": "Préparation athlétique",
+        "counts": {
+          "tactics": 20,
+          "programSessions": 0
+        },
+        "principles": [
+          {
+            "id": "68870dab-405b-4a9d-938f-680d15374d2f",
+            "name": "Endurance",
+            "color": "#166534",
+            "counts": {
+              "tactics": 14,
+              "programSessions": 0
+            },
+            "tactics": 14
+          },
+          {
+            "id": "85cdeda4-17bb-45da-af07-f0fad6ee5f16",
+            "name": "Vitesse",
+            "color": "#15803D",
+            "counts": {
+              "tactics": 3,
+              "programSessions": 0
+            },
+            "tactics": 3
+          },
+          {
+            "id": "f755d053-d444-4119-9d55-be58e591ab6d",
+            "name": "Coordination motrice",
+            "color": "#22C55E",
+            "counts": {
+              "tactics": 3,
+              "programSessions": 0
+            },
+            "tactics": 3
+          }
+        ]
+      },
+      {
+        "id": "ef230503-f7a4-493c-a97a-daab9734bd73",
+        "name": "Divers",
+        "counts": {
+          "tactics": 105,
+          "programSessions": 0
+        },
+        "principles": [
+          {
+            "id": "ed45fde9-5f20-4bc0-b5b5-d34b6b85f045",
+            "name": "Exercices d'echauffements",
+            "color": "#831843",
+            "counts": {
+              "tactics": 58,
+              "programSessions": 0
+            },
+            "tactics": 58
+          },
+          {
+            "id": "acbcc342-e540-4c48-b46d-a671ae4d10f1",
+            "name": "Jeux d'éveil",
+            "color": "#DB2777",
+            "counts": {
+              "tactics": 18,
+              "programSessions": 0
+            },
+            "tactics": 18
+          },
+          {
+            "id": "22c87495-c27d-4962-a92a-ff1e54b7f142",
+            "name": "Jonglage",
+            "color": "#EC4899",
+            "counts": {
+              "tactics": 2,
+              "programSessions": 0
+            },
+            "tactics": 2
+          },
+          {
+            "id": "24b06f99-c838-4e1e-85ac-21cc98c03a1d",
+            "name": "Coups de pieds arrêtés",
+            "color": "#64748B",
+            "counts": {
+              "tactics": 6,
+              "programSessions": 0
+            },
+            "tactics": 6
+          },
+          {
+            "id": "71a60013-e2ca-442a-8bb6-ac1e34daf1a6",
+            "name": "Cohésion",
+            "color": "#10B981",
+            "counts": {
+              "tactics": 7,
+              "programSessions": 0
+            },
+            "tactics": 7
+          },
+          {
+            "id": "59cfe9a8-2dd7-4333-8086-f56fa5e07046",
+            "name": "Evaluation",
+            "color": "#FCA5A5",
+            "counts": {
+              "tactics": 14,
+              "programSessions": 0
+            },
+            "tactics": 14
+          }
+        ]
+      }
+    ]
+  }
+]

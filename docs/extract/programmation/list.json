@@ -1,0 +1,46 @@
+[
+  {
+    "bannerOne": null,
+    "bannerTwo": null,
+    "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "categoryGroups": [
+      {
+        "id": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "name": "Groupe A",
+        "description": null,
+        "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021363950-303102182.jpg",
+        "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+      }
+    ],
+    "isImported": false,
+    "isVisible": false,
+    "id": "206ccc47-622b-44f6-bbc7-78ccfb836467",
+    "createdById": null,
+    "createdAt": "2026-05-04T14:10:09.701Z",
+    "updatedAt": "2026-07-02T09:27:43.816Z"
+  },
+  {
+    "bannerOne": null,
+    "bannerTwo": null,
+    "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "categoryGroups": [
+      {
+        "id": "c3ca020f-9b3f-4624-aa0e-e2e1470e0ffc",
+        "name": "Groupe B",
+        "description": "",
+        "picture": null,
+        "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+      }
+    ],
+    "isImported": false,
+    "isVisible": false,
+    "id": "c6ec3ca5-f55f-423e-b0c3-0700b071ae19",
+    "createdById": null,
+    "createdAt": "2026-05-04T14:10:09.701Z",
+    "updatedAt": "2026-05-04T14:10:09.701Z"
+  }
+]

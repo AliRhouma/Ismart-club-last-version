@@ -1,4 +1,6 @@
 import {
+  ClipboardList,
+  Shapes,
   Home,
   Users,
   UserCog,
@@ -94,6 +96,8 @@ export const navTree: NavNode[] = [
       { type: "item", label: "Composition", path: "/pole-technique/composition", icon: Network },
       { type: "item", label: "Consignes", path: "/pole-technique/consignes", icon: Gamepad2 },
       { type: "item", label: "Défis", path: "/pole-technique/defis", icon: Target },
+      { type: "item", label: "Procédés", path: "/pole-technique/procedes", icon: Shapes },
+      { type: "item", label: "Séances", path: "/pole-technique/seances", icon: ClipboardList },
     ],
   },
 

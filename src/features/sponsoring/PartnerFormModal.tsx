@@ -1,10 +1,15 @@
 import { useMemo, useState } from "react"
-import { Check, Search, X, UserRound, Link2Off } from "lucide-react"
+import { Check, Search, X, UserRound, Link2Off, CalendarRange } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { fmtFrLong } from "@/lib/format"
 import { useData } from "@/data/useData"
 import {
+  applyContractPreset,
   blankPartner,
+  CONTRACT_PRESETS,
+  contractSpan,
+  matchContractPreset,
   type Offer,
   type Partner,
 } from "@/data/seed/sponsoring"
@@ -21,8 +26,12 @@ const inputCls =
   "w-full rounded-md border border-input bg-transparent px-3.5 py-2.5 font-body text-sm text-ink outline-none transition-colors placeholder:text-ink-disabled focus:border-border-focus"
 
 /**
- * Add / edit a partenaire. Three things only: a name, a description, and the
- * sponsor account it's linked to.
+ * Add / edit a partenaire: a name, a description, the durée du partenariat, and
+ * the sponsor account it's linked to.
+ *
+ * The période is picked as a DURATION first (6 mois / 1 an / 2 ans / 3 ans /
+ * saison sportive), because that's the term you sign — the two date fields are
+ * written by the chips and stay editable for anything off-preset.
  *
  * The account link is the interesting one — a sponsor signs up on iSmart Club to
  * follow its own campaigns, and the admin picks which of those accounts this
@@ -80,7 +89,18 @@ export function PartnerFormModal({
   const selected =
     sponsorAccounts.find((a) => a.id === draft.accountId) ?? null
 
+  // Période — the duration chips and the summary both read from the two dates.
+  const span = contractSpan(draft.startDate, draft.endDate)
+  const activePreset = matchContractPreset(draft.startDate, draft.endDate)
+  const datesOk = span !== null && span.valid
+
+  const pickPreset = (preset: (typeof CONTRACT_PRESETS)[number]) => {
+    const { start, end } = applyContractPreset(preset, draft.startDate)
+    setDraft((d) => ({ ...d, startDate: start, endDate: end }))
+  }
+
   const submit = () => {
+    if (!datesOk) return
     const clean: Omit<Partner, "id"> = {
       ...draft,
       name: draft.name.trim() || "Sans nom",
@@ -154,6 +174,99 @@ export function PartnerFormModal({
               club.
             </span>
           </label>
+
+          {/* ── Durée du partenariat ──────────────────────────────────────
+              La durée d'abord, les dates ensuite : on signe « pour deux ans »,
+              on ne calcule pas une date de fin de tête. Les chips écrivent les
+              deux champs, qui restent librement modifiables. */}
+          <div className="flex flex-col gap-2.5">
+            <div className="flex items-baseline justify-between gap-3">
+              <span className="font-ui text-[0.7rem] font-medium tracking-[0.06em] text-ink-muted uppercase">
+                Durée du partenariat
+              </span>
+              {span ? (
+                <span className="font-body text-[0.72rem] text-ink-disabled tabular-nums">
+                  {span.valid ? span.label : "Période invalide"}
+                </span>
+              ) : null}
+            </div>
+
+            <div className="flex flex-wrap items-center gap-1.5">
+              {CONTRACT_PRESETS.map((preset) => {
+                const active = activePreset === preset.key
+                return (
+                  <button
+                    key={preset.key}
+                    type="button"
+                    aria-pressed={active}
+                    onClick={() => pickPreset(preset)}
+                    className={cn(
+                      "rounded-pill border px-3.5 py-1.5 font-ui text-[0.76rem] font-medium transition-colors",
+                      active
+                        ? "border-info bg-info/10 text-info"
+                        : "border-border text-ink-muted hover:border-border-strong hover:text-ink",
+                    )}
+                  >
+                    {preset.label}
+                  </button>
+                )
+              })}
+            </div>
+
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <label className="flex flex-col gap-1.5">
+                <span className="font-ui text-[0.66rem] font-medium tracking-[0.06em] text-ink-muted uppercase">
+                  Début
+                </span>
+                <input
+                  type="date"
+                  value={draft.startDate}
+                  onChange={(e) => set("startDate", e.target.value)}
+                  className={cn(inputCls, "[color-scheme:dark]")}
+                />
+              </label>
+              <label className="flex flex-col gap-1.5">
+                <span className="font-ui text-[0.66rem] font-medium tracking-[0.06em] text-ink-muted uppercase">
+                  Fin
+                </span>
+                <input
+                  type="date"
+                  min={draft.startDate || undefined}
+                  value={draft.endDate}
+                  onChange={(e) => set("endDate", e.target.value)}
+                  className={cn(
+                    inputCls,
+                    "[color-scheme:dark]",
+                    !datesOk && "border-danger",
+                  )}
+                />
+              </label>
+            </div>
+
+            {datesOk && span ? (
+              <div className="flex items-start gap-2.5 rounded-md border border-border bg-surface-nested px-3.5 py-3">
+                <CalendarRange size={14} className="mt-0.5 shrink-0 text-info" />
+                <p className="font-body text-[0.76rem] leading-relaxed text-ink-muted">
+                  Du{" "}
+                  <span className="text-ink">{fmtFrLong(draft.startDate)}</span>{" "}
+                  au <span className="text-ink">{fmtFrLong(draft.endDate)}</span>.
+                  <span
+                    className={cn(
+                      "ml-1",
+                      span.tone === "over" && "text-danger",
+                      span.tone === "soon" && "text-warning",
+                    )}
+                  >
+                    {span.status}.
+                  </span>
+                </p>
+              </div>
+            ) : (
+              <p className="font-body text-[0.74rem] text-danger">
+                La date de fin doit suivre la date de début.
+              </p>
+            )}
+          </div>
 
           {/* Compte sponsor */}
           <div className="flex flex-col gap-2.5">
@@ -273,7 +386,7 @@ export function PartnerFormModal({
           <button
             type="button"
             onClick={submit}
-            disabled={!draft.name.trim()}
+            disabled={!draft.name.trim() || !datesOk}
             className="inline-flex items-center gap-1.5 rounded-md bg-brand px-5 py-2 font-ui text-sm font-medium text-ink-inverted shadow-glow transition-colors hover:bg-brand-dim disabled:cursor-not-allowed disabled:opacity-45"
           >
             <Check size={16} />

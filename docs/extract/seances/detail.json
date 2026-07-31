@@ -1,0 +1,626 @@
+{
+  "id": "b514dcdf-91dc-412f-a541-015bd4b1e57b",
+  "date": "2026-07-10T17:00:00.000Z",
+  "creatorId": null,
+  "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+  "category": {
+    "id": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+    "name": "FFF",
+    "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+    "description": null,
+    "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021836347-935196374.jpg",
+    "gender": "MALE",
+    "colors": [
+      "#0060FD",
+      "#991B1B"
+    ],
+    "automaticConvocation": false,
+    "convocationLeadHours": null
+  },
+  "categoryGroups": [
+    {
+      "id": "c98df277-c391-4692-95f1-3f9859ad85d9",
+      "name": "Groupe A",
+      "description": null,
+      "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021363950-303102182.jpg",
+      "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+      "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+    }
+  ],
+  "programSessionId": "db1fc9cf-31da-43ef-be58-b5431ccf208b",
+  "presences": [],
+  "programSession": {
+    "id": "db1fc9cf-31da-43ef-be58-b5431ccf208b",
+    "type": "SESSION",
+    "number": 96,
+    "index": 2,
+    "week": 32,
+    "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+    "gamePhase": null,
+    "gamePrincipe": null,
+    "tacticalPrincipleId": "8b277085-6ccb-423d-b274-af14239e0b38",
+    "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "annualProgramId": "206ccc47-622b-44f6-bbc7-78ccfb836467",
+    "eventId": "db1fc9cf-31da-43ef-be58-b5431ccf208b",
+    "createdAt": "2026-03-11T14:25:46.941Z",
+    "updatedAt": "2026-07-02T09:27:44.944Z",
+    "teamInstallationId": "11bf92fd-6b6b-400e-a441-99435a9d8f03",
+    "externalAddress": null,
+    "automaticConvocation": false,
+    "convocationLeadHours": null,
+    "autoConvocationLastSentAt": null,
+    "evaluationItems": [],
+    "tacticalPhase": {
+      "id": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+      "groupId": "2be133e7-5ef1-4fe3-9771-19c4182b8b50",
+      "name": "Conserver - Progresser",
+      "index": 0,
+      "translations": {},
+      "sourceLanguage": "fr"
+    },
+    "tacticalPrinciple": {
+      "id": "8b277085-6ccb-423d-b274-af14239e0b38",
+      "name": "Créer et utiliser des espaces",
+      "index": 0,
+      "color": "#1E3A8A",
+      "translations": {},
+      "sourceLanguage": "fr",
+      "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da"
+    }
+  },
+  "playersEvaluations": [],
+  "groupsEvaluations": [],
+  "isDraft": false,
+  "status": "NOT_STARTED",
+  "gamePrincipe": null,
+  "gamePhase": null,
+  "materials": [
+    {
+      "amount": 12,
+      "equipment": "/things/equipments/general/02.svg"
+    },
+    {
+      "amount": 10,
+      "equipment": "/things/equipments/balls/03.svg"
+    },
+    {
+      "amount": 2,
+      "equipment": "/things/equipments/goals/11.svg"
+    }
+  ],
+  "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+  "tacticalPrincipleId": "8b277085-6ccb-423d-b274-af14239e0b38",
+  "duration": "72",
+  "targetRpe": 0,
+  "effective": 0,
+  "statusReason": null,
+  "postponedDate": null,
+  "trainingTacticsOrder": [
+    "f33cf1fb-9095-4cb6-97f0-a1f9a009d920",
+    "2c2bb8fd-d077-42eb-a1cd-5667855deb2a",
+    "457983d3-d560-47dc-8a9c-466c2f74649d",
+    "8a77b03a-2c2d-40e0-a3a6-40cc9bac0e76",
+    "ae08a758-cf56-4614-9b35-b091dfc573f4",
+    "194fe30c-e558-4534-a29c-9916f36cafaf"
+  ],
+  "explanation": "",
+  "safetyVerified": false,
+  "hydrationVerified": false,
+  "conclusion": null,
+  "internalNotes": null,
+  "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+  "trainingTactics": [],
+  "tacticalPhase": {
+    "id": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+    "groupId": "2be133e7-5ef1-4fe3-9771-19c4182b8b50",
+    "name": "Conserver - Progresser",
+    "index": 0,
+    "translations": {},
+    "sourceLanguage": "fr"
+  },
+  "tacticalPrinciple": {
+    "id": "8b277085-6ccb-423d-b274-af14239e0b38",
+    "name": "Créer et utiliser des espaces",
+    "index": 0,
+    "color": "#1E3A8A",
+    "translations": {},
+    "sourceLanguage": "fr",
+    "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da"
+  },
+  "trainingSessionTactics": [
+    {
+      "id": "194fe30c-e558-4534-a29c-9916f36cafaf",
+      "trainingSessionId": "b514dcdf-91dc-412f-a541-015bd4b1e57b",
+      "tacticId": "bd1b9b3f-787e-4259-9436-eacdf39821b5",
+      "tactic": {
+        "id": "bd1b9b3f-787e-4259-9436-eacdf39821b5",
+        "title": "6vs6 - Point de fixation ",
+        "translations": {},
+        "sourceLanguage": "fr",
+        "type": "game",
+        "createdById": "5d3bd2a9-05ed-4d8a-8975-600b3c25b95e",
+        "isPublic": true,
+        "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+        "tacticalPrincipleId": "8b277085-6ccb-423d-b274-af14239e0b38",
+        "programSessionId": null,
+        "previewVideo": null,
+        "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+        "surface": [
+          20,
+          15
+        ],
+        "duration": "12",
+        "sequence": "3*4",
+        "squad": [
+          12,
+          0
+        ],
+        "materials": [
+          {
+            "amount": 12,
+            "equipment": "/things/equipments/general/02.svg"
+          },
+          {
+            "amount": 2,
+            "equipment": "/things/equipments/goals/11.svg"
+          },
+          {
+            "amount": 10,
+            "equipment": "/things/equipments/balls/03.svg"
+          }
+        ],
+        "tactic": "{\"stadium\":\"/things/stadiums/13.svg\",\"objects\":[{\"category\":\"shape\",\"type\":\"rectangle\",\"id\":\"1757604526733\",\"fill\":\"transparent\",\"strokeColor\":\"black\",\"strokeWidth\":1,\"isDashed\":false,\"dashSpace\":5,\"x\":104.87396789164248,\"y\":97.47815631387729,\"width\":479.9601190663895,\"height\":304.50503175688834,\"rotation\":0},{\"type\":\"ball\",\"category\":\"equipment\",\"x\":105.07339221106052,\"y\":217.95835764789086,\"rotation\":89.99999999999989,\"img\":\"/things/equipments/goals/07.svg\",\"id\":\"1757604373792\",\"width\":56.281745692208034,\"height\":23.263121552779314,\"color\":\"#ff0000ff\"},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1757604401180\",\"x\":478.73885739712716,\"y\":302.1343810637166,\"radius\":10,\"number\":2,\"color\":\"#000000\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1757604401627\",\"x\":466.63303837023017,\"y\":115.02030781123607,\"radius\":10,\"number\":3,\"color\":\"#000000\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1757604402101\",\"x\":407.5281572389092,\"y\":219.60497993334496,\"radius\":10,\"number\":4,\"color\":\"#000000\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1757604402626\",\"x\":403.2555152294162,\"y\":168.37983440414877,\"radius\":10,\"number\":5,\"color\":\"#000000\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1757604403193\",\"x\":338.45377808543776,\"y\":312.0948260277269,\"radius\":10,\"number\":6,\"color\":\"#000000\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1757604405279\",\"x\":337.02956408227334,\"y\":199.6840900053242,\"radius\":10,\"number\":7,\"color\":\"#000000\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1757604419623\",\"x\":522.8894914952225,\"y\":139.2099598666898,\"radius\":10,\"number\":2,\"color\":\"#88D6BB\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1757604420042\",\"x\":515.7684214794006,\"y\":370.43457510264477,\"radius\":10,\"number\":3,\"color\":\"#88D6BB\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1757604420622\",\"x\":401.1191942246696,\"y\":262.29260120767503,\"radius\":10,\"number\":4,\"color\":\"#88D6BB\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1757604421092\",\"x\":272.93993393987705,\"y\":235.96856808850487,\"radius\":10,\"number\":5,\"color\":\"#88D6BB\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1757604421479\",\"x\":163.98756269780367,\"y\":134.22973738468463,\"radius\":10,\"number\":6,\"color\":\"#88D6BB\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1757604421957\",\"x\":198.16869877374828,\"y\":366.1658129752118,\"radius\":10,\"number\":7,\"color\":\"#88D6BB\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},{\"type\":\"ball\",\"category\":\"equipment\",\"x\":585.3004227547299,\"y\":276.4140394398036,\"rotation\":-90.00000000000018,\"img\":\"/things/equipments/goals/07.svg\",\"id\":\"1757604558894\",\"width\":56.28174569220775,\"height\":23.2631215527792,\"color\":\"#ffff00ff\"},{\"type\":\"ball\",\"category\":\"equipment\",\"x\":57.883619462058725,\"y\":238.1029491522213,\"rotation\":0,\"img\":\"/things/equipments/general/24.svg\",\"id\":\"1757604626247\",\"width\":15,\"height\":15},{\"type\":\"ball\",\"category\":\"equipment\",\"x\":617.6302246835019,\"y\":240.27688525192744,\"rotation\":0,\"img\":\"/things/equipments/general/24.svg\",\"id\":\"1757604632049\",\"color\":\"#ffff00ff\",\"width\":15,\"height\":15},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1757604642031\",\"x\":355.54434612341015,\"y\":71.62122618233379,\"radius\":10,\"number\":1,\"color\":\"#ffff00ff\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1757604647942\",\"x\":366.25645312499245,\"y\":421.69927566783053,\"radius\":10,\"number\":2,\"color\":\"#ff0000ff\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"shape\",\"type\":\"line\",\"id\":\"1757604668943\",\"isArrow\":true,\"isWavy\":false,\"isDashed\":false,\"dashSpace\":5,\"strokeColor\":\"black\",\"strokeWidth\":1,\"start\":{\"x\":275.06754126978353,\"y\":221.27225800943472},\"end\":{\"x\":345.5661344264194,\"y\":83.24894922243395}},{\"category\":\"shape\",\"type\":\"line\",\"id\":\"1757604670444\",\"isArrow\":true,\"isWavy\":false,\"isDashed\":false,\"dashSpace\":5,\"strokeColor\":\"black\",\"strokeWidth\":1,\"start\":{\"x\":344.141920423255,\"y\":77.5572663858566},\"end\":{\"x\":178.93309605618919,\"y\":131.62825333334143}},{\"category\":\"shape\",\"type\":\"line\",\"id\":\"1757604672516\",\"isArrow\":true,\"isWavy\":false,\"isDashed\":false,\"dashSpace\":5,\"strokeColor\":\"black\",\"strokeWidth\":1,\"start\":{\"x\":166.82727702929213,\"y\":147.9918414885013},\"end\":{\"x\":198.15998509890804,\"y\":351.46950289614165}},{\"category\":\"shape\",\"type\":\"line\",\"id\":\"1757604674933\",\"isArrow\":true,\"isWavy\":false,\"isDashed\":false,\"dashSpace\":5,\"strokeColor\":\"black\",\"strokeWidth\":1,\"start\":{\"x\":207.4173761194764,\"y\":360.71848750557984},\"end\":{\"x\":498.6691397665881,\"y\":364.2757892784407}},{\"category\":\"shape\",\"type\":\"line\",\"id\":\"1757604676333\",\"isArrow\":true,\"isWavy\":false,\"isDashed\":false,\"dashSpace\":5,\"strokeColor\":\"black\",\"strokeWidth\":1,\"start\":{\"x\":518.6081358108892,\"y\":357.161185732719},\"end\":{\"x\":504.36599577924557,\"y\":253.9994343197545}},{\"category\":\"shape\",\"type\":\"line\",\"id\":\"1757604677914\",\"isArrow\":true,\"isWavy\":false,\"isDashed\":false,\"dashSpace\":5,\"strokeColor\":\"black\",\"strokeWidth\":1,\"start\":{\"x\":415.35262058147305,\"y\":258.2681964471875},\"end\":{\"x\":499.38124676817034,\"y\":249.73067219232146}},{\"category\":\"shape\",\"type\":\"line\",\"id\":\"1757604679568\",\"isArrow\":true,\"isWavy\":false,\"isDashed\":false,\"dashSpace\":5,\"strokeColor\":\"black\",\"strokeWidth\":1,\"start\":{\"x\":504.36599577924557,\"y\":249.73067219232146},\"end\":{\"x\":592.667263975436,\"y\":246.17337041946064}},{\"type\":\"ball\",\"category\":\"equipment\",\"x\":266.5309709256375,\"y\":218.89351957877275,\"rotation\":0,\"img\":\"/things/equipments/balls/01.svg\",\"id\":\"1757604683976\",\"width\":10,\"height\":10}]}",
+        "preview": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/tactics/image-1757605916876-276302739.png",
+        "createdAt": "2025-09-11T15:51:56.894Z",
+        "updatedAt": "2026-01-23T09:26:23.040Z",
+        "originalTacticId": null,
+        "originalTeamId": null,
+        "fields": [
+          {
+            "id": "49d2f424",
+            "title": "Objectif ",
+            "content": "<p>Trouver un point de fixation pour ensuite marquer </p>"
+          },
+          {
+            "id": "d6aac536",
+            "title": "But(s) ",
+            "content": "<p>Marquer </p>"
+          },
+          {
+            "id": "4301dde8",
+            "title": "Organisation ",
+            "content": "<ul><li><p>2 buts placés aux extrémités</p></li><li><p>2 jokers ou 2 planches de différentes couleurs placées au milieu des couloirs latéraux</p></li><li><p>2 équipes de 6 joueurs (possibilité d’ajouter 1 ou 2 jokers si besoin)</p></li><li><p>Ballons en quantité</p></li></ul>"
+          },
+          {
+            "id": "31b2337d",
+            "title": "Consignes",
+            "content": "<ul><li><p>Jeu libre en <strong>6 vs 6</strong></p></li><li><p>Le sens de jeu est <strong>déterminé par l'appui ou la planche touché</strong> :</p><ul><li><p>Exemple : touche planche jaune → attaquer but jaune</p></li><li><p>Touche planche rouge → attaquer but rouge</p></li></ul></li><li><p>Si <strong>les deux appui ou planches sont touchés dans la même séquence</strong>, l’équipe peut choisir librement le but à attaquer.</p></li><li><p>Quand un joueur touche une planche :</p><ul><li><p>L’adversaire <strong>ne peut pas intervenir immédiatement</strong></p></li><li><p>Il peut seulement intervenir <strong>après que le joueur ait rejoué son ballon</strong></p></li></ul></li></ul>"
+          },
+          {
+            "id": "049bc2b7",
+            "title": "Comportements Attendus Collectif ",
+            "content": "<ul><li><p>Agrandir l’espace de jeu.</p></li><li><p>Créer des triangles pour garder des solutions de passes en appui/remise</p></li><li><p>Alterner jeu court (sécuriser la possession) et jeu long (changer vite de côté)</p></li></ul>"
+          },
+          {
+            "id": "22ab728e",
+            "title": "Comportements attendus Individuels ",
+            "content": "<ul><li><p>Se déplacer constamment pour proposer une solution </p></li><li><p>Lever la tête avant de recevoir pour repérer la planche libre ou le but à attaquer</p></li><li><p>Fixer un défenseur avant de donner le ballon pour libérer un partenaire</p></li><li><p>Être capable de finir vite (tir rapide après la planche)</p></li></ul>"
+          },
+          {
+            "id": "c7a4afc3",
+            "title": "Variables ",
+            "content": "<ul><li><p><strong>Touches de balle limitées</strong> (2 touches max)</p></li><li><p><strong>Temps limité</strong> pour marquer après activation de la planche (ex. : 8 secondes)</p></li><li><p>Ajouter un <strong>joker intérieur</strong> qui joue toujours avec l’équipe en possession</p></li><li><p>Imposer de toucher <strong>obligatoirement les deux planches</strong> avant de pouvoir marquer.</p></li></ul>"
+          }
+        ],
+        "recuperation": "30"
+      }
+    },
+    {
+      "id": "457983d3-d560-47dc-8a9c-466c2f74649d",
+      "trainingSessionId": "b514dcdf-91dc-412f-a541-015bd4b1e57b",
+      "tacticId": "5852b4db-31b4-48be-a368-2d5e43b61d87",
+      "tactic": {
+        "id": "5852b4db-31b4-48be-a368-2d5e43b61d87",
+        "title": "Conservation - 4+2 contre 2 ",
+        "translations": {},
+        "sourceLanguage": "fr",
+        "type": "game",
+        "createdById": "5d3bd2a9-05ed-4d8a-8975-600b3c25b95e",
+        "isPublic": true,
+        "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+        "tacticalPrincipleId": "8b277085-6ccb-423d-b274-af14239e0b38",
+        "programSessionId": null,
+        "previewVideo": null,
+        "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+        "surface": [
+          20,
+          15
+        ],
+        "duration": "9",
+        "sequence": "3*3",
+        "squad": [
+          10,
+          0
+        ],
+        "materials": [
+          {
+            "amount": 10,
+            "equipment": "/things/equipments/general/02.svg"
+          },
+          {
+            "amount": 8,
+            "equipment": "/things/equipments/balls/03.svg"
+          }
+        ],
+        "tactic": "{\"stadium\":\"/things/stadiums/13.svg\",\"objects\":[{\"category\":\"shape\",\"type\":\"rectangle\",\"id\":\"1759940770422\",\"fill\":\"transparent\",\"strokeColor\":\"black\",\"strokeWidth\":1,\"isDashed\":false,\"dashSpace\":5,\"x\":139.09464965864169,\"y\":101.88271750494961,\"width\":422.9919367588933,\"height\":291.69694569884103,\"rotation\":0},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759940782153\",\"x\":490.84484688785085,\"y\":136.3651280226014,\"radius\":10,\"number\":1,\"color\":\"#000000\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759940782624\",\"x\":211.698652932487,\"y\":134.94221609236317,\"radius\":10,\"number\":2,\"color\":\"#000000\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759940783174\",\"x\":489.4206316125683,\"y\":346.9560936978623,\"radius\":10,\"number\":3,\"color\":\"#000000\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759940783788\",\"x\":206.7138994689983,\"y\":346.9560936978624,\"radius\":10,\"number\":4,\"color\":\"#000000\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759940785261\",\"x\":426.04305186249843,\"y\":226.7200355927302,\"radius\":10,\"number\":1,\"color\":\"#88D6BB\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759940785661\",\"x\":329.9085207809318,\"y\":284.34796876737937,\"radius\":10,\"number\":2,\"color\":\"#88D6BB\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759940786086\",\"x\":358.39282628658134,\"y\":239.52624296487446,\"radius\":10,\"number\":3,\"color\":\"#88D6BB\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759940786655\",\"x\":292.1668159859464,\"y\":228.8544034880876,\"radius\":10,\"number\":4,\"color\":\"#88D6BB\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759940787596\",\"x\":401.8313921826964,\"y\":290.0396164883324,\"radius\":10,\"number\":1,\"color\":\"#ffff00ff\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759940793122\",\"x\":325.6663680281073,\"y\":194.0326776855827,\"radius\":10,\"number\":2,\"color\":\"#ffff00ff\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"shape\",\"type\":\"line\",\"id\":\"1759941452104\",\"isArrow\":true,\"isWavy\":false,\"isDashed\":false,\"dashSpace\":5,\"strokeColor\":\"black\",\"strokeWidth\":1,\"start\":{\"x\":223.83545853794865,\"y\":142.4357075167397},\"end\":{\"x\":310.71259033017924,\"y\":186.54597735412543}},{\"category\":\"shape\",\"type\":\"line\",\"id\":\"1759941454686\",\"isArrow\":true,\"isWavy\":false,\"isDashed\":false,\"dashSpace\":5,\"strokeColor\":\"black\",\"strokeWidth\":1,\"start\":{\"x\":339.1968958358286,\"y\":187.96888928436368},\"end\":{\"x\":480.9063157264343,\"y\":143.14716348185885}},{\"category\":\"shape\",\"type\":\"line\",\"id\":\"1759941457682\",\"isArrow\":true,\"isWavy\":false,\"isDashed\":false,\"dashSpace\":5,\"strokeColor\":\"black\",\"strokeWidth\":1,\"start\":{\"x\":487.3152844652054,\"y\":148.83881120281183},\"end\":{\"x\":487.3152844652054,\"y\":335.2402740640224}},{\"category\":\"shape\",\"type\":\"line\",\"id\":\"1759941459692\",\"isArrow\":true,\"isWavy\":false,\"isDashed\":false,\"dashSpace\":5,\"strokeColor\":\"black\",\"strokeWidth\":1,\"start\":{\"x\":482.3305310017168,\"y\":337.3746419593798},\"end\":{\"x\":415.39241306344076,\"y\":301.09038773830446}}]}",
+        "preview": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/tactics/image-1759941814734-165270714.png",
+        "createdAt": "2025-10-08T16:43:34.769Z",
+        "updatedAt": "2026-01-23T09:26:28.124Z",
+        "originalTacticId": null,
+        "originalTeamId": null,
+        "fields": [
+          {
+            "id": "49d2f424",
+            "title": "Objectif ",
+            "content": "<p><strong>Conserver le ballon</strong> collectivement sans sens de jeu imposé</p>"
+          },
+          {
+            "id": "d6aac536",
+            "title": "But(s) ",
+            "content": "<p>10 passes = 1 point</p>"
+          },
+          {
+            "id": "4301dde8",
+            "title": "Organisation ",
+            "content": "<ul><li><p>2 équipes équilibrées (ex : 4vs4, 5vs5, ou 6vs6).</p></li><li><p>2 <strong>jokers neutres</strong> pour favoriser la conservation</p></li><li><p>Un ballon en jeu</p></li></ul>"
+          },
+          {
+            "id": "31b2337d",
+            "title": "Consignes",
+            "content": "<ul><li><p>Conserver le ballon le plus longtemps possible.</p></li><li><p>Jeu en <strong>une touche</strong> de balle</p></li><li><p>Se rendre <strong>disponible avant la réception</strong> (anticiper la prochaine action)</p></li><li><p>Si une équipe perd le ballon, <strong>transition immédiate</strong> en phase défensive</p></li></ul>"
+          },
+          {
+            "id": "049bc2b7",
+            "title": "Comportements Attendus Collectif ",
+            "content": "<ul><li><p><strong>Création de triangles d’appui</strong> autour du porteur</p></li><li><p>Mobilité constante pour offrir <strong>des solutions dans les intervalles</strong></p></li><li><p>Synchronisation dans les déplacements (un joueur dans la largeur, un dans la profondeur)</p></li><li><p>Soutien rapide du porteur pour assurer la continuité du jeu</p></li></ul>"
+          },
+          {
+            "id": "22ab728e",
+            "title": "Comportements attendus Individuels ",
+            "content": "<ul><li><p><strong>Porteur :</strong> orientation du corps ouverte, jeu simple, choix rapide</p></li><li><p><strong>Partenaire proche :</strong> proposition d’appui-remise, soutien permanent</p></li><li><p><strong>Partenaire éloigné :</strong> occupation des espaces libres pour étirer le bloc adverse</p></li></ul>"
+          },
+          {
+            "id": "c7a4afc3",
+            "title": "Variables ",
+            "content": "<p><strong>Espace réduit</strong> pour plus de densité</p>"
+          }
+        ],
+        "recuperation": "30"
+      }
+    },
+    {
+      "id": "f33cf1fb-9095-4cb6-97f0-a1f9a009d920",
+      "trainingSessionId": "b514dcdf-91dc-412f-a541-015bd4b1e57b",
+      "tacticId": "9bb3b126-a0e4-4d2a-871e-2896157766ce",
+      "tactic": {
+        "id": "9bb3b126-a0e4-4d2a-871e-2896157766ce",
+        "title": "Enchaînement Jeu combiné au poste – Finition - Jeu direct ",
+        "translations": {},
+        "sourceLanguage": "fr",
+        "type": "exercice",
+        "createdById": "5d3bd2a9-05ed-4d8a-8975-600b3c25b95e",
+        "isPublic": true,
+        "tacticalPhaseId": "ef230503-f7a4-493c-a97a-daab9734bd73",
+        "tacticalPrincipleId": "ed45fde9-5f20-4bc0-b5b5-d34b6b85f045",
+        "programSessionId": null,
+        "previewVideo": null,
+        "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+        "surface": [
+          0,
+          0
+        ],
+        "duration": "12",
+        "sequence": "4*3",
+        "squad": [
+          0,
+          0
+        ],
+        "materials": [],
+        "tactic": "{\"stadium\":\"/things/stadiums/06.svg\",\"objects\":[{\"type\":\"ball\",\"category\":\"equipment\",\"x\":464.4968642951243,\"y\":237.28429585362284,\"rotation\":0,\"img\":\"/things/equipments/general/97.svg\",\"id\":\"1765188512586\",\"color\":\"#e3ff00ff\",\"width\":8.763900262319893,\"height\":8.763900262319893},{\"type\":\"ball\",\"category\":\"equipment\",\"x\":201.7596390785315,\"y\":236.612456376836,\"rotation\":0,\"img\":\"/things/equipments/general/97.svg\",\"id\":\"1765188540648\",\"width\":8.763900262319893,\"height\":8.763900262319893},{\"type\":\"ball\",\"category\":\"equipment\",\"x\":211.04753144089028,\"y\":448.66595047066727,\"rotation\":0,\"img\":\"/things/equipments/general/97.svg\",\"id\":\"1765188541194\",\"width\":8.763900262319893,\"height\":8.763900262319893},{\"type\":\"ball\",\"category\":\"equipment\",\"x\":69.36860462330735,\"y\":406.7296650169712,\"rotation\":0,\"img\":\"/things/equipments/general/97.svg\",\"id\":\"1765188541587\",\"width\":8.763900262319893,\"height\":8.763900262319893},{\"type\":\"ball\",\"category\":\"equipment\",\"x\":194.20115097901777,\"y\":164.53409548430471,\"rotation\":0,\"img\":\"/things/equipments/goals/08.svg\",\"id\":\"1765188630736\",\"width\":25.291391181574284,\"height\":10.453775021717375},{\"type\":\"ball\",\"category\":\"equipment\",\"x\":458.4235776169385,\"y\":164.57371197263697,\"rotation\":0,\"img\":\"/things/equipments/goals/08.svg\",\"id\":\"1765188638607\",\"width\":25.291391181574284,\"height\":10.453775021717375},{\"type\":\"ball\",\"category\":\"equipment\",\"x\":427.49776021080294,\"y\":305.62368499339107,\"rotation\":0,\"img\":\"/things/equipments/general/97.svg\",\"id\":\"1765188659859\",\"color\":\"#e3ff00ff\",\"width\":8.763900262319893,\"height\":8.763900262319893},{\"type\":\"ball\",\"category\":\"equipment\",\"x\":483.7847566574831,\"y\":446.53158257531004,\"rotation\":0,\"img\":\"/things/equipments/general/97.svg\",\"id\":\"1765188660403\",\"color\":\"#e3ff00ff\",\"width\":8.763900262319893,\"height\":8.763900262319893},{\"type\":\"ball\",\"category\":\"equipment\",\"x\":607.0098710424395,\"y\":277.9561353304098,\"rotation\":0,\"img\":\"/things/equipments/general/97.svg\",\"id\":\"1765188660975\",\"color\":\"#e3ff00ff\",\"width\":8.763900262319893,\"height\":8.763900262319893},{\"type\":\"ball\",\"category\":\"equipment\",\"x\":602.7677182896148,\"y\":410.32656133089915,\"rotation\":0,\"img\":\"/things/equipments/general/97.svg\",\"id\":\"1765188696915\",\"color\":\"#e3ff00ff\",\"width\":8.763900262319893,\"height\":8.763900262319893},{\"type\":\"ball\",\"category\":\"equipment\",\"x\":541.5569545254915,\"y\":345.6236849933911,\"rotation\":0,\"img\":\"/things/equipments/general/97.svg\",\"id\":\"1765188697499\",\"color\":\"#e3ff00ff\",\"width\":8.763900262319893,\"height\":8.763900262319893},{\"type\":\"ball\",\"category\":\"equipment\",\"x\":225.289684193715,\"y\":297.8372858654129,\"rotation\":0,\"img\":\"/things/equipments/general/97.svg\",\"id\":\"1765188742747\",\"width\":8.763900262319893,\"height\":8.763900262319893},{\"type\":\"ball\",\"category\":\"equipment\",\"x\":67.23228171038363,\"y\":275.8217674350523,\"rotation\":0,\"img\":\"/things/equipments/general/97.svg\",\"id\":\"1765188743369\",\"width\":8.763900262319893,\"height\":8.763900262319893},{\"type\":\"ball\",\"category\":\"equipment\",\"x\":165.53362877789667,\"y\":366.2162914935135,\"rotation\":0,\"img\":\"/things/equipments/general/97.svg\",\"id\":\"1765188743819\",\"width\":8.763900262319893,\"height\":8.763900262319893},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1765190760304\",\"x\":47.2017886373618,\"y\":403.16111494227306,\"radius\":10,\"number\":2,\"color\":\"#000000\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1765190760706\",\"x\":159.7147953846768,\"y\":357.62793317464894,\"radius\":10,\"number\":3,\"color\":\"#000000\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1765190761295\",\"x\":205.28968419371589,\"y\":308.5374715814295,\"radius\":10,\"number\":4,\"color\":\"#000000\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1765190776161\",\"x\":191.0475314408912,\"y\":457.94322425644566,\"radius\":10,\"number\":1,\"color\":\"#000000\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1765190782673\",\"x\":49.338111550285504,\"y\":290.03961648833234,\"radius\":10,\"number\":5,\"color\":\"#000000\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1765190783626\",\"x\":188.91120852796755,\"y\":250.90953840678048,\"radius\":10,\"number\":6,\"color\":\"#000000\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},{\"type\":\"ball\",\"category\":\"equipment\",\"x\":52.898649738491656,\"y\":386.08617177941403,\"rotation\":0,\"img\":\"/things/equipments/balls/01.svg\",\"id\":\"1765190825379\",\"width\":10,\"height\":10},{\"type\":\"ball\",\"category\":\"equipment\",\"x\":49.338111550285504,\"y\":427.35061775632335,\"rotation\":0,\"img\":\"/things/equipments/balls/01.svg\",\"id\":\"1765190829961\",\"width\":10,\"height\":10},{\"type\":\"ball\",\"category\":\"equipment\",\"x\":164.69954884816545,\"y\":471.460887593709,\"rotation\":0,\"img\":\"/things/equipments/balls/01.svg\",\"id\":\"1765190830363\",\"width\":10,\"height\":10},{\"type\":\"ball\",\"category\":\"equipment\",\"x\":190.33542380324994,\"y\":477.152535314662,\"rotation\":0,\"img\":\"/things/equipments/balls/01.svg\",\"id\":\"1765190835843\",\"width\":10,\"height\":10},{\"category\":\"shape\",\"type\":\"line\",\"id\":\"1765190846943\",\"isArrow\":true,\"isWavy\":false,\"isDashed\":false,\"dashSpace\":5,\"strokeColor\":\"black\",\"strokeWidth\":1,\"start\":{\"x\":62.187024793388424,\"y\":385.75364758748026},\"isDoubleArrow\":false,\"end\":{\"x\":189.65429193116944,\"y\":313.1851391453295}},{\"category\":\"shape\",\"type\":\"line\",\"id\":\"1765190848879\",\"isArrow\":true,\"isWavy\":false,\"isDashed\":false,\"dashSpace\":5,\"strokeColor\":\"black\",\"strokeWidth\":1,\"start\":{\"x\":203.8964446839941,\"y\":321.01115476164},\"isDoubleArrow\":false,\"end\":{\"x\":168.29106280193238,\"y\":350.180849331524}},{\"category\":\"shape\",\"type\":\"line\",\"id\":\"1765190870603\",\"isArrow\":true,\"isWavy\":false,\"isDashed\":false,\"dashSpace\":5,\"strokeColor\":\"black\",\"strokeWidth\":1,\"start\":{\"x\":154.04891004910772,\"y\":344.489201610571},\"isDoubleArrow\":false,\"end\":{\"x\":111.32245179063361,\"y\":201.48655262162706}},{\"category\":\"shape\",\"type\":\"line\",\"id\":\"1765190873333\",\"isArrow\":true,\"isWavy\":false,\"isDashed\":false,\"dashSpace\":5,\"strokeColor\":\"black\",\"strokeWidth\":1,\"start\":{\"x\":53.64173314169362,\"y\":278.32379685449246},\"isDoubleArrow\":false,\"end\":{\"x\":106.33769832714496,\"y\":199.35218472626968}},{\"category\":\"shape\",\"type\":\"line\",\"id\":\"1765190875328\",\"isArrow\":true,\"isWavy\":false,\"isDashed\":false,\"dashSpace\":5,\"strokeColor\":\"black\",\"strokeWidth\":1,\"start\":{\"x\":109.89823651535113,\"y\":197.92927279603143},\"isDoubleArrow\":false,\"end\":{\"x\":201.7601217710704,\"y\":210.0240242030565}},{\"category\":\"shape\",\"type\":\"curvedLine\",\"id\":\"1765190878215\",\"isArrow\":true,\"isDoubleArrow\":false,\"isDashed\":true,\"dashSpace\":5,\"strokeColor\":\"black\",\"strokeWidth\":1,\"start\":{\"x\":201.76012177107037,\"y\":256.98011790091874},\"isWavy\":false,\"center\":{\"x\":226.0480141334291,\"y\":245.2410944764532},\"end\":{\"x\":208.88119814748273,\"y\":212.1583920984139}},{\"category\":\"shape\",\"type\":\"line\",\"id\":\"1765190898632\",\"isArrow\":true,\"isWavy\":false,\"isDashed\":false,\"dashSpace\":5,\"strokeColor\":\"black\",\"strokeWidth\":1,\"start\":{\"x\":209.59330578512393,\"y\":202.90946455186526},\"isDoubleArrow\":false,\"end\":{\"x\":207.45698287220026,\"y\":173.02831401686205}},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1765190910985\",\"x\":463.78475665748397,\"y\":443.00264898894403,\"radius\":10,\"number\":1,\"color\":\"#88D6BB\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1765190911455\",\"x\":632.5542667784565,\"y\":418.81314617489375,\"radius\":10,\"number\":2,\"color\":\"#88D6BB\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1765190911983\",\"x\":530.0107669581187,\"y\":366.8768607211978,\"radius\":10,\"number\":3,\"color\":\"#88D6BB\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1765190912544\",\"x\":436.7246664271171,\"y\":331.30406246524154,\"radius\":10,\"number\":4,\"color\":\"#88D6BB\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1765190913024\",\"x\":633.2663744160977,\"y\":297.1541761395235,\"radius\":10,\"number\":5,\"color\":\"#88D6BB\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1765190913527\",\"x\":476.6026941350262,\"y\":277.9448650813071,\"radius\":10,\"number\":6,\"color\":\"#88D6BB\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},{\"type\":\"ball\",\"category\":\"equipment\",\"x\":625.4331904020443,\"y\":453.67448846573086,\"rotation\":0,\"img\":\"/things/equipments/balls/01.svg\",\"id\":\"1765190940152\",\"width\":10,\"height\":10},{\"type\":\"ball\",\"category\":\"equipment\",\"x\":484.4358781490799,\"y\":470.74943162858983,\"rotation\":0,\"img\":\"/things/equipments/balls/01.svg\",\"id\":\"1765190940627\",\"width\":10,\"height\":10},{\"type\":\"ball\",\"category\":\"equipment\",\"x\":622.5847598514794,\"y\":433.75372144239543,\"rotation\":0,\"img\":\"/things/equipments/balls/01.svg\",\"id\":\"1765190941010\",\"width\":10,\"height\":10},{\"type\":\"ball\",\"category\":\"equipment\",\"x\":463.784756657484,\"y\":423.7933379307276,\"rotation\":0,\"img\":\"/things/equipments/balls/01.svg\",\"id\":\"1765190941493\",\"width\":10,\"height\":10},{\"category\":\"shape\",\"type\":\"line\",\"id\":\"1765190966415\",\"isArrow\":true,\"isWavy\":false,\"isDashed\":false,\"dashSpace\":5,\"strokeColor\":\"black\",\"strokeWidth\":1,\"start\":{\"x\":468.8004858865333,\"y\":421.3264458434365},\"isDoubleArrow\":false,\"end\":{\"x\":476.6336699005869,\"y\":293.2643721219941}},{\"category\":\"shape\",\"type\":\"line\",\"id\":\"1765190968163\",\"isArrow\":true,\"isWavy\":false,\"isDashed\":false,\"dashSpace\":5,\"strokeColor\":\"black\",\"strokeWidth\":1,\"start\":{\"x\":450.2856873078612,\"y\":333.10590616866506},\"isDoubleArrow\":false,\"end\":{\"x\":588.4345690102608,\"y\":216.42712788912866}},{\"category\":\"shape\",\"type\":\"line\",\"id\":\"1765190973303\",\"isArrow\":true,\"isWavy\":false,\"isDashed\":false,\"dashSpace\":5,\"strokeColor\":\"black\",\"strokeWidth\":1,\"start\":{\"x\":589.1466766479019,\"y\":207.88965630769917},\"isDoubleArrow\":false,\"end\":{\"x\":473.07313171238076,\"y\":215.7156719240095}},{\"category\":\"shape\",\"type\":\"line\",\"id\":\"1765190977145\",\"isArrow\":true,\"isWavy\":false,\"isDashed\":true,\"dashSpace\":5,\"strokeColor\":\"black\",\"strokeWidth\":1,\"start\":{\"x\":634.7215654569409,\"y\":284.0154445754455},\"isDoubleArrow\":false,\"end\":{\"x\":596.9798606619555,\"y\":210.02402420305654}},{\"category\":\"shape\",\"type\":\"line\",\"id\":\"1765190980821\",\"isArrow\":true,\"isWavy\":false,\"isDashed\":false,\"dashSpace\":5,\"strokeColor\":\"black\",\"strokeWidth\":1,\"start\":{\"x\":470.936808799457,\"y\":212.86984806353306},\"isDoubleArrow\":false,\"end\":{\"x\":470.936808799457,\"y\":172.31685805174294}},{\"category\":\"shape\",\"type\":\"curvedLine\",\"id\":\"1765190984749\",\"isArrow\":true,\"isDoubleArrow\":false,\"isDashed\":true,\"dashSpace\":5,\"strokeColor\":\"black\",\"strokeWidth\":1,\"start\":{\"x\":460.2551942348385,\"y\":270.4977812381821},\"isWavy\":false,\"center\":{\"x\":451.7861352657004,\"y\":244.17391052877446},\"end\":{\"x\":468.08837824889207,\"y\":218.56149578448603}},{\"category\":\"shape\",\"type\":\"line\",\"id\":\"1765191703349\",\"isArrow\":true,\"isWavy\":false,\"isDashed\":false,\"dashSpace\":5,\"strokeColor\":\"black\",\"strokeWidth\":1,\"start\":{\"x\":467.37627061125085,\"y\":288.28418036616023},\"isDoubleArrow\":false,\"end\":{\"x\":442.45250329380764,\"y\":322.43406669187823}}]}",
+        "preview": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/tactics/image-1765192449391-955283374.png",
+        "createdAt": "2025-12-08T10:20:01.744Z",
+        "updatedAt": "2026-01-23T09:26:29.301Z",
+        "originalTacticId": null,
+        "originalTeamId": null,
+        "fields": [
+          {
+            "id": "49d2f424",
+            "title": "Objectif ",
+            "content": "<p>Jeu combiné pour progresser rapidement et lancer l’excentré en profondeur</p>"
+          },
+          {
+            "id": "d6aac536",
+            "title": "But(s) ",
+            "content": "<p>Réaliser les enchainements et finir dans le mini but </p>"
+          },
+          {
+            "id": "4301dde8",
+            "title": "Organisation ",
+            "content": "<ul><li><p>Installation symétrique <strong>des deux côtés</strong> du terrain.</p></li><li><p>Joueurs par côté :<br><strong>Défenseur central – Latéral – Milieu pointe basse – Milieu pointe haute – Excentré – Attaquant</strong></p></li><li><p><strong>Deux départs possibles</strong> : du <strong>Défenseur central</strong> ou du <strong>Latéral</strong>.</p></li></ul>"
+          },
+          {
+            "id": "31b2337d",
+            "title": "Consignes",
+            "content": "<p>1️⃣ Enchaînement départ LATÉRAL</p><ul><li><p><strong>Latéral → Milieu pointe haute</strong></p></li><li><p><strong>Pointe haute → remise</strong> vers <strong>pointe basse</strong></p></li><li><p><strong>Pointe basse → Excentré</strong> (lancé dans la profondeur)</p></li><li><p><strong>Excentré → Attaquant</strong> (balle au sol dans la surface / entre mini-buts)</p></li><li><p><strong>Attaquant → Finition</strong> (1 touche si possible)</p></li></ul><p><strong>2️⃣ </strong>Enchaînement départ DÉFENSEUR CENTRAL</p><ol><li><p><strong>Défenseur central → Attaquant</strong> </p></li><li><p><strong>Attaquant → remise</strong> vers <strong>pointe haute</strong></p></li><li><p><strong>Pointe haute → Excentré</strong> </p></li><li><p><strong>Excentré → Attaquant</strong> (ballon au sol dans zone de finition)</p></li><li><p><strong>Attaquant → Finition</strong></p></li></ol><p></p>"
+          },
+          {
+            "id": "049bc2b7",
+            "title": "Comportements Attendus Collectif ",
+            "content": "<ul><li><p>Combiner en triangle milieu / latéral / excentré</p></li><li><p>Alternance jeu court / jeu long</p></li><li><p>Occupation rationnelle des hauteurs (pointe basse / pointe haute)</p></li><li><p>Fluidité dans la circulation et continuité des actions</p></li></ul>"
+          },
+          {
+            "id": "22ab728e",
+            "title": "Comportements attendus Individuels ",
+            "content": "<ul><li><p>Appels synchronisés (profondeur / soutien / remise)</p></li><li><p>Corps orienté vers l’avant</p></li><li><p>Remises propres et rapides</p></li><li><p>Qualité technique : passes fortes, dans le bon tempo</p></li><li><p>Attaquant : finisseur → 1 touche privilégiée</p></li></ul>"
+          },
+          {
+            "id": "c7a4afc3",
+            "title": "Variables ",
+            "content": "<p>Départ jeu long </p><p>Instaurer compétition </p>"
+          }
+        ],
+        "recuperation": "30"
+      }
+    },
+    {
+      "id": "2c2bb8fd-d077-42eb-a1cd-5667855deb2a",
+      "trainingSessionId": "b514dcdf-91dc-412f-a541-015bd4b1e57b",
+      "tacticId": "e03334df-4fc2-4d1d-832c-8908b6831315",
+      "tactic": {
+        "id": "e03334df-4fc2-4d1d-832c-8908b6831315",
+        "title": "Jeu Banide - 5vs5 + 4 appuis & 1 joker",
+        "translations": {},
+        "sourceLanguage": "fr",
+        "type": "game",
+        "createdById": "5d3bd2a9-05ed-4d8a-8975-600b3c25b95e",
+        "isPublic": true,
+        "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+        "tacticalPrincipleId": "8b277085-6ccb-423d-b274-af14239e0b38",
+        "programSessionId": null,
+        "previewVideo": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/tactic-preview-1772046729141.webm-1772046729437-472351144.webm",
+        "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+        "surface": [
+          30,
+          40
+        ],
+        "duration": "12",
+        "sequence": "3*4",
+        "squad": [
+          15,
+          2
+        ],
+        "materials": [],
+        "tactic": "{\"stadium\":\"/things/stadiums/06.svg\",\"objects\":[{\"category\":\"shape\",\"type\":\"flexibleRectangle\",\"id\":\"1764333277089\",\"fill\":\"transparent\",\"strokeColor\":\"black\",\"strokeWidth\":1,\"isDashed\":false,\"dashSpace\":5,\"point1\":{\"x\":139.806757296283,\"y\":25.04547327208418},\"point2\":{\"x\":537.1628191000918,\"y\":25.04547327208418},\"point3\":{\"x\":537.1628191000918,\"y\":243.46245456365537},\"point4\":{\"x\":139.806757296283,\"y\":243.46245456365537}},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333287031\",\"x\":476.6026941350261,\"y\":140.63386381331614,\"radius\":10,\"number\":2,\"color\":\"#000000\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333287408\",\"x\":208.850222381922,\"y\":141.34531977843528,\"radius\":10,\"number\":3,\"color\":\"#000000\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333288022\",\"x\":404.67982273326163,\"y\":191.14723733677403,\"radius\":10,\"number\":4,\"color\":\"#000000\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333288669\",\"x\":286.4699548848166,\"y\":198.2617969879652,\"radius\":10,\"number\":5,\"color\":\"#000000\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333289110\",\"x\":309.2573992893361,\"y\":103.63815362712167,\"radius\":10,\"number\":6,\"color\":\"#000000\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333290249\",\"x\":214.5470834830519,\"y\":83.71738660378622,\"radius\":10,\"number\":2,\"color\":\"#88D6BB\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333290706\",\"x\":447.40628099173557,\"y\":97.23504994104955,\"radius\":10,\"number\":3,\"color\":\"#88D6BB\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333291251\",\"x\":333.4690589691381,\"y\":83.71738660378621,\"radius\":10,\"number\":4,\"color\":\"#88D6BB\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333291690\",\"x\":371.2107637641234,\"y\":142.76823170867354,\"radius\":10,\"number\":5,\"color\":\"#88D6BB\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333292163\",\"x\":266.530941030862,\"y\":124.98183258069542,\"radius\":10,\"number\":6,\"color\":\"#88D6BB\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333294728\",\"x\":339.87802770790915,\"y\":36.76129290592398,\"radius\":10,\"number\":1,\"color\":\"#00ff30ff\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333302742\",\"x\":334.1811666067793,\"y\":226.72003559273026,\"radius\":10,\"number\":1,\"color\":\"#e3ff00ff\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},{\"type\":\"ball\",\"category\":\"equipment\",\"x\":293.591031261229,\"y\":243.79497875558917,\"rotation\":0,\"img\":\"/things/equipments/goals/07.svg\",\"id\":\"1764333374740\",\"width\":75,\"height\":31},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333402081\",\"x\":216.00179183135702,\"y\":12.611406580205934,\"radius\":10,\"number\":3,\"color\":\"#0500ff\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333416069\",\"x\":460.9973122529644,\"y\":12.651023068538208,\"radius\":10,\"number\":4,\"color\":\"#0500ff\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333418005\",\"x\":453.19462131193353,\"y\":275.92934665094657,\"radius\":10,\"number\":5,\"color\":\"#0500ff\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333419075\",\"x\":323.6215243342515,\"y\":157.15581696438494,\"radius\":10,\"number\":6,\"color\":\"#0500ff\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333421625\",\"x\":217.45650017966219,\"y\":269.4866264765421,\"radius\":10,\"number\":2,\"color\":\"#0500ff\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false}],\"animation\":{\"steps\":[{\"id\":\"step-1772046650089\",\"index\":0,\"durationMs\":800,\"delayMs\":0,\"objectPositions\":{\"1764333287031\":{\"x\":476.6026941350261,\"y\":140.63386381331614,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#000000\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":1},\"1764333287408\":{\"x\":208.850222381922,\"y\":141.34531977843528,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#000000\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":2},\"1764333288022\":{\"x\":404.67982273326163,\"y\":191.14723733677403,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#000000\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":3},\"1764333288669\":{\"x\":286.4699548848166,\"y\":198.2617969879652,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#000000\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":4},\"1764333289110\":{\"x\":309.2573992893361,\"y\":103.63815362712167,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#000000\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":5},\"1764333290249\":{\"x\":214.5470834830519,\"y\":83.71738660378622,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#88D6BB\",\"radius\":10,\"strokeColor\":\"#F5F5F5\"},\"zIndex\":6},\"1764333290706\":{\"x\":447.40628099173557,\"y\":97.23504994104955,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#88D6BB\",\"radius\":10,\"strokeColor\":\"#F5F5F5\"},\"zIndex\":7},\"1764333291251\":{\"x\":333.4690589691381,\"y\":83.71738660378621,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#88D6BB\",\"radius\":10,\"strokeColor\":\"#F5F5F5\"},\"zIndex\":8},\"1764333291690\":{\"x\":371.2107637641234,\"y\":142.76823170867354,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#88D6BB\",\"radius\":10,\"strokeColor\":\"#F5F5F5\"},\"zIndex\":9},\"1764333292163\":{\"x\":266.530941030862,\"y\":124.98183258069542,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#88D6BB\",\"radius\":10,\"strokeColor\":\"#F5F5F5\"},\"zIndex\":10},\"1764333294728\":{\"x\":339.87802770790915,\"y\":36.76129290592398,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#00ff30ff\",\"radius\":10,\"strokeColor\":\"#F5F5F5\"},\"zIndex\":11},\"1764333302742\":{\"x\":334.1811666067793,\"y\":226.72003559273026,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#e3ff00ff\",\"radius\":10,\"strokeColor\":\"#F5F5F5\"},\"zIndex\":12},\"1764333374740\":{\"x\":293.591031261229,\"y\":243.79497875558917,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"img\":\"/things/equipments/goals/07.svg\",\"rotation\":0},\"zIndex\":13},\"1764333402081\":{\"x\":216.00179183135702,\"y\":12.611406580205934,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#0500ff\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":14},\"1764333416069\":{\"x\":460.9973122529644,\"y\":12.651023068538208,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#0500ff\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":15},\"1764333418005\":{\"x\":453.19462131193353,\"y\":275.92934665094657,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#0500ff\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":16},\"1764333419075\":{\"x\":323.6215243342515,\"y\":157.15581696438494,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#0500ff\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":17},\"1764333421625\":{\"x\":217.45650017966219,\"y\":269.4866264765421,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#0500ff\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":18},\"1772046655711\":{\"x\":333.469058969138,\"y\":210.35654839499034,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"img\":\"/things/equipments/balls/01.svg\",\"rotation\":0},\"zIndex\":19}},\"name\":\"Étape 1\"},{\"id\":\"step-1772046664150\",\"index\":1,\"durationMs\":800,\"delayMs\":0,\"objectPositions\":{\"1764333287031\":{\"x\":476.6026941350261,\"y\":140.63386381331614,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#000000\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":1},\"1764333287408\":{\"x\":208.850222381922,\"y\":141.34531977843528,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#000000\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":2},\"1764333288022\":{\"x\":404.67982273326163,\"y\":191.14723733677403,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#000000\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":3},\"1764333288669\":{\"x\":286.4699548848166,\"y\":198.2617969879652,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#000000\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":4},\"1764333289110\":{\"x\":309.2573992893361,\"y\":103.63815362712167,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#000000\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":5},\"1764333290249\":{\"x\":214.5470834830519,\"y\":83.71738660378622,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#88D6BB\",\"radius\":10,\"strokeColor\":\"#F5F5F5\"},\"zIndex\":6},\"1764333290706\":{\"x\":460.9363261069189,\"y\":121.42455275509977,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#88D6BB\",\"radius\":10,\"strokeColor\":\"#F5F5F5\"},\"zIndex\":7},\"1764333291251\":{\"x\":333.4690589691381,\"y\":83.71738660378621,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#88D6BB\",\"radius\":10,\"strokeColor\":\"#F5F5F5\"},\"zIndex\":8},\"1764333291690\":{\"x\":374.7713019523295,\"y\":165.5348225924855,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#88D6BB\",\"radius\":10,\"strokeColor\":\"#F5F5F5\"},\"zIndex\":9},\"1764333292163\":{\"x\":266.530941030862,\"y\":124.98183258069542,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#88D6BB\",\"radius\":10,\"strokeColor\":\"#F5F5F5\"},\"zIndex\":10},\"1764333294728\":{\"x\":339.87802770790915,\"y\":36.76129290592398,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#00ff30ff\",\"radius\":10,\"strokeColor\":\"#F5F5F5\"},\"zIndex\":11},\"1764333302742\":{\"x\":334.1811666067793,\"y\":226.72003559273026,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#e3ff00ff\",\"radius\":10,\"strokeColor\":\"#F5F5F5\"},\"zIndex\":12},\"1764333374740\":{\"x\":293.591031261229,\"y\":243.79497875558917,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"img\":\"/things/equipments/goals/07.svg\",\"rotation\":0},\"zIndex\":13},\"1764333402081\":{\"x\":216.00179183135702,\"y\":12.611406580205934,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#0500ff\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":14},\"1764333416069\":{\"x\":426.816145646185,\"y\":13.362479033657333,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#0500ff\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":15},\"1764333418005\":{\"x\":453.19462131193353,\"y\":275.92934665094657,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#0500ff\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":16},\"1764333419075\":{\"x\":323.6215243342515,\"y\":157.15581696438494,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#0500ff\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":17},\"1764333421625\":{\"x\":217.45650017966219,\"y\":269.4866264765421,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#0500ff\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":18},\"1772046655711\":{\"x\":392.57399289336047,\"y\":176.91811803439145,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"img\":\"/things/equipments/balls/01.svg\",\"rotation\":0},\"zIndex\":19}},\"name\":\"Étape 2\"},{\"id\":\"step-1772046675193\",\"index\":2,\"durationMs\":800,\"delayMs\":0,\"objectPositions\":{\"1764333287031\":{\"x\":478.7390170479498,\"y\":110.04125731319378,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#000000\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":1},\"1764333287408\":{\"x\":206.7138994689983,\"y\":96.52359397593044,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#000000\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":2},\"1764333288022\":{\"x\":404.67982273326163,\"y\":191.14723733677403,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#000000\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":3},\"1764333288669\":{\"x\":286.4699548848166,\"y\":198.2617969879652,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#000000\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":4},\"1764333289110\":{\"x\":364.8017950253524,\"y\":97.94650590616865,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#000000\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":5},\"1764333290249\":{\"x\":238.04663552521268,\"y\":72.33409116188022,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#88D6BB\",\"radius\":10,\"strokeColor\":\"#F5F5F5\"},\"zIndex\":6},\"1764333290706\":{\"x\":458.08789555635394,\"y\":70.91117923164192,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#88D6BB\",\"radius\":10,\"strokeColor\":\"#F5F5F5\"},\"zIndex\":7},\"1764333291251\":{\"x\":363.3775797500699,\"y\":68.06535537116545,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#88D6BB\",\"radius\":10,\"strokeColor\":\"#F5F5F5\"},\"zIndex\":8},\"1764333291690\":{\"x\":381.89237832874187,\"y\":137.78803995283965,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#88D6BB\",\"radius\":10,\"strokeColor\":\"#F5F5F5\"},\"zIndex\":9},\"1764333292163\":{\"x\":280.0609861460455,\"y\":110.04125731319381,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#88D6BB\",\"radius\":10,\"strokeColor\":\"#F5F5F5\"},\"zIndex\":10},\"1764333294728\":{\"x\":339.87802770790915,\"y\":36.76129290592398,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#00ff30ff\",\"radius\":10,\"strokeColor\":\"#F5F5F5\"},\"zIndex\":11},\"1764333302742\":{\"x\":334.1811666067793,\"y\":226.72003559273026,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#e3ff00ff\",\"radius\":10,\"strokeColor\":\"#F5F5F5\"},\"zIndex\":12},\"1764333374740\":{\"x\":293.591031261229,\"y\":243.79497875558917,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"img\":\"/things/equipments/goals/07.svg\",\"rotation\":0},\"zIndex\":13},\"1764333402081\":{\"x\":216.00179183135702,\"y\":12.611406580205934,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#0500ff\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":14},\"1764333416069\":{\"x\":426.816145646185,\"y\":13.362479033657333,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#0500ff\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":15},\"1764333418005\":{\"x\":453.19462131193353,\"y\":275.92934665094657,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#0500ff\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":16},\"1764333419075\":{\"x\":323.6215243342515,\"y\":157.15581696438494,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#0500ff\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":17},\"1764333421625\":{\"x\":217.45650017966219,\"y\":269.4866264765421,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#0500ff\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":18},\"1772046655711\":{\"x\":419.63408312372735,\"y\":22.53217360354146,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"img\":\"/things/equipments/balls/01.svg\",\"rotation\":0},\"zIndex\":19}},\"name\":\"Étape 3\"},{\"id\":\"step-1772046691110\",\"index\":3,\"durationMs\":800,\"delayMs\":0,\"objectPositions\":{\"1764333287031\":{\"x\":478.7390170479498,\"y\":110.04125731319378,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#000000\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":1},\"1764333287408\":{\"x\":206.7138994689983,\"y\":96.52359397593044,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#000000\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":2},\"1764333288022\":{\"x\":404.67982273326163,\"y\":191.14723733677403,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#000000\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":3},\"1764333288669\":{\"x\":266.5309410308621,\"y\":178.34102996462974,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#000000\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":4},\"1764333289110\":{\"x\":330.62062841857306,\"y\":92.25485818521565,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#000000\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":5},\"1764333290249\":{\"x\":262.2582952050147,\"y\":68.7768113362846,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#88D6BB\",\"radius\":10,\"strokeColor\":\"#F5F5F5\"},\"zIndex\":6},\"1764333290706\":{\"x\":458.08789555635394,\"y\":70.91117923164192,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#88D6BB\",\"radius\":10,\"strokeColor\":\"#F5F5F5\"},\"zIndex\":7},\"1764333291251\":{\"x\":387.5892394298719,\"y\":68.06535537116544,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#88D6BB\",\"radius\":10,\"strokeColor\":\"#F5F5F5\"},\"zIndex\":8},\"1764333291690\":{\"x\":369.0744408511996,\"y\":117.86727292950415,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#88D6BB\",\"radius\":10,\"strokeColor\":\"#F5F5F5\"},\"zIndex\":9},\"1764333292163\":{\"x\":297.8636770870764,\"y\":102.21524169688342,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#88D6BB\",\"radius\":10,\"strokeColor\":\"#F5F5F5\"},\"zIndex\":10},\"1764333294728\":{\"x\":339.87802770790915,\"y\":36.76129290592398,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#00ff30ff\",\"radius\":10,\"strokeColor\":\"#F5F5F5\"},\"zIndex\":11},\"1764333302742\":{\"x\":334.1811666067793,\"y\":226.72003559273026,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#e3ff00ff\",\"radius\":10,\"strokeColor\":\"#F5F5F5\"},\"zIndex\":12},\"1764333374740\":{\"x\":293.591031261229,\"y\":243.79497875558917,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"img\":\"/things/equipments/goals/07.svg\",\"rotation\":0},\"zIndex\":13},\"1764333402081\":{\"x\":216.00179183135702,\"y\":12.611406580205934,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#0500ff\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":14},\"1764333416069\":{\"x\":426.816145646185,\"y\":13.362479033657333,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#0500ff\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":15},\"1764333418005\":{\"x\":453.19462131193353,\"y\":275.92934665094657,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#0500ff\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":16},\"1764333419075\":{\"x\":320.77309378368653,\"y\":135.81213801081117,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#0500ff\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":17},\"1764333421625\":{\"x\":217.45650017966219,\"y\":269.4866264765421,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#0500ff\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":18},\"1772046655711\":{\"x\":333.46905896913796,\"y\":73.0455471269993,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"img\":\"/things/equipments/balls/01.svg\",\"rotation\":0},\"zIndex\":19}},\"name\":\"Étape 4\"},{\"id\":\"step-1772046707991\",\"index\":4,\"durationMs\":800,\"delayMs\":0,\"objectPositions\":{\"1764333287031\":{\"x\":478.7390170479498,\"y\":110.04125731319378,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#000000\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":1},\"1764333287408\":{\"x\":206.7138994689983,\"y\":96.52359397593044,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#000000\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":2},\"1764333288022\":{\"x\":404.67982273326163,\"y\":191.14723733677403,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#000000\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":3},\"1764333288669\":{\"x\":266.5309410308621,\"y\":178.34102996462974,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#000000\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":4},\"1764333289110\":{\"x\":330.62062841857306,\"y\":92.25485818521565,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#000000\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":5},\"1764333290249\":{\"x\":289.3183854353817,\"y\":60.95079571997424,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#88D6BB\",\"radius\":10,\"strokeColor\":\"#F5F5F5\"},\"zIndex\":6},\"1764333290706\":{\"x\":437.43677406475814,\"y\":67.35389940604632,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#88D6BB\",\"radius\":10,\"strokeColor\":\"#F5F5F5\"},\"zIndex\":7},\"1764333291251\":{\"x\":369.0744408511998,\"y\":68.77681133628455,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#88D6BB\",\"radius\":10,\"strokeColor\":\"#F5F5F5\"},\"zIndex\":8},\"1764333291690\":{\"x\":369.0744408511996,\"y\":117.86727292950415,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#88D6BB\",\"radius\":10,\"strokeColor\":\"#F5F5F5\"},\"zIndex\":9},\"1764333292163\":{\"x\":305.69686110113,\"y\":92.9663141503348,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#88D6BB\",\"radius\":10,\"strokeColor\":\"#F5F5F5\"},\"zIndex\":10},\"1764333294728\":{\"x\":328.48430550564944,\"y\":31.7811011500901,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#00ff30ff\",\"radius\":10,\"strokeColor\":\"#F5F5F5\"},\"zIndex\":11},\"1764333302742\":{\"x\":334.1811666067793,\"y\":226.72003559273026,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#e3ff00ff\",\"radius\":10,\"strokeColor\":\"#F5F5F5\"},\"zIndex\":12},\"1764333374740\":{\"x\":293.591031261229,\"y\":243.79497875558917,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"img\":\"/things/equipments/goals/07.svg\",\"rotation\":0},\"zIndex\":13},\"1764333402081\":{\"x\":216.00179183135702,\"y\":12.611406580205934,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#0500ff\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":14},\"1764333416069\":{\"x\":426.816145646185,\"y\":13.362479033657333,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#0500ff\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":15},\"1764333418005\":{\"x\":453.19462131193353,\"y\":275.92934665094657,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#0500ff\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":16},\"1764333419075\":{\"x\":320.77309378368653,\"y\":135.81213801081117,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#0500ff\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":17},\"1764333421625\":{\"x\":217.45650017966219,\"y\":269.4866264765421,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"color\":\"#0500ff\",\"radius\":10,\"strokeColor\":\"#C0C0C0\"},\"zIndex\":18},\"1772046655711\":{\"x\":304.27264582584735,\"y\":25.377997464017955,\"visible\":true,\"controlPoint\":null,\"overrides\":{\"img\":\"/things/equipments/balls/01.svg\",\"rotation\":0},\"zIndex\":19}},\"name\":\"Étape 5\"}],\"shapesByStep\":{\"step-1772046650089\":[{\"category\":\"shape\",\"type\":\"flexibleRectangle\",\"id\":\"1764333277089\",\"fill\":\"transparent\",\"strokeColor\":\"black\",\"strokeWidth\":1,\"isDashed\":false,\"dashSpace\":5,\"point1\":{\"x\":139.806757296283,\"y\":25.04547327208418},\"point2\":{\"x\":537.1628191000918,\"y\":25.04547327208418},\"point3\":{\"x\":537.1628191000918,\"y\":243.46245456365537},\"point4\":{\"x\":139.806757296283,\"y\":243.46245456365537},\"sourceStepId\":\"step-1772046650089\",\"zIndex\":0}],\"step-1772046664150\":[{\"category\":\"shape\",\"type\":\"flexibleRectangle\",\"id\":\"shape-1772046664150-8g4f46z\",\"fill\":\"transparent\",\"strokeColor\":\"black\",\"strokeWidth\":1,\"isDashed\":false,\"dashSpace\":5,\"point1\":{\"x\":139.806757296283,\"y\":25.04547327208418},\"point2\":{\"x\":537.1628191000918,\"y\":25.04547327208418},\"point3\":{\"x\":537.1628191000918,\"y\":243.46245456365537},\"point4\":{\"x\":139.806757296283,\"y\":243.46245456365537},\"sourceStepId\":\"step-1772046664150\",\"zIndex\":0}],\"step-1772046675193\":[{\"category\":\"shape\",\"type\":\"flexibleRectangle\",\"id\":\"shape-1772046675193-1gv23bb\",\"fill\":\"transparent\",\"strokeColor\":\"black\",\"strokeWidth\":1,\"isDashed\":false,\"dashSpace\":5,\"point1\":{\"x\":139.806757296283,\"y\":25.04547327208418},\"point2\":{\"x\":537.1628191000918,\"y\":25.04547327208418},\"point3\":{\"x\":537.1628191000918,\"y\":243.46245456365537},\"point4\":{\"x\":139.806757296283,\"y\":243.46245456365537},\"sourceStepId\":\"step-1772046675193\",\"zIndex\":0}],\"step-1772046691110\":[{\"category\":\"shape\",\"type\":\"flexibleRectangle\",\"id\":\"shape-1772046691110-ll0lyoo\",\"fill\":\"transparent\",\"strokeColor\":\"black\",\"strokeWidth\":1,\"isDashed\":false,\"dashSpace\":5,\"point1\":{\"x\":139.806757296283,\"y\":25.04547327208418},\"point2\":{\"x\":537.1628191000918,\"y\":25.04547327208418},\"point3\":{\"x\":537.1628191000918,\"y\":243.46245456365537},\"point4\":{\"x\":139.806757296283,\"y\":243.46245456365537},\"sourceStepId\":\"step-1772046691110\",\"zIndex\":0}],\"step-1772046707991\":[{\"category\":\"shape\",\"type\":\"flexibleRectangle\",\"id\":\"shape-1772046707991-yib239g\",\"fill\":\"transparent\",\"strokeColor\":\"black\",\"strokeWidth\":1,\"isDashed\":false,\"dashSpace\":5,\"point1\":{\"x\":139.806757296283,\"y\":25.04547327208418},\"point2\":{\"x\":537.1628191000918,\"y\":25.04547327208418},\"point3\":{\"x\":537.1628191000918,\"y\":243.46245456365537},\"point4\":{\"x\":139.806757296283,\"y\":243.46245456365537},\"sourceStepId\":\"step-1772046707991\",\"zIndex\":0}]},\"speed\":1,\"showPaths\":true,\"showShapesDuringPlayback\":true,\"stepTimingDefaults\":{\"durationMs\":800,\"delayMs\":0},\"thumbnail\":{\"objects\":[{\"category\":\"shape\",\"type\":\"flexibleRectangle\",\"id\":\"1764333277089\",\"fill\":\"transparent\",\"strokeColor\":\"black\",\"strokeWidth\":1,\"isDashed\":false,\"dashSpace\":5,\"point1\":{\"x\":139.806757296283,\"y\":25.04547327208418},\"point2\":{\"x\":537.1628191000918,\"y\":25.04547327208418},\"point3\":{\"x\":537.1628191000918,\"y\":243.46245456365537},\"point4\":{\"x\":139.806757296283,\"y\":243.46245456365537}},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333287031\",\"x\":476.6026941350261,\"y\":140.63386381331614,\"radius\":10,\"number\":2,\"color\":\"#000000\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333287408\",\"x\":208.850222381922,\"y\":141.34531977843528,\"radius\":10,\"number\":3,\"color\":\"#000000\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333288022\",\"x\":404.67982273326163,\"y\":191.14723733677403,\"radius\":10,\"number\":4,\"color\":\"#000000\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333288669\",\"x\":286.4699548848166,\"y\":198.2617969879652,\"radius\":10,\"number\":5,\"color\":\"#000000\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333289110\",\"x\":309.2573992893361,\"y\":103.63815362712167,\"radius\":10,\"number\":6,\"color\":\"#000000\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333290249\",\"x\":214.5470834830519,\"y\":83.71738660378622,\"radius\":10,\"number\":2,\"color\":\"#88D6BB\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333290706\",\"x\":447.40628099173557,\"y\":97.23504994104955,\"radius\":10,\"number\":3,\"color\":\"#88D6BB\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333291251\",\"x\":333.4690589691381,\"y\":83.71738660378621,\"radius\":10,\"number\":4,\"color\":\"#88D6BB\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333291690\",\"x\":371.2107637641234,\"y\":142.76823170867354,\"radius\":10,\"number\":5,\"color\":\"#88D6BB\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333292163\",\"x\":266.530941030862,\"y\":124.98183258069542,\"radius\":10,\"number\":6,\"color\":\"#88D6BB\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333294728\",\"x\":339.87802770790915,\"y\":36.76129290592398,\"radius\":10,\"number\":1,\"color\":\"#00ff30ff\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333302742\",\"x\":334.1811666067793,\"y\":226.72003559273026,\"radius\":10,\"number\":1,\"color\":\"#e3ff00ff\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},{\"type\":\"ball\",\"category\":\"equipment\",\"x\":293.591031261229,\"y\":243.79497875558917,\"rotation\":0,\"img\":\"/things/equipments/goals/07.svg\",\"id\":\"1764333374740\",\"width\":75,\"height\":31},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333402081\",\"x\":216.00179183135702,\"y\":12.611406580205934,\"radius\":10,\"number\":3,\"color\":\"#0500ff\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333416069\",\"x\":460.9973122529644,\"y\":12.651023068538208,\"radius\":10,\"number\":4,\"color\":\"#0500ff\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333418005\",\"x\":453.19462131193353,\"y\":275.92934665094657,\"radius\":10,\"number\":5,\"color\":\"#0500ff\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333419075\",\"x\":323.6215243342515,\"y\":157.15581696438494,\"radius\":10,\"number\":6,\"color\":\"#0500ff\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333421625\",\"x\":217.45650017966219,\"y\":269.4866264765421,\"radius\":10,\"number\":2,\"color\":\"#0500ff\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false}]},\"objectTemplates\":{\"1764333287031\":{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333287031\",\"x\":476.6026941350261,\"y\":140.63386381331614,\"radius\":10,\"number\":2,\"color\":\"#000000\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},\"1764333287408\":{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333287408\",\"x\":208.850222381922,\"y\":141.34531977843528,\"radius\":10,\"number\":3,\"color\":\"#000000\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},\"1764333288022\":{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333288022\",\"x\":404.67982273326163,\"y\":191.14723733677403,\"radius\":10,\"number\":4,\"color\":\"#000000\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},\"1764333288669\":{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333288669\",\"x\":286.4699548848166,\"y\":198.2617969879652,\"radius\":10,\"number\":5,\"color\":\"#000000\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},\"1764333289110\":{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333289110\",\"x\":309.2573992893361,\"y\":103.63815362712167,\"radius\":10,\"number\":6,\"color\":\"#000000\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},\"1764333290249\":{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333290249\",\"x\":214.5470834830519,\"y\":83.71738660378622,\"radius\":10,\"number\":2,\"color\":\"#88D6BB\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},\"1764333290706\":{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333290706\",\"x\":447.40628099173557,\"y\":97.23504994104955,\"radius\":10,\"number\":3,\"color\":\"#88D6BB\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},\"1764333291251\":{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333291251\",\"x\":333.4690589691381,\"y\":83.71738660378621,\"radius\":10,\"number\":4,\"color\":\"#88D6BB\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},\"1764333291690\":{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333291690\",\"x\":371.2107637641234,\"y\":142.76823170867354,\"radius\":10,\"number\":5,\"color\":\"#88D6BB\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},\"1764333292163\":{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333292163\",\"x\":266.530941030862,\"y\":124.98183258069542,\"radius\":10,\"number\":6,\"color\":\"#88D6BB\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},\"1764333294728\":{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333294728\",\"x\":339.87802770790915,\"y\":36.76129290592398,\"radius\":10,\"number\":1,\"color\":\"#00ff30ff\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},\"1764333302742\":{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333302742\",\"x\":334.1811666067793,\"y\":226.72003559273026,\"radius\":10,\"number\":1,\"color\":\"#e3ff00ff\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},\"1764333374740\":{\"type\":\"ball\",\"category\":\"equipment\",\"x\":293.591031261229,\"y\":243.79497875558917,\"rotation\":0,\"img\":\"/things/equipments/goals/07.svg\",\"id\":\"1764333374740\",\"width\":75,\"height\":31},\"1764333402081\":{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333402081\",\"x\":216.00179183135702,\"y\":12.611406580205934,\"radius\":10,\"number\":3,\"color\":\"#0500ff\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},\"1764333416069\":{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333416069\",\"x\":460.9973122529644,\"y\":12.651023068538208,\"radius\":10,\"number\":4,\"color\":\"#0500ff\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},\"1764333418005\":{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333418005\",\"x\":453.19462131193353,\"y\":275.92934665094657,\"radius\":10,\"number\":5,\"color\":\"#0500ff\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},\"1764333419075\":{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333419075\",\"x\":323.6215243342515,\"y\":157.15581696438494,\"radius\":10,\"number\":6,\"color\":\"#0500ff\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},\"1764333421625\":{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1764333421625\",\"x\":217.45650017966219,\"y\":269.4866264765421,\"radius\":10,\"number\":2,\"color\":\"#0500ff\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},\"1772046655711\":{\"type\":\"ball\",\"category\":\"equipment\",\"x\":300,\"y\":300,\"rotation\":0,\"img\":\"/things/equipments/balls/01.svg\",\"id\":\"1772046655711\",\"isLocked\":false}}}}",
+        "preview": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/tactics/image-1781516290349-182420691.png",
+        "createdAt": "2025-11-28T12:45:32.197Z",
+        "updatedAt": "2026-06-15T09:38:10.397Z",
+        "originalTacticId": null,
+        "originalTeamId": null,
+        "fields": [
+          {
+            "id": "49d2f424",
+            "title": "Objectif ",
+            "content": "<p>Etirer le bloc adverse en exploitant les espaces libres (largeur, intervalles, profondeur)</p>"
+          },
+          {
+            "id": "d6aac536",
+            "title": "But(s) ",
+            "content": "<p>Marquer </p>"
+          },
+          {
+            "id": "4301dde8",
+            "title": "Organisation ",
+            "content": "<ul><li><p>5 vs 5 dans le terrain</p></li></ul><ul><li><p>4 appuis extérieurs (latéraux ou ligne du fond) + 1 appui à l'intérieur - à adapter selon le nombre de joueurs</p></li></ul>"
+          },
+          {
+            "id": "31b2337d",
+            "title": "Consignes",
+            "content": "<ul><li><p>Tous les départs de ballon à partir du gardien de but pour l'équipe en possession </p></li><li><p>Appuis = 1 touche obligatoirement</p></li><li><p>Rechercher la continuité → pas d’arrêts </p></li></ul>"
+          },
+          {
+            "id": "049bc2b7",
+            "title": "Comportements Attendus Collectif ",
+            "content": "<ul><li><p>Élargir et étirer le bloc adverse.</p></li><li><p>Alterner jeu court / renversements.</p></li><li><p>Trouver rapidement un joueur dans un espace libre</p></li></ul>"
+          },
+          {
+            "id": "22ab728e",
+            "title": "Comportements attendus Individuels ",
+            "content": "<ul><li><p>Se démarquer dans intervalles.</p></li><li><p>Appels de rupture / contre-appels.</p></li><li><p>Jouer simple après fixation pour exploiter l’espace créé</p></li></ul>"
+          },
+          {
+            "id": "c7a4afc3",
+            "title": "Variables ",
+            "content": "<p>5 passes avant un but = +2 pts </p>"
+          }
+        ],
+        "recuperation": "30"
+      }
+    },
+    {
+      "id": "ae08a758-cf56-4614-9b35-b091dfc573f4",
+      "trainingSessionId": "b514dcdf-91dc-412f-a541-015bd4b1e57b",
+      "tacticId": "5852b4db-31b4-48be-a368-2d5e43b61d87",
+      "tactic": {
+        "id": "5852b4db-31b4-48be-a368-2d5e43b61d87",
+        "title": "Conservation - 4+2 contre 2 ",
+        "translations": {},
+        "sourceLanguage": "fr",
+        "type": "game",
+        "createdById": "5d3bd2a9-05ed-4d8a-8975-600b3c25b95e",
+        "isPublic": true,
+        "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+        "tacticalPrincipleId": "8b277085-6ccb-423d-b274-af14239e0b38",
+        "programSessionId": null,
+        "previewVideo": null,
+        "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+        "surface": [
+          20,
+          15
+        ],
+        "duration": "9",
+        "sequence": "3*3",
+        "squad": [
+          10,
+          0
+        ],
+        "materials": [
+          {
+            "amount": 10,
+            "equipment": "/things/equipments/general/02.svg"
+          },
+          {
+            "amount": 8,
+            "equipment": "/things/equipments/balls/03.svg"
+          }
+        ],
+        "tactic": "{\"stadium\":\"/things/stadiums/13.svg\",\"objects\":[{\"category\":\"shape\",\"type\":\"rectangle\",\"id\":\"1759940770422\",\"fill\":\"transparent\",\"strokeColor\":\"black\",\"strokeWidth\":1,\"isDashed\":false,\"dashSpace\":5,\"x\":139.09464965864169,\"y\":101.88271750494961,\"width\":422.9919367588933,\"height\":291.69694569884103,\"rotation\":0},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759940782153\",\"x\":490.84484688785085,\"y\":136.3651280226014,\"radius\":10,\"number\":1,\"color\":\"#000000\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759940782624\",\"x\":211.698652932487,\"y\":134.94221609236317,\"radius\":10,\"number\":2,\"color\":\"#000000\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759940783174\",\"x\":489.4206316125683,\"y\":346.9560936978623,\"radius\":10,\"number\":3,\"color\":\"#000000\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759940783788\",\"x\":206.7138994689983,\"y\":346.9560936978624,\"radius\":10,\"number\":4,\"color\":\"#000000\",\"strokeColor\":\"#C0C0C0\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759940785261\",\"x\":426.04305186249843,\"y\":226.7200355927302,\"radius\":10,\"number\":1,\"color\":\"#88D6BB\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759940785661\",\"x\":329.9085207809318,\"y\":284.34796876737937,\"radius\":10,\"number\":2,\"color\":\"#88D6BB\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759940786086\",\"x\":358.39282628658134,\"y\":239.52624296487446,\"radius\":10,\"number\":3,\"color\":\"#88D6BB\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759940786655\",\"x\":292.1668159859464,\"y\":228.8544034880876,\"radius\":10,\"number\":4,\"color\":\"#88D6BB\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759940787596\",\"x\":401.8313921826964,\"y\":290.0396164883324,\"radius\":10,\"number\":1,\"color\":\"#ffff00ff\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759940793122\",\"x\":325.6663680281073,\"y\":194.0326776855827,\"radius\":10,\"number\":2,\"color\":\"#ffff00ff\",\"strokeColor\":\"#F5F5F5\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"shape\",\"type\":\"line\",\"id\":\"1759941452104\",\"isArrow\":true,\"isWavy\":false,\"isDashed\":false,\"dashSpace\":5,\"strokeColor\":\"black\",\"strokeWidth\":1,\"start\":{\"x\":223.83545853794865,\"y\":142.4357075167397},\"end\":{\"x\":310.71259033017924,\"y\":186.54597735412543}},{\"category\":\"shape\",\"type\":\"line\",\"id\":\"1759941454686\",\"isArrow\":true,\"isWavy\":false,\"isDashed\":false,\"dashSpace\":5,\"strokeColor\":\"black\",\"strokeWidth\":1,\"start\":{\"x\":339.1968958358286,\"y\":187.96888928436368},\"end\":{\"x\":480.9063157264343,\"y\":143.14716348185885}},{\"category\":\"shape\",\"type\":\"line\",\"id\":\"1759941457682\",\"isArrow\":true,\"isWavy\":false,\"isDashed\":false,\"dashSpace\":5,\"strokeColor\":\"black\",\"strokeWidth\":1,\"start\":{\"x\":487.3152844652054,\"y\":148.83881120281183},\"end\":{\"x\":487.3152844652054,\"y\":335.2402740640224}},{\"category\":\"shape\",\"type\":\"line\",\"id\":\"1759941459692\",\"isArrow\":true,\"isWavy\":false,\"isDashed\":false,\"dashSpace\":5,\"strokeColor\":\"black\",\"strokeWidth\":1,\"start\":{\"x\":482.3305310017168,\"y\":337.3746419593798},\"end\":{\"x\":415.39241306344076,\"y\":301.09038773830446}}]}",
+        "preview": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/tactics/image-1759941814734-165270714.png",
+        "createdAt": "2025-10-08T16:43:34.769Z",
+        "updatedAt": "2026-01-23T09:26:28.124Z",
+        "originalTacticId": null,
+        "originalTeamId": null,
+        "fields": [
+          {
+            "id": "49d2f424",
+            "title": "Objectif ",
+            "content": "<p><strong>Conserver le ballon</strong> collectivement sans sens de jeu imposé</p>"
+          },
+          {
+            "id": "d6aac536",
+            "title": "But(s) ",
+            "content": "<p>10 passes = 1 point</p>"
+          },
+          {
+            "id": "4301dde8",
+            "title": "Organisation ",
+            "content": "<ul><li><p>2 équipes équilibrées (ex : 4vs4, 5vs5, ou 6vs6).</p></li><li><p>2 <strong>jokers neutres</strong> pour favoriser la conservation</p></li><li><p>Un ballon en jeu</p></li></ul>"
+          },
+          {
+            "id": "31b2337d",
+            "title": "Consignes",
+            "content": "<ul><li><p>Conserver le ballon le plus longtemps possible.</p></li><li><p>Jeu en <strong>une touche</strong> de balle</p></li><li><p>Se rendre <strong>disponible avant la réception</strong> (anticiper la prochaine action)</p></li><li><p>Si une équipe perd le ballon, <strong>transition immédiate</strong> en phase défensive</p></li></ul>"
+          },
+          {
+            "id": "049bc2b7",
+            "title": "Comportements Attendus Collectif ",
+            "content": "<ul><li><p><strong>Création de triangles d’appui</strong> autour du porteur</p></li><li><p>Mobilité constante pour offrir <strong>des solutions dans les intervalles</strong></p></li><li><p>Synchronisation dans les déplacements (un joueur dans la largeur, un dans la profondeur)</p></li><li><p>Soutien rapide du porteur pour assurer la continuité du jeu</p></li></ul>"
+          },
+          {
+            "id": "22ab728e",
+            "title": "Comportements attendus Individuels ",
+            "content": "<ul><li><p><strong>Porteur :</strong> orientation du corps ouverte, jeu simple, choix rapide</p></li><li><p><strong>Partenaire proche :</strong> proposition d’appui-remise, soutien permanent</p></li><li><p><strong>Partenaire éloigné :</strong> occupation des espaces libres pour étirer le bloc adverse</p></li></ul>"
+          },
+          {
+            "id": "c7a4afc3",
+            "title": "Variables ",
+            "content": "<p><strong>Espace réduit</strong> pour plus de densité</p>"
+          }
+        ],
+        "recuperation": "30"
+      }
+    },
+    {
+      "id": "8a77b03a-2c2d-40e0-a3a6-40cc9bac0e76",
+      "trainingSessionId": "b514dcdf-91dc-412f-a541-015bd4b1e57b",
+      "tacticId": "f13824f8-e6c7-4f7c-945f-fcf790d6ae75",
+      "tactic": {
+        "id": "f13824f8-e6c7-4f7c-945f-fcf790d6ae75",
+        "title": "Situation 11vs11 - Sortie de balle ",
+        "translations": {},
+        "sourceLanguage": "fr",
+        "type": "situation",
+        "createdById": "f6120b6d-e235-4758-b880-ddd1b69578ce",
+        "isPublic": false,
+        "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+        "tacticalPrincipleId": "8b277085-6ccb-423d-b274-af14239e0b38",
+        "programSessionId": null,
+        "previewVideo": null,
+        "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+        "surface": [
+          70,
+          60
+        ],
+        "duration": "18",
+        "sequence": "2*9",
+        "squad": [
+          22,
+          2
+        ],
+        "materials": [
+          {
+            "amount": 1,
+            "equipment": "/things/equipments/goals/11.svg"
+          },
+          {
+            "amount": 10,
+            "equipment": "/things/equipments/balls/03.svg"
+          }
+        ],
+        "tactic": "{\"stadium\":\"/things/stadiums/04.svg\",\"objects\":[{\"category\":\"shape\",\"type\":\"line\",\"id\":\"1759487265742\",\"isArrow\":false,\"isWavy\":false,\"isDashed\":false,\"dashSpace\":5,\"strokeColor\":\"black\",\"strokeWidth\":1,\"start\":{\"x\":457.96761645511214,\"y\":53.266236171407336},\"end\":{\"x\":458.6797292267002,\"y\":452.39993456941994}},{\"type\":\"ball\",\"category\":\"equipment\",\"x\":459.8011595246313,\"y\":281.1972614498116,\"rotation\":-89.99999999999991,\"img\":\"/things/equipments/goals/07.svg\",\"id\":\"1759487293390\",\"width\":67.22940557783787,\"height\":27.788154305506332},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759487321653\",\"x\":222.37970789690198,\"y\":480.7129400946438,\"radius\":10,\"number\":\"C\",\"color\":\"#000\",\"strokeColor\":\"#fff\",\"hideNumber\":false,\"isCoach\":true},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759487327674\",\"x\":222.37970789690192,\"y\":23.950311981410124,\"radius\":10,\"number\":\"C\",\"color\":\"#000\",\"strokeColor\":\"#fff\",\"hideNumber\":false,\"isCoach\":true},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759487342041\",\"x\":32.95771065447912,\"y\":253.0430943061162,\"radius\":10,\"number\":1,\"color\":\"#ffff00ff\",\"strokeColor\":\"#25573c\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759487347608\",\"x\":184.637731002735,\"y\":405.29730367719395,\"radius\":10,\"number\":2,\"color\":\"#161515\",\"strokeColor\":\"#25573c\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759487347961\",\"x\":186.77406931749914,\"y\":94.38567052223593,\"radius\":10,\"number\":3,\"color\":\"#161515\",\"strokeColor\":\"#25573c\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759487348552\",\"x\":124.82025818933832,\"y\":291.46238078293027,\"radius\":10,\"number\":4,\"color\":\"#161515\",\"strokeColor\":\"#25573c\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759487349047\",\"x\":69.27546200546989,\"y\":134.93936180331744,\"radius\":10,\"number\":5,\"color\":\"#161515\",\"strokeColor\":\"#25573c\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759487349519\",\"x\":187.48618208908724,\"y\":224.58436358255022,\"radius\":10,\"number\":6,\"color\":\"#161515\",\"strokeColor\":\"#25573c\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759487350088\",\"x\":307.8332404874687,\"y\":61.65813019013508,\"radius\":10,\"number\":7,\"color\":\"#161515\",\"strokeColor\":\"#25573c\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759487350551\",\"x\":268.66703805012554,\"y\":200.39444246751916,\"radius\":10,\"number\":8,\"color\":\"#161515\",\"strokeColor\":\"#25573c\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759487350952\",\"x\":355.5447961838684,\"y\":250.19722123375954,\"radius\":10,\"number\":9,\"color\":\"#161515\",\"strokeColor\":\"#25573c\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759487351440\",\"x\":282.19718071029865,\"y\":265.84952313172084,\"radius\":10,\"number\":10,\"color\":\"#161515\",\"strokeColor\":\"#25573c\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759487351967\",\"x\":332.75718749305065,\"y\":416.6807959666205,\"radius\":10,\"number\":11,\"color\":\"#161515\",\"strokeColor\":\"#25573c\",\"hideNumber\":false,\"isCoach\":false},{\"type\":\"ball\",\"category\":\"equipment\",\"x\":205.2890013787886,\"y\":466.4835747328609,\"rotation\":0,\"img\":\"/things/equipments/balls/01.svg\",\"id\":\"1759487462092\",\"width\":10,\"height\":10},{\"type\":\"ball\",\"category\":\"equipment\",\"x\":228.7887228411944,\"y\":467.1950430009501,\"rotation\":0,\"img\":\"/things/equipments/balls/01.svg\",\"id\":\"1759487467044\",\"width\":10,\"height\":10},{\"type\":\"ball\",\"category\":\"equipment\",\"x\":7.321650877309086,\"y\":193.27975978662766,\"rotation\":0,\"img\":\"/things/equipments/balls/01.svg\",\"id\":\"1759487470556\",\"width\":10,\"height\":10},{\"type\":\"ball\",\"category\":\"equipment\",\"x\":5.185312562544938,\"y\":292.1738490510193,\"rotation\":0,\"img\":\"/things/equipments/balls/01.svg\",\"id\":\"1759487471138\",\"width\":10,\"height\":10},{\"type\":\"ball\",\"category\":\"equipment\",\"x\":468.05861409478126,\"y\":186.8765453738253,\"rotation\":0,\"img\":\"/things/equipments/balls/01.svg\",\"id\":\"1759487482001\",\"width\":10,\"height\":10},{\"type\":\"ball\",\"category\":\"equipment\",\"x\":470.9070651811334,\"y\":293.59678558719764,\"rotation\":0,\"img\":\"/things/equipments/balls/01.svg\",\"id\":\"1759487482687\",\"width\":10,\"height\":10},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759487507038\",\"x\":452.3921331198439,\"y\":250.19722123375965,\"radius\":10,\"number\":1,\"color\":\"#00ff00ff\",\"strokeColor\":\"#ff0000\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759487515826\",\"x\":396.84733693597565,\"y\":147.03432236083296,\"radius\":10,\"number\":2,\"color\":\"#ff0000\",\"strokeColor\":\"#ff0000\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759487516181\",\"x\":396.1352241643875,\"y\":409.5661132857291,\"radius\":10,\"number\":3,\"color\":\"#ff0000\",\"strokeColor\":\"#ff0000\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759487517049\",\"x\":406.81691573820837,\"y\":216.75821263356963,\"radius\":10,\"number\":4,\"color\":\"#ff0000\",\"strokeColor\":\"#ff0000\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759487517431\",\"x\":415.36226899726506,\"y\":321.3440480426745,\"radius\":10,\"number\":5,\"color\":\"#ff0000\",\"strokeColor\":\"#ff0000\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759487517840\",\"x\":351.27211955434,\"y\":308.5376192170699,\"radius\":10,\"number\":6,\"color\":\"#ff0000\",\"strokeColor\":\"#ff0000\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759487518305\",\"x\":245.87942935930778,\"y\":161.9751559907051,\"radius\":10,\"number\":7,\"color\":\"#ff0000\",\"strokeColor\":\"#ff0000\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759487518721\",\"x\":310.68169157382084,\"y\":193.2797597866277,\"radius\":10,\"number\":8,\"color\":\"#ff0000\",\"strokeColor\":\"#ff0000\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759487519124\",\"x\":152.59265628127247,\"y\":224.58436358255022,\"radius\":10,\"number\":9,\"color\":\"#ff0000\",\"strokeColor\":\"#ff0000\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759487519574\",\"x\":230.92506115595864,\"y\":264.4265865955426,\"radius\":10,\"number\":10,\"color\":\"#ff0000\",\"strokeColor\":\"#ff0000\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"player\",\"type\":\"playerCircle\",\"id\":\"1759487520061\",\"x\":208.8495652367289,\"y\":332.72754033210083,\"radius\":10,\"number\":11,\"color\":\"#ff0000\",\"strokeColor\":\"#ff0000\",\"hideNumber\":false,\"isCoach\":false},{\"category\":\"shape\",\"type\":\"line\",\"id\":\"1759487553254\",\"isArrow\":true,\"isWavy\":false,\"isDashed\":false,\"dashSpace\":5,\"strokeColor\":\"black\",\"strokeWidth\":1,\"start\":{\"x\":45.654321705627886,\"y\":243.93973201929933},\"end\":{\"x\":68.44193039644567,\"y\":150.73738889962078}},{\"category\":\"shape\",\"type\":\"line\",\"id\":\"1759487561616\",\"isArrow\":true,\"isWavy\":false,\"isDashed\":true,\"dashSpace\":5,\"strokeColor\":\"black\",\"strokeWidth\":1,\"start\":{\"x\":234.36420617646266,\"y\":147.180047559175},\"end\":{\"x\":198.75856759705988,\"y\":105.20341974191523}},{\"category\":\"shape\",\"type\":\"line\",\"id\":\"1759487563895\",\"isArrow\":true,\"isWavy\":false,\"isDashed\":true,\"dashSpace\":5,\"strokeColor\":\"black\",\"strokeWidth\":1,\"start\":{\"x\":389.60479038265885,\"y\":135.08508700165947},\"end\":{\"x\":321.2419643102055,\"y\":70.3414746055469}},{\"category\":\"shape\",\"type\":\"line\",\"id\":\"1759487568494\",\"isArrow\":true,\"isWavy\":false,\"isDashed\":true,\"dashSpace\":5,\"strokeColor\":\"black\",\"strokeWidth\":1,\"start\":{\"x\":144.63799695636766,\"y\":211.21219168719844},\"end\":{\"x\":87.66897522932318,\"y\":148.60298409535332}},{\"category\":\"shape\",\"type\":\"line\",\"id\":\"1759487570826\",\"isArrow\":true,\"isWavy\":false,\"isDashed\":true,\"dashSpace\":5,\"strokeColor\":\"black\",\"strokeWidth\":1,\"start\":{\"x\":220.8340635162897,\"y\":253.9002877725474},\"end\":{\"x\":196.6222292822957,\"y\":232.55623972987283}},{\"category\":\"shape\",\"type\":\"line\",\"id\":\"1759487573443\",\"isArrow\":true,\"isWavy\":false,\"isDashed\":true,\"dashSpace\":5,\"strokeColor\":\"black\",\"strokeWidth\":1,\"start\":{\"x\":198.75856759705988,\"y\":322.2012415091057},\"end\":{\"x\":142.50165864160348,\"y\":298.7227886621638}},{\"category\":\"shape\",\"type\":\"line\",\"id\":\"1759487576404\",\"isArrow\":true,\"isWavy\":false,\"isDashed\":true,\"dashSpace\":5,\"strokeColor\":\"black\",\"strokeWidth\":1,\"start\":{\"x\":297.7422428477996,\"y\":192.00254844879143},\"end\":{\"x\":278.51519801492213,\"y\":186.31080230407824}},{\"category\":\"shape\",\"type\":\"line\",\"id\":\"1759487591242\",\"isArrow\":true,\"isWavy\":false,\"isDashed\":true,\"dashSpace\":5,\"strokeColor\":\"black\",\"strokeWidth\":1,\"start\":{\"x\":340.469009143083,\"y\":307.97187614732275},\"end\":{\"x\":294.1816789898594,\"y\":277.37874061948935}},{\"category\":\"shape\",\"type\":\"line\",\"id\":\"1759487592681\",\"isArrow\":true,\"isWavy\":false,\"isDashed\":true,\"dashSpace\":5,\"strokeColor\":\"black\",\"strokeWidth\":1,\"start\":{\"x\":396.72591809853935,\"y\":214.05806475955507},\"end\":{\"x\":378.923098808838,\"y\":192.00254844879143}},{\"category\":\"shape\",\"type\":\"line\",\"id\":\"1759487594991\",\"isArrow\":true,\"isWavy\":false,\"isDashed\":true,\"dashSpace\":5,\"strokeColor\":\"black\",\"strokeWidth\":1,\"start\":{\"x\":418.08930124618104,\"y\":310.1062809515902},\"end\":{\"x\":368.95352000660523,\"y\":254.61175604063655}},{\"category\":\"shape\",\"type\":\"line\",\"id\":\"1759487597106\",\"isArrow\":true,\"isWavy\":false,\"isDashed\":true,\"dashSpace\":5,\"strokeColor\":\"black\",\"strokeWidth\":1,\"start\":{\"x\":398.15014364171554,\"y\":394.0595365861098},\"end\":{\"x\":388.8926776110707,\"y\":343.54528955178023}},{\"type\":\"ball\",\"category\":\"equipment\",\"x\":233.0613994707228,\"y\":21.10443890905353,\"rotation\":0,\"img\":\"/things/equipments/balls/01.svg\",\"id\":\"1759487626358\",\"width\":10,\"height\":10},{\"type\":\"ball\",\"category\":\"equipment\",\"x\":198.8799864344961,\"y\":24.661780249499277,\"rotation\":0,\"img\":\"/things/equipments/balls/01.svg\",\"id\":\"1759487627248\",\"width\":10,\"height\":10},{\"category\":\"shape\",\"type\":\"line\",\"id\":\"1759487642566\",\"isArrow\":true,\"isWavy\":false,\"isDashed\":false,\"dashSpace\":5,\"strokeColor\":\"#0000ffff\",\"strokeWidth\":1,\"start\":{\"x\":222.97040183105375,\"y\":37.613934273446056},\"end\":{\"x\":195.1980037391196,\"y\":211.21219168719844}}]}",
+        "preview": "https://back.ismart-club.com/public/0220fabc-88bb-40b8-bbf2-bd765ec3ddad/tactics/image-1759488574023-386106460.png",
+        "createdAt": "2025-10-08T16:23:59.482Z",
+        "updatedAt": "2026-01-23T09:26:24.665Z",
+        "originalTacticId": "b29d7702-1e01-4cc0-8055-569848b372f3",
+        "originalTeamId": "0220fabc-88bb-40b8-bbf2-bd765ec3ddad",
+        "fields": [
+          {
+            "id": "c664cce4",
+            "title": "Objectifs ",
+            "content": "<p>Créer et utiliser les espaces pour progresser </p>"
+          },
+          {
+            "id": "0225c361",
+            "title": "Organisation ",
+            "content": "<ul><li><p>Deux équipes en système 11vs11.</p></li><li><p>2 séquences à enchaîner :</p><ol><li><p><strong>Relance gardien</strong> → équipe en possession attaque, l’autre s’organise pour presser.</p></li><li><p><strong>Deuxième ballon</strong> donné immédiatement à un milieu en possession → permet de varier les conditions de pressing après perte ou transition</p></li></ol></li></ul>"
+          },
+          {
+            "id": "66e15ed9",
+            "title": "Consignes",
+            "content": "<ul><li><p>Jouer chaque séquence jusqu’au <strong>but, récupération ou sortie du ballon</strong>.</p></li><li><p>À la fin de la 1ʳᵉ séquence, entraîneur remet directement un ballon au milieu (séquence 2).</p></li><li><p>Les joueurs doivent <strong>réagir instantanément</strong> (pressing ou transition offensive).</p></li><li><p>Répéter les séquences pour travailler différents scénarios de pressing</p></li></ul>"
+          },
+          {
+            "id": "ff63a75c",
+            "title": "Comportement attendus collectifs",
+            "content": "<ul><li><p>Mobilité pour offrir des solutions courtes/moyennes.</p></li><li><p>Créer des triangles et intervalles pour sortir du pressing.</p></li><li><p>Utiliser le jeu long si bloc adverse trop compact.</p></li></ul>"
+          },
+          {
+            "id": "8e6b2f11",
+            "title": "Comportements attendus individuels ",
+            "content": "<ul><li><p>Porteur de balle : Jeu simple, Orienté, peu de touches</p></li><li><p>Joueurs autour : se démarquer dans les intervalles, en appui et en soutien </p></li></ul>"
+          },
+          {
+            "id": "9affe192",
+            "title": "Variables",
+            "content": "<ul><li><p><strong>Zones de départ</strong> : relance courte gardien / ballon récupéré plus haut / ballon joué direct au pivot.</p></li><li><p><strong>Toucher de balle</strong> : limité pour l’équipe en possession (2T max) → favorise pressing</p></li></ul>"
+          }
+        ],
+        "recuperation": "30"
+      }
+    }
+  ],
+  "videos": [],
+  "trainingSessionTacticPlayersGroups": [],
+  "season": {
+    "id": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "name": "2025 - 2026",
+    "endDate": "2026-06-30T00:00:00.000Z",
+    "startDate": "2025-07-01T00:00:00.000Z",
+    "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+    "createdAt": "2025-10-20T16:36:26.222Z",
+    "updatedAt": "2025-10-22T08:58:57.011Z",
+    "type": "MAIN_PERIOD",
+    "isArchived": false,
+    "isCurrent": true
+  }
+}

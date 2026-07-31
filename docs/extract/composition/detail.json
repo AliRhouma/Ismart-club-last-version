@@ -1,0 +1,40 @@
+{
+  "id": "a296a15b-dd3e-41d3-bee1-4b701d04e4a3",
+  "title": "U10 - 2-4-1 ",
+  "description": "",
+  "sourceLanguage": "fr",
+  "translations": {},
+  "categoryId": "c6fe37a9-ab2f-493b-a619-d09f8ee93fde",
+  "category": {
+    "id": "c6fe37a9-ab2f-493b-a619-d09f8ee93fde",
+    "name": "U10",
+    "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+    "description": "",
+    "picture": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae\\general\\5.png-1754322893961-810945686.png",
+    "gender": "MALE",
+    "colors": [
+      "#64748B",
+      "#EA580C"
+    ],
+    "automaticConvocation": false,
+    "convocationLeadHours": null
+  },
+  "categoryGroups": [
+    {
+      "id": "2c209aec-770f-4773-86b8-e8f53e07c8b3",
+      "name": "Groupe A",
+      "description": "",
+      "picture": null,
+      "categoryId": "c6fe37a9-ab2f-493b-a619-d09f8ee93fde",
+      "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+    }
+  ],
+  "creatorId": "5d3bd2a9-05ed-4d8a-8975-600b3c25b95e",
+  "gameId": null,
+  "preview": "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/game-lineups/image-1762280144040-20434115.png",
+  "stadium": null,
+  "formationId": null,
+  "game": null,
+  "playersLineup": [],
+  "createdAt": "2025-11-04T18:15:44.054Z"
+}

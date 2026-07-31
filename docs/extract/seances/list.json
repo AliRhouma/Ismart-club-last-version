@@ -1,0 +1,2618 @@
+[
+  {
+    "id": "b514dcdf-91dc-412f-a541-015bd4b1e57b",
+    "date": "2026-07-10T17:00:00.000Z",
+    "creatorId": null,
+    "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+    "category": {
+      "id": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+      "name": "FFF",
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+      "description": null,
+      "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021836347-935196374.jpg",
+      "gender": "MALE",
+      "colors": [
+        "#0060FD",
+        "#991B1B"
+      ],
+      "automaticConvocation": false,
+      "convocationLeadHours": null
+    },
+    "categoryGroups": [
+      {
+        "id": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "name": "Groupe A",
+        "description": null,
+        "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021363950-303102182.jpg",
+        "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+      }
+    ],
+    "programSessionId": "db1fc9cf-31da-43ef-be58-b5431ccf208b",
+    "programSession": {
+      "number": 96,
+      "teamInstallation": {
+        "name": "Stade de France"
+      },
+      "event": {
+        "startTime": "2026-07-10T17:00:00.000Z"
+      }
+    },
+    "isDraft": false,
+    "status": "NOT_STARTED",
+    "gamePrincipe": null,
+    "gamePhase": null,
+    "materials": [
+      {
+        "amount": 12,
+        "equipment": "/things/equipments/general/02.svg"
+      },
+      {
+        "amount": 10,
+        "equipment": "/things/equipments/balls/03.svg"
+      },
+      {
+        "amount": 2,
+        "equipment": "/things/equipments/goals/11.svg"
+      }
+    ],
+    "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+    "tacticalPrincipleId": "8b277085-6ccb-423d-b274-af14239e0b38",
+    "duration": "72",
+    "targetRpe": 0,
+    "effective": 0,
+    "statusReason": null,
+    "postponedDate": null,
+    "trainingTacticsOrder": [
+      "f33cf1fb-9095-4cb6-97f0-a1f9a009d920",
+      "2c2bb8fd-d077-42eb-a1cd-5667855deb2a",
+      "457983d3-d560-47dc-8a9c-466c2f74649d",
+      "8a77b03a-2c2d-40e0-a3a6-40cc9bac0e76",
+      "ae08a758-cf56-4614-9b35-b091dfc573f4",
+      "194fe30c-e558-4534-a29c-9916f36cafaf"
+    ],
+    "explanation": "",
+    "safetyVerified": false,
+    "hydrationVerified": false,
+    "conclusion": null,
+    "internalNotes": null,
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "tacticalPhase": {
+      "id": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+      "groupId": "2be133e7-5ef1-4fe3-9771-19c4182b8b50",
+      "name": "Conserver - Progresser",
+      "index": 0,
+      "translations": {},
+      "sourceLanguage": "fr"
+    },
+    "tacticalPrinciple": {
+      "id": "8b277085-6ccb-423d-b274-af14239e0b38",
+      "name": "Créer et utiliser des espaces",
+      "index": 0,
+      "color": "#1E3A8A",
+      "translations": {},
+      "sourceLanguage": "fr",
+      "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da"
+    }
+  },
+  {
+    "id": "cc09d1ad-7039-4995-b870-3d59948f9732",
+    "date": "2026-07-08T17:00:00.000Z",
+    "creatorId": null,
+    "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+    "category": {
+      "id": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+      "name": "FFF",
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+      "description": null,
+      "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021836347-935196374.jpg",
+      "gender": "MALE",
+      "colors": [
+        "#0060FD",
+        "#991B1B"
+      ],
+      "automaticConvocation": false,
+      "convocationLeadHours": null
+    },
+    "categoryGroups": [
+      {
+        "id": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "name": "Groupe A",
+        "description": null,
+        "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021363950-303102182.jpg",
+        "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+      }
+    ],
+    "programSessionId": "528fd92e-b593-45a9-bcfb-f1a544ee6d65",
+    "programSession": {
+      "number": 95,
+      "teamInstallation": {
+        "name": "Stade de France"
+      },
+      "event": {
+        "startTime": "2026-07-08T17:00:00.000Z"
+      }
+    },
+    "isDraft": false,
+    "status": "PROGRESS",
+    "gamePrincipe": null,
+    "gamePhase": null,
+    "materials": [
+      {
+        "amount": 12,
+        "equipment": "/things/equipments/general/02.svg"
+      },
+      {
+        "amount": 10,
+        "equipment": "/things/equipments/balls/03.svg"
+      },
+      {
+        "amount": 3,
+        "equipment": "/things/equipments/goals/11.svg"
+      }
+    ],
+    "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+    "tacticalPrincipleId": "8b277085-6ccb-423d-b274-af14239e0b38",
+    "duration": "43",
+    "targetRpe": 0,
+    "effective": 0,
+    "statusReason": null,
+    "postponedDate": null,
+    "trainingTacticsOrder": [
+      "68527476-8249-40c0-b3e7-4ca9a71bc79c",
+      "fa285cd0-38ce-47ff-9253-f36cd00c1ace",
+      "394fce1f-a272-441c-a6fe-c9e8e62cef55",
+      "2698ca47-791a-4063-a965-03ddecca13f2"
+    ],
+    "explanation": "",
+    "safetyVerified": false,
+    "hydrationVerified": false,
+    "conclusion": null,
+    "internalNotes": null,
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "tacticalPhase": {
+      "id": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+      "groupId": "2be133e7-5ef1-4fe3-9771-19c4182b8b50",
+      "name": "Conserver - Progresser",
+      "index": 0,
+      "translations": {},
+      "sourceLanguage": "fr"
+    },
+    "tacticalPrinciple": {
+      "id": "8b277085-6ccb-423d-b274-af14239e0b38",
+      "name": "Créer et utiliser des espaces",
+      "index": 0,
+      "color": "#1E3A8A",
+      "translations": {},
+      "sourceLanguage": "fr",
+      "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da"
+    }
+  },
+  {
+    "id": "be4a69a1-708e-42ef-9c2b-d1855144a5bf",
+    "date": "2026-07-06T17:00:00.000Z",
+    "creatorId": null,
+    "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+    "category": {
+      "id": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+      "name": "FFF",
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+      "description": null,
+      "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021836347-935196374.jpg",
+      "gender": "MALE",
+      "colors": [
+        "#0060FD",
+        "#991B1B"
+      ],
+      "automaticConvocation": false,
+      "convocationLeadHours": null
+    },
+    "categoryGroups": [
+      {
+        "id": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "name": "Groupe A",
+        "description": null,
+        "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021363950-303102182.jpg",
+        "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+      }
+    ],
+    "programSessionId": "2d6e5883-f70d-48f1-b821-1997429257b6",
+    "programSession": {
+      "number": 94,
+      "teamInstallation": {
+        "name": "Stade de France"
+      },
+      "event": {
+        "startTime": "2026-07-06T17:00:00.000Z"
+      }
+    },
+    "isDraft": false,
+    "status": "PROGRESS",
+    "gamePrincipe": null,
+    "gamePhase": null,
+    "materials": [
+      {
+        "amount": 12,
+        "equipment": "/things/equipments/general/02.svg"
+      },
+      {
+        "amount": 10,
+        "equipment": "/things/equipments/balls/03.svg"
+      },
+      {
+        "amount": 2,
+        "equipment": "/things/equipments/goals/11.svg"
+      }
+    ],
+    "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+    "tacticalPrincipleId": "8b277085-6ccb-423d-b274-af14239e0b38",
+    "duration": "63",
+    "targetRpe": 0,
+    "effective": 0,
+    "statusReason": null,
+    "postponedDate": null,
+    "trainingTacticsOrder": [
+      "8bb672b1-4490-4154-8e25-f30b3a482d03",
+      "bb4118d3-fc7f-4bbf-a11d-d77c4096c76c",
+      "b108b9c4-256b-444c-868a-38159b6d405d",
+      "f0347c4f-3f5d-40ab-aa63-275368b5453d",
+      "ea0de2ab-17a8-445d-9225-7c8720007741"
+    ],
+    "explanation": "",
+    "safetyVerified": false,
+    "hydrationVerified": false,
+    "conclusion": null,
+    "internalNotes": null,
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "tacticalPhase": {
+      "id": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+      "groupId": "2be133e7-5ef1-4fe3-9771-19c4182b8b50",
+      "name": "Conserver - Progresser",
+      "index": 0,
+      "translations": {},
+      "sourceLanguage": "fr"
+    },
+    "tacticalPrinciple": {
+      "id": "8b277085-6ccb-423d-b274-af14239e0b38",
+      "name": "Créer et utiliser des espaces",
+      "index": 0,
+      "color": "#1E3A8A",
+      "translations": {},
+      "sourceLanguage": "fr",
+      "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da"
+    }
+  },
+  {
+    "id": "0d8daefa-fb00-462c-bb76-ef1deba1602e",
+    "date": "2026-07-02T09:19:48.571Z",
+    "creatorId": null,
+    "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+    "category": {
+      "id": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+      "name": "FFF",
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+      "description": null,
+      "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021836347-935196374.jpg",
+      "gender": "MALE",
+      "colors": [
+        "#0060FD",
+        "#991B1B"
+      ],
+      "automaticConvocation": false,
+      "convocationLeadHours": null
+    },
+    "categoryGroups": [
+      {
+        "id": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "name": "Groupe A",
+        "description": null,
+        "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021363950-303102182.jpg",
+        "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+      }
+    ],
+    "programSessionId": "77a4e58e-1d5e-4c4c-8b02-08bcfcc892bb",
+    "programSession": {
+      "number": 103,
+      "teamInstallation": null,
+      "event": null
+    },
+    "isDraft": false,
+    "status": "PROGRESS",
+    "gamePrincipe": null,
+    "gamePhase": null,
+    "materials": [
+      {
+        "amount": 3,
+        "equipment": "/things/equipments/goals/11.svg"
+      },
+      {
+        "amount": 10,
+        "equipment": "/things/equipments/balls/03.svg"
+      },
+      {
+        "amount": 12,
+        "equipment": "/things/equipments/general/02.svg"
+      }
+    ],
+    "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+    "tacticalPrincipleId": "8b277085-6ccb-423d-b274-af14239e0b38",
+    "duration": "64",
+    "targetRpe": 0,
+    "effective": 0,
+    "statusReason": null,
+    "postponedDate": null,
+    "trainingTacticsOrder": [
+      "390f6ef5-0649-4a1c-bb7d-ed706b45bfbe",
+      "52111949-fde9-434e-9a5c-b0f69063bc4f",
+      "71b719ec-73d0-40d4-834b-6b146f7ffa62",
+      "b08f3c2f-7459-4750-ac52-178b8612ef78",
+      "7a1d08b8-05c3-4859-9f24-bed5355ed73a"
+    ],
+    "explanation": "",
+    "safetyVerified": false,
+    "hydrationVerified": false,
+    "conclusion": null,
+    "internalNotes": null,
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "tacticalPhase": {
+      "id": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+      "groupId": "2be133e7-5ef1-4fe3-9771-19c4182b8b50",
+      "name": "Conserver - Progresser",
+      "index": 0,
+      "translations": {},
+      "sourceLanguage": "fr"
+    },
+    "tacticalPrinciple": {
+      "id": "8b277085-6ccb-423d-b274-af14239e0b38",
+      "name": "Créer et utiliser des espaces",
+      "index": 0,
+      "color": "#1E3A8A",
+      "translations": {},
+      "sourceLanguage": "fr",
+      "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da"
+    }
+  },
+  {
+    "id": "5ef4e419-a044-401a-b7a7-9feb9c6be625",
+    "date": "2026-07-01T17:00:00.000Z",
+    "creatorId": null,
+    "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+    "category": {
+      "id": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+      "name": "FFF",
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+      "description": null,
+      "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021836347-935196374.jpg",
+      "gender": "MALE",
+      "colors": [
+        "#0060FD",
+        "#991B1B"
+      ],
+      "automaticConvocation": false,
+      "convocationLeadHours": null
+    },
+    "categoryGroups": [
+      {
+        "id": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "name": "Groupe A",
+        "description": null,
+        "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021363950-303102182.jpg",
+        "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+      }
+    ],
+    "programSessionId": "23f830c6-12e5-4331-b8d6-b4990c1a2944",
+    "programSession": {
+      "number": 92,
+      "teamInstallation": {
+        "name": "Stade de France"
+      },
+      "event": {
+        "startTime": "2026-07-01T17:00:00.000Z"
+      }
+    },
+    "isDraft": false,
+    "status": "PROGRESS",
+    "gamePrincipe": null,
+    "gamePhase": null,
+    "materials": [
+      {
+        "amount": 12,
+        "equipment": "/things/equipments/general/02.svg"
+      },
+      {
+        "amount": 10,
+        "equipment": "/things/equipments/balls/03.svg"
+      },
+      {
+        "amount": 2,
+        "equipment": "/things/equipments/goals/11.svg"
+      }
+    ],
+    "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+    "tacticalPrincipleId": "8b277085-6ccb-423d-b274-af14239e0b38",
+    "duration": "63",
+    "targetRpe": 0,
+    "effective": 0,
+    "statusReason": null,
+    "postponedDate": null,
+    "trainingTacticsOrder": [
+      "b8bf33ce-d4cd-4c5b-9e66-e41484da7aa6",
+      "eb11c26b-24d9-4b17-9d41-869b8f0aa9f9",
+      "5b67eab8-ae69-4a0b-96b2-20f2eae4847a",
+      "e3d6ec80-7fb6-47a7-8032-830fcc91dbec",
+      "2ac7cb22-c3ff-48b5-a974-40663ca912d6"
+    ],
+    "explanation": "",
+    "safetyVerified": false,
+    "hydrationVerified": false,
+    "conclusion": null,
+    "internalNotes": null,
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "tacticalPhase": {
+      "id": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+      "groupId": "2be133e7-5ef1-4fe3-9771-19c4182b8b50",
+      "name": "Conserver - Progresser",
+      "index": 0,
+      "translations": {},
+      "sourceLanguage": "fr"
+    },
+    "tacticalPrinciple": {
+      "id": "8b277085-6ccb-423d-b274-af14239e0b38",
+      "name": "Créer et utiliser des espaces",
+      "index": 0,
+      "color": "#1E3A8A",
+      "translations": {},
+      "sourceLanguage": "fr",
+      "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da"
+    }
+  },
+  {
+    "id": "fd929c17-7cb9-4a11-9097-143df00224ec",
+    "date": "2026-07-01T15:32:43.608Z",
+    "creatorId": null,
+    "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+    "category": {
+      "id": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+      "name": "FFF",
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+      "description": null,
+      "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021836347-935196374.jpg",
+      "gender": "MALE",
+      "colors": [
+        "#0060FD",
+        "#991B1B"
+      ],
+      "automaticConvocation": false,
+      "convocationLeadHours": null
+    },
+    "categoryGroups": [
+      {
+        "id": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "name": "Groupe A",
+        "description": null,
+        "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021363950-303102182.jpg",
+        "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+      }
+    ],
+    "programSessionId": "1b5b81bd-6f62-4021-a6dd-bf50f1d49f8b",
+    "programSession": {
+      "number": 102,
+      "teamInstallation": null,
+      "event": null
+    },
+    "isDraft": false,
+    "status": "PROGRESS",
+    "gamePrincipe": null,
+    "gamePhase": null,
+    "materials": [
+      {
+        "amount": 12,
+        "equipment": "/things/equipments/general/02.svg"
+      },
+      {
+        "amount": 10,
+        "equipment": "/things/equipments/balls/03.svg"
+      },
+      {
+        "amount": 2,
+        "equipment": "/things/equipments/goals/11.svg"
+      }
+    ],
+    "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+    "tacticalPrincipleId": "8b277085-6ccb-423d-b274-af14239e0b38",
+    "duration": "63",
+    "targetRpe": 0,
+    "effective": 0,
+    "statusReason": null,
+    "postponedDate": null,
+    "trainingTacticsOrder": [
+      "f5bcc862-04de-46dd-a708-683b1752659f",
+      "c90810ca-6175-43c6-8d7f-e848bc52a3d7",
+      "e1c26e4a-03c1-44dd-aaf6-be57cb04b908",
+      "a2c0e469-bafd-4e5c-800e-296ee65aa91d",
+      "9f3ce38c-2afe-4a8e-be42-143208fddd83"
+    ],
+    "explanation": "",
+    "safetyVerified": false,
+    "hydrationVerified": false,
+    "conclusion": null,
+    "internalNotes": null,
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "tacticalPhase": {
+      "id": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+      "groupId": "2be133e7-5ef1-4fe3-9771-19c4182b8b50",
+      "name": "Conserver - Progresser",
+      "index": 0,
+      "translations": {},
+      "sourceLanguage": "fr"
+    },
+    "tacticalPrinciple": {
+      "id": "8b277085-6ccb-423d-b274-af14239e0b38",
+      "name": "Créer et utiliser des espaces",
+      "index": 0,
+      "color": "#1E3A8A",
+      "translations": {},
+      "sourceLanguage": "fr",
+      "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da"
+    }
+  },
+  {
+    "id": "6edb03dd-6622-449e-a22b-f3c2764f754a",
+    "date": "2026-06-29T17:00:00.000Z",
+    "creatorId": null,
+    "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+    "category": {
+      "id": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+      "name": "FFF",
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+      "description": null,
+      "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021836347-935196374.jpg",
+      "gender": "MALE",
+      "colors": [
+        "#0060FD",
+        "#991B1B"
+      ],
+      "automaticConvocation": false,
+      "convocationLeadHours": null
+    },
+    "categoryGroups": [
+      {
+        "id": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "name": "Groupe A",
+        "description": null,
+        "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021363950-303102182.jpg",
+        "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+      }
+    ],
+    "programSessionId": "dd5badf1-ee54-4021-a82f-613db8124f15",
+    "programSession": {
+      "number": 86,
+      "teamInstallation": {
+        "name": "Stade de France"
+      },
+      "event": {
+        "startTime": "2026-06-17T17:00:00.000Z"
+      }
+    },
+    "isDraft": false,
+    "status": "NOT_STARTED",
+    "gamePrincipe": null,
+    "gamePhase": null,
+    "materials": [
+      {
+        "amount": 4,
+        "equipment": "/things/equipments/general/02.svg"
+      },
+      {
+        "amount": 2,
+        "equipment": "/things/equipments/general/01.svg"
+      },
+      {
+        "amount": 10,
+        "equipment": "/things/equipments/balls/03.svg"
+      },
+      {
+        "amount": 2,
+        "equipment": "/things/equipments/goals/11.svg"
+      }
+    ],
+    "tacticalPhaseId": "99d286eb-29c3-4bef-990c-02bdd42fd8e7",
+    "tacticalPrincipleId": "3da56199-bb61-409c-b54f-ca817f6cf359",
+    "duration": "45",
+    "targetRpe": 0,
+    "effective": 0,
+    "statusReason": null,
+    "postponedDate": null,
+    "trainingTacticsOrder": [
+      "11d139fb-a622-4ab7-bd9e-3985915ac830",
+      "00b5d41c-93a4-4dd5-b2b0-702b13aa35f5",
+      "3d2fbcb8-5781-434d-964f-89d2551e7fd7"
+    ],
+    "explanation": "",
+    "safetyVerified": false,
+    "hydrationVerified": false,
+    "conclusion": null,
+    "internalNotes": null,
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "tacticalPhase": {
+      "id": "99d286eb-29c3-4bef-990c-02bdd42fd8e7",
+      "groupId": "85ad09e7-a16c-43ab-bfaf-4270c3daba26",
+      "name": "Evaluation",
+      "index": 1,
+      "translations": {},
+      "sourceLanguage": "fr"
+    },
+    "tacticalPrinciple": {
+      "id": "3da56199-bb61-409c-b54f-ca817f6cf359",
+      "name": "Evaluation",
+      "index": 0,
+      "color": "#64748B",
+      "translations": {},
+      "sourceLanguage": "fr",
+      "tacticalPhaseId": "99d286eb-29c3-4bef-990c-02bdd42fd8e7"
+    }
+  },
+  {
+    "id": "0204bf12-e4c8-4ceb-b6da-b60a7a20ed1e",
+    "date": "2026-06-26T17:00:00.000Z",
+    "creatorId": null,
+    "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+    "category": {
+      "id": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+      "name": "FFF",
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+      "description": null,
+      "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021836347-935196374.jpg",
+      "gender": "MALE",
+      "colors": [
+        "#0060FD",
+        "#991B1B"
+      ],
+      "automaticConvocation": false,
+      "convocationLeadHours": null
+    },
+    "categoryGroups": [
+      {
+        "id": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "name": "Groupe A",
+        "description": null,
+        "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021363950-303102182.jpg",
+        "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+      }
+    ],
+    "programSessionId": "875e4b17-0c78-4d4b-a835-ea9455e82ec3",
+    "programSession": {
+      "number": 85,
+      "teamInstallation": {
+        "name": "Stade de France"
+      },
+      "event": {
+        "startTime": "2026-06-15T17:00:00.000Z"
+      }
+    },
+    "isDraft": false,
+    "status": "DONE",
+    "gamePrincipe": null,
+    "gamePhase": null,
+    "materials": [
+      {
+        "amount": 16,
+        "equipment": "/things/equipments/general/02.svg"
+      }
+    ],
+    "tacticalPhaseId": "99d286eb-29c3-4bef-990c-02bdd42fd8e7",
+    "tacticalPrincipleId": "3da56199-bb61-409c-b54f-ca817f6cf359",
+    "duration": "32",
+    "targetRpe": 0,
+    "effective": 0,
+    "statusReason": null,
+    "postponedDate": null,
+    "trainingTacticsOrder": [
+      "bade1b57-e668-4ea0-a6c3-2192d7761a4c",
+      "hydration_177204156079012ftr7f_30",
+      "406526b5-e157-4f76-9dcf-f446f68180fc"
+    ],
+    "explanation": "",
+    "safetyVerified": false,
+    "hydrationVerified": false,
+    "conclusion": null,
+    "internalNotes": null,
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "tacticalPhase": {
+      "id": "99d286eb-29c3-4bef-990c-02bdd42fd8e7",
+      "groupId": "85ad09e7-a16c-43ab-bfaf-4270c3daba26",
+      "name": "Evaluation",
+      "index": 1,
+      "translations": {},
+      "sourceLanguage": "fr"
+    },
+    "tacticalPrinciple": {
+      "id": "3da56199-bb61-409c-b54f-ca817f6cf359",
+      "name": "Evaluation",
+      "index": 0,
+      "color": "#64748B",
+      "translations": {},
+      "sourceLanguage": "fr",
+      "tacticalPhaseId": "99d286eb-29c3-4bef-990c-02bdd42fd8e7"
+    }
+  },
+  {
+    "id": "509063a1-2430-4909-a77b-4c821ab9cb4c",
+    "date": "2026-06-23T17:04:21.710Z",
+    "creatorId": null,
+    "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+    "category": {
+      "id": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+      "name": "FFF",
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+      "description": null,
+      "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021836347-935196374.jpg",
+      "gender": "MALE",
+      "colors": [
+        "#0060FD",
+        "#991B1B"
+      ],
+      "automaticConvocation": false,
+      "convocationLeadHours": null
+    },
+    "categoryGroups": [
+      {
+        "id": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "name": "Groupe A",
+        "description": null,
+        "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021363950-303102182.jpg",
+        "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+      }
+    ],
+    "programSessionId": "7905b6c3-0607-464f-ba0c-27d2c90bd443",
+    "programSession": {
+      "number": 101,
+      "teamInstallation": null,
+      "event": null
+    },
+    "isDraft": false,
+    "status": "PROGRESS",
+    "gamePrincipe": null,
+    "gamePhase": null,
+    "materials": [
+      {
+        "amount": 12,
+        "equipment": "/things/equipments/general/02.svg"
+      },
+      {
+        "amount": 10,
+        "equipment": "/things/equipments/balls/03.svg"
+      },
+      {
+        "amount": 3,
+        "equipment": "/things/equipments/goals/11.svg"
+      }
+    ],
+    "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+    "tacticalPrincipleId": "8b277085-6ccb-423d-b274-af14239e0b38",
+    "duration": "52",
+    "targetRpe": 0,
+    "effective": 0,
+    "statusReason": null,
+    "postponedDate": null,
+    "trainingTacticsOrder": [
+      "c17090c2-c372-4bbd-9124-a794e98c2385",
+      "2f596aba-52d3-4d1c-ac35-777281fa8183",
+      "1fbd1207-5209-44a0-8ef2-ca696ff5b669",
+      "70f70b71-66c6-4f23-b5ab-fa8e782a4969",
+      "cfa291dc-8d77-467f-91d8-00ec72c7d140"
+    ],
+    "explanation": "",
+    "safetyVerified": false,
+    "hydrationVerified": false,
+    "conclusion": null,
+    "internalNotes": null,
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "tacticalPhase": {
+      "id": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+      "groupId": "2be133e7-5ef1-4fe3-9771-19c4182b8b50",
+      "name": "Conserver - Progresser",
+      "index": 0,
+      "translations": {},
+      "sourceLanguage": "fr"
+    },
+    "tacticalPrinciple": {
+      "id": "8b277085-6ccb-423d-b274-af14239e0b38",
+      "name": "Créer et utiliser des espaces",
+      "index": 0,
+      "color": "#1E3A8A",
+      "translations": {},
+      "sourceLanguage": "fr",
+      "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da"
+    }
+  },
+  {
+    "id": "4da5104c-a931-405c-9b4b-7e5a6ecce26e",
+    "date": "2026-06-19T17:00:00.000Z",
+    "creatorId": null,
+    "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+    "category": {
+      "id": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+      "name": "FFF",
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+      "description": null,
+      "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021836347-935196374.jpg",
+      "gender": "MALE",
+      "colors": [
+        "#0060FD",
+        "#991B1B"
+      ],
+      "automaticConvocation": false,
+      "convocationLeadHours": null
+    },
+    "categoryGroups": [
+      {
+        "id": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "name": "Groupe A",
+        "description": null,
+        "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021363950-303102182.jpg",
+        "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+      }
+    ],
+    "programSessionId": "b335067d-5411-4693-8898-5b887bcd4d7f",
+    "programSession": {
+      "number": 87,
+      "teamInstallation": {
+        "name": "Stade de France"
+      },
+      "event": {
+        "startTime": "2026-06-19T17:00:00.000Z"
+      }
+    },
+    "isDraft": false,
+    "status": "DONE",
+    "gamePrincipe": null,
+    "gamePhase": null,
+    "materials": [],
+    "tacticalPhaseId": "99d286eb-29c3-4bef-990c-02bdd42fd8e7",
+    "tacticalPrincipleId": "3da56199-bb61-409c-b54f-ca817f6cf359",
+    "duration": "120",
+    "targetRpe": 0,
+    "effective": 0,
+    "statusReason": null,
+    "postponedDate": null,
+    "trainingTacticsOrder": [
+      "4dc8cf3b-1389-40c4-a109-e9872eee332d",
+      "34c60207-f565-4b97-b215-857b353115f4"
+    ],
+    "explanation": "",
+    "safetyVerified": false,
+    "hydrationVerified": false,
+    "conclusion": null,
+    "internalNotes": null,
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "tacticalPhase": {
+      "id": "99d286eb-29c3-4bef-990c-02bdd42fd8e7",
+      "groupId": "85ad09e7-a16c-43ab-bfaf-4270c3daba26",
+      "name": "Evaluation",
+      "index": 1,
+      "translations": {},
+      "sourceLanguage": "fr"
+    },
+    "tacticalPrinciple": {
+      "id": "3da56199-bb61-409c-b54f-ca817f6cf359",
+      "name": "Evaluation",
+      "index": 0,
+      "color": "#64748B",
+      "translations": {},
+      "sourceLanguage": "fr",
+      "tacticalPhaseId": "99d286eb-29c3-4bef-990c-02bdd42fd8e7"
+    }
+  },
+  {
+    "id": "d77ff4dc-c64c-469e-8cae-f239b1cdb8fa",
+    "date": "2026-04-17T17:00:00.000Z",
+    "creatorId": null,
+    "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+    "category": {
+      "id": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+      "name": "FFF",
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+      "description": null,
+      "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021836347-935196374.jpg",
+      "gender": "MALE",
+      "colors": [
+        "#0060FD",
+        "#991B1B"
+      ],
+      "automaticConvocation": false,
+      "convocationLeadHours": null
+    },
+    "categoryGroups": [
+      {
+        "id": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "name": "Groupe A",
+        "description": null,
+        "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021363950-303102182.jpg",
+        "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+      }
+    ],
+    "programSessionId": "d57d1e51-3bb5-4f79-aa75-6a76d6334abb",
+    "programSession": {
+      "number": 66,
+      "teamInstallation": {
+        "name": "Stade de France"
+      },
+      "event": {
+        "startTime": "2026-04-17T17:00:00.000Z"
+      }
+    },
+    "isDraft": false,
+    "status": "PROGRESS",
+    "gamePrincipe": null,
+    "gamePhase": null,
+    "materials": [
+      {
+        "amount": 12,
+        "equipment": "/things/equipments/general/02.svg"
+      },
+      {
+        "amount": 10,
+        "equipment": "/things/equipments/balls/03.svg"
+      },
+      {
+        "amount": 3,
+        "equipment": "/things/equipments/goals/11.svg"
+      }
+    ],
+    "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+    "tacticalPrincipleId": "8b277085-6ccb-423d-b274-af14239e0b38",
+    "duration": "61",
+    "targetRpe": 0,
+    "effective": 0,
+    "statusReason": null,
+    "postponedDate": null,
+    "trainingTacticsOrder": [
+      "05ec348e-2596-45ba-b7d7-1e6020c4d7b2",
+      "507ba7bf-3e68-419a-980c-ac9818962fb7",
+      "1a63bd95-1617-4eec-83fc-19c49f3c1c9c",
+      "390998f4-ad42-4a39-8495-f1eda4cac282",
+      "fcbd4332-7c28-4008-8f26-689c2ba34083"
+    ],
+    "explanation": "",
+    "safetyVerified": false,
+    "hydrationVerified": false,
+    "conclusion": null,
+    "internalNotes": null,
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "tacticalPhase": {
+      "id": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+      "groupId": "2be133e7-5ef1-4fe3-9771-19c4182b8b50",
+      "name": "Conserver - Progresser",
+      "index": 0,
+      "translations": {},
+      "sourceLanguage": "fr"
+    },
+    "tacticalPrinciple": {
+      "id": "8b277085-6ccb-423d-b274-af14239e0b38",
+      "name": "Créer et utiliser des espaces",
+      "index": 0,
+      "color": "#1E3A8A",
+      "translations": {},
+      "sourceLanguage": "fr",
+      "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da"
+    }
+  },
+  {
+    "id": "0b7d0a9c-6bd3-49b4-9f00-47591263e495",
+    "date": "2026-04-15T17:00:00.000Z",
+    "creatorId": null,
+    "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+    "category": {
+      "id": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+      "name": "FFF",
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+      "description": null,
+      "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021836347-935196374.jpg",
+      "gender": "MALE",
+      "colors": [
+        "#0060FD",
+        "#991B1B"
+      ],
+      "automaticConvocation": false,
+      "convocationLeadHours": null
+    },
+    "categoryGroups": [
+      {
+        "id": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "name": "Groupe A",
+        "description": null,
+        "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021363950-303102182.jpg",
+        "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+      }
+    ],
+    "programSessionId": "44aaf47d-3a29-4616-b010-f0b39f70db14",
+    "programSession": {
+      "number": 65,
+      "teamInstallation": {
+        "name": "Stade de France"
+      },
+      "event": {
+        "startTime": "2026-04-15T17:00:00.000Z"
+      }
+    },
+    "isDraft": false,
+    "status": "PROGRESS",
+    "gamePrincipe": null,
+    "gamePhase": null,
+    "materials": [
+      {
+        "amount": 8,
+        "equipment": "/things/equipments/general/01.svg"
+      },
+      {
+        "amount": 10,
+        "equipment": "/things/equipments/balls/03.svg"
+      },
+      {
+        "amount": 16,
+        "equipment": "/things/equipments/general/02.svg"
+      },
+      {
+        "amount": 4,
+        "equipment": "/things/equipments/goals/11.svg"
+      }
+    ],
+    "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+    "tacticalPrincipleId": "8b277085-6ccb-423d-b274-af14239e0b38",
+    "duration": "63",
+    "targetRpe": 0,
+    "effective": 0,
+    "statusReason": null,
+    "postponedDate": null,
+    "trainingTacticsOrder": [
+      "608aa1b4-50ec-4d2d-ba13-64f1c0863d97",
+      "480ef833-3c8b-4027-bf24-9e9ce936b2f0",
+      "a7a2bbbe-760d-4f61-9d3c-cd01959f8916",
+      "819c52da-1107-47af-aeaa-857fadc1a784",
+      "bc627a2a-c5c0-4188-8833-cc2d1222dc30",
+      "a4af8903-f516-4538-8e0a-bdc9786a6c3e"
+    ],
+    "explanation": "",
+    "safetyVerified": false,
+    "hydrationVerified": false,
+    "conclusion": null,
+    "internalNotes": null,
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "tacticalPhase": {
+      "id": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+      "groupId": "2be133e7-5ef1-4fe3-9771-19c4182b8b50",
+      "name": "Conserver - Progresser",
+      "index": 0,
+      "translations": {},
+      "sourceLanguage": "fr"
+    },
+    "tacticalPrinciple": {
+      "id": "8b277085-6ccb-423d-b274-af14239e0b38",
+      "name": "Créer et utiliser des espaces",
+      "index": 0,
+      "color": "#1E3A8A",
+      "translations": {},
+      "sourceLanguage": "fr",
+      "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da"
+    }
+  },
+  {
+    "id": "ab38a5a3-aa45-4aeb-a5ea-4bcd57e797d0",
+    "date": "2026-04-13T17:00:00.000Z",
+    "creatorId": null,
+    "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+    "category": {
+      "id": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+      "name": "FFF",
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+      "description": null,
+      "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021836347-935196374.jpg",
+      "gender": "MALE",
+      "colors": [
+        "#0060FD",
+        "#991B1B"
+      ],
+      "automaticConvocation": false,
+      "convocationLeadHours": null
+    },
+    "categoryGroups": [
+      {
+        "id": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "name": "Groupe A",
+        "description": null,
+        "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021363950-303102182.jpg",
+        "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+      }
+    ],
+    "programSessionId": "f02c4278-d9e9-4144-9c95-94fc105cb6d8",
+    "programSession": {
+      "number": 64,
+      "teamInstallation": {
+        "name": "Stade de France"
+      },
+      "event": {
+        "startTime": "2026-04-13T17:00:00.000Z"
+      }
+    },
+    "isDraft": false,
+    "status": "NOT_STARTED",
+    "gamePrincipe": null,
+    "gamePhase": null,
+    "materials": [
+      {
+        "amount": 12,
+        "equipment": "/things/equipments/general/02.svg"
+      },
+      {
+        "amount": 10,
+        "equipment": "/things/equipments/balls/03.svg"
+      },
+      {
+        "amount": 3,
+        "equipment": "/things/equipments/goals/11.svg"
+      }
+    ],
+    "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+    "tacticalPrincipleId": "8b277085-6ccb-423d-b274-af14239e0b38",
+    "duration": "58",
+    "targetRpe": 0,
+    "effective": 0,
+    "statusReason": null,
+    "postponedDate": null,
+    "trainingTacticsOrder": [
+      "c879eb3b-06bd-41a6-bbe4-6af0a42262c3",
+      "b1672f2d-f4c3-4c33-957d-ddafe2d669ca",
+      "77551ee5-37ff-4a10-bb52-4bf9a5a9994a",
+      "ce2de98d-3e95-4317-928c-7dede40b1c13",
+      "9b563cfd-b114-41ac-9983-fd68ab86240a"
+    ],
+    "explanation": "",
+    "safetyVerified": false,
+    "hydrationVerified": false,
+    "conclusion": null,
+    "internalNotes": null,
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "tacticalPhase": {
+      "id": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+      "groupId": "2be133e7-5ef1-4fe3-9771-19c4182b8b50",
+      "name": "Conserver - Progresser",
+      "index": 0,
+      "translations": {},
+      "sourceLanguage": "fr"
+    },
+    "tacticalPrinciple": {
+      "id": "8b277085-6ccb-423d-b274-af14239e0b38",
+      "name": "Créer et utiliser des espaces",
+      "index": 0,
+      "color": "#1E3A8A",
+      "translations": {},
+      "sourceLanguage": "fr",
+      "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da"
+    }
+  },
+  {
+    "id": "53a7cc52-a1ec-4680-8bdd-ca68b96c1274",
+    "date": "2026-02-26T18:00:00.000Z",
+    "creatorId": "5d3bd2a9-05ed-4d8a-8975-600b3c25b95e",
+    "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+    "category": {
+      "id": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+      "name": "FFF",
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+      "description": null,
+      "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021836347-935196374.jpg",
+      "gender": "MALE",
+      "colors": [
+        "#0060FD",
+        "#991B1B"
+      ],
+      "automaticConvocation": false,
+      "convocationLeadHours": null
+    },
+    "categoryGroups": [
+      {
+        "id": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "name": "Groupe A",
+        "description": null,
+        "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021363950-303102182.jpg",
+        "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+      }
+    ],
+    "programSessionId": "0ba7f62d-0cfa-49b2-a9ac-d50bccbd85f0",
+    "programSession": {
+      "number": 54,
+      "teamInstallation": {
+        "name": "Stade de France"
+      },
+      "event": {
+        "startTime": "2026-03-20T18:00:00.000Z"
+      }
+    },
+    "isDraft": false,
+    "status": "DONE",
+    "gamePrincipe": null,
+    "gamePhase": null,
+    "materials": [],
+    "tacticalPhaseId": "ceb7cae0-c323-4c65-93d5-041482a0f36f",
+    "tacticalPrincipleId": "7b538e25-c85a-44e6-9dd7-8689b30293d9",
+    "duration": "",
+    "targetRpe": null,
+    "effective": 2,
+    "statusReason": null,
+    "postponedDate": null,
+    "trainingTacticsOrder": [],
+    "explanation": null,
+    "safetyVerified": null,
+    "hydrationVerified": null,
+    "conclusion": null,
+    "internalNotes": null,
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "tacticalPhase": {
+      "id": "ceb7cae0-c323-4c65-93d5-041482a0f36f",
+      "groupId": "2be133e7-5ef1-4fe3-9771-19c4182b8b50",
+      "name": "Déséquilibrer - Finir",
+      "index": 1,
+      "translations": {},
+      "sourceLanguage": "fr"
+    },
+    "tacticalPrinciple": {
+      "id": "7b538e25-c85a-44e6-9dd7-8689b30293d9",
+      "name": "Jouer combiné pour créer un surnombre",
+      "index": 1,
+      "color": "#0EA5E9",
+      "translations": {},
+      "sourceLanguage": "fr",
+      "tacticalPhaseId": "ceb7cae0-c323-4c65-93d5-041482a0f36f"
+    }
+  },
+  {
+    "id": "dce28dad-2424-462e-aeb2-029785cb9d71",
+    "date": "2026-02-25T14:22:27.081Z",
+    "creatorId": null,
+    "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+    "category": {
+      "id": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+      "name": "FFF",
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+      "description": null,
+      "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021836347-935196374.jpg",
+      "gender": "MALE",
+      "colors": [
+        "#0060FD",
+        "#991B1B"
+      ],
+      "automaticConvocation": false,
+      "convocationLeadHours": null
+    },
+    "categoryGroups": [
+      {
+        "id": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "name": "Groupe A",
+        "description": null,
+        "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021363950-303102182.jpg",
+        "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+      }
+    ],
+    "programSessionId": "990e3364-5d5a-43f6-acd1-6cbbd2d56b53",
+    "programSession": {
+      "number": 2,
+      "teamInstallation": {
+        "name": "Stade de France"
+      },
+      "event": {
+        "startTime": "2025-10-08T17:00:00.000Z"
+      }
+    },
+    "isDraft": false,
+    "status": "DONE",
+    "gamePrincipe": null,
+    "gamePhase": null,
+    "materials": [
+      {
+        "amount": 4,
+        "equipment": "/things/equipments/general/02.svg"
+      },
+      {
+        "amount": 2,
+        "equipment": "/things/equipments/general/01.svg"
+      },
+      {
+        "amount": 10,
+        "equipment": "/things/equipments/balls/03.svg"
+      },
+      {
+        "amount": 2,
+        "equipment": "/things/equipments/goals/11.svg"
+      }
+    ],
+    "tacticalPhaseId": "99d286eb-29c3-4bef-990c-02bdd42fd8e7",
+    "tacticalPrincipleId": "3da56199-bb61-409c-b54f-ca817f6cf359",
+    "duration": "45",
+    "targetRpe": 0,
+    "effective": 0,
+    "statusReason": null,
+    "postponedDate": null,
+    "trainingTacticsOrder": [
+      "5a193c49-3b2d-4e1f-8030-5d652f3bb5ac",
+      "6ee4ecbc-06a0-477f-8227-4649006bfdfc",
+      "7fb4f8ae-63a3-4267-8300-0ed70c4dd229"
+    ],
+    "explanation": "",
+    "safetyVerified": false,
+    "hydrationVerified": false,
+    "conclusion": null,
+    "internalNotes": null,
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "tacticalPhase": {
+      "id": "99d286eb-29c3-4bef-990c-02bdd42fd8e7",
+      "groupId": "85ad09e7-a16c-43ab-bfaf-4270c3daba26",
+      "name": "Evaluation",
+      "index": 1,
+      "translations": {},
+      "sourceLanguage": "fr"
+    },
+    "tacticalPrinciple": {
+      "id": "3da56199-bb61-409c-b54f-ca817f6cf359",
+      "name": "Evaluation",
+      "index": 0,
+      "color": "#64748B",
+      "translations": {},
+      "sourceLanguage": "fr",
+      "tacticalPhaseId": "99d286eb-29c3-4bef-990c-02bdd42fd8e7"
+    }
+  },
+  {
+    "id": "6b6047dd-3ee8-4785-955c-c903821c9cc9",
+    "date": "2026-02-25T12:30:27.427Z",
+    "creatorId": null,
+    "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+    "category": {
+      "id": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+      "name": "FFF",
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+      "description": null,
+      "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021836347-935196374.jpg",
+      "gender": "MALE",
+      "colors": [
+        "#0060FD",
+        "#991B1B"
+      ],
+      "automaticConvocation": false,
+      "convocationLeadHours": null
+    },
+    "categoryGroups": [
+      {
+        "id": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "name": "Groupe A",
+        "description": null,
+        "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021363950-303102182.jpg",
+        "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+      }
+    ],
+    "programSessionId": "cbd5bbef-ccf2-4518-a0da-036327a7bbc6",
+    "programSession": {
+      "number": 1,
+      "teamInstallation": {
+        "name": "Stade de France"
+      },
+      "event": {
+        "startTime": "2025-10-06T17:00:00.000Z"
+      }
+    },
+    "isDraft": false,
+    "status": "DONE",
+    "gamePrincipe": null,
+    "gamePhase": null,
+    "materials": [
+      {
+        "amount": 16,
+        "equipment": "/things/equipments/general/02.svg"
+      }
+    ],
+    "tacticalPhaseId": "99d286eb-29c3-4bef-990c-02bdd42fd8e7",
+    "tacticalPrincipleId": "3da56199-bb61-409c-b54f-ca817f6cf359",
+    "duration": "32",
+    "targetRpe": 0,
+    "effective": 0,
+    "statusReason": null,
+    "postponedDate": null,
+    "trainingTacticsOrder": [
+      "96931d55-567c-47ff-a613-7e6be22f240a",
+      "hydration_1772022671881wtwm538_30",
+      "f96b1078-6f1d-4a84-bb9a-7dc5987d1d1b"
+    ],
+    "explanation": "",
+    "safetyVerified": false,
+    "hydrationVerified": false,
+    "conclusion": null,
+    "internalNotes": null,
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "tacticalPhase": {
+      "id": "99d286eb-29c3-4bef-990c-02bdd42fd8e7",
+      "groupId": "85ad09e7-a16c-43ab-bfaf-4270c3daba26",
+      "name": "Evaluation",
+      "index": 1,
+      "translations": {},
+      "sourceLanguage": "fr"
+    },
+    "tacticalPrinciple": {
+      "id": "3da56199-bb61-409c-b54f-ca817f6cf359",
+      "name": "Evaluation",
+      "index": 0,
+      "color": "#64748B",
+      "translations": {},
+      "sourceLanguage": "fr",
+      "tacticalPhaseId": "99d286eb-29c3-4bef-990c-02bdd42fd8e7"
+    }
+  },
+  {
+    "id": "c4526aeb-0e4c-40bf-b61c-8024feef28ec",
+    "date": "2026-02-25T12:25:07.459Z",
+    "creatorId": null,
+    "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+    "category": {
+      "id": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+      "name": "FFF",
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+      "description": null,
+      "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021836347-935196374.jpg",
+      "gender": "MALE",
+      "colors": [
+        "#0060FD",
+        "#991B1B"
+      ],
+      "automaticConvocation": false,
+      "convocationLeadHours": null
+    },
+    "categoryGroups": [
+      {
+        "id": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "name": "Groupe A",
+        "description": null,
+        "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021363950-303102182.jpg",
+        "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+      }
+    ],
+    "programSessionId": "d49bbeab-22e5-4d6c-8711-4c3c18161536",
+    "programSession": {
+      "number": 7,
+      "teamInstallation": {
+        "name": "Stade de France"
+      },
+      "event": {
+        "startTime": "2025-10-20T17:00:00.000Z"
+      }
+    },
+    "isDraft": false,
+    "status": "PROGRESS",
+    "gamePrincipe": null,
+    "gamePhase": null,
+    "materials": [],
+    "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+    "tacticalPrincipleId": "8b277085-6ccb-423d-b274-af14239e0b38",
+    "duration": "12",
+    "targetRpe": 0,
+    "effective": 0,
+    "statusReason": null,
+    "postponedDate": null,
+    "trainingTacticsOrder": [
+      "93b64794-25ca-44fb-82a7-7923149ddc7d"
+    ],
+    "explanation": "",
+    "safetyVerified": false,
+    "hydrationVerified": false,
+    "conclusion": null,
+    "internalNotes": null,
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "tacticalPhase": {
+      "id": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+      "groupId": "2be133e7-5ef1-4fe3-9771-19c4182b8b50",
+      "name": "Conserver - Progresser",
+      "index": 0,
+      "translations": {},
+      "sourceLanguage": "fr"
+    },
+    "tacticalPrinciple": {
+      "id": "8b277085-6ccb-423d-b274-af14239e0b38",
+      "name": "Créer et utiliser des espaces",
+      "index": 0,
+      "color": "#1E3A8A",
+      "translations": {},
+      "sourceLanguage": "fr",
+      "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da"
+    }
+  },
+  {
+    "id": "b685de37-69a0-4991-9431-c4a28052d905",
+    "date": "2026-02-20T18:00:00.000Z",
+    "creatorId": null,
+    "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+    "category": {
+      "id": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+      "name": "FFF",
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+      "description": null,
+      "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021836347-935196374.jpg",
+      "gender": "MALE",
+      "colors": [
+        "#0060FD",
+        "#991B1B"
+      ],
+      "automaticConvocation": false,
+      "convocationLeadHours": null
+    },
+    "categoryGroups": [
+      {
+        "id": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "name": "Groupe A",
+        "description": null,
+        "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021363950-303102182.jpg",
+        "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+      }
+    ],
+    "programSessionId": "de9b5171-7da9-463d-928e-3a85e015e4af",
+    "programSession": {
+      "number": 48,
+      "teamInstallation": {
+        "name": "Stade de France"
+      },
+      "event": {
+        "startTime": "2026-02-20T18:00:00.000Z"
+      }
+    },
+    "isDraft": false,
+    "status": "DONE",
+    "gamePrincipe": null,
+    "gamePhase": null,
+    "materials": [],
+    "tacticalPhaseId": "99d286eb-29c3-4bef-990c-02bdd42fd8e7",
+    "tacticalPrincipleId": "3da56199-bb61-409c-b54f-ca817f6cf359",
+    "duration": "120",
+    "targetRpe": 0,
+    "effective": 0,
+    "statusReason": null,
+    "postponedDate": null,
+    "trainingTacticsOrder": [
+      "67ef039d-9103-44ab-9e3b-9bebaa3503ee",
+      "4252be41-e620-4946-b06b-3e917f797cc4"
+    ],
+    "explanation": "",
+    "safetyVerified": false,
+    "hydrationVerified": false,
+    "conclusion": null,
+    "internalNotes": null,
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "tacticalPhase": {
+      "id": "99d286eb-29c3-4bef-990c-02bdd42fd8e7",
+      "groupId": "85ad09e7-a16c-43ab-bfaf-4270c3daba26",
+      "name": "Evaluation",
+      "index": 1,
+      "translations": {},
+      "sourceLanguage": "fr"
+    },
+    "tacticalPrinciple": {
+      "id": "3da56199-bb61-409c-b54f-ca817f6cf359",
+      "name": "Evaluation",
+      "index": 0,
+      "color": "#64748B",
+      "translations": {},
+      "sourceLanguage": "fr",
+      "tacticalPhaseId": "99d286eb-29c3-4bef-990c-02bdd42fd8e7"
+    }
+  },
+  {
+    "id": "c87a9534-24aa-4685-9eb6-5b37d566278a",
+    "date": "2026-02-04T18:00:00.000Z",
+    "creatorId": null,
+    "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+    "category": {
+      "id": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+      "name": "FFF",
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+      "description": null,
+      "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021836347-935196374.jpg",
+      "gender": "MALE",
+      "colors": [
+        "#0060FD",
+        "#991B1B"
+      ],
+      "automaticConvocation": false,
+      "convocationLeadHours": null
+    },
+    "categoryGroups": [
+      {
+        "id": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "name": "Groupe A",
+        "description": null,
+        "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021363950-303102182.jpg",
+        "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+      }
+    ],
+    "programSessionId": "c6cfc137-97ee-46a8-9855-c93b7c839cf8",
+    "programSession": {
+      "number": 47,
+      "teamInstallation": {
+        "name": "Stade de France"
+      },
+      "event": {
+        "startTime": "2026-02-18T18:00:00.000Z"
+      }
+    },
+    "isDraft": false,
+    "status": "DONE",
+    "gamePrincipe": null,
+    "gamePhase": null,
+    "materials": [
+      {
+        "amount": 4,
+        "equipment": "/things/equipments/general/02.svg"
+      },
+      {
+        "amount": 2,
+        "equipment": "/things/equipments/general/01.svg"
+      },
+      {
+        "amount": 10,
+        "equipment": "/things/equipments/balls/03.svg"
+      },
+      {
+        "amount": 2,
+        "equipment": "/things/equipments/goals/11.svg"
+      }
+    ],
+    "tacticalPhaseId": "99d286eb-29c3-4bef-990c-02bdd42fd8e7",
+    "tacticalPrincipleId": "3da56199-bb61-409c-b54f-ca817f6cf359",
+    "duration": "45",
+    "targetRpe": 0,
+    "effective": 0,
+    "statusReason": null,
+    "postponedDate": null,
+    "trainingTacticsOrder": [
+      "e57238f6-1fee-4f2b-b5e5-c80da80e45cd",
+      "baf6dead-4c6e-4b36-b898-c7413497e098",
+      "0453b14f-5a69-463b-92d8-223a7f3ae09d"
+    ],
+    "explanation": "",
+    "safetyVerified": false,
+    "hydrationVerified": false,
+    "conclusion": null,
+    "internalNotes": null,
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "tacticalPhase": {
+      "id": "99d286eb-29c3-4bef-990c-02bdd42fd8e7",
+      "groupId": "85ad09e7-a16c-43ab-bfaf-4270c3daba26",
+      "name": "Evaluation",
+      "index": 1,
+      "translations": {},
+      "sourceLanguage": "fr"
+    },
+    "tacticalPrinciple": {
+      "id": "3da56199-bb61-409c-b54f-ca817f6cf359",
+      "name": "Evaluation",
+      "index": 0,
+      "color": "#64748B",
+      "translations": {},
+      "sourceLanguage": "fr",
+      "tacticalPhaseId": "99d286eb-29c3-4bef-990c-02bdd42fd8e7"
+    }
+  },
+  {
+    "id": "62ba083f-033c-4698-b0d6-07f580e6cdb3",
+    "date": "2026-02-02T18:00:00.000Z",
+    "creatorId": null,
+    "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+    "category": {
+      "id": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+      "name": "FFF",
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+      "description": null,
+      "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021836347-935196374.jpg",
+      "gender": "MALE",
+      "colors": [
+        "#0060FD",
+        "#991B1B"
+      ],
+      "automaticConvocation": false,
+      "convocationLeadHours": null
+    },
+    "categoryGroups": [
+      {
+        "id": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "name": "Groupe A",
+        "description": null,
+        "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021363950-303102182.jpg",
+        "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+      }
+    ],
+    "programSessionId": "acedaeff-fdf6-49ae-be65-9174ef9137ed",
+    "programSession": {
+      "number": 46,
+      "teamInstallation": {
+        "name": "Stade de France"
+      },
+      "event": {
+        "startTime": "2026-02-16T18:00:00.000Z"
+      }
+    },
+    "isDraft": false,
+    "status": "DONE",
+    "gamePrincipe": null,
+    "gamePhase": null,
+    "materials": [
+      {
+        "amount": 16,
+        "equipment": "/things/equipments/general/02.svg"
+      }
+    ],
+    "tacticalPhaseId": "99d286eb-29c3-4bef-990c-02bdd42fd8e7",
+    "tacticalPrincipleId": "3da56199-bb61-409c-b54f-ca817f6cf359",
+    "duration": "32",
+    "targetRpe": 0,
+    "effective": 0,
+    "statusReason": null,
+    "postponedDate": null,
+    "trainingTacticsOrder": [
+      "41d8d736-c090-4095-9609-cab14cc901c4",
+      "hydration_1772040265440c0sl4m2_30",
+      "5a18f9c1-9a1b-48da-b020-f53a38c7835e"
+    ],
+    "explanation": "",
+    "safetyVerified": false,
+    "hydrationVerified": false,
+    "conclusion": null,
+    "internalNotes": null,
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "tacticalPhase": {
+      "id": "99d286eb-29c3-4bef-990c-02bdd42fd8e7",
+      "groupId": "85ad09e7-a16c-43ab-bfaf-4270c3daba26",
+      "name": "Evaluation",
+      "index": 1,
+      "translations": {},
+      "sourceLanguage": "fr"
+    },
+    "tacticalPrinciple": {
+      "id": "3da56199-bb61-409c-b54f-ca817f6cf359",
+      "name": "Evaluation",
+      "index": 0,
+      "color": "#64748B",
+      "translations": {},
+      "sourceLanguage": "fr",
+      "tacticalPhaseId": "99d286eb-29c3-4bef-990c-02bdd42fd8e7"
+    }
+  },
+  {
+    "id": "41cb755b-7b9a-4afa-8022-d2291fc46b42",
+    "date": "2026-01-30T18:00:00.000Z",
+    "creatorId": null,
+    "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+    "category": {
+      "id": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+      "name": "FFF",
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+      "description": null,
+      "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021836347-935196374.jpg",
+      "gender": "MALE",
+      "colors": [
+        "#0060FD",
+        "#991B1B"
+      ],
+      "automaticConvocation": false,
+      "convocationLeadHours": null
+    },
+    "categoryGroups": [
+      {
+        "id": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "name": "Groupe A",
+        "description": null,
+        "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021363950-303102182.jpg",
+        "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+      }
+    ],
+    "programSessionId": "fa82e9f8-1c01-41b1-956c-b2e361cfba3c",
+    "programSession": {
+      "number": 39,
+      "teamInstallation": {
+        "name": "Stade de France"
+      },
+      "event": {
+        "startTime": "2026-01-30T18:00:00.000Z"
+      }
+    },
+    "isDraft": false,
+    "status": "NOT_STARTED",
+    "gamePrincipe": null,
+    "gamePhase": null,
+    "materials": [
+      {
+        "amount": 2,
+        "equipment": "/things/equipments/goals/11.svg"
+      },
+      {
+        "amount": 10,
+        "equipment": "/things/equipments/balls/03.svg"
+      },
+      {
+        "amount": 12,
+        "equipment": "/things/equipments/general/02.svg"
+      },
+      {
+        "amount": 8,
+        "equipment": "/things/equipments/general/01.svg"
+      }
+    ],
+    "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+    "tacticalPrincipleId": "8b277085-6ccb-423d-b274-af14239e0b38",
+    "duration": "59",
+    "targetRpe": 0,
+    "effective": 0,
+    "statusReason": null,
+    "postponedDate": null,
+    "trainingTacticsOrder": [
+      "b9925f0e-7e5d-4c00-a6d4-8d182c39d238",
+      "3e3ad775-e4e4-4ba6-a5ea-033b9291e1fe",
+      "3dae2462-d18a-416a-902e-71aa4c8d8224",
+      "f97aaafb-5547-47a3-8b55-712c37ae11b8",
+      "6cd6d32e-9616-4e01-bb3e-45d8d399160d"
+    ],
+    "explanation": "",
+    "safetyVerified": false,
+    "hydrationVerified": false,
+    "conclusion": null,
+    "internalNotes": null,
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "tacticalPhase": {
+      "id": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+      "groupId": "2be133e7-5ef1-4fe3-9771-19c4182b8b50",
+      "name": "Conserver - Progresser",
+      "index": 0,
+      "translations": {},
+      "sourceLanguage": "fr"
+    },
+    "tacticalPrinciple": {
+      "id": "8b277085-6ccb-423d-b274-af14239e0b38",
+      "name": "Créer et utiliser des espaces",
+      "index": 0,
+      "color": "#1E3A8A",
+      "translations": {},
+      "sourceLanguage": "fr",
+      "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da"
+    }
+  },
+  {
+    "id": "e3f31aa4-8ef1-4634-989a-9d7e386f63a4",
+    "date": "2026-01-07T18:00:00.000Z",
+    "creatorId": null,
+    "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+    "category": {
+      "id": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+      "name": "FFF",
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+      "description": null,
+      "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021836347-935196374.jpg",
+      "gender": "MALE",
+      "colors": [
+        "#0060FD",
+        "#991B1B"
+      ],
+      "automaticConvocation": false,
+      "convocationLeadHours": null
+    },
+    "categoryGroups": [
+      {
+        "id": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "name": "Groupe A",
+        "description": null,
+        "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021363950-303102182.jpg",
+        "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+      }
+    ],
+    "programSessionId": "f884dccf-ea1a-4c23-a06c-f370eb8f83fb",
+    "programSession": {
+      "number": 38,
+      "teamInstallation": {
+        "name": "Stade de France"
+      },
+      "event": {
+        "startTime": "2026-01-28T18:00:00.000Z"
+      }
+    },
+    "isDraft": false,
+    "status": "PROGRESS",
+    "gamePrincipe": null,
+    "gamePhase": null,
+    "materials": [
+      {
+        "amount": 8,
+        "equipment": "/things/equipments/general/01.svg"
+      },
+      {
+        "amount": 10,
+        "equipment": "/things/equipments/balls/03.svg"
+      },
+      {
+        "amount": 12,
+        "equipment": "/things/equipments/general/02.svg"
+      },
+      {
+        "amount": 3,
+        "equipment": "/things/equipments/goals/11.svg"
+      }
+    ],
+    "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+    "tacticalPrincipleId": "8b277085-6ccb-423d-b274-af14239e0b38",
+    "duration": "57",
+    "targetRpe": 0,
+    "effective": 0,
+    "statusReason": null,
+    "postponedDate": null,
+    "trainingTacticsOrder": [
+      "a8f022a6-8c28-4e44-88da-4b339420f79a",
+      "79ae0c5a-3f1b-407b-bae5-ee9cffb73791",
+      "ede8df77-bee9-43be-aba7-e2115c14e939",
+      "86c00080-9b0b-4bc4-9e84-c69a76862a21",
+      "eb1c58a7-9b58-49b6-82f8-d4b226afebfd"
+    ],
+    "explanation": "",
+    "safetyVerified": false,
+    "hydrationVerified": false,
+    "conclusion": null,
+    "internalNotes": null,
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "tacticalPhase": {
+      "id": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+      "groupId": "2be133e7-5ef1-4fe3-9771-19c4182b8b50",
+      "name": "Conserver - Progresser",
+      "index": 0,
+      "translations": {},
+      "sourceLanguage": "fr"
+    },
+    "tacticalPrinciple": {
+      "id": "8b277085-6ccb-423d-b274-af14239e0b38",
+      "name": "Créer et utiliser des espaces",
+      "index": 0,
+      "color": "#1E3A8A",
+      "translations": {},
+      "sourceLanguage": "fr",
+      "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da"
+    }
+  },
+  {
+    "id": "65fb7bea-d14f-40f7-9ddc-7f13e3af8339",
+    "date": "2026-01-05T18:00:00.000Z",
+    "creatorId": null,
+    "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+    "category": {
+      "id": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+      "name": "FFF",
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+      "description": null,
+      "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021836347-935196374.jpg",
+      "gender": "MALE",
+      "colors": [
+        "#0060FD",
+        "#991B1B"
+      ],
+      "automaticConvocation": false,
+      "convocationLeadHours": null
+    },
+    "categoryGroups": [
+      {
+        "id": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "name": "Groupe A",
+        "description": null,
+        "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021363950-303102182.jpg",
+        "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+      }
+    ],
+    "programSessionId": "bfb61555-47d3-49fa-ad29-8940277403b4",
+    "programSession": {
+      "number": 37,
+      "teamInstallation": {
+        "name": "Stade de France"
+      },
+      "event": {
+        "startTime": "2026-01-26T18:00:00.000Z"
+      }
+    },
+    "isDraft": false,
+    "status": "PROGRESS",
+    "gamePrincipe": null,
+    "gamePhase": null,
+    "materials": [
+      {
+        "amount": 8,
+        "equipment": "/things/equipments/general/01.svg"
+      },
+      {
+        "amount": 10,
+        "equipment": "/things/equipments/balls/03.svg"
+      },
+      {
+        "amount": 12,
+        "equipment": "/things/equipments/general/02.svg"
+      },
+      {
+        "amount": 3,
+        "equipment": "/things/equipments/goals/11.svg"
+      }
+    ],
+    "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+    "tacticalPrincipleId": "8b277085-6ccb-423d-b274-af14239e0b38",
+    "duration": "57",
+    "targetRpe": 0,
+    "effective": 0,
+    "statusReason": null,
+    "postponedDate": null,
+    "trainingTacticsOrder": [
+      "0942ff4e-9956-424a-991b-ca2128342301",
+      "5d1c2589-983c-4292-be9e-07f650e45cf4",
+      "23d07a2c-ca40-42e4-bbf0-40931535c8d2",
+      "0ae08802-d20f-4912-b5f4-e6813a1d8aad",
+      "83f57bd7-094d-467e-b5e5-4332542429b7"
+    ],
+    "explanation": "",
+    "safetyVerified": false,
+    "hydrationVerified": false,
+    "conclusion": null,
+    "internalNotes": null,
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "tacticalPhase": {
+      "id": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+      "groupId": "2be133e7-5ef1-4fe3-9771-19c4182b8b50",
+      "name": "Conserver - Progresser",
+      "index": 0,
+      "translations": {},
+      "sourceLanguage": "fr"
+    },
+    "tacticalPrinciple": {
+      "id": "8b277085-6ccb-423d-b274-af14239e0b38",
+      "name": "Créer et utiliser des espaces",
+      "index": 0,
+      "color": "#1E3A8A",
+      "translations": {},
+      "sourceLanguage": "fr",
+      "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da"
+    }
+  },
+  {
+    "id": "5babde93-69ae-41a1-b3a7-7f8f1e307a2e",
+    "date": "2025-10-10T17:00:00.000Z",
+    "creatorId": null,
+    "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+    "category": {
+      "id": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+      "name": "FFF",
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+      "description": null,
+      "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021836347-935196374.jpg",
+      "gender": "MALE",
+      "colors": [
+        "#0060FD",
+        "#991B1B"
+      ],
+      "automaticConvocation": false,
+      "convocationLeadHours": null
+    },
+    "categoryGroups": [
+      {
+        "id": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "name": "Groupe A",
+        "description": null,
+        "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021363950-303102182.jpg",
+        "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+      }
+    ],
+    "programSessionId": "c419d64c-f86a-4a5c-9169-4e0879a57a67",
+    "programSession": {
+      "number": 3,
+      "teamInstallation": {
+        "name": "Stade de France"
+      },
+      "event": {
+        "startTime": "2025-10-10T17:00:00.000Z"
+      }
+    },
+    "isDraft": false,
+    "status": "DONE",
+    "gamePrincipe": null,
+    "gamePhase": null,
+    "materials": [],
+    "tacticalPhaseId": "99d286eb-29c3-4bef-990c-02bdd42fd8e7",
+    "tacticalPrincipleId": "3da56199-bb61-409c-b54f-ca817f6cf359",
+    "duration": "120",
+    "targetRpe": 0,
+    "effective": 0,
+    "statusReason": null,
+    "postponedDate": null,
+    "trainingTacticsOrder": [
+      "86c01915-f6b2-4ad0-961d-d634ab6a4fda",
+      "d5ca6707-1083-4dbe-9922-ec3f49a35f8a"
+    ],
+    "explanation": "",
+    "safetyVerified": false,
+    "hydrationVerified": false,
+    "conclusion": null,
+    "internalNotes": null,
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "tacticalPhase": {
+      "id": "99d286eb-29c3-4bef-990c-02bdd42fd8e7",
+      "groupId": "85ad09e7-a16c-43ab-bfaf-4270c3daba26",
+      "name": "Evaluation",
+      "index": 1,
+      "translations": {},
+      "sourceLanguage": "fr"
+    },
+    "tacticalPrinciple": {
+      "id": "3da56199-bb61-409c-b54f-ca817f6cf359",
+      "name": "Evaluation",
+      "index": 0,
+      "color": "#64748B",
+      "translations": {},
+      "sourceLanguage": "fr",
+      "tacticalPhaseId": "99d286eb-29c3-4bef-990c-02bdd42fd8e7"
+    }
+  },
+  {
+    "id": "e98349dd-f0ba-49de-b997-2b0874b9092e",
+    "date": "2025-09-12T17:00:00.000Z",
+    "creatorId": null,
+    "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+    "category": {
+      "id": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+      "name": "FFF",
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+      "description": null,
+      "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021836347-935196374.jpg",
+      "gender": "MALE",
+      "colors": [
+        "#0060FD",
+        "#991B1B"
+      ],
+      "automaticConvocation": false,
+      "convocationLeadHours": null
+    },
+    "categoryGroups": [
+      {
+        "id": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "name": "Groupe A",
+        "description": null,
+        "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021363950-303102182.jpg",
+        "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+      }
+    ],
+    "programSessionId": "19017c33-cc52-4d6f-8101-8c5872a40ae5",
+    "programSession": {
+      "number": 9,
+      "teamInstallation": {
+        "name": "Stade de France"
+      },
+      "event": {
+        "startTime": "2025-10-24T17:00:00.000Z"
+      }
+    },
+    "isDraft": false,
+    "status": "DONE",
+    "gamePrincipe": null,
+    "gamePhase": null,
+    "materials": [
+      {
+        "amount": 10,
+        "equipment": "/things/equipments/general/02.svg"
+      },
+      {
+        "amount": 10,
+        "equipment": "/things/equipments/balls/03.svg"
+      }
+    ],
+    "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+    "tacticalPrincipleId": "8b277085-6ccb-423d-b274-af14239e0b38",
+    "duration": "52",
+    "targetRpe": 0,
+    "effective": 0,
+    "statusReason": null,
+    "postponedDate": null,
+    "trainingTacticsOrder": [
+      "3945d290-a4d7-464a-8d0b-02e57021124b",
+      "hydration_17721072211860uunaor_30",
+      "e2b7276a-90ef-4ea7-a5bc-6f17f35ed8f2",
+      "83e3b0e5-aede-4d1f-bbfa-d3e87ae4aa20",
+      "6c1410ce-5645-422a-9ca2-c45180d16cce",
+      "672edff6-5a03-45aa-b1bd-67982ce6bb8a"
+    ],
+    "explanation": "",
+    "safetyVerified": false,
+    "hydrationVerified": false,
+    "conclusion": null,
+    "internalNotes": null,
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "tacticalPhase": {
+      "id": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+      "groupId": "2be133e7-5ef1-4fe3-9771-19c4182b8b50",
+      "name": "Conserver - Progresser",
+      "index": 0,
+      "translations": {},
+      "sourceLanguage": "fr"
+    },
+    "tacticalPrinciple": {
+      "id": "8b277085-6ccb-423d-b274-af14239e0b38",
+      "name": "Créer et utiliser des espaces",
+      "index": 0,
+      "color": "#1E3A8A",
+      "translations": {},
+      "sourceLanguage": "fr",
+      "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da"
+    }
+  },
+  {
+    "id": "e72ed32e-45f8-4625-a6e9-dcd3cf43a539",
+    "date": "2025-09-10T17:00:00.000Z",
+    "creatorId": null,
+    "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+    "category": {
+      "id": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+      "name": "FFF",
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+      "description": null,
+      "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021836347-935196374.jpg",
+      "gender": "MALE",
+      "colors": [
+        "#0060FD",
+        "#991B1B"
+      ],
+      "automaticConvocation": false,
+      "convocationLeadHours": null
+    },
+    "categoryGroups": [
+      {
+        "id": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "name": "Groupe A",
+        "description": null,
+        "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021363950-303102182.jpg",
+        "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+      }
+    ],
+    "programSessionId": "29368e12-c533-4b7e-afb0-ae50ca42fb6d",
+    "programSession": {
+      "number": 8,
+      "teamInstallation": {
+        "name": "Stade de France"
+      },
+      "event": {
+        "startTime": "2025-10-22T17:00:00.000Z"
+      }
+    },
+    "isDraft": false,
+    "status": "DONE",
+    "gamePrincipe": null,
+    "gamePhase": null,
+    "materials": [
+      {
+        "amount": 12,
+        "equipment": "/things/equipments/general/02.svg"
+      },
+      {
+        "amount": 10,
+        "equipment": "/things/equipments/balls/03.svg"
+      },
+      {
+        "amount": 3,
+        "equipment": "/things/equipments/goals/11.svg"
+      }
+    ],
+    "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+    "tacticalPrincipleId": "8b277085-6ccb-423d-b274-af14239e0b38",
+    "duration": "58",
+    "targetRpe": 0,
+    "effective": 0,
+    "statusReason": null,
+    "postponedDate": null,
+    "trainingTacticsOrder": [
+      "80835451-3171-41ad-ba24-e868d75060e9",
+      "1fd28922-66fa-42d0-95f4-912f1391d7d1",
+      "69bad30d-63d5-4bfd-b64e-81eba7f93134",
+      "465726d9-cbcc-444f-afcc-892d2e55cd61",
+      "a2e0abea-97e6-4a61-8ad5-3006eacfd6c2"
+    ],
+    "explanation": "",
+    "safetyVerified": true,
+    "hydrationVerified": false,
+    "conclusion": null,
+    "internalNotes": null,
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "tacticalPhase": {
+      "id": "a505cb23-d9c9-4f56-b635-1d7c769eb9da",
+      "groupId": "2be133e7-5ef1-4fe3-9771-19c4182b8b50",
+      "name": "Conserver - Progresser",
+      "index": 0,
+      "translations": {},
+      "sourceLanguage": "fr"
+    },
+    "tacticalPrinciple": {
+      "id": "8b277085-6ccb-423d-b274-af14239e0b38",
+      "name": "Créer et utiliser des espaces",
+      "index": 0,
+      "color": "#1E3A8A",
+      "translations": {},
+      "sourceLanguage": "fr",
+      "tacticalPhaseId": "a505cb23-d9c9-4f56-b635-1d7c769eb9da"
+    }
+  },
+  {
+    "id": "6aad0e99-c310-4242-b31e-ce5b7e2977b3",
+    "date": "2025-09-05T17:00:00.000Z",
+    "creatorId": "5d3bd2a9-05ed-4d8a-8975-600b3c25b95e",
+    "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+    "category": {
+      "id": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+      "name": "FFF",
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+      "description": null,
+      "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021836347-935196374.jpg",
+      "gender": "MALE",
+      "colors": [
+        "#0060FD",
+        "#991B1B"
+      ],
+      "automaticConvocation": false,
+      "convocationLeadHours": null
+    },
+    "categoryGroups": [
+      {
+        "id": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "name": "Groupe A",
+        "description": null,
+        "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021363950-303102182.jpg",
+        "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+      }
+    ],
+    "programSessionId": "1db91913-c3d1-4328-a404-f61d605a388a",
+    "programSession": {
+      "number": 6,
+      "teamInstallation": {
+        "name": "Stade de France"
+      },
+      "event": {
+        "startTime": "2025-10-17T17:00:00.000Z"
+      }
+    },
+    "isDraft": false,
+    "status": "DONE",
+    "gamePrincipe": null,
+    "gamePhase": null,
+    "materials": [],
+    "tacticalPhaseId": "3aa2f493-927a-44ff-b1d0-cc2485607fbf",
+    "tacticalPrincipleId": "30b4617b-d1a1-4d46-935d-8f8430ca4f8b",
+    "duration": "",
+    "targetRpe": null,
+    "effective": 2,
+    "statusReason": null,
+    "postponedDate": null,
+    "trainingTacticsOrder": [],
+    "explanation": null,
+    "safetyVerified": null,
+    "hydrationVerified": null,
+    "conclusion": null,
+    "internalNotes": null,
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "tacticalPhase": {
+      "id": "3aa2f493-927a-44ff-b1d0-cc2485607fbf",
+      "groupId": "85ad09e7-a16c-43ab-bfaf-4270c3daba26",
+      "name": "Préparation physique",
+      "index": 3,
+      "translations": {},
+      "sourceLanguage": "fr"
+    },
+    "tacticalPrinciple": {
+      "id": "30b4617b-d1a1-4d46-935d-8f8430ca4f8b",
+      "name": "Préparation physique",
+      "index": 0,
+      "color": "#EC4899",
+      "translations": {},
+      "sourceLanguage": "fr",
+      "tacticalPhaseId": "3aa2f493-927a-44ff-b1d0-cc2485607fbf"
+    }
+  },
+  {
+    "id": "f5fc435f-4633-4f60-859c-cada0bd1df99",
+    "date": "2025-09-03T17:00:00.000Z",
+    "creatorId": "5d3bd2a9-05ed-4d8a-8975-600b3c25b95e",
+    "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+    "category": {
+      "id": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+      "name": "FFF",
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+      "description": null,
+      "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021836347-935196374.jpg",
+      "gender": "MALE",
+      "colors": [
+        "#0060FD",
+        "#991B1B"
+      ],
+      "automaticConvocation": false,
+      "convocationLeadHours": null
+    },
+    "categoryGroups": [
+      {
+        "id": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "name": "Groupe A",
+        "description": null,
+        "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021363950-303102182.jpg",
+        "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+      }
+    ],
+    "programSessionId": "dda246e8-328b-4286-a437-61e69dc24a26",
+    "programSession": {
+      "number": 5,
+      "teamInstallation": {
+        "name": "Stade de France"
+      },
+      "event": {
+        "startTime": "2025-10-15T17:00:00.000Z"
+      }
+    },
+    "isDraft": false,
+    "status": "DONE",
+    "gamePrincipe": null,
+    "gamePhase": null,
+    "materials": [],
+    "tacticalPhaseId": "3aa2f493-927a-44ff-b1d0-cc2485607fbf",
+    "tacticalPrincipleId": "30b4617b-d1a1-4d46-935d-8f8430ca4f8b",
+    "duration": "",
+    "targetRpe": null,
+    "effective": 2,
+    "statusReason": null,
+    "postponedDate": null,
+    "trainingTacticsOrder": [],
+    "explanation": null,
+    "safetyVerified": null,
+    "hydrationVerified": null,
+    "conclusion": null,
+    "internalNotes": null,
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "tacticalPhase": {
+      "id": "3aa2f493-927a-44ff-b1d0-cc2485607fbf",
+      "groupId": "85ad09e7-a16c-43ab-bfaf-4270c3daba26",
+      "name": "Préparation physique",
+      "index": 3,
+      "translations": {},
+      "sourceLanguage": "fr"
+    },
+    "tacticalPrinciple": {
+      "id": "30b4617b-d1a1-4d46-935d-8f8430ca4f8b",
+      "name": "Préparation physique",
+      "index": 0,
+      "color": "#EC4899",
+      "translations": {},
+      "sourceLanguage": "fr",
+      "tacticalPhaseId": "3aa2f493-927a-44ff-b1d0-cc2485607fbf"
+    }
+  },
+  {
+    "id": "b7dc6620-2511-4c39-b72f-3d29ba791ef1",
+    "date": "2025-09-01T17:00:00.000Z",
+    "creatorId": null,
+    "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+    "category": {
+      "id": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+      "name": "FFF",
+      "teamId": "fb4200ec-d401-4dfb-b6e6-9b2d71522bae",
+      "description": null,
+      "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021836347-935196374.jpg",
+      "gender": "MALE",
+      "colors": [
+        "#0060FD",
+        "#991B1B"
+      ],
+      "automaticConvocation": false,
+      "convocationLeadHours": null
+    },
+    "categoryGroups": [
+      {
+        "id": "c98df277-c391-4692-95f1-3f9859ad85d9",
+        "name": "Groupe A",
+        "description": null,
+        "picture": "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021363950-303102182.jpg",
+        "categoryId": "0ae26e6b-071c-450e-8f89-b90f822ce7b4",
+        "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e"
+      }
+    ],
+    "programSessionId": "eb2f9e3e-8400-4ee8-b36b-3385d0297454",
+    "programSession": {
+      "number": 4,
+      "teamInstallation": {
+        "name": "Stade de France"
+      },
+      "event": {
+        "startTime": "2025-10-13T17:00:00.000Z"
+      }
+    },
+    "isDraft": false,
+    "status": "PROGRESS",
+    "gamePrincipe": null,
+    "gamePhase": null,
+    "materials": [
+      {
+        "amount": 12,
+        "equipment": "/things/equipments/general/02.svg"
+      },
+      {
+        "amount": 10,
+        "equipment": "/things/equipments/balls/03.svg"
+      },
+      {
+        "amount": 16,
+        "equipment": "/things/equipments/general/01.svg"
+      },
+      {
+        "amount": 10,
+        "equipment": "/things/equipments/general/05.svg"
+      }
+    ],
+    "tacticalPhaseId": "3aa2f493-927a-44ff-b1d0-cc2485607fbf",
+    "tacticalPrincipleId": "30b4617b-d1a1-4d46-935d-8f8430ca4f8b",
+    "duration": "44",
+    "targetRpe": 7,
+    "effective": 25,
+    "statusReason": null,
+    "postponedDate": null,
+    "trainingTacticsOrder": [
+      "077baf17-be8f-46ce-9610-76d92da39640",
+      "hydration_1772040912671zak5mtq_30",
+      "22a19ffd-20ff-4d6c-b9fa-82eb37034835",
+      "66eeb2fd-94bf-45ac-a0e8-d13c5a0f1977",
+      "hydration_1772040913465xhxxu34_30",
+      "bf71041c-38d5-4359-a6c1-874f761b2a4f"
+    ],
+    "explanation": "",
+    "safetyVerified": true,
+    "hydrationVerified": true,
+    "conclusion": null,
+    "internalNotes": null,
+    "seasonId": "ff11d1d7-a0ca-4c9e-a44c-ae9a01016a0e",
+    "tacticalPhase": {
+      "id": "3aa2f493-927a-44ff-b1d0-cc2485607fbf",
+      "groupId": "85ad09e7-a16c-43ab-bfaf-4270c3daba26",
+      "name": "Préparation physique",
+      "index": 3,
+      "translations": {},
+      "sourceLanguage": "fr"
+    },
+    "tacticalPrinciple": {
+      "id": "30b4617b-d1a1-4d46-935d-8f8430ca4f8b",
+      "name": "Préparation physique",
+      "index": 0,
+      "color": "#EC4899",
+      "translations": {},
+      "sourceLanguage": "fr",
+      "tacticalPhaseId": "3aa2f493-927a-44ff-b1d0-cc2485607fbf"
+    }
+  }
+]

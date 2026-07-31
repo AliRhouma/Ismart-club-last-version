@@ -1,0 +1,535 @@
+import { useMemo, useState, type ReactNode } from "react"
+import { useNavigate, useSearchParams } from "react-router-dom"
+import {
+  ArrowRight,
+  Check,
+  ChevronLeft,
+  Handshake,
+  Plus,
+} from "lucide-react"
+
+import { cn } from "@/lib/utils"
+import { todayISO } from "@/lib/format"
+import { useData } from "@/data/useData"
+import {
+  CAMPAIGN_COLORS,
+  SLOT_DEFS,
+  blankCampaignDraft,
+  buildCampaign,
+  type CampaignDraft,
+  type Partner,
+  type SlotKey,
+} from "@/data/seed/sponsoring"
+import { BackButton } from "@/components/kit/BackButton"
+import { PageHeader } from "@/components/kit/PageHeader"
+import { Avatar } from "@/components/kit/Avatar"
+import { EmptyState } from "@/components/kit/EmptyState"
+import { Creative } from "@/features/sponsoring/campaignUi"
+import {
+  SLOT_ICON,
+  SectionTitle,
+  Switch,
+  TierBadge,
+} from "@/features/sponsoring/ui"
+
+const inputCls =
+  "w-full rounded-md border border-input bg-transparent px-3.5 py-2.5 font-body text-sm text-ink outline-none transition-colors placeholder:text-ink-disabled focus:border-border-focus"
+
+/**
+ * Sponsoring ▸ Campagnes ▸ Nouvelle campagne — the club admin creates a
+ * campaign himself, from his own account, for one of his partenaires. Until
+ * now a campaign could only arrive as a sponsor request; most clubs run the
+ * artwork for their partners themselves, so the admin needs the same power.
+ *
+ * Two steps on one page, like the sponsor's own wizard:
+ *   1. Le partenaire — a campaign always belongs to one (and its pack decides
+ *      what the club is selling), so it's picked first.
+ *   2. La campagne — name, période, couleur, then the ad spaces the visuals go
+ *      into, each with its accroche.
+ *
+ * "Créer la campagne" writes to the store and opens the campaign on its
+ * partenaire, where the six surfaces render the creatives.
+ * References sponsor/NouvelleCampagneScreen (steps + recap row), OffreFormScreen
+ * (fields, space rows, footer) and PartnerFormModal (selectable rows).
+ */
+export function NouvelleCampagneScreen() {
+  const navigate = useNavigate()
+  const [params] = useSearchParams()
+  const { partners, offers, addCampaign } = useData()
+
+  // Coming from a partenaire's accueil ("Créer une campagne") pre-picks them.
+  const preset = params.get("partenaire")
+  const presetPartner = partners.find((p) => p.id === preset) ?? null
+
+  const [draft, setDraft] = useState<CampaignDraft>(() =>
+    blankCampaignDraft(presetPartner?.id ?? ""),
+  )
+  const [step, setStep] = useState<1 | 2>(presetPartner ? 2 : 1)
+
+  const set = (patch: Partial<CampaignDraft>) =>
+    setDraft((d) => ({ ...d, ...patch }))
+
+  const setSlot = (key: SlotKey, patch: Partial<CampaignDraft["slots"][SlotKey]>) =>
+    setDraft((d) => ({
+      ...d,
+      slots: { ...d.slots, [key]: { ...d.slots[key], ...patch } },
+    }))
+
+  const partner = partners.find((p) => p.id === draft.partnerId) ?? null
+  const offer = offers.find((o) => o.id === partner?.offerId) ?? null
+
+  const enabled = useMemo(
+    () => SLOT_DEFS.filter((s) => draft.slots[s.key].enabled),
+    [draft.slots],
+  )
+
+  const datesOk =
+    Boolean(draft.start) &&
+    Boolean(draft.end) &&
+    Date.parse(draft.end) >= Date.parse(draft.start)
+  const ready =
+    Boolean(partner) && draft.name.trim() !== "" && datesOk && enabled.length > 0
+
+  const create = () => {
+    if (!ready || !partner) return
+    const id = addCampaign(buildCampaign(draft))
+    navigate(`/sponsoring/partenaires/${partner.id}/campagnes/${id}`, {
+      state: { toast: `Campagne « ${draft.name.trim()} » créée` },
+    })
+  }
+
+  const pick = (p: Partner) => {
+    set({ partnerId: p.id })
+    setStep(2)
+  }
+
+  /* No partenaire yet → a campaign has no one to run for. */
+  if (partners.length === 0) {
+    return (
+      <div className="mx-auto max-w-3xl">
+        <BackButton to="/sponsoring/campagnes" label="Retour aux campagnes" />
+        <PageHeader title="Nouvelle campagne" />
+        <div className="mt-6 rounded-lg border border-border">
+          <EmptyState
+            icon={Handshake}
+            title="Aucun partenaire pour l'instant"
+            description="Une campagne se diffuse toujours au nom d'un partenaire. Ajoutez-en un pour pouvoir en créer une."
+            action={
+              <button
+                type="button"
+                onClick={() => navigate("/sponsoring/partenaires")}
+                className="inline-flex items-center gap-1.5 rounded-md bg-brand px-4 py-2 font-ui text-sm font-medium text-ink-inverted shadow-glow transition-colors hover:bg-brand-dim"
+              >
+                <Plus size={16} /> Ajouter un partenaire
+              </button>
+            }
+          />
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="mx-auto max-w-3xl">
+      <BackButton to="/sponsoring/campagnes" label="Retour aux campagnes" />
+      <PageHeader
+        title="Nouvelle campagne"
+        subtitle="Lancez une campagne pour l'un de vos partenaires, sans attendre sa demande."
+      />
+
+      <Steps step={step} />
+
+      {step === 1 ? (
+        <div className="mt-8">
+          <SectionTitle hint={`${partners.length} partenaires`}>
+            Pour quel partenaire ?
+          </SectionTitle>
+          <p className="-mt-2 mb-4 font-body text-[0.8rem] text-ink-muted">
+            La campagne sera diffusée en son nom dans les espaces publicitaires
+            du club.
+          </p>
+
+          <div className="flex flex-col gap-3">
+            {partners.map((p) => (
+              <PartnerRow
+                key={p.id}
+                partner={p}
+                offerName={offers.find((o) => o.id === p.offerId)?.name ?? ""}
+                offerColor={offers.find((o) => o.id === p.offerId)?.color ?? "#9aa4b2"}
+                onSelect={pick}
+              />
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className="mt-8 flex flex-col gap-9">
+          {/* Step 1's choice, recapped and reversible. */}
+          <div className="flex items-center justify-between gap-4 rounded-lg border border-border px-4 py-3.5">
+            <div className="flex min-w-0 items-center gap-3">
+              <Avatar name={partner?.name ?? ""} size="lg" />
+              <div className="min-w-0">
+                <div className="truncate font-body text-[0.88rem] text-ink">
+                  {partner?.name}
+                </div>
+                <div className="mt-0.5 font-body text-[0.72rem] text-ink-disabled">
+                  Campagne diffusée au nom de ce partenaire
+                </div>
+              </div>
+            </div>
+            <div className="flex shrink-0 items-center gap-3">
+              {offer ? (
+                <TierBadge name={offer.name} color={offer.color} size="sm" />
+              ) : null}
+              <button
+                type="button"
+                onClick={() => setStep(1)}
+                className="inline-flex items-center gap-1 rounded-sm px-1.5 py-0.5 font-ui text-[0.72rem] font-medium text-info transition-colors hover:bg-surface-hover"
+              >
+                <ChevronLeft size={12} /> Changer
+              </button>
+            </div>
+          </div>
+
+          {/* ── La campagne ─────────────────────────────────────────────── */}
+          <div>
+            <SectionTitle>La campagne</SectionTitle>
+            <div className="flex flex-col gap-5">
+              <Field label="Nom de la campagne">
+                <input
+                  autoFocus
+                  value={draft.name}
+                  onChange={(e) => set({ name: e.target.value })}
+                  placeholder="Campagne Rentrée 2026"
+                  className={inputCls}
+                />
+              </Field>
+
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <Field label="Début" hint="Premier jour de diffusion.">
+                  <input
+                    type="date"
+                    value={draft.start}
+                    onChange={(e) => set({ start: e.target.value })}
+                    className={cn(inputCls, "[color-scheme:dark]")}
+                  />
+                </Field>
+                <Field
+                  label="Fin"
+                  hint={
+                    draft.start && draft.end && !datesOk
+                      ? "La fin doit suivre le début."
+                      : "Dernier jour de diffusion."
+                  }
+                >
+                  <input
+                    type="date"
+                    min={draft.start || todayISO()}
+                    value={draft.end}
+                    onChange={(e) => set({ end: e.target.value })}
+                    className={cn(
+                      inputCls,
+                      "[color-scheme:dark]",
+                      draft.start && draft.end && !datesOk && "border-danger",
+                    )}
+                  />
+                </Field>
+              </div>
+
+              <Field
+                label="Lien de destination"
+                hint="Où les visuels envoient les parents et les joueurs."
+              >
+                <input
+                  value={draft.link}
+                  onChange={(e) => set({ link: e.target.value })}
+                  placeholder="https://exemple.tn"
+                  className={cn(inputCls, "font-mono text-[0.82rem]")}
+                />
+              </Field>
+
+              <div className="flex flex-col gap-2">
+                <span className="font-ui text-[0.7rem] font-medium tracking-[0.06em] text-ink-muted uppercase">
+                  Couleur des visuels
+                </span>
+                <div className="flex flex-wrap items-center gap-2">
+                  {CAMPAIGN_COLORS.map((c) => (
+                    <button
+                      key={c}
+                      type="button"
+                      aria-label={`Couleur ${c}`}
+                      onClick={() => set({ color: c })}
+                      className={cn(
+                        "size-8 rounded-full border-2 transition-colors",
+                        draft.color === c
+                          ? "border-info"
+                          : "border-transparent hover:border-border-strong",
+                      )}
+                      style={{ backgroundColor: c }}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* ── Les espaces ─────────────────────────────────────────────── */}
+          <div>
+            <SectionTitle hint={`${enabled.length} / ${SLOT_DEFS.length} activés`}>
+              Où la campagne s'affiche
+            </SectionTitle>
+            <div className="flex flex-col gap-3">
+              {SLOT_DEFS.map((def) => (
+                <SlotRow
+                  key={def.key}
+                  slotKey={def.key}
+                  label={def.label}
+                  description={def.description}
+                  on={draft.slots[def.key].enabled}
+                  headline={draft.slots[def.key].headline}
+                  fallback={draft.name}
+                  partnerName={partner?.name ?? ""}
+                  color={draft.color}
+                  onToggle={(v) => setSlot(def.key, { enabled: v })}
+                  onHeadline={(v) => setSlot(def.key, { headline: v })}
+                />
+              ))}
+            </div>
+            {enabled.length === 0 ? (
+              <p className="mt-3 font-body text-[0.76rem] text-warning">
+                Activez au moins un espace : sans espace, la campagne n'a nulle
+                part où s'afficher.
+              </p>
+            ) : null}
+          </div>
+
+          {/* ── Footer ──────────────────────────────────────────────────── */}
+          <div className="flex items-center justify-between gap-4 border-t border-border pt-5">
+            <span className="font-body text-[0.76rem] text-ink-disabled">
+              {ready
+                ? `${enabled.length} espaces · diffusion au nom de ${partner?.name}`
+                : "Renseignez un nom, les deux dates et au moins un espace."}
+            </span>
+            <div className="flex shrink-0 items-center gap-2">
+              <button
+                type="button"
+                onClick={() => navigate("/sponsoring/campagnes")}
+                className="rounded-md border border-input px-4 py-2 font-ui text-sm font-medium text-ink transition-colors hover:border-border-strong hover:bg-accent"
+              >
+                Annuler
+              </button>
+              <button
+                type="button"
+                disabled={!ready}
+                onClick={create}
+                className="inline-flex items-center gap-1.5 rounded-md bg-brand px-5 py-2 font-ui text-sm font-medium text-ink-inverted shadow-glow transition-colors hover:bg-brand-dim disabled:cursor-not-allowed disabled:opacity-45 disabled:shadow-none"
+              >
+                <Check size={16} /> Créer la campagne
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+/* ── Step rail ──────────────────────────────────────────────────────────── */
+function Steps({ step }: { step: 1 | 2 }) {
+  const items = [
+    { n: 1, label: "Le partenaire" },
+    { n: 2, label: "La campagne" },
+  ]
+  return (
+    <div className="mt-6 flex items-center gap-3">
+      {items.map((it, i) => (
+        <div key={it.n} className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <span
+              className={cn(
+                "flex size-6 items-center justify-center rounded-full border font-ui text-[0.68rem] tabular-nums transition-colors",
+                it.n < step
+                  ? "border-info/40 bg-info/10 text-info"
+                  : it.n === step
+                    ? "border-info bg-info text-ink-inverted"
+                    : "border-border-strong text-ink-disabled",
+              )}
+            >
+              {it.n < step ? <Check size={12} /> : it.n}
+            </span>
+            <span
+              className={cn(
+                "font-ui text-[0.78rem]",
+                it.n === step ? "text-ink" : "text-ink-disabled",
+              )}
+            >
+              {it.label}
+            </span>
+          </div>
+          {i < items.length - 1 ? (
+            <span className="h-px w-6 bg-border-strong" />
+          ) : null}
+        </div>
+      ))}
+    </div>
+  )
+}
+
+/* ── Step 1 — one selectable partenaire ─────────────────────────────────── */
+function PartnerRow({
+  partner,
+  offerName,
+  offerColor,
+  onSelect,
+}: {
+  partner: Partner
+  offerName: string
+  offerColor: string
+  onSelect: (p: Partner) => void
+}) {
+  return (
+    <button
+      type="button"
+      onClick={() => onSelect(partner)}
+      className="group relative flex items-center gap-4 overflow-hidden rounded-lg border border-border bg-background px-4 py-3.5 text-left transition-colors hover:border-border-strong"
+    >
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-0 origin-top scale-y-0 bg-surface transition-transform duration-[260ms] ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:scale-y-100"
+      />
+
+      <div className="relative z-10 flex w-full items-center gap-4">
+        <Avatar name={partner.name} size="lg" />
+        <div className="min-w-0 flex-1">
+          <div className="truncate font-body text-[0.9rem] text-ink transition-colors group-hover:text-brand-blue-600">
+            {partner.name}
+          </div>
+          <div className="mt-0.5 truncate font-body text-[0.74rem] text-ink-disabled">
+            {partner.description || "Aucune description"}
+          </div>
+        </div>
+        <div className="flex shrink-0 items-center gap-3">
+          {offerName ? (
+            <TierBadge name={offerName} color={offerColor} size="sm" />
+          ) : null}
+          <ArrowRight
+            size={15}
+            className="text-ink-disabled transition-colors group-hover:text-info"
+          />
+        </div>
+      </div>
+    </button>
+  )
+}
+
+/* ── One ad space: toggle, and its accroche once it's on ────────────────── */
+function SlotRow({
+  slotKey,
+  label,
+  description,
+  on,
+  headline,
+  fallback,
+  partnerName,
+  color,
+  onToggle,
+  onHeadline,
+}: {
+  slotKey: SlotKey
+  label: string
+  description: string
+  on: boolean
+  headline: string
+  /** Campaign name — what an empty accroche falls back to. */
+  fallback: string
+  partnerName: string
+  color: string
+  onToggle: (v: boolean) => void
+  onHeadline: (v: string) => void
+}) {
+  const Icon = SLOT_ICON[slotKey]
+
+  return (
+    <div
+      className={cn(
+        "rounded-lg border px-4 py-3.5 transition-colors",
+        on ? "border-border-second" : "border-border",
+      )}
+    >
+      <div className="flex items-center gap-3">
+        <span
+          className={cn(
+            "flex size-9 shrink-0 items-center justify-center rounded-md border transition-colors",
+            on
+              ? "border-border-second bg-surface-nested text-ink"
+              : "border-border text-ink-disabled",
+          )}
+        >
+          <Icon size={16} />
+        </span>
+        <div className="min-w-0 flex-1">
+          <div
+            className={cn(
+              "font-ui text-[0.86rem] font-medium",
+              on ? "text-ink" : "text-ink-muted",
+            )}
+          >
+            {label}
+          </div>
+          <div className="truncate font-body text-[0.74rem] text-ink-disabled">
+            {description}
+          </div>
+        </div>
+        <Switch checked={on} onChange={onToggle} label={label} />
+      </div>
+
+      {on ? (
+        <div className="mt-3.5 flex items-end gap-3 border-t border-border pt-3.5">
+          <label className="flex min-w-0 flex-1 flex-col gap-1.5">
+            <span className="font-ui text-[0.66rem] font-medium tracking-[0.06em] text-ink-muted uppercase">
+              Accroche
+            </span>
+            <input
+              value={headline}
+              onChange={(e) => onHeadline(e.target.value)}
+              placeholder={fallback || "Bien grandir, bien jouer"}
+              className={cn(inputCls, "py-2 text-[0.82rem]")}
+            />
+          </label>
+          {/* Live creative — the admin sees the artwork as he types. */}
+          <Creative
+            name={partnerName}
+            headline={headline || fallback || "Accroche"}
+            color={color}
+            className="h-[66px] w-[146px] shrink-0"
+            compact
+          />
+        </div>
+      ) : null}
+    </div>
+  )
+}
+
+/* ── Field ──────────────────────────────────────────────────────────────── */
+function Field({
+  label,
+  children,
+  hint,
+}: {
+  label: string
+  children: ReactNode
+  hint?: string
+}) {
+  return (
+    <label className="flex flex-col gap-1.5">
+      <span className="font-ui text-[0.7rem] font-medium tracking-[0.06em] text-ink-muted uppercase">
+        {label}
+      </span>
+      {children}
+      {hint ? (
+        <span className="font-body text-[0.72rem] leading-snug text-ink-disabled">
+          {hint}
+        </span>
+      ) : null}
+    </label>
+  )
+}
