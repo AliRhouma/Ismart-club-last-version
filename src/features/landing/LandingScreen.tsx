@@ -483,7 +483,7 @@ export function LandingScreen() {
           <button className="lp-badge-strip" onClick={goToOffer}>
             <span className="lp-badge-pulse" />
             <span className="lp-badge-text">
-              Offre d'août — 1 € par membre, toute la saison
+              Offre d'août — 1 € par licencié, pour tout le club
             </span>
             <span className="lp-badge-arrow">→</span>
           </button>
@@ -511,7 +511,8 @@ export function LandingScreen() {
                 Devenir partenaire iSmart Club
               </button>
               <span className="lp-cta-note">
-                <Check size={13} /> 1 € par membre · toute la saison 2025-2026
+                <Check size={13} /> 1 € par licencié · pour tout le club ·
+                saison 2025-2026
               </span>
             </div>
             <a className="lp-btn-ghost" href="#modules">
@@ -662,8 +663,8 @@ export function LandingScreen() {
                 </button>
               </div>
               <p className="lp-solution-cta-note">
-                1 € par membre pour toute la saison — sans engagement de
-                reconduction.
+                1 € par licencié pour toute la saison, à l'échelle du club
+                entier — sans effectif minimum.
               </p>
             </div>
           </div>
@@ -729,9 +730,9 @@ export function LandingScreen() {
               Offre partenaire — août
             </div>
             <h2 className="lp-title">
-              1 € par membre.
+              1 € par licencié.
               <br />
-              <span className="lp-green">Toute la saison.</span>
+              <span className="lp-green">Tout le club, toute la saison.</span>
             </h2>
           </div>
 
@@ -739,8 +740,8 @@ export function LandingScreen() {
             <div className="lp-offer-price">
               <span className="lp-offer-amount">1 €</span>
               <span className="lp-offer-unit">
-                par membre
-                <span>pour la saison entière</span>
+                par licencié
+                <span>pour le club entier, toute la saison</span>
               </span>
             </div>
 
@@ -750,30 +751,51 @@ export function LandingScreen() {
               modules, pour tous vos éducateurs et toutes vos catégories.
             </p>
 
+            {/* The offer is club-wide only: no minimum, and no way to take it
+                for part of the club. The examples show sizes, never tiers. */}
+            <div className="lp-offer-scope">
+              <Building2 size={15} />
+              <p>
+                <strong>L'offre s'applique à l'ensemble du club</strong> —
+                tous les licenciés, toutes les catégories, tout le staff. Elle
+                ne se souscrit ni par catégorie, ni par équipe, et n'impose
+                aucun effectif minimum.
+              </p>
+            </div>
+
+            <div className="lp-offer-examples-head">
+              Quelle que soit la taille de votre club
+            </div>
             <div className="lp-offer-examples">
               <div className="lp-offer-example">
-                <div className="lp-offer-example-members">120 membres</div>
-                <div className="lp-offer-example-price">120 €</div>
-                <div className="lp-offer-example-per">soit 10 € par mois</div>
+                <div className="lp-offer-example-members">80 licenciés</div>
+                <div className="lp-offer-example-price">80 €</div>
+                <div className="lp-offer-example-per">
+                  pour la saison entière
+                </div>
               </div>
               <div className="lp-offer-example">
-                <div className="lp-offer-example-members">300 membres</div>
-                <div className="lp-offer-example-price">300 €</div>
-                <div className="lp-offer-example-per">soit 25 € par mois</div>
+                <div className="lp-offer-example-members">250 licenciés</div>
+                <div className="lp-offer-example-price">250 €</div>
+                <div className="lp-offer-example-per">
+                  pour la saison entière
+                </div>
               </div>
               <div className="lp-offer-example">
-                <div className="lp-offer-example-members">600 membres</div>
-                <div className="lp-offer-example-price">600 €</div>
-                <div className="lp-offer-example-per">soit 50 € par mois</div>
+                <div className="lp-offer-example-members">700 licenciés</div>
+                <div className="lp-offer-example-price">700 €</div>
+                <div className="lp-offer-example-per">
+                  pour la saison entière
+                </div>
               </div>
             </div>
 
             <div className="lp-offer-checks">
               <span>
-                <Check size={14} /> Accès complet
+                <Check size={14} /> Le club entier
               </span>
               <span>
-                <Check size={14} /> Utilisateurs illimités
+                <Check size={14} /> Aucun effectif minimum
               </span>
               <span>
                 <Check size={14} /> Reprise de vos données
@@ -796,7 +818,8 @@ export function LandingScreen() {
             </button>
 
             <p className="lp-offer-deadline">
-              Offre valable pour toute adhésion signée avant le 31 août 2026.
+              Offre réservée aux clubs, pour toute adhésion signée avant le
+              31 août 2026.
             </p>
           </div>
         </div>
@@ -892,7 +915,7 @@ export function LandingScreen() {
               Devenir partenaire iSmart Club
             </button>
             <span className="lp-cta-note">
-              <Check size={12} /> 1 € par membre pour toute la saison
+              <Check size={12} /> 1 € par licencié, pour l'ensemble du club
             </span>
           </div>
         </div>
@@ -1062,17 +1085,20 @@ export function LandingScreen() {
               <Sparkles size={20} />
             </div>
             <div className="lp-pricing-banner-text">
-              <strong>Offre d'août — 1 € par membre, toute la saison</strong>
+              <strong>
+                Offre d'août — 1 € par licencié, pour l'ensemble du club
+              </strong>
               <span>
-                Le club entier équipé pour le prix d'un café par licencié.
+                Le club entier équipé pour le prix d'un café par licencié, quel
+                que soit son effectif.
               </span>
             </div>
             <div className="lp-pricing-banner-checks">
               <span>
-                <Check size={13} /> Accès complet
+                <Check size={13} /> Le club entier
               </span>
               <span>
-                <Check size={13} /> Sans engagement
+                <Check size={13} /> Sans minimum
               </span>
             </div>
           </div>
@@ -1084,7 +1110,7 @@ export function LandingScreen() {
               <div className="lp-plan-price-row">
                 <span className="lp-plan-price">3 €</span>
                 <span className="lp-plan-price-then">
-                  par membre / an — tarif normal
+                  par licencié / an — tarif normal
                 </span>
               </div>
               <div className="lp-plan-divider" />
@@ -1113,13 +1139,15 @@ export function LandingScreen() {
               <div className="lp-plan-price-row">
                 <span className="lp-plan-price">1 €</span>
                 <span className="lp-plan-price-then">
-                  par membre — la saison entière
+                  par licencié — pour tout le club
                 </span>
               </div>
               <div className="lp-plan-include">
                 Tout ce que contient la Formule Club, plus :
               </div>
               <ul className="lp-plan-features">
+                <li>Souscrite pour l'ensemble du club</li>
+                <li>Aucun effectif minimum requis</li>
                 <li>Reprise de vos données existantes</li>
                 <li>Accompagnement au démarrage</li>
                 <li>Accès au module Communauté</li>
@@ -1207,7 +1235,7 @@ export function LandingScreen() {
                 </div>
                 <div className="lp-form-field">
                   <label className="lp-form-label" htmlFor="lp-membres">
-                    Nombre de membres
+                    Licenciés du club
                   </label>
                   <input
                     id="lp-membres"
@@ -1260,7 +1288,7 @@ export function LandingScreen() {
           <div className="lp-sticky-text">
             <span className="lp-sticky-badge">Offre d'août</span>
             <span>
-              <strong>1 €</strong> par membre — toute la saison
+              <strong>1 €</strong> par licencié — pour tout le club
             </span>
           </div>
           <button className="lp-sticky-btn" onClick={goToOffer}>

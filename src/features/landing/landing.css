@@ -830,11 +830,48 @@ html:has(.lp) {
   max-width: 620px;
   margin: 1.5rem auto 0;
 }
+/* Club-wide scope — the one condition of the offer, stated once and plainly. */
+.lp-offer-scope {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  text-align: left;
+  max-width: 640px;
+  margin: 2rem auto 0;
+  padding: 1rem 1.35rem;
+  background: rgba(0, 255, 135, 0.05);
+  border: 1px solid rgba(0, 255, 135, 0.18);
+  border-radius: 14px;
+}
+.lp-offer-scope svg {
+  flex-shrink: 0;
+  margin-top: 0.2rem;
+  color: var(--green);
+}
+.lp-offer-scope p {
+  color: var(--muted);
+  font-size: 0.87rem;
+  line-height: 1.65;
+}
+.lp-offer-scope strong {
+  color: var(--white);
+  font-weight: 600;
+}
+
+.lp-offer-examples-head {
+  margin-top: 2.25rem;
+  font-family: "Syne", sans-serif;
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
 .lp-offer-examples {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
-  margin: 2.5rem 0;
+  margin: 1rem 0 2.5rem;
 }
 .lp-offer-example {
   border: 1px solid var(--border);
