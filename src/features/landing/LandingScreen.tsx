@@ -875,9 +875,12 @@ export function LandingScreen() {
                 </span>
                 <div>
                   <div className="lp-contact-info-label">Email</div>
-                  <div className="lp-contact-info-value">
-                    contact@ismart-club.com
-                  </div>
+                  <a
+                    className="lp-contact-info-value lp-contact-mail"
+                    href="mailto:support@ismart-club.com"
+                  >
+                    support@ismart-club.com
+                  </a>
                 </div>
               </div>
               <div className="lp-contact-info-item">

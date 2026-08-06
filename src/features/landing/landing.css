@@ -1459,8 +1459,17 @@ html:has(.lp) {
   margin-bottom: 0.2rem;
 }
 .lp-contact-info-value {
+  display: block;
   color: var(--white);
   font-size: 0.92rem;
+}
+/* The address is a real mailto — underline it on hover so it reads clickable. */
+.lp-contact-mail {
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.lp-contact-mail:hover {
+  color: var(--green);
 }
 .lp-form-card {
   background: var(--card-bg);
