@@ -1,5 +1,4 @@
 import {
-  useCallback,
   useEffect,
   useRef,
   useState,
@@ -44,10 +43,12 @@ const VIDEO_SEANCE =
   "https://res.cloudinary.com/dceefnpod/video/upload/v1777033235/Seance_WEB_MP4_montage_qtgsri.mp4"
 const APP_SCREENSHOT =
   "https://res.cloudinary.com/dceefnpod/image/upload/v1776761932/Rectangle_31467_jmwty4.png"
-const STEP_IMAGE =
-  "https://res.cloudinary.com/dceefnpod/image/upload/v1773402732/Gemini_Generated_Image_z1e5b4z1e5b4z1e5_1_tsxyra.png"
 
 const PLATFORM_URL = "https://pprod.ismart-club.com/auth/login"
+
+/** Laptop / phone mock-ups — hidden for now. Flip to `true` to bring the
+ *  "Au bureau comme au bord du terrain" section back; nothing else changes. */
+const SHOW_DEVICE_MOCKUPS = false
 
 /* ── Hero showcase ─────────────────────────────────────────────────────── */
 const HERO_FEATURES = [
@@ -140,135 +141,6 @@ const MODULES: {
   },
 ]
 
-/* ── Features, presented one by one on the timeline ───────────────────────
-   Same alternating rail as the coach landing's "étapes", but each entry is a
-   feature of the platform rather than a step of a process. `stat` carries the
-   one number that makes the feature concrete.                              */
-const FEATURES: {
-  num: string
-  icon: ReactNode
-  tag: string
-  title: string
-  desc: string
-  points: string[]
-  stat: string | null
-  media: string
-  isVideo: boolean
-  caption: string
-}[] = [
-  {
-    num: "01",
-    icon: <Target size={13} />,
-    tag: "Projet de jeu",
-    title: "Le modèle de jeu du club",
-    desc: "Écrivez une fois la façon de jouer du club, découpée par phase de jeu et illustrée sur le terrain. Chaque catégorie s'y rattache — l'école de foot et les seniors parlent enfin le même langage.",
-    points: [
-      "Système et animations, offensives comme défensives",
-      "Étapes classées par phase de jeu",
-      "Appliqué aux catégories concernées",
-    ],
-    stat: "Jusqu'à 31 étapes par projet, schéma à l'appui.",
-    media: VIDEO_PROCEDES,
-    isVideo: true,
-    caption: "Une étape du projet de jeu, schéma et consignes",
-  },
-  {
-    num: "02",
-    icon: <Calendar size={13} />,
-    tag: "Programmation",
-    title: "La saison programmée d'avance",
-    desc: "Chaque semaine de la saison sait ce qu'elle doit travailler. L'éducateur n'ouvre plus une page blanche : il déroule un programme cohérent avec le projet de jeu du club.",
-    points: [
-      "Programme annuel par équipe et par groupe",
-      "Chaque séance rattachée à un principe de jeu",
-      "Évaluations et séances spécifiques positionnées",
-    ],
-    stat: "36 semaines, 108 séances programmées par équipe.",
-    media: VIDEO_PROGRAMMATION,
-    isVideo: true,
-    caption: "Le programme annuel, semaine par semaine",
-  },
-  {
-    num: "03",
-    icon: <ClipboardList size={13} />,
-    tag: "Procédés",
-    title: "Une bibliothèque qui reste au club",
-    desc: "Jeux, situations et exercices rangés par principe de jeu, avec durée, surface, effectif, matériel et schéma. Le contenu appartient au club, pas à l'éducateur qui s'en va.",
-    points: [
-      "Classés par phase et principe de jeu",
-      "Jeu, situation ou exercice",
-      "Filtres par type, auteur et catégorie",
-    ],
-    stat: "544 fiches procédés déjà partagées dans le réseau.",
-    media: VIDEO_BIBLIOTHEQUE,
-    isVideo: true,
-    caption: "La bibliothèque, filtrée par principe de jeu",
-  },
-  {
-    num: "04",
-    icon: <Layers size={13} />,
-    tag: "Séances",
-    title: "Des séances construites en quelques clics",
-    desc: "La séance se compose depuis la bibliothèque : on choisit les procédés, le reste suit. Matériel, durée, thème et contrôles terrain sont déjà là.",
-    points: [
-      "Procédés repris depuis la bibliothèque",
-      "Matériel, durée et intensité cible",
-      "Contrôles sécurité et hydratation",
-    ],
-    stat: "De la ligne du programme à la séance prête : un clic.",
-    media: VIDEO_SEANCE,
-    isVideo: true,
-    caption: "Une séance et ses procédés",
-  },
-  {
-    num: "05",
-    icon: <Users size={13} />,
-    tag: "Catégories & effectifs",
-    title: "Chaque catégorie, sa photo complète",
-    desc: "Effectif, groupes, staff, calendrier et résultats réunis sur une même page. En un coup d'œil : qui est là, qui vient s'entraîner, comment l'équipe se comporte.",
-    points: [
-      "Effectif par groupe et par poste",
-      "Taux de présence par joueur",
-      "Résultats, bilan et forme de la saison",
-    ],
-    stat: "Toutes les catégories, de U6 aux seniors.",
-    media: APP_SCREENSHOT,
-    isVideo: false,
-    caption: "Une catégorie : effectif, résultats et séances",
-  },
-  {
-    num: "06",
-    icon: <BarChart3 size={13} />,
-    tag: "Analyse & suivi",
-    title: "Le progrès, en chiffres",
-    desc: "Présences, évaluations individuelles et de groupe, notes de match et tests physiques rattachés à chaque joueur — et comparables d'une saison à l'autre.",
-    points: [
-      "Évaluations individuelles et de groupe",
-      "Tests physiques et dominantes techniques",
-      "Notes de match et assiduité",
-    ],
-    stat: "Un historique qui suit le joueur de catégorie en catégorie.",
-    media: STEP_IMAGE,
-    isVideo: false,
-    caption: "Suivi des présences et des évaluations",
-  },
-  {
-    num: "07",
-    icon: <Wallet size={13} />,
-    tag: "Administration & finances",
-    title: "Le club vu depuis le bureau",
-    desc: "Organigramme, tâches, réunions, documents, budget prévisionnel et transactions réelles. La partie invisible du club, enfin tenue au même endroit que le terrain.",
-    points: [
-      "Budget prévisionnel comparé au réel, mois par mois",
-      "Transactions, collectes et rapports",
-      "Organigramme, tâches, réunions et documents",
-    ],
-    stat: "Le bureau décide sur des faits, pas des impressions.",
-    media: APP_SCREENSHOT,
-    isVideo: false,
-    caption: "Budget prévisionnel et suivi des transactions",
-  },
-]
 
 /* ── Hooks ────────────────────────────────────────────────────────────── */
 function useScrollReveal() {
@@ -286,30 +158,6 @@ function useScrollReveal() {
   }, [])
 }
 
-function useJourney() {
-  const timelineRef = useRef<HTMLDivElement>(null)
-  const progressRef = useRef<HTMLDivElement>(null)
-  const onScroll = useCallback(() => {
-    if (!timelineRef.current || !progressRef.current) return
-    const rect = timelineRef.current.getBoundingClientRect()
-    const h = window.innerHeight
-    const progress =
-      rect.top < h * 0.5
-        ? Math.min(1, (h * 0.5 - rect.top) / (rect.bottom - rect.top))
-        : 0
-    progressRef.current.style.height = `${progress * 100}%`
-    timelineRef.current.querySelectorAll(".lp-j-step").forEach((step) => {
-      if (step.getBoundingClientRect().top < h * 0.75)
-        step.classList.add("lp-j-step--active")
-    })
-  }, [])
-  useEffect(() => {
-    window.addEventListener("scroll", onScroll, { passive: true })
-    onScroll()
-    return () => window.removeEventListener("scroll", onScroll)
-  }, [onScroll])
-  return { timelineRef, progressRef }
-}
 
 /* ── Hero showcase ────────────────────────────────────────────────────── */
 const SLIDE_MS = 6000
@@ -433,7 +281,6 @@ export function LandingScreen() {
   const [sent, setSent] = useState(false)
 
   useScrollReveal()
-  const { timelineRef, progressRef } = useJourney()
 
   useEffect(() => {
     const onScroll = () => {
@@ -444,9 +291,10 @@ export function LandingScreen() {
     return () => window.removeEventListener("scroll", onScroll)
   }, [])
 
-  /** Every CTA on the page points at the same place: the offer section. */
-  const goToOffer = () => {
-    document.getElementById("offre")?.scrollIntoView({ behavior: "smooth" })
+  /** Every CTA on the page lands on the contact form — that is the one
+   *  action the page asks for. */
+  const goToForm = () => {
+    document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })
   }
 
   return (
@@ -463,27 +311,29 @@ export function LandingScreen() {
             <a href="#modules">Modules</a>
           </li>
           <li>
-            <a href="#fonctionnalites">Fonctionnalités</a>
-          </li>
-          <li>
             <a href="#communaute">Communauté</a>
           </li>
           <li>
-            <a href="#offre">Offre</a>
+            <a href="#offre">Pack Découverte</a>
           </li>
         </ul>
-        <button className="lp-nav-cta" onClick={goToOffer}>
-          Devenir partenaire
-        </button>
+        <div className="lp-nav-actions">
+          <a className="lp-nav-signin" href={PLATFORM_URL}>
+            Se connecter
+          </a>
+          <button className="lp-nav-cta" onClick={goToForm}>
+            Demander le Pack
+          </button>
+        </div>
       </nav>
 
       <div className="lp-canvas">
         {/* ════════ HERO ════════ */}
         <section id="hero" className="lp-hero">
-          <button className="lp-badge-strip" onClick={goToOffer}>
+          <button className="lp-badge-strip" onClick={goToForm}>
             <span className="lp-badge-pulse" />
             <span className="lp-badge-text">
-              Offre d'août — 1 € par licencié, pour tout le club
+              Pack Découverte 2026-2027 — 1 € HT par licencié
             </span>
             <span className="lp-badge-arrow">→</span>
           </button>
@@ -506,13 +356,13 @@ export function LandingScreen() {
             <div className="lp-hero-cta-stack">
               <button
                 className="lp-btn-primary lp-btn-primary--xl"
-                onClick={goToOffer}
+                onClick={goToForm}
               >
-                Devenir partenaire iSmart Club
+                Demander le Pack Découverte
               </button>
               <span className="lp-cta-note">
-                <Check size={13} /> 1 € par licencié · pour tout le club ·
-                saison 2025-2026
+                <Check size={13} /> 1 € HT par licencié · l'ensemble du club ·
+                saison 2026-2027
               </span>
             </div>
             <a className="lp-btn-ghost" href="#modules">
@@ -606,20 +456,6 @@ export function LandingScreen() {
               </p>
             </div>
 
-            <div className="lp-video-container lp-reveal">
-              <div className="lp-video-wrapper">
-                <video
-                  src={VIDEO_PROGRAMMATION}
-                  muted
-                  playsInline
-                  loop
-                  autoPlay
-                  preload="metadata"
-                  aria-label="Aperçu d'iSmart Club"
-                />
-              </div>
-              <div className="lp-video-glow" />
-            </div>
 
             <div className="lp-pillars lp-reveal">
               <div className="lp-pillar">
@@ -656,15 +492,15 @@ export function LandingScreen() {
 
             {/* CTA #2 — the offer, mid-page */}
             <div className="lp-solution-cta lp-reveal">
-              <div className="lp-offer-tag">Offre d'août</div>
+              <div className="lp-offer-tag">Offre de lancement</div>
               <div>
-                <button className="lp-btn-primary" onClick={goToOffer}>
-                  Devenir partenaire iSmart Club
+                <button className="lp-btn-primary" onClick={goToForm}>
+                  Demander le Pack Découverte
                 </button>
               </div>
               <p className="lp-solution-cta-note">
-                1 € par licencié pour toute la saison, à l'échelle du club
-                entier — sans effectif minimum.
+                1 € HT par licencié pour la saison 2026-2027, à l'échelle du
+                club entier.
               </p>
             </div>
           </div>
@@ -722,46 +558,79 @@ export function LandingScreen() {
         </div>
       </section>
 
-      {/* ════════ OFFER ════════ */}
+      {/* ════════ OFFER — Pack Découverte 2026-2027 ════════ */}
       <section id="offre" className="lp-offer">
         <div className="lp-offer-inner">
           <div className="lp-reveal">
             <div className="lp-section-label lp-section-label--center">
-              Offre partenaire — août
+              Offre de lancement
             </div>
             <h2 className="lp-title">
-              1 € par licencié.
+              Pack Découverte
               <br />
-              <span className="lp-green">Tout le club, toute la saison.</span>
+              <span className="lp-green">2026-2027</span>
             </h2>
+            <p className="lp-desc lp-center" style={{ margin: "1.25rem auto 0" }}>
+              Une offre de lancement destinée aux clubs de football qui
+              souhaitent découvrir iSmart Club pendant la saison 2026-2027.
+            </p>
           </div>
 
           <div className="lp-offer-card lp-reveal">
             <div className="lp-offer-price">
               <span className="lp-offer-amount">1 €</span>
               <span className="lp-offer-unit">
-                par licencié
-                <span>pour le club entier, toute la saison</span>
+                HT par licencié
+                <span>
+                  calculé sur le nombre total de licenciés du club — joueurs et
+                  membres du staff
+                </span>
               </span>
             </div>
 
             <p className="lp-offer-lead">
-              Pendant le mois d'août, devenez partenaire iSmart Club et équipez
-              tout votre club pour un euro par licencié — accès complet aux 34
-              modules, pour tous vos éducateurs et toutes vos catégories.
+              Contrairement à un abonnement classique, le Pack Découverte permet
+              au club de déployer la plateforme à l'échelle de toute sa
+              structure.
             </p>
 
-            {/* The offer is club-wide only: no minimum, and no way to take it
-                for part of the club. The examples show sizes, never tiers. */}
+            {/* The single condition of the offer: it is club-wide or nothing. */}
             <div className="lp-offer-scope">
               <Building2 size={15} />
               <p>
-                <strong>L'offre s'applique à l'ensemble du club</strong> —
-                tous les licenciés, toutes les catégories, tout le staff. Elle
-                ne se souscrit ni par catégorie, ni par équipe, et n'impose
-                aucun effectif minimum.
+                <strong>L'offre est globale</strong> — il n'est pas possible
+                d'équiper uniquement une équipe ou une catégorie. L'objectif est
+                de permettre à l'ensemble des éducateurs, dirigeants et
+                catégories de travailler avec le même outil et la même
+                méthodologie.
               </p>
             </div>
+
+            <div className="lp-offer-includes-head">
+              Le Pack Découverte comprend
+            </div>
+            <ul className="lp-offer-includes">
+              <li>
+                <Check size={15} />
+                L'accès à l'ensemble des fonctionnalités d'iSmart Club
+              </li>
+              <li>
+                <Check size={15} />
+                L'accès pour tous les éducateurs, dirigeants et membres du staff
+              </li>
+              <li>
+                <Check size={15} />
+                L'accès pour toutes les catégories du club
+              </li>
+              <li>
+                <Check size={15} />
+                Les mises à jour de la plateforme pendant toute la saison
+              </li>
+              <li>
+                <Check size={15} />
+                L'accompagnement au déploiement et le support technique
+              </li>
+            </ul>
 
             <div className="lp-offer-examples-head">
               Quelle que soit la taille de votre club
@@ -769,154 +638,41 @@ export function LandingScreen() {
             <div className="lp-offer-examples">
               <div className="lp-offer-example">
                 <div className="lp-offer-example-members">80 licenciés</div>
-                <div className="lp-offer-example-price">80 €</div>
+                <div className="lp-offer-example-price">80 € HT</div>
                 <div className="lp-offer-example-per">
                   pour la saison entière
                 </div>
               </div>
               <div className="lp-offer-example">
                 <div className="lp-offer-example-members">250 licenciés</div>
-                <div className="lp-offer-example-price">250 €</div>
+                <div className="lp-offer-example-price">250 € HT</div>
                 <div className="lp-offer-example-per">
                   pour la saison entière
                 </div>
               </div>
               <div className="lp-offer-example">
                 <div className="lp-offer-example-members">700 licenciés</div>
-                <div className="lp-offer-example-price">700 €</div>
+                <div className="lp-offer-example-price">700 € HT</div>
                 <div className="lp-offer-example-per">
                   pour la saison entière
                 </div>
               </div>
             </div>
 
-            <div className="lp-offer-checks">
-              <span>
-                <Check size={14} /> Le club entier
-              </span>
-              <span>
-                <Check size={14} /> Aucun effectif minimum
-              </span>
-              <span>
-                <Check size={14} /> Reprise de vos données
-              </span>
-              <span>
-                <Check size={14} /> Sans engagement
-              </span>
-            </div>
-
             {/* CTA #3 — the offer's own button */}
             <button
               className="lp-btn-primary lp-btn-primary--xl"
-              onClick={() =>
-                document
-                  .getElementById("contact")
-                  ?.scrollIntoView({ behavior: "smooth" })
-              }
+              onClick={goToForm}
             >
-              Devenir partenaire iSmart Club
+              Demander le Pack Découverte
             </button>
 
             <p className="lp-offer-deadline">
-              Offre réservée aux clubs, pour toute adhésion signée avant le
-              31 août 2026.
+              Offre valable uniquement pour la saison 2026-2027, dans le cadre
+              du lancement d'iSmart Club. Elle permet aux clubs de tester la
+              plateforme dans des conditions optimales avant le passage à la
+              grille tarifaire standard, à partir de la saison suivante.
             </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ════════ FEATURES — one per rail entry ════════ */}
-      <section id="fonctionnalites" className="lp-journey">
-        <div className="lp-j-header lp-reveal">
-          <div className="lp-section-label lp-section-label--center">
-            Les fonctionnalités
-          </div>
-          <h2 className="lp-j-header-title">
-            Chaque outil du club,
-            <br />
-            <em>en détail</em>
-          </h2>
-          <p className="lp-j-header-sub">
-            Sept fonctionnalités qui portent le quotidien d'un club — reliées
-            entre elles par la même saison, les mêmes catégories et le même
-            projet de jeu.
-          </p>
-        </div>
-
-        <div className="lp-j-timeline" ref={timelineRef}>
-          <div className="lp-j-track">
-            <div className="lp-j-progress" ref={progressRef} />
-          </div>
-
-          {FEATURES.map((feature, i) => (
-            <div
-              key={feature.num}
-              className={`lp-j-step ${i % 2 !== 0 ? "lp-j-step--reversed" : ""}`}
-            >
-              <div className="lp-j-dot">
-                <span>{feature.num}</span>
-              </div>
-
-              <div className="lp-j-text">
-                <div className="lp-j-tag">
-                  {feature.icon}
-                  {feature.tag}
-                </div>
-                <h3 className="lp-j-title">{feature.title}</h3>
-                <p className="lp-j-desc">{feature.desc}</p>
-                <ul className="lp-j-features">
-                  {feature.points.map((p) => (
-                    <li key={p}>{p}</li>
-                  ))}
-                </ul>
-                {feature.stat ? (
-                  <div className="lp-j-bridge">{feature.stat}</div>
-                ) : null}
-              </div>
-
-              <div className="lp-j-media-side">
-                <div className="lp-j-media">
-                  {feature.isVideo ? (
-                    <video
-                      src={feature.media}
-                      muted
-                      playsInline
-                      loop
-                      autoPlay
-                      preload="metadata"
-                      aria-label={feature.caption}
-                    />
-                  ) : (
-                    <img
-                      src={feature.media}
-                      alt={feature.caption}
-                      loading="lazy"
-                    />
-                  )}
-                  <p className="lp-j-caption">{feature.caption}</p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* CTA #4 — closing the feature rail */}
-        <div className="lp-j-closing lp-reveal">
-          <div className="lp-j-closing-badge">
-            Sept fonctionnalités, une seule plateforme.
-          </div>
-          <p>
-            Aucune n'est vendue à part : le projet de jeu nourrit la
-            programmation, la programmation crée les séances, les séances
-            alimentent le suivi. Tout est compris dans l'offre partenaire.
-          </p>
-          <div className="lp-j-closing-cta">
-            <button className="lp-btn-primary" onClick={goToOffer}>
-              Devenir partenaire iSmart Club
-            </button>
-            <span className="lp-cta-note">
-              <Check size={12} /> 1 € par licencié, pour l'ensemble du club
-            </span>
           </div>
         </div>
       </section>
@@ -1006,7 +762,7 @@ export function LandingScreen() {
             <div>
               <h3>Un réseau de clubs, pas un logiciel de plus</h3>
               <p>
-                Devenir partenaire iSmart Club, c'est rejoindre les clubs qui
+                Rejoindre iSmart Club, c'est rejoindre les clubs qui
                 mutualisent leur méthodologie plutôt que de la reconstruire
                 chacun de leur côté.
               </p>
@@ -1023,152 +779,81 @@ export function LandingScreen() {
         </div>
       </section>
 
-      {/* ════════ DEVICES ════════ */}
-      <section className="lp-devices">
-        <div className="lp-devices-inner">
-          <div className="lp-reveal">
-            <div className="lp-section-label lp-section-label--center">
-              Partout avec vous
+      {/* ════════ DEVICES — temporarily hidden ════════ */}
+      {SHOW_DEVICE_MOCKUPS ? (
+        <section className="lp-devices">
+          <div className="lp-devices-inner">
+            <div className="lp-reveal">
+              <div className="lp-section-label lp-section-label--center">
+                Partout avec vous
+              </div>
+              <h2 className="lp-title">
+                Au bureau comme
+                <br />
+                au bord du terrain
+              </h2>
             </div>
-            <h2 className="lp-title">
-              Au bureau comme
-              <br />
-              au bord du terrain
-            </h2>
-          </div>
 
-          <div className="lp-devices-hero lp-reveal">
-            <div>
-              <div className="lp-laptop-bezel">
-                <div className="lp-laptop-toolbar">
-                  <span className="lp-laptop-dots" />
+            <div className="lp-devices-hero lp-reveal">
+              <div>
+                <div className="lp-laptop-bezel">
+                  <div className="lp-laptop-toolbar">
+                    <span className="lp-laptop-dots" />
+                  </div>
+                  <div className="lp-laptop-screen">
+                    <img
+                      src={APP_SCREENSHOT}
+                      alt="iSmart Club sur ordinateur"
+                      loading="lazy"
+                    />
+                  </div>
                 </div>
-                <div className="lp-laptop-screen">
+                <div className="lp-laptop-bottom">
+                  <div className="lp-laptop-notch" />
+                </div>
+                <div className="lp-laptop-shadow" />
+              </div>
+              <div className="lp-phone">
+                <div className="lp-phone-notch" />
+                <div className="lp-phone-screen">
                   <img
                     src={APP_SCREENSHOT}
-                    alt="iSmart Club sur ordinateur"
+                    alt="iSmart Club sur mobile"
                     loading="lazy"
                   />
                 </div>
+                <div className="lp-phone-indicator" />
               </div>
-              <div className="lp-laptop-bottom">
-                <div className="lp-laptop-notch" />
-              </div>
-              <div className="lp-laptop-shadow" />
+              <div className="lp-devices-glow" />
             </div>
-            <div className="lp-phone">
-              <div className="lp-phone-notch" />
-              <div className="lp-phone-screen">
-                <img
-                  src={APP_SCREENSHOT}
-                  alt="iSmart Club sur mobile"
-                  loading="lazy"
-                />
-              </div>
-              <div className="lp-phone-indicator" />
-            </div>
-            <div className="lp-devices-glow" />
           </div>
+        </section>
+      ) : null}
+
+      {/* The launch offer is a single pack, so there is no tariff grid to
+          compare — the standard grid only arrives the season after. A short
+          recap band carries the offer one more time before the contact form. */}
+      <section className="lp-recap">
+        <div className="lp-recap-inner lp-reveal">
+          <div className="lp-recap-icon">
+            <Sparkles size={20} />
+          </div>
+          <div className="lp-recap-text">
+            <strong>Pack Découverte 2026-2027 — 1 € HT par licencié</strong>
+            <span>
+              Une seule formule, pour l'ensemble du club. Tarification standard
+              à partir de la saison suivante.
+            </span>
+          </div>
+          {/* CTA #5 */}
+          <button
+            className="lp-btn-primary"
+            onClick={goToForm}
+          >
+            Demander le Pack
+          </button>
         </div>
       </section>
-
-      {/* ════════ PRICING ════════ */}
-      <section className="lp-pricing">
-        <div className="lp-pricing-inner">
-          <div className="lp-section-label lp-section-label--center">Tarifs</div>
-          <h2 className="lp-title lp-reveal">
-            Un tarif par club, pas par utilisateur
-          </h2>
-
-          <div className="lp-pricing-banner lp-reveal">
-            <div className="lp-pricing-banner-icon">
-              <Sparkles size={20} />
-            </div>
-            <div className="lp-pricing-banner-text">
-              <strong>
-                Offre d'août — 1 € par licencié, pour l'ensemble du club
-              </strong>
-              <span>
-                Le club entier équipé pour le prix d'un café par licencié, quel
-                que soit son effectif.
-              </span>
-            </div>
-            <div className="lp-pricing-banner-checks">
-              <span>
-                <Check size={13} /> Le club entier
-              </span>
-              <span>
-                <Check size={13} /> Sans minimum
-              </span>
-            </div>
-          </div>
-
-          <div className="lp-pricing-grid lp-reveal">
-            <div className="lp-plan">
-              <div className="lp-plan-tag">Standard</div>
-              <div className="lp-plan-title">Formule Club</div>
-              <div className="lp-plan-price-row">
-                <span className="lp-plan-price">3 €</span>
-                <span className="lp-plan-price-then">
-                  par licencié / an — tarif normal
-                </span>
-              </div>
-              <div className="lp-plan-divider" />
-              <ul className="lp-plan-features">
-                <li>Les 34 modules de la plateforme</li>
-                <li>Éducateurs et dirigeants illimités</li>
-                <li>Espaces joueurs et parents</li>
-                <li>Une saison complète</li>
-              </ul>
-              {/* CTA #5 */}
-              <button
-                className="lp-plan-btn lp-plan-btn--outline"
-                onClick={goToOffer}
-              >
-                Demander un devis
-              </button>
-            </div>
-
-            <div className="lp-plan lp-plan--featured">
-              <div className="lp-plan-badge">Août uniquement</div>
-              <div className="lp-plan-pill lp-plan-pill--gold">
-                Offre partenaire
-              </div>
-              <div className="lp-plan-tag lp-plan-tag--gold">Partenaire</div>
-              <div className="lp-plan-title">Formule Partenaire</div>
-              <div className="lp-plan-price-row">
-                <span className="lp-plan-price">1 €</span>
-                <span className="lp-plan-price-then">
-                  par licencié — pour tout le club
-                </span>
-              </div>
-              <div className="lp-plan-include">
-                Tout ce que contient la Formule Club, plus :
-              </div>
-              <ul className="lp-plan-features">
-                <li>Souscrite pour l'ensemble du club</li>
-                <li>Aucun effectif minimum requis</li>
-                <li>Reprise de vos données existantes</li>
-                <li>Accompagnement au démarrage</li>
-                <li>Accès au module Communauté</li>
-                <li>Tarif bloqué sur toute la saison</li>
-              </ul>
-              {/* CTA #6 */}
-              <button
-                className="lp-plan-btn lp-plan-btn--filled"
-                onClick={() =>
-                  document
-                    .getElementById("contact")
-                    ?.scrollIntoView({ behavior: "smooth" })
-                }
-              >
-                Devenir partenaire iSmart Club
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* ════════ CONTACT ════════ */}
       <section id="contact" className="lp-contact">
         <div className="lp-contact-inner">
@@ -1179,9 +864,9 @@ export function LandingScreen() {
               <span className="lp-green">On vous répond.</span>
             </h2>
             <p className="lp-desc" style={{ marginTop: "1rem" }}>
-              Dites-nous combien de licenciés compte votre club : nous vous
-              renvoyons le montant exact de l'offre d'août et un accès de
-              démonstration.
+              Dites-nous combien de licenciés compte votre club — joueurs et
+              staff — et nous vous renvoyons le montant exact du Pack Découverte
+              ainsi qu'un accès de démonstration.
             </p>
             <div className="lp-contact-info">
               <div className="lp-contact-info-item">
@@ -1200,7 +885,7 @@ export function LandingScreen() {
                   <Building2 size={20} strokeWidth={1.8} />
                 </span>
                 <div>
-                  <div className="lp-contact-info-label">Déjà partenaire ?</div>
+                  <div className="lp-contact-info-label">Déjà client ?</div>
                   <a
                     className="lp-contact-info-value"
                     href={PLATFORM_URL}
@@ -1274,7 +959,7 @@ export function LandingScreen() {
                 </div>
               ) : (
                 <button className="lp-form-btn" type="submit">
-                  Demander l'offre partenaire <ArrowRight size={16} />
+                  Demander le Pack Découverte <ArrowRight size={16} />
                 </button>
               )}
             </form>
@@ -1286,13 +971,13 @@ export function LandingScreen() {
       <div className={`lp-sticky ${sticky ? "lp-sticky--visible" : ""}`}>
         <div className="lp-sticky-inner">
           <div className="lp-sticky-text">
-            <span className="lp-sticky-badge">Offre d'août</span>
+            <span className="lp-sticky-badge">Pack Découverte</span>
             <span>
-              <strong>1 €</strong> par licencié — pour tout le club
+              <strong>1 € HT</strong> par licencié — saison 2026-2027
             </span>
           </div>
-          <button className="lp-sticky-btn" onClick={goToOffer}>
-            Devenir partenaire
+          <button className="lp-sticky-btn" onClick={goToForm}>
+            Demander le Pack
             <ArrowRight size={14} />
           </button>
         </div>
@@ -1306,7 +991,7 @@ export function LandingScreen() {
             </div>
             <div className="lp-footer-links">
               <a href="#modules">Modules</a>
-              <a href="#offre">Offre</a>
+              <a href="#offre">Pack Découverte</a>
               <a href="#contact">Contact</a>
               <a href={PLATFORM_URL}>Connexion</a>
             </div>
