@@ -37,7 +37,7 @@ import { exportTransactionsCsv } from "@/features/finance/export"
 import { Field, Kpi, NaturePill, Select } from "@/features/finance/ui"
 import { TransactionDrawer, type DrawerMode } from "@/features/finance/TransactionDrawer"
 import { HistoriquePanel } from "@/features/finance/HistoriquePanel"
-import { DemandesModal, DEMANDES_COUNT } from "@/features/finance/DemandesModal"
+import { DemandesModal } from "@/features/finance/DemandesModal"
 import { Badge } from "@/components/kit/Badge"
 import { TeamChip } from "@/features/budget/ui"
 import { Segmented } from "@/features/budget/ui"
@@ -81,6 +81,7 @@ export function TransactionsScreen() {
   const {
     financeConfig,
     transactions,
+    transactionRequests,
     groups,
     subCategories,
     financeTeams,
@@ -130,6 +131,11 @@ export function TransactionsScreen() {
   const deletedCount = useMemo(
     () => transactions.filter((t) => t.is_deleted).length,
     [transactions],
+  )
+  // Requests still waiting on a decision — drives the Demandes badge.
+  const pendingDemandes = useMemo(
+    () => transactionRequests.filter((d) => d.status === "en_attente").length,
+    [transactionRequests],
   )
 
   // Apply search + filters.
@@ -400,9 +406,9 @@ export function TransactionsScreen() {
               className="inline-flex items-center gap-1.5 rounded-md border border-input px-3 py-2 font-ui text-sm font-medium text-ink-subtle transition-colors hover:border-[var(--border-hover)] hover:text-ink"
             >
               <Inbox size={15} /> Demandes
-              {DEMANDES_COUNT ? (
+              {pendingDemandes ? (
                 <span className="rounded-full bg-warning/20 px-1.5 text-[0.68rem] text-warning tabular-nums">
-                  {DEMANDES_COUNT}
+                  {pendingDemandes}
                 </span>
               ) : null}
             </button>
@@ -773,7 +779,11 @@ export function TransactionsScreen() {
         onRestored={notify}
       />
 
-      <DemandesModal open={demandes} onOpenChange={setDemandes} />
+      <DemandesModal
+        open={demandes}
+        onOpenChange={setDemandes}
+        onDecided={notify}
+      />
 
       <ConfirmDialog
         open={confirm !== null}

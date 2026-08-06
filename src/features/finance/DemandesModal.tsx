@@ -1,8 +1,10 @@
+import { useMemo, useState } from "react"
 import { Check, Inbox, Paperclip, X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
-import { fmtShort, fmtFrDate } from "@/lib/format"
-import type { Nature } from "@/data/seed/finance"
+import { fmtShort, fmtFrLong } from "@/lib/format"
+import { useData } from "@/data/useData"
+import { byId } from "@/features/finance/helpers"
 import { Avatar } from "@/components/kit/Avatar"
 import { EmptyState } from "@/components/kit/EmptyState"
 import {
@@ -14,86 +16,43 @@ import {
 } from "@/components/ui/dialog"
 
 /**
- * Read-only demo of the « Demandes de transaction » review flow: requests
- * submitted by the staff / coaches, waiting for an admin to validate or refuse.
- * UI-only prototype — the Valider / Refuser actions are intentionally inert.
+ * The admin side of « Demandes de transaction »: the requests submitted from
+ * Finance ▸ Demander une transaction, still waiting for a decision. Valider /
+ * Refuser write back to the store — the requester sees the outcome in their
+ * historique. Refusing asks for a motif first, so the answer is never silent.
  */
-type Demande = {
-  id: string
-  requester: string
-  role: string
-  nature: Nature
-  category: string
-  amount: number
-  date: string
-  motif: string
-  attachment?: string
-}
-
-const DEMANDES: Demande[] = [
-  {
-    id: "dem-ballons",
-    requester: "Karim Belhadj",
-    role: "Entraîneur principal",
-    nature: "Dépense",
-    category: "Biens & Équipement → Ballons",
-    amount: 850,
-    date: "2026-06-28",
-    motif: "Renouvellement du lot de ballons pour la reprise des U17.",
-    attachment: "devis-ballons.pdf",
-  },
-  {
-    id: "dem-pharmacie",
-    requester: "Mehdi Traoui",
-    role: "Préparateur physique",
-    nature: "Dépense",
-    category: "Santé → Pharmacie & soins",
-    amount: 320,
-    date: "2026-06-30",
-    motif: "Réassort de la trousse de premiers soins avant le tournoi.",
-  },
-  {
-    id: "dem-bus-sousse",
-    requester: "Karim Belhadj",
-    role: "Entraîneur principal",
-    nature: "Dépense",
-    category: "Transport → Bus déplacement",
-    amount: 1600,
-    date: "2026-07-01",
-    motif: "Bus pour le tournoi national U15 à Sousse (aller-retour).",
-    attachment: "devis-transport-sousse.pdf",
-  },
-  {
-    id: "dem-fournitures",
-    requester: "Sonia Khelifi",
-    role: "Secrétaire générale",
-    nature: "Dépense",
-    category: "Frais Administratifs → Fournitures de bureau",
-    amount: 145,
-    date: "2026-07-01",
-    motif: "Cartouches d'encre et ramettes de papier pour le secrétariat.",
-  },
-  {
-    id: "dem-buvette",
-    requester: "Ahmed Ben Salah",
-    role: "Trésorier",
-    nature: "Revenu",
-    category: "Collecte → Buvette",
-    amount: 1240,
-    date: "2026-07-02",
-    motif: "Recette de la buvette — tournoi de fin de saison.",
-    attachment: "recette-buvette.pdf",
-  },
-]
-
 export function DemandesModal({
   open,
   onOpenChange,
+  onDecided,
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
+  onDecided?: (message: string) => void
 }) {
-  const count = DEMANDES.length
+  const {
+    transactionRequests,
+    groups,
+    subCategories,
+    staff,
+    decideTransactionRequest,
+  } = useData()
+
+  /** id of the request whose refusal motif is being typed, + the text. */
+  const [refusing, setRefusing] = useState<{ id: string; note: string } | null>(null)
+
+  const groupMap = useMemo(() => byId(groups), [groups])
+  const subMap = useMemo(() => byId(subCategories), [subCategories])
+  const staffMap = useMemo(() => byId(staff), [staff])
+
+  const pending = useMemo(
+    () =>
+      transactionRequests
+        .filter((d) => d.status === "en_attente")
+        .sort((a, b) => a.created_at.localeCompare(b.created_at)),
+    [transactionRequests],
+  )
+  const count = pending.length
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -128,8 +87,14 @@ export function DemandesModal({
             />
           ) : (
             <ul className="flex flex-col gap-3">
-              {DEMANDES.map((d) => {
+              {pending.map((d) => {
                 const revenu = d.nature === "Revenu"
+                const member = staffMap.get(d.requester_id)
+                const requester = member?.full_name ?? "—"
+                const group = groupMap.get(d.group_id)?.name ?? "—"
+                const sub = subMap.get(d.subcategory_id)?.name ?? "—"
+                const isRefusing = refusing?.id === d.id
+
                 return (
                   <li
                     key={d.id}
@@ -138,13 +103,13 @@ export function DemandesModal({
                     {/* Requester + amount */}
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex min-w-0 items-start gap-3">
-                        <Avatar name={d.requester} size="md" />
+                        <Avatar name={requester} size="md" />
                         <div className="min-w-0">
                           <span className="font-body text-[0.9rem] text-ink">
-                            {d.requester}
+                            {requester}
                           </span>
                           <div className="mt-1 truncate font-body text-[0.78rem] text-ink-muted">
-                            {d.category}
+                            {group} → {sub}
                           </div>
                         </div>
                       </div>
@@ -166,7 +131,9 @@ export function DemandesModal({
 
                     {/* Meta */}
                     <div className="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-1.5 font-body text-[0.72rem] text-ink-disabled">
-                      <span className="tabular-nums">{fmtFrDate(d.date)}</span>
+                      <span className="tabular-nums">
+                        Souhaitée pour {fmtFrLong(d.date)}
+                      </span>
                       {d.attachment ? (
                         <span className="inline-flex items-center gap-1 text-info">
                           <Paperclip size={12} />
@@ -175,20 +142,70 @@ export function DemandesModal({
                       ) : null}
                     </div>
 
-                    {/* Actions — UI only */}
+                    {/* Refusal motif — asked for before the request is refused */}
+                    {isRefusing ? (
+                      <div className="mt-3.5 rounded-md border border-border bg-surface-nested p-3">
+                        <label className="font-ui text-[0.66rem] font-medium tracking-[0.08em] text-ink-muted uppercase">
+                          Motif du refus
+                        </label>
+                        <textarea
+                          rows={2}
+                          autoFocus
+                          value={refusing.note}
+                          onChange={(e) =>
+                            setRefusing({ id: d.id, note: e.target.value })
+                          }
+                          placeholder="Expliquez la raison du refus…"
+                          className="mt-1.5 w-full resize-none rounded-md border border-input bg-input-bg px-3 py-2 font-body text-[0.82rem] text-ink outline-none transition-colors placeholder:text-ink-disabled focus:border-border-focus"
+                        />
+                      </div>
+                    ) : null}
+
+                    {/* Actions */}
                     <div className="mt-3.5 flex items-center justify-end gap-2 border-t border-border pt-3.5">
-                      <button
-                        type="button"
-                        className="inline-flex items-center gap-1.5 rounded-md border border-input px-3 py-2 font-ui text-[0.82rem] font-medium text-ink-subtle transition-colors hover:border-danger/40 hover:text-danger"
-                      >
-                        <X size={15} /> Refuser
-                      </button>
-                      <button
-                        type="button"
-                        className="inline-flex items-center gap-1.5 rounded-md bg-brand px-4 py-2 font-ui text-[0.82rem] font-medium text-ink-inverted shadow-glow transition-colors hover:bg-brand-dim"
-                      >
-                        <Check size={15} /> Valider
-                      </button>
+                      {isRefusing ? (
+                        <>
+                          <button
+                            type="button"
+                            onClick={() => setRefusing(null)}
+                            className="inline-flex items-center rounded-md border border-input px-3 py-2 font-ui text-[0.82rem] font-medium text-ink-subtle transition-colors hover:border-[var(--border-hover)] hover:text-ink"
+                          >
+                            Annuler
+                          </button>
+                          <button
+                            type="button"
+                            disabled={!refusing.note.trim()}
+                            onClick={() => {
+                              decideTransactionRequest(d.id, "refusee", refusing.note)
+                              setRefusing(null)
+                              onDecided?.("Demande refusée")
+                            }}
+                            className="inline-flex items-center gap-1.5 rounded-md bg-danger px-4 py-2 font-ui text-[0.82rem] font-medium text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-45"
+                          >
+                            <X size={15} /> Confirmer le refus
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <button
+                            type="button"
+                            onClick={() => setRefusing({ id: d.id, note: "" })}
+                            className="inline-flex items-center gap-1.5 rounded-md border border-input px-3 py-2 font-ui text-[0.82rem] font-medium text-ink-subtle transition-colors hover:border-danger/40 hover:text-danger"
+                          >
+                            <X size={15} /> Refuser
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              decideTransactionRequest(d.id, "approuvee")
+                              onDecided?.("Demande approuvée")
+                            }}
+                            className="inline-flex items-center gap-1.5 rounded-md bg-brand px-4 py-2 font-ui text-[0.82rem] font-medium text-ink-inverted shadow-glow transition-colors hover:bg-brand-dim"
+                          >
+                            <Check size={15} /> Valider
+                          </button>
+                        </>
+                      )}
                     </div>
                   </li>
                 )
@@ -200,6 +217,3 @@ export function DemandesModal({
     </Dialog>
   )
 }
-
-/** Count exposed for the toolbar badge (kept in sync with the demo list). */
-export const DEMANDES_COUNT = DEMANDES.length

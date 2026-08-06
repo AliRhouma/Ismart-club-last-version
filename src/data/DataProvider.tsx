@@ -81,6 +81,11 @@ import {
   type OfferRequest,
 } from "@/data/seed/offerRequests"
 import {
+  transactionRequestsSeed,
+  type NewTransactionRequest,
+  type TransactionRequest,
+} from "@/data/seed/transactionRequests"
+import {
   budget2Reducer,
   budget2InitialState,
   type Budget2State,
@@ -281,6 +286,8 @@ export type DataContextValue = {
   subCategories: SubCategory[]
   /** All financial movements of the active season (incl. soft-deleted). */
   transactions: Transaction[]
+  /** Transaction requests submitted by the staff, awaiting or carrying a decision. */
+  transactionRequests: TransactionRequest[]
   setSeason: (season: string) => void
   setMode: (mode: BudgetMode) => void
   setGlobalIncome: (value: number) => void
@@ -378,6 +385,17 @@ export type DataContextValue = {
   deleteTransaction: (id: string) => void
   /** Restore a soft-deleted transaction back into the active view. */
   restoreTransaction: (id: string) => void
+  /** Submit a transaction request (id/season/status/date filled in); returns the new id. */
+  addTransactionRequest: (request: NewTransactionRequest) => string
+  /**
+   * Admin decision on a request — flips the status and stamps the decision date
+   * (the prototype does NOT create the matching transaction).
+   */
+  decideTransactionRequest: (
+    id: string,
+    status: "approuvee" | "refusee",
+    note?: string,
+  ) => void
 
   /* ── Budget module (Outil Budget) — seasons / drafts / groups / lines ── */
   budget2: Budget2State
@@ -497,6 +515,11 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const [groups] = useState<Group[]>(groupsSeed)
   const [subCategories] = useState<SubCategory[]>(subCategoriesSeed)
   const [transactions, setTransactions] = useState<Transaction[]>(transactionsSeed)
+  // Demandes de transaction — submitted on Finance ▸ Demander une transaction,
+  // decided by the admin from the Demandes inbox on the Transactions screen.
+  const [transactionRequests, setTransactionRequests] = useState<
+    TransactionRequest[]
+  >(transactionRequestsSeed)
   // Budget module — its own reducer (seasons / drafts / groups / lines). IDs and
   // timestamps are minted here and passed in, keeping the reducer pure.
   const [budget2, dispatch2] = useReducer(budget2Reducer, budget2InitialState)
@@ -554,6 +577,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
       groups,
       subCategories,
       transactions,
+      transactionRequests,
       setSeason: (season) => dispatch({ type: "setSeason", season }),
       setMode: (mode) => dispatch({ type: "setMode", mode }),
       setGlobalIncome: (value) => dispatch({ type: "setGlobalIncome", value }),
@@ -985,6 +1009,46 @@ export function DataProvider({ children }: { children: ReactNode }) {
               : tx,
           ),
         ),
+      addTransactionRequest: (request) => {
+        const id = crypto.randomUUID()
+        const today = new Date().toISOString().slice(0, 10)
+        setTransactionRequests((prev) => [
+          {
+            ...request,
+            id,
+            season: financeConfig.active_season,
+            status: "en_attente",
+            created_at: today,
+          },
+          ...prev,
+        ])
+        // Notify the admin so the bell reflects the new request.
+        setNotifications((prev) => [
+          {
+            id: crypto.randomUUID(),
+            kind: "demande",
+            title: "Demande de transaction",
+            date: new Date().toLocaleDateString("fr-FR"),
+            body: `${request.nature} de ${request.amount} TND à valider`,
+            unread: true,
+          },
+          ...prev,
+        ])
+        return id
+      },
+      decideTransactionRequest: (id, status, note) =>
+        setTransactionRequests((prev) =>
+          prev.map((r) =>
+            r.id === id
+              ? {
+                  ...r,
+                  status,
+                  decided_at: new Date().toISOString().slice(0, 10),
+                  decision_note: note?.trim() ? note.trim() : undefined,
+                }
+              : r,
+          ),
+        ),
 
       /* ── Budget module ──────────────────────────────────────────────── */
       budget2,
@@ -1080,6 +1144,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
       groups,
       subCategories,
       transactions,
+      transactionRequests,
       budget2,
     ],
   )
