@@ -1,33 +1,23 @@
-import {
-  useEffect,
-  useRef,
-  useState,
-  type ReactNode,
-} from "react"
+import { useEffect, useRef, useState } from "react"
+import { Link, useLocation } from "react-router-dom"
 import {
   ArrowRight,
   BarChart3,
   Building2,
-  Calendar,
   Check,
-  ClipboardList,
   Clock,
   Download,
-  FolderTree,
   Info,
-  Layers,
-  MessageSquare,
   RefreshCw,
   Send,
   Share2,
   Shield,
   Sparkles,
-  Target,
   Users,
-  Wallet,
   Zap,
 } from "lucide-react"
 
+import { MODULES } from "@/features/landing/modules"
 import "@/features/landing/landing.css"
 
 /* ── Media ────────────────────────────────────────────────────────────────
@@ -78,69 +68,8 @@ const HERO_FEATURES = [
   },
 ]
 
-/* ── Modules — grouped as the platform's own navigation groups them ────── */
-const MODULES: {
-  icon: ReactNode
-  name: string
-  desc: string
-  tags: string[]
-}[] = [
-  {
-    icon: <Users size={24} strokeWidth={1.5} />,
-    name: "Ressources humaines",
-    desc: "Joueurs, éducateurs, membres et parents dans un seul annuaire, avec des profils et des permissions par rôle.",
-    tags: ["Joueurs", "Éducateurs", "Parents", "Profils"],
-  },
-  {
-    icon: <Layers size={24} strokeWidth={1.5} />,
-    name: "Catégories & groupes",
-    desc: "Chaque catégorie a son effectif, ses groupes, son staff, ses résultats et son taux de présence, saison après saison.",
-    tags: ["Effectif", "Groupes", "Résultats"],
-  },
-  {
-    icon: <Target size={24} strokeWidth={1.5} />,
-    name: "Projet de jeu",
-    desc: "Le modèle de jeu du club, décliné en étapes par phase, et appliqué aux catégories concernées.",
-    tags: ["Modèle de jeu", "Étapes", "Par catégorie"],
-  },
-  {
-    icon: <Calendar size={24} strokeWidth={1.5} />,
-    name: "Programmation annuelle",
-    desc: "La saison entière planifiée : chaque séance sait quel principe de jeu elle doit travailler, semaine après semaine.",
-    tags: ["36 semaines", "Cycles", "Principes"],
-  },
-  {
-    icon: <ClipboardList size={24} strokeWidth={1.5} />,
-    name: "Procédés & séances",
-    desc: "Une bibliothèque de procédés classée par principe, et des séances construites à partir d'elle en quelques clics.",
-    tags: ["Bibliothèque", "Séances", "Matériel"],
-  },
-  {
-    icon: <BarChart3 size={24} strokeWidth={1.5} />,
-    name: "Analyse & suivi",
-    desc: "Présences, évaluations individuelles et de groupe, notes de match et tests physiques rattachés à chaque joueur.",
-    tags: ["Présences", "Évaluations", "Tests"],
-  },
-  {
-    icon: <FolderTree size={24} strokeWidth={1.5} />,
-    name: "Structuration",
-    desc: "Organigramme, tâches, réunions, formations, qualifications et documents — le fonctionnement du club, écrit.",
-    tags: ["Organigramme", "Tâches", "Documents"],
-  },
-  {
-    icon: <Wallet size={24} strokeWidth={1.5} />,
-    name: "Finances",
-    desc: "Budget prévisionnel, transactions réelles et collectes, avec la comparaison prévu / réel mois par mois.",
-    tags: ["Budget", "Transactions", "Collectes"],
-  },
-  {
-    icon: <MessageSquare size={24} strokeWidth={1.5} />,
-    name: "Communication",
-    desc: "Messagerie par groupe, sondages, convocations et courrier sortant vers les joueurs, le staff et les parents.",
-    tags: ["Messagerie", "Sondages", "Convocations"],
-  },
-]
-
+/* The module grid reads `MODULES` from ./modules — the same records the module
+   detail pages render, so a card and its page never diverge. */
 
 /* ── Hooks ────────────────────────────────────────────────────────────── */
 function useScrollReveal() {
@@ -279,8 +208,22 @@ export function LandingScreen() {
   const [scrolled, setScrolled] = useState(false)
   const [sticky, setSticky] = useState(false)
   const [sent, setSent] = useState(false)
+  const { hash } = useLocation()
 
   useScrollReveal()
+
+  /* Coming back from a module page with `/landing#modules`: React Router does
+     not honour the hash on its own, so land the reader on the right section. */
+  useEffect(() => {
+    if (!hash) return
+    const el = document.getElementById(hash.slice(1))
+    if (!el) return
+    const t = window.setTimeout(
+      () => el.scrollIntoView({ behavior: "auto", block: "start" }),
+      0,
+    )
+    return () => window.clearTimeout(t)
+  }, [hash])
 
   useEffect(() => {
     const onScroll = () => {
@@ -528,21 +471,35 @@ export function LandingScreen() {
           </div>
 
           <div className="lp-modules-grid lp-reveal">
-            {MODULES.map((m) => (
-              <article className="lp-module-card" key={m.name}>
-                <div className="lp-module-icon">{m.icon}</div>
-                <h3 className="lp-module-name">{m.name}</h3>
-                <p className="lp-module-desc">{m.desc}</p>
-                <div className="lp-module-tags">
-                  {m.tags.map((t) => (
-                    <span className="lp-module-tag" key={t}>
-                      {t}
-                    </span>
-                  ))}
-                </div>
-                <span className="lp-module-glow" />
-              </article>
-            ))}
+            {MODULES.map((m) => {
+              const Icon = m.icon
+              return (
+                <article className="lp-module-card" key={m.slug}>
+                  <div className="lp-module-icon">
+                    <Icon size={24} strokeWidth={1.5} />
+                  </div>
+                  <h3 className="lp-module-name">{m.name}</h3>
+                  <p className="lp-module-desc">{m.desc}</p>
+                  <div className="lp-module-tags">
+                    {m.tags.map((t) => (
+                      <span className="lp-module-tag" key={t}>
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                  {/* The card sells the module in three lines; this button is
+                      where the reader goes for the long version. */}
+                  <Link
+                    className="lp-module-cta"
+                    to={`/landing/modules/${m.slug}`}
+                  >
+                    Voir les détails
+                    <ArrowRight size={14} />
+                  </Link>
+                  <span className="lp-module-glow" />
+                </article>
+              )
+            })}
           </div>
 
           <div className="lp-modules-footnote lp-reveal">

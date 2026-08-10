@@ -976,6 +976,8 @@ html:has(.lp) {
 }
 .lp-module-card {
   position: relative;
+  display: flex;
+  flex-direction: column;
   background: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: 16px;
@@ -1040,6 +1042,45 @@ html:has(.lp) {
   border: 1px solid rgba(0, 255, 135, 0.14);
   color: rgba(0, 255, 135, 0.85);
 }
+/* "Voir les détails" — pinned to the bottom of the card so the row of buttons
+   lines up whatever the length of each blurb. Quiet until you hover the card:
+   the grid is a menu, not nine competing CTAs. */
+.lp-module-cta {
+  margin-top: auto;
+  padding-top: 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  align-self: flex-start;
+  font-family: "Syne", sans-serif;
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.01em;
+  color: var(--muted);
+  text-decoration: none;
+  background: none;
+  border: none;
+  padding-left: 0;
+  cursor: pointer;
+  transition: color 0.25s ease, gap 0.25s ease;
+}
+.lp-module-cta svg {
+  transition: transform 0.25s ease;
+}
+.lp-module-card:hover .lp-module-cta {
+  color: var(--green);
+}
+.lp-module-cta:hover svg,
+.lp-module-cta:focus-visible svg {
+  transform: translateX(3px);
+}
+.lp-module-cta:focus-visible {
+  outline: 2px solid rgba(0, 255, 135, 0.5);
+  outline-offset: 4px;
+  border-radius: 4px;
+  color: var(--green);
+}
+
 .lp-module-glow {
   position: absolute;
   bottom: 0;
@@ -1667,6 +1708,445 @@ html:has(.lp) {
   color: var(--white);
 }
 
+/* ═══════════════ MODULE DETAIL PAGE ═══════════════
+   /landing/modules/:slug — the long version of a module card. Same rhythm as
+   the landing sections (7rem bands, 1100px column, Bebas headings), with a
+   quieter hero: this page is read, not scanned. */
+.lp-detail-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.lp-detail-hero {
+  padding: 10rem 5% 4.5rem;
+  background: var(--dark);
+  position: relative;
+  overflow: hidden;
+}
+/* The module's own halo — the only decoration the page needs. */
+.lp-detail-hero::before {
+  content: "";
+  position: absolute;
+  top: -220px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 720px;
+  height: 520px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 255, 135, 0.09),
+    transparent 70%
+  );
+  pointer-events: none;
+}
+.lp-detail-hero > .lp-detail-inner {
+  position: relative;
+  z-index: 1;
+}
+.lp-crumbs {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-bottom: 2.25rem;
+}
+.lp-crumbs a {
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.lp-crumbs a:hover {
+  color: var(--white);
+}
+.lp-crumbs span:last-child {
+  color: var(--white);
+}
+.lp-crumbs svg {
+  opacity: 0.45;
+  flex-shrink: 0;
+}
+.lp-detail-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+}
+.lp-detail-icon {
+  width: 76px;
+  height: 76px;
+  flex-shrink: 0;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--green);
+  background: rgba(0, 255, 135, 0.08);
+  border: 1px solid rgba(0, 255, 135, 0.2);
+  box-shadow: 0 0 40px rgba(0, 255, 135, 0.1);
+}
+.lp-detail-title {
+  font-size: clamp(2.6rem, 6vw, 4.4rem);
+}
+.lp-detail-tagline {
+  margin-top: 0.85rem;
+  font-family: "Syne", sans-serif;
+  font-weight: 600;
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
+  line-height: 1.4;
+  color: var(--white);
+  max-width: 660px;
+}
+.lp-detail-intro {
+  margin-top: 1.5rem;
+  max-width: 680px;
+}
+.lp-detail-tags {
+  margin-top: 1.75rem;
+}
+.lp-detail-roles {
+  margin-top: 1.75rem;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+.lp-detail-roles-label {
+  font-family: "Syne", sans-serif;
+  font-weight: 700;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.lp-detail-roles-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.lp-detail-role {
+  padding: 0.28rem 0.75rem;
+  border-radius: 100px;
+  font-size: 0.78rem;
+  color: var(--white);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+}
+.lp-detail-actions {
+  margin-top: 2.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+}
+/* The primary CTA is a <Link> here, not a <button> — keep the text centred. */
+.lp-detail-actions .lp-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.lp-detail-section {
+  padding: 5.5rem 5%;
+  background: var(--dark);
+}
+.lp-detail-section--alt {
+  background: var(--dark2);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.lp-detail-h2 {
+  font-size: clamp(2rem, 4vw, 2.8rem);
+}
+
+/* — Highlights — */
+.lp-hl-grid {
+  margin-top: 2.75rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+}
+.lp-hl-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.75rem 1.6rem;
+  transition: border-color 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.lp-hl-card:hover {
+  border-color: rgba(0, 255, 135, 0.22);
+  transform: translateY(-4px);
+}
+.lp-hl-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--green);
+  background: rgba(0, 255, 135, 0.07);
+  border: 1px solid rgba(0, 255, 135, 0.14);
+  margin-bottom: 1.1rem;
+}
+.lp-hl-title {
+  font-family: "Syne", sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--white);
+  margin-bottom: 0.5rem;
+}
+.lp-hl-text {
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+/* — Capabilities — */
+.lp-cap-grid {
+  margin-top: 2.75rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+.lp-cap-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.75rem 1.6rem;
+}
+.lp-cap-title {
+  font-family: "Syne", sans-serif;
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--green);
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.lp-cap-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+.lp-cap-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+.lp-cap-list svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: var(--green);
+}
+
+/* — Steps — */
+.lp-steps {
+  margin-top: 2.75rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+.lp-step {
+  position: relative;
+  padding: 1.75rem 1.6rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+}
+.lp-step-num {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 2.2rem;
+  line-height: 1;
+  color: rgba(0, 255, 135, 0.35);
+  margin-bottom: 0.9rem;
+}
+.lp-step-title {
+  font-family: "Syne", sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--white);
+  margin-bottom: 0.5rem;
+}
+.lp-step-text {
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.7;
+}
+
+/* — Outcomes — */
+.lp-outcomes {
+  margin-top: 2rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+.lp-outcome {
+  background: var(--dark);
+  padding: 1.6rem 1.25rem;
+  text-align: center;
+}
+.lp-outcome-value {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 2.1rem;
+  line-height: 1;
+  color: var(--green);
+  letter-spacing: 0.02em;
+}
+.lp-outcome-label {
+  margin-top: 0.45rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+/* — Other modules — */
+.lp-others-grid {
+  margin-top: 2.75rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.9rem;
+}
+.lp-other-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.1rem 1.25rem;
+  border-radius: 14px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  text-decoration: none;
+  transition: border-color 0.25s ease, background 0.25s ease,
+    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.lp-other-card:hover {
+  border-color: rgba(0, 255, 135, 0.25);
+  background: rgba(0, 255, 135, 0.03);
+  transform: translateX(4px);
+}
+.lp-other-icon {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border);
+  transition: color 0.25s, background 0.25s, border-color 0.25s;
+}
+.lp-other-card:hover .lp-other-icon {
+  color: var(--green);
+  background: rgba(0, 255, 135, 0.08);
+  border-color: rgba(0, 255, 135, 0.2);
+}
+.lp-other-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+.lp-other-name {
+  font-family: "Syne", sans-serif;
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: var(--white);
+}
+.lp-other-pole {
+  font-size: 0.76rem;
+  color: var(--muted);
+}
+.lp-other-arrow {
+  margin-left: auto;
+  flex-shrink: 0;
+  color: var(--muted);
+  transition: color 0.25s, transform 0.25s;
+}
+.lp-other-card:hover .lp-other-arrow {
+  color: var(--green);
+  transform: translateX(3px);
+}
+
+/* — Prev / next — */
+.lp-prevnext {
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.lp-prevnext-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: var(--muted);
+  transition: color 0.2s;
+}
+.lp-prevnext-link--next {
+  text-align: right;
+}
+.lp-prevnext-link:hover {
+  color: var(--white);
+}
+.lp-prevnext-link svg {
+  flex-shrink: 0;
+  transition: transform 0.25s;
+}
+.lp-prevnext-link:hover svg {
+  transform: translateX(-3px);
+}
+.lp-prevnext-link--next:hover svg {
+  transform: translateX(3px);
+}
+.lp-prevnext-link > span {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.lp-prevnext-label {
+  font-family: "Syne", sans-serif;
+  font-weight: 700;
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(150, 150, 150, 0.7);
+}
+.lp-prevnext-name {
+  font-family: "Syne", sans-serif;
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: var(--white);
+}
+
+/* The detail page reuses the landing recap band as its closing CTA — the CTA
+   there is a <Link>, so it needs the button's inline-flex treatment. */
+.lp-recap .lp-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  /* Stays centred when the 600px rule stretches it to width:100%. */
+  justify-content: center;
+  text-decoration: none;
+  white-space: nowrap;
+}
+/* Same for the nav CTA when it routes instead of scrolling. */
+.lp-nav-cta {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
 /* ═══════════════ REVEAL ═══════════════ */
 @keyframes lp-fadeUp {
   from {
@@ -1737,6 +2217,13 @@ html:has(.lp) {
   }
   .lp-showcase-item-sub {
     font-size: 0.67rem;
+  }
+  .lp-cap-grid,
+  .lp-steps {
+    grid-template-columns: 1fr;
+  }
+  .lp-others-grid {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -1834,5 +2321,45 @@ html:has(.lp) {
   }
   .lp-btn-ghost {
     justify-content: center;
+  }
+
+  /* Module detail — the hero stacks, and the outcome strip becomes a column
+     so the Bebas numbers stay readable instead of shrinking to nothing. */
+  .lp-detail-hero {
+    padding: 8rem 5% 3.5rem;
+  }
+  .lp-detail-head {
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  .lp-detail-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+  }
+  .lp-detail-section {
+    padding: 4rem 5%;
+  }
+  .lp-hl-grid {
+    grid-template-columns: 1fr;
+  }
+  .lp-outcomes {
+    grid-template-columns: 1fr;
+  }
+  .lp-detail-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .lp-detail-actions > * {
+    justify-content: center;
+    text-align: center;
+  }
+  .lp-prevnext {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.25rem;
+  }
+  .lp-prevnext-link--next {
+    justify-content: flex-end;
   }
 }

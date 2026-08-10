@@ -12,6 +12,36 @@
  * catégorie (SENIOR) is deliberately left empty for the "à constituer" state.
  */
 
+/* Squad portraits + the catégorie banner, bundled with the app so the
+   prototype renders with no backend and no network (CLAUDE.md). Players
+   with no real photo simply omit the field and fall back to their poste. */
+import aerola from "@/assets/joueurs/aerola.jpg"
+import barcola from "@/assets/joueurs/barcola.jpg"
+import cama from "@/assets/joueurs/cama.jpg"
+import clauss from "@/assets/joueurs/clauss.jpg"
+import coman from "@/assets/joueurs/coman.jpg"
+import dembele from "@/assets/joueurs/dembele.jpg"
+import fofana from "@/assets/joueurs/fofana.jpg"
+import giroud from "@/assets/joueurs/giroud.jpg"
+import griezmann from "@/assets/joueurs/griezmann.jpg"
+import kante from "@/assets/joueurs/kante.jpg"
+import kolo from "@/assets/joueurs/kolo.jpg"
+import konate from "@/assets/joueurs/konate.jpg"
+import kounde from "@/assets/joueurs/kounde.jpg"
+import kyks from "@/assets/joueurs/kyks.jpg"
+import maignan from "@/assets/joueurs/maignan.jpg"
+import mendy from "@/assets/joueurs/mendy.jpg"
+import pavard from "@/assets/joueurs/pavard.jpg"
+import rabiot from "@/assets/joueurs/rabiot.jpg"
+import saliba from "@/assets/joueurs/saliba.jpg"
+import samba from "@/assets/joueurs/samba.jpg"
+import tchoua from "@/assets/joueurs/tchoua.jpg"
+import theo from "@/assets/joueurs/theo.jpg"
+import thuram from "@/assets/joueurs/thuram.jpg"
+import upamecano from "@/assets/joueurs/upamecano.jpg"
+import warren from "@/assets/joueurs/warren.jpg"
+import equipePremiere from "@/assets/categories/equipe-premiere.jpg"
+
 export const POSTE_LABEL: Record<string, string> = {
   GB: "Gardien",
   LD: "Latéral droit",
@@ -89,8 +119,7 @@ export const categoriesSeed: Categorie[] = [
     id: "fff",
     nom: "FFF",
     description: "",
-    image:
-      "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/QSU2EXM6J5CF7APQUGQMSJY5JI.jpg-1772021836347-935196374.jpg",
+    image: equipePremiere,
     genre: "Masculin",
     groupes: [
       { id: "fff-groupe-a", nom: "Groupe A" },
@@ -103,8 +132,7 @@ export const categoriesSeed: Categorie[] = [
         id: "fff-j1",
         nom: "Mike Maignan",
         poste: "GB",
-        photo:
-          "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/maignan.jpg-1772018136854-446059239.jpg",
+        photo: maignan,
         naissance: "1995-07-02",
         presences: 7,
         seances: 9,
@@ -114,8 +142,7 @@ export const categoriesSeed: Categorie[] = [
         id: "fff-j2",
         nom: "William Saliba",
         poste: "DC",
-        photo:
-          "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/saliba.jpg-1772018372018-816808238.jpg",
+        photo: saliba,
         naissance: "2001-03-23",
         presences: 10,
         seances: 10,
@@ -125,8 +152,7 @@ export const categoriesSeed: Categorie[] = [
         id: "fff-j3",
         nom: "Dayot Upamecano",
         poste: "DC",
-        photo:
-          "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/upamecano.jpg-1772017847572-141518690.jpg",
+        photo: upamecano,
         naissance: "1998-10-26",
         presences: 10,
         seances: 10,
@@ -136,8 +162,7 @@ export const categoriesSeed: Categorie[] = [
         id: "fff-j4",
         nom: "Jules Koundé",
         poste: "LD",
-        photo:
-          "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/kounde.jpg-1772018002697-124957233.jpg",
+        photo: kounde,
         naissance: "1998-11-11",
         presences: 9,
         seances: 9,
@@ -147,8 +172,7 @@ export const categoriesSeed: Categorie[] = [
         id: "fff-j5",
         nom: "Eduardo Camavinga",
         poste: "MDC",
-        photo:
-          "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/cama.jpg-1772017975809-391784380.jpg",
+        photo: cama,
         naissance: "2002-11-09",
         presences: 10,
         seances: 10,
@@ -158,8 +182,7 @@ export const categoriesSeed: Categorie[] = [
         id: "fff-j6",
         nom: "Adrien Rabiot",
         poste: "MDC",
-        photo:
-          "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/rabiot.jpg-1772017796447-833725344.jpg",
+        photo: rabiot,
         naissance: "1995-04-02",
         presences: 7,
         seances: 8,
@@ -169,8 +192,7 @@ export const categoriesSeed: Categorie[] = [
         id: "fff-j7",
         nom: "Ousmane Dembélé",
         poste: "AD",
-        photo:
-          "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/dembele.jpg-1772018209365-301426615.jpg",
+        photo: dembele,
         naissance: "1997-05-14",
         presences: 8,
         seances: 8,
@@ -180,8 +202,7 @@ export const categoriesSeed: Categorie[] = [
         id: "fff-j8",
         nom: "Marcus Thuram",
         poste: "AT",
-        photo:
-          "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/thuram.jpg-1772018121098-67325843.jpg",
+        photo: thuram,
         naissance: "1997-08-05",
         presences: 9,
         seances: 10,
@@ -191,8 +212,7 @@ export const categoriesSeed: Categorie[] = [
         id: "fff-j9",
         nom: "Randal Muani",
         poste: "AT",
-        photo:
-          "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/kolo.jpg-1772018230204-164326326.jpg",
+        photo: kolo,
         naissance: "1998-12-04",
         presences: 10,
         seances: 10,
@@ -202,8 +222,7 @@ export const categoriesSeed: Categorie[] = [
         id: "fff-j10",
         nom: "Brice Samba",
         poste: "GB",
-        photo:
-          "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/football-brice-samba-1.jpg-1772016431350-970184889.jpg",
+        photo: samba,
         naissance: "1994-04-24",
         presences: 9,
         seances: 9,
@@ -213,8 +232,7 @@ export const categoriesSeed: Categorie[] = [
         id: "fff-j11",
         nom: "Ibrahima Konaté",
         poste: "DC",
-        photo:
-          "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/konate.jpg-1772017990559-83097058.jpg",
+        photo: konate,
         naissance: "1999-05-24",
         presences: 6,
         seances: 7,
@@ -224,8 +242,7 @@ export const categoriesSeed: Categorie[] = [
         id: "fff-j12",
         nom: "Theo Hernandez",
         poste: "LG",
-        photo:
-          "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/theo.jpg-1772018322296-879174532.jpg",
+        photo: theo,
         naissance: "1997-10-05",
         presences: 10,
         seances: 10,
@@ -235,8 +252,7 @@ export const categoriesSeed: Categorie[] = [
         id: "fff-j13",
         nom: "Benjamin Pavard",
         poste: "LD",
-        photo:
-          "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/pavard.jpg-1772017825051-852987309.jpg",
+        photo: pavard,
         naissance: "1996-03-27",
         presences: 10,
         seances: 10,
@@ -246,8 +262,7 @@ export const categoriesSeed: Categorie[] = [
         id: "fff-j14",
         nom: "Aurélien Tchouaméni",
         poste: "MDC",
-        photo:
-          "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/tchoua.jpg-1772017810040-66339328.jpg",
+        photo: tchoua,
         naissance: "2000-01-26",
         presences: 10,
         seances: 10,
@@ -257,8 +272,7 @@ export const categoriesSeed: Categorie[] = [
         id: "fff-j15",
         nom: "Youssouf Fofana",
         poste: "MDC",
-        photo:
-          "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/fofana.jpg-1772018398165-71450195.jpg",
+        photo: fofana,
         naissance: "1999-01-09",
         presences: 9,
         seances: 9,
@@ -268,8 +282,7 @@ export const categoriesSeed: Categorie[] = [
         id: "fff-j16",
         nom: "Kingsley Coman",
         poste: "AD",
-        photo:
-          "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/coman.jpg-1772018017187-823824322.jpg",
+        photo: coman,
         naissance: "1996-06-12",
         presences: 8,
         seances: 9,
@@ -279,8 +292,7 @@ export const categoriesSeed: Categorie[] = [
         id: "fff-j17",
         nom: "Kylian Mbappé",
         poste: "AG",
-        photo:
-          "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/kyks.jpg-1772018036179-544380539.jpg",
+        photo: kyks,
         naissance: "1998-12-19",
         presences: 10,
         seances: 10,
@@ -290,8 +302,7 @@ export const categoriesSeed: Categorie[] = [
         id: "fff-j18",
         nom: "Bradley Barcola",
         poste: "AG",
-        photo:
-          "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/barcola.jpg-1772017474101-929806112.jpg",
+        photo: barcola,
         naissance: "2002-09-01",
         presences: 9,
         seances: 9,
@@ -301,8 +312,7 @@ export const categoriesSeed: Categorie[] = [
         id: "fff-j19",
         nom: "Alphonse Areola",
         poste: "GB",
-        photo:
-          "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/aerola.jpg-1772019406328-613657647.jpg",
+        photo: aerola,
         naissance: "1993-02-27",
         presences: 10,
         seances: 10,
@@ -312,8 +322,7 @@ export const categoriesSeed: Categorie[] = [
         id: "fff-j20",
         nom: "Jonathan Clauss",
         poste: "LD",
-        photo:
-          "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/clauss.jpg-1772019502359-800443381.jpg",
+        photo: clauss,
         naissance: "1992-09-25",
         presences: 9,
         seances: 10,
@@ -323,8 +332,7 @@ export const categoriesSeed: Categorie[] = [
         id: "fff-j21",
         nom: "Antoine Griezmann",
         poste: "MOC",
-        photo:
-          "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/griezmann.jpg-1772019557570-523688009.jpg",
+        photo: griezmann,
         naissance: "1992-03-21",
         presences: 8,
         seances: 10,
@@ -334,8 +342,7 @@ export const categoriesSeed: Categorie[] = [
         id: "fff-j22",
         nom: "Olivier Giroud",
         poste: "BU",
-        photo:
-          "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/giroud.jpg-1772019616627-88113715.jpg",
+        photo: giroud,
         naissance: "1986-09-30",
         presences: 9,
         seances: 9,
@@ -345,8 +352,7 @@ export const categoriesSeed: Categorie[] = [
         id: "fff-j23",
         nom: "N’Golo Kanté",
         poste: "MDC",
-        photo:
-          "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/kante.jpg-1772019673703-176717000.jpg",
+        photo: kante,
         naissance: "1991-03-25",
         presences: 9,
         seances: 10,
@@ -356,8 +362,7 @@ export const categoriesSeed: Categorie[] = [
         id: "fff-j24",
         nom: "Ferland Mendy",
         poste: "LG",
-        photo:
-          "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/mendy.jpg-1772019781300-909754618.jpg",
+        photo: mendy,
         naissance: "1995-06-08",
         presences: 10,
         seances: 10,
@@ -367,8 +372,7 @@ export const categoriesSeed: Categorie[] = [
         id: "fff-j25",
         nom: "Warren Zaïre-Emery",
         poste: "MDC",
-        photo:
-          "https://pprodback.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/general/warren.jpg-1772019844518-525760585.jpg",
+        photo: warren,
         naissance: "2006-03-08",
         presences: 10,
         seances: 10,
@@ -534,7 +538,6 @@ export const categoriesSeed: Categorie[] = [
         id: "senior-j1",
         nom: "Mike Maignan",
         poste: "GB",
-        photo: "https://pprodback.ismart-club.com/public/player-avatar.png",
         naissance: "1995-07-02",
         presences: 0,
         seances: 0,
@@ -544,7 +547,6 @@ export const categoriesSeed: Categorie[] = [
         id: "senior-j2",
         nom: "Brice Samba",
         poste: "GB",
-        photo: "https://pprodback.ismart-club.com/public/player-avatar.png",
         naissance: "1994-04-24",
         presences: 0,
         seances: 0,
@@ -554,7 +556,6 @@ export const categoriesSeed: Categorie[] = [
         id: "senior-j3",
         nom: "Lucas Chevalier",
         poste: "GB",
-        photo: "https://pprodback.ismart-club.com/public/player-avatar.png",
         naissance: "2001-11-05",
         presences: 0,
         seances: 0,
@@ -564,7 +565,6 @@ export const categoriesSeed: Categorie[] = [
         id: "senior-j4",
         nom: "William Saliba",
         poste: "DC",
-        photo: "https://pprodback.ismart-club.com/public/player-avatar.png",
         naissance: "2001-03-23",
         presences: 0,
         seances: 0,
@@ -574,7 +574,6 @@ export const categoriesSeed: Categorie[] = [
         id: "senior-j5",
         nom: "Dayot Upamecano",
         poste: "DC",
-        photo: "https://pprodback.ismart-club.com/public/player-avatar.png",
         naissance: "1998-10-26",
         presences: 0,
         seances: 0,
@@ -584,7 +583,6 @@ export const categoriesSeed: Categorie[] = [
         id: "senior-j6",
         nom: "Ibrahima Konaté",
         poste: "DC",
-        photo: "https://pprodback.ismart-club.com/public/player-avatar.png",
         naissance: "1999-05-24",
         presences: 0,
         seances: 0,
@@ -594,7 +592,6 @@ export const categoriesSeed: Categorie[] = [
         id: "senior-j7",
         nom: "Benoît Badiashile",
         poste: "DC",
-        photo: "https://pprodback.ismart-club.com/public/player-avatar.png",
         naissance: "2001-03-25",
         presences: 0,
         seances: 0,
@@ -604,7 +601,6 @@ export const categoriesSeed: Categorie[] = [
         id: "senior-j8",
         nom: "Theo Hernandez",
         poste: "LG",
-        photo: "https://pprodback.ismart-club.com/public/player-avatar.png",
         naissance: "1997-10-05",
         presences: 0,
         seances: 0,
@@ -614,7 +610,6 @@ export const categoriesSeed: Categorie[] = [
         id: "senior-j9",
         nom: "Lucas Hernandez",
         poste: "LG",
-        photo: "https://pprodback.ismart-club.com/public/player-avatar.png",
         naissance: "1996-02-13",
         presences: 0,
         seances: 0,
@@ -624,7 +619,6 @@ export const categoriesSeed: Categorie[] = [
         id: "senior-j10",
         nom: "Jules Koundé",
         poste: "LD",
-        photo: "https://pprodback.ismart-club.com/public/player-avatar.png",
         naissance: "1998-11-11",
         presences: 0,
         seances: 0,
@@ -634,7 +628,6 @@ export const categoriesSeed: Categorie[] = [
         id: "senior-j11",
         nom: "Benjamin Pavard",
         poste: "LD",
-        photo: "https://pprodback.ismart-club.com/public/player-avatar.png",
         naissance: "1996-03-27",
         presences: 0,
         seances: 0,
@@ -644,7 +637,6 @@ export const categoriesSeed: Categorie[] = [
         id: "senior-j12",
         nom: "Malo Gusto",
         poste: "LD",
-        photo: "https://pprodback.ismart-club.com/public/player-avatar.png",
         naissance: "2003-05-18",
         presences: 0,
         seances: 0,
@@ -654,7 +646,6 @@ export const categoriesSeed: Categorie[] = [
         id: "senior-j13",
         nom: "Aurélien Tchouaméni",
         poste: "MDC",
-        photo: "https://pprodback.ismart-club.com/public/player-avatar.png",
         naissance: "2000-01-26",
         presences: 0,
         seances: 0,
@@ -664,7 +655,6 @@ export const categoriesSeed: Categorie[] = [
         id: "senior-j14",
         nom: "Youssouf Fofana",
         poste: "MDC",
-        photo: "https://pprodback.ismart-club.com/public/player-avatar.png",
         naissance: "1999-01-09",
         presences: 0,
         seances: 0,
@@ -674,7 +664,6 @@ export const categoriesSeed: Categorie[] = [
         id: "senior-j15",
         nom: "Eduardo Camavinga",
         poste: "MDC",
-        photo: "https://pprodback.ismart-club.com/public/player-avatar.png",
         naissance: "2002-11-09",
         presences: 0,
         seances: 0,
@@ -684,7 +673,6 @@ export const categoriesSeed: Categorie[] = [
         id: "senior-j16",
         nom: "Adrien Rabiot",
         poste: "MDC",
-        photo: "https://pprodback.ismart-club.com/public/player-avatar.png",
         naissance: "1995-04-02",
         presences: 0,
         seances: 0,
@@ -694,7 +682,6 @@ export const categoriesSeed: Categorie[] = [
         id: "senior-j17",
         nom: "Manu Koné",
         poste: "MDC",
-        photo: "https://pprodback.ismart-club.com/public/player-avatar.png",
         naissance: "2001-05-16",
         presences: 0,
         seances: 0,
@@ -704,7 +691,6 @@ export const categoriesSeed: Categorie[] = [
         id: "senior-j18",
         nom: "Christopher Nkunku",
         poste: "MOC",
-        photo: "https://pprodback.ismart-club.com/public/player-avatar.png",
         naissance: "1997-11-13",
         presences: 0,
         seances: 0,
@@ -714,7 +700,6 @@ export const categoriesSeed: Categorie[] = [
         id: "senior-j19",
         nom: "Rayan Cherki",
         poste: "MOC",
-        photo: "https://pprodback.ismart-club.com/public/player-avatar.png",
         naissance: "2003-08-16",
         presences: 0,
         seances: 0,
@@ -724,7 +709,6 @@ export const categoriesSeed: Categorie[] = [
         id: "senior-j20",
         nom: "Désiré Doué",
         poste: "MOC",
-        photo: "https://pprodback.ismart-club.com/public/player-avatar.png",
         naissance: "2005-06-02",
         presences: 0,
         seances: 0,
@@ -734,7 +718,6 @@ export const categoriesSeed: Categorie[] = [
         id: "senior-j21",
         nom: "Ousmane Dembélé",
         poste: "AD",
-        photo: "https://pprodback.ismart-club.com/public/player-avatar.png",
         naissance: "1997-05-14",
         presences: 0,
         seances: 0,
@@ -744,7 +727,6 @@ export const categoriesSeed: Categorie[] = [
         id: "senior-j22",
         nom: "Kingsley Coman",
         poste: "AD",
-        photo: "https://pprodback.ismart-club.com/public/player-avatar.png",
         naissance: "1996-06-12",
         presences: 0,
         seances: 0,
@@ -754,7 +736,6 @@ export const categoriesSeed: Categorie[] = [
         id: "senior-j23",
         nom: "Kylian Mbappé",
         poste: "AG",
-        photo: "https://pprodback.ismart-club.com/public/player-avatar.png",
         naissance: "1998-12-19",
         presences: 0,
         seances: 0,
@@ -764,7 +745,6 @@ export const categoriesSeed: Categorie[] = [
         id: "senior-j24",
         nom: "Bradley Barcola",
         poste: "AG",
-        photo: "https://pprodback.ismart-club.com/public/player-avatar.png",
         naissance: "2002-09-01",
         presences: 0,
         seances: 0,
@@ -774,7 +754,6 @@ export const categoriesSeed: Categorie[] = [
         id: "senior-j25",
         nom: "Marcus Thuram",
         poste: "AT",
-        photo: "https://pprodback.ismart-club.com/public/player-avatar.png",
         naissance: "1997-08-05",
         presences: 0,
         seances: 0,
@@ -784,7 +763,6 @@ export const categoriesSeed: Categorie[] = [
         id: "senior-j26",
         nom: "Randal Muani",
         poste: "AT",
-        photo: "https://pprodback.ismart-club.com/public/player-avatar.png",
         naissance: "1998-12-04",
         presences: 0,
         seances: 0,
@@ -794,7 +772,6 @@ export const categoriesSeed: Categorie[] = [
         id: "senior-j27",
         nom: "Hugo Ekitike",
         poste: "AT",
-        photo: "https://pprodback.ismart-club.com/public/player-avatar.png",
         naissance: "2002-06-19",
         presences: 0,
         seances: 0,
@@ -804,7 +781,6 @@ export const categoriesSeed: Categorie[] = [
         id: "senior-j28",
         nom: "Wesley Fofana",
         poste: "DC",
-        photo: "https://pprodback.ismart-club.com/public/player-avatar.png",
         naissance: "2000-12-16",
         presences: 0,
         seances: 0,

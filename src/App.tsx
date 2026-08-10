@@ -25,6 +25,10 @@ import { MatchScreen } from "@/features/planification/MatchScreen"
 import { ResultatsScreen } from "@/features/resultats/ResultatsScreen"
 import { MessagerieScreen } from "@/features/messagerie/MessagerieScreen"
 import { ObjectifsScreen } from "@/features/objectifs/ObjectifsScreen"
+import { OrganigrammeScreen } from "@/features/structuration/OrganigrammeScreen"
+import { TachesScreen } from "@/features/structuration/TachesScreen"
+import { FichesPosteScreen } from "@/features/fiches-poste/FichesPosteScreen"
+import { FichePosteDetailScreen } from "@/features/fiches-poste/FichePosteDetailScreen"
 import { CategoriesScreen } from "@/features/pole-technique/CategoriesScreen"
 import { CategoryDetailScreen } from "@/features/pole-technique/CategoryDetailScreen"
 import { ProcedesScreen } from "@/features/pole-technique/ProcedesScreen"
@@ -54,6 +58,7 @@ import { DesignSystemScreen } from "@/features/design-system/DesignSystemScreen"
 import { AccueilScreen } from "@/features/accueil/AccueilScreen"
 import { LoginScreen } from "@/features/auth/LoginScreen"
 import { LandingScreen } from "@/features/landing/LandingScreen"
+import { ModuleDetailScreen } from "@/features/landing/ModuleDetailScreen"
 import { PartenairesListScreen } from "@/features/sponsor/PartenairesListScreen"
 import { CampagnesScreen } from "@/features/sponsor/CampagnesScreen"
 import { NouvelleCampagneScreen } from "@/features/sponsor/NouvelleCampagneScreen"
@@ -70,7 +75,10 @@ const CUSTOM_ROUTES = new Set([
   "/planification",
   "/resultats",
   "/messagerie",
+  "/structuration/organigramme",
+  "/structuration/taches",
   "/structuration/objectifs-techniques",
+  "/structuration/fiches-poste",
   "/pole-technique/categories",
   "/pole-technique/procedes",
   "/pole-technique/programmation",
@@ -109,6 +117,12 @@ export default function App() {
               iSmart Coach landing design system (Bebas / Syne / DM Sans), not
               the app's. Styles are scoped under `.lp` so the two don't mix. */}
           <Route path="/landing" element={<LandingScreen />} />
+          {/* One page per module, opened by the "Voir les détails" button on a
+              module card. Same `.lp` design system as the landing page. */}
+          <Route
+            path="/landing/modules/:slug"
+            element={<ModuleDetailScreen />}
+          />
 
           <Route element={<AppShell />}>
             {/* Accueil — quick-access grid of the club's modules. */}
@@ -171,6 +185,33 @@ export default function App() {
             {/* Messagerie — two-pane chat: conversation list + chat, three
                 conversation types (groupes / sessions / matchs) via tabs. */}
             <Route path="messagerie" element={<MessagerieScreen />} />
+
+            {/* Structuration — Organigramme: the club's unités on a canvas,
+                with their membres, tâches and relations transverses. */}
+            <Route
+              path="structuration/organigramme"
+              element={<OrganigrammeScreen />}
+            />
+
+            {/* Structuration — Gestion des tâches: three views over one tâche
+                list (hiérarchie / projets / kanban), one URL each. */}
+            <Route
+              path="structuration/taches"
+              element={<Navigate to="hierarchie" replace />}
+            />
+            <Route path="structuration/taches/:vue" element={<TachesScreen />} />
+
+            {/* Structuration — Fiche de poste: the club's referential of fiches,
+                chartes, règlements and listes des rôles. A row opens the
+                document's page: its identity + the membres it engages. */}
+            <Route
+              path="structuration/fiches-poste"
+              element={<FichesPosteScreen />}
+            />
+            <Route
+              path="structuration/fiches-poste/:id"
+              element={<FichePosteDetailScreen />}
+            />
 
             {/* Structuration — Objectifs techniques: reviewable objectives table. */}
             <Route

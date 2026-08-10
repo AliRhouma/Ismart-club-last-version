@@ -373,4 +373,44 @@
   .animate-fade-up {
     animation: fade-up 0.32s cubic-bezier(0.4, 0, 0.2, 1);
   }
+  /* Organigramme canvas — a relation's label pill is its only affordance
+     (rename / delete), so it has to float above the unité cards a long
+     transverse link may pass behind. React Flow paints its label layer under
+     the nodes by default, hence this one override. */
+  .org-flow .react-flow__edgelabel-renderer {
+    z-index: 1200;
+  }
+  /* Organigramme canvas — touch dragging.
+     React Flow sets `touch-action: none` on the node wrapper, but the property
+     is NOT inherited: every element we draw inside a card (the header, the
+     membre rows, the avatars) falls back to `touch-action: auto`. A finger
+     landing there is claimed by the AppShell's scroll container before d3-drag
+     sees a single `touchmove`, which cancels the gesture — the card simply
+     never moves on a real phone. Opting the whole subtree out fixes it.
+     `overscroll-behavior` then stops a pan at the canvas edge from bouncing
+     the page underneath. */
+  .org-flow,
+  .org-flow * {
+    touch-action: none;
+  }
+  /* A long press on a card's text would otherwise start an iOS/Android text
+     selection instead of a drag. The rename input keeps its own selection. */
+  .org-flow .react-flow__node {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+  .org-flow .react-flow__node input {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+  .org-flow {
+    overscroll-behavior: contain;
+  }
+  /* …except the panels layered on top of the canvas, which stay tappable and
+     scrollable as normal UI. */
+  .org-flow .react-flow__panel,
+  .org-flow .react-flow__panel * {
+    touch-action: auto;
+  }
 }

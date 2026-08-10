@@ -9,6 +9,11 @@ import {
   type Composition,
   type CompositionJoueur,
 } from "@/data/seed/compositions"
+import {
+  STADE_H,
+  STADE_W,
+} from "@/features/pole-technique/composition/TerrainEditeur"
+import stadeFoot from "@/assets/terrain/stade-foot.png"
 import { PageHeader } from "@/components/kit/PageHeader"
 import { EmptyState } from "@/components/kit/EmptyState"
 import { Button } from "@/components/ui/button"
@@ -28,9 +33,8 @@ const labelCls =
   "block font-ui text-[0.72rem] font-medium tracking-[0.02em] text-ink"
 
 /**
- * Pitch board. Coordinates are % of the pitch, own goal at the top — see
- * `seed/compositions`. Shared by the list cards (compact) and the detail
- * screen (full, with names).
+ * Read-only board for the list cards. Same stadium and same 1206×802 ratio as
+ * the editor, so a composition looks identical wherever it is shown.
  */
 export function Terrain({
   joueurs,
@@ -44,14 +48,17 @@ export function Terrain({
   selectedId?: string | null
 }) {
   return (
-    <div className="relative aspect-[7/9] w-full overflow-hidden rounded-lg border border-border bg-surface-nested">
-      {/* Pitch markings — drawn, never an image, so they follow the theme. */}
-      <div aria-hidden className="absolute inset-3 rounded-sm border border-border-second/70">
-        <div className="absolute top-1/2 right-0 left-0 border-t border-border-second/70" />
-        <div className="absolute top-1/2 left-1/2 size-[22%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-border-second/70" />
-        <div className="absolute top-0 left-1/2 h-[16%] w-[52%] -translate-x-1/2 border-x border-b border-border-second/70" />
-        <div className="absolute bottom-0 left-1/2 h-[16%] w-[52%] -translate-x-1/2 border-x border-t border-border-second/70" />
-      </div>
+    <div
+      style={{ aspectRatio: `${STADE_W} / ${STADE_H}` }}
+      className="relative w-full overflow-hidden rounded-lg border border-border"
+    >
+      <img
+        src={stadeFoot}
+        alt=""
+        aria-hidden
+        draggable={false}
+        className="pointer-events-none absolute inset-0 size-full select-none"
+      />
 
       {joueurs.map((j) => {
         const on = j.id === selectedId
@@ -72,11 +79,11 @@ export function Terrain({
           >
             <span
               className={cn(
-                "mx-auto flex items-center justify-center overflow-hidden rounded-full border font-ui text-ink transition-colors",
-                compact ? "size-5 text-[0.5rem]" : "size-9 text-[0.65rem]",
+                "mx-auto flex items-center justify-center overflow-hidden rounded-full border-2 font-ui text-white transition-colors",
+                compact ? "size-5 text-[0.45rem]" : "size-9 text-[0.6rem]",
                 on
-                  ? "border-brand-blue-600 bg-brand-blue-600/20"
-                  : "border-border-strong bg-background",
+                  ? "border-brand-blue-600 bg-brand-blue-600"
+                  : "border-white/70 bg-black/55",
               )}
             >
               {j.photo ? (
@@ -86,7 +93,7 @@ export function Terrain({
               )}
             </span>
             {!compact ? (
-              <span className="mt-1 block max-w-20 truncate font-ui text-[0.62rem] text-ink-muted">
+              <span className="mt-1 block max-w-20 truncate rounded-sm bg-black/55 px-1 font-ui text-[0.58rem] text-white">
                 {j.nom.split(" ").slice(-1)[0]}
               </span>
             ) : null}

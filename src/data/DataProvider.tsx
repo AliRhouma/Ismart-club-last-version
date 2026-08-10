@@ -19,6 +19,7 @@ import { seasonsSeed, type Season } from "@/data/seed/seasons"
 import { entriesSeed, type Entry } from "@/data/seed/entries"
 import { monthsSeed, type Month } from "@/data/seed/months"
 import { documentsSeed, type Document } from "@/data/seed/documents"
+import { fichesSeed, type Fiche } from "@/data/seed/fichesPoste"
 import {
   categoriesSeed,
   type Categorie,
@@ -60,6 +61,24 @@ import { matchDetailsSeed, type MatchDetail } from "@/data/seed/matches"
 import { objectifsSeed, type Objectif, type ObjectifStatut } from "@/data/seed/objectifs"
 import { notificationsSeed, type AppNotif } from "@/data/seed/notifications"
 import { educateursSeed, type Educateur } from "@/data/seed/educateurs"
+import {
+  membresPool,
+  relationsSeed,
+  unitesSeed,
+  type OrgAffectation,
+  type OrgMembre,
+  type OrgRelation,
+  type OrgUnite,
+} from "@/data/seed/organigramme"
+import {
+  projetsSeed,
+  sousProjetsSeed,
+  tachesSeed,
+  type Projet,
+  type SousProjet,
+  type SousTache,
+  type Tache,
+} from "@/data/seed/taches"
 import {
   SUGGESTED_OFFERS,
   campaignsSeed,
@@ -228,6 +247,8 @@ export type DataContextValue = {
   months: Month[]
   /** Club documents catalogue (newest first). */
   documents: Document[]
+  /** Fiches & Documents — the club's referential, each tied to its membres. */
+  fiches: Fiche[]
   /** Procédés taxonomy — groupes ▸ phases ▸ principes (read-only referential). */
   procedeGroupes: ProcedeGroupe[]
   procedePhases: ProcedePhase[]
@@ -264,6 +285,16 @@ export type DataContextValue = {
   reviewObjectifId: string | null
   /** Éducateurs (coaches) — Ressources humaines. */
   educateurs: Educateur[]
+  /** Organigramme — the club's unités (a tree via `parentId`) placed on a canvas. */
+  orgUnites: OrgUnite[]
+  /** Organigramme — named transverse links between two unités. */
+  orgRelations: OrgRelation[]
+  /** Everyone who can be affected to a unité (read-only pool). */
+  orgMembres: OrgMembre[]
+  /** Gestion des tâches — projets, their sous-projets, and one flat tâche list. */
+  projets: Projet[]
+  sousProjets: SousProjet[]
+  taches: Tache[]
   /** Sponsoring offers (Or / Argent / Bronze…), sorted by the screens. */
   offers: Offer[]
   /** Partenaires signed on an offer (each takes one of its seats). */
@@ -300,6 +331,9 @@ export type DataContextValue = {
   /** Add a document; returns the new id so the caller can open its editor. */
   addDocument: (doc: Omit<Document, "id">) => string
   removeDocument: (id: string) => void
+  /** Add a fiche; returns the new id so the caller can open its detail page. */
+  addFiche: (fiche: Omit<Fiche, "id">) => string
+  removeFiche: (id: string) => void
   /** Add a procédé to the library; returns the new id so the caller can open it. */
   addProcede: (procede: Omit<ProcedeItem, "id">) => string
   updateProcede: (id: string, patch: Partial<ProcedeItem>) => void
@@ -349,6 +383,40 @@ export type DataContextValue = {
   addEducateur: (edu: Omit<Educateur, "id">) => string
   updateEducateur: (id: string, patch: Partial<Educateur>) => void
   removeEducateur: (id: string) => void
+  /** Add a unité (racine when `parentId` is null); returns the new id. */
+  addOrgUnite: (unite: Omit<OrgUnite, "id">) => string
+  updateOrgUnite: (id: string, patch: Partial<OrgUnite>) => void
+  /** Delete a unité; its children are re-attached to its own parent. */
+  removeOrgUnite: (id: string) => void
+  /** Write back the positions computed by the auto-layout / a drag. */
+  setOrgPositions: (positions: Record<string, { x: number; y: number }>) => void
+  /** Replace the membres affected to a unité (the picker saves the whole set). */
+  setOrgUniteMembres: (id: string, membres: OrgAffectation[]) => void
+  /** Add a relation transverse between two unités; returns the new id. */
+  addOrgRelation: (relation: Omit<OrgRelation, "id">) => string
+  updateOrgRelation: (id: string, patch: Partial<OrgRelation>) => void
+  removeOrgRelation: (id: string) => void
+  /** Add a projet (id filled in); returns the new id. */
+  addProjet: (projet: Omit<Projet, "id">) => string
+  updateProjet: (id: string, patch: Partial<Projet>) => void
+  /** Delete a projet with its sous-projets and every tâche underneath. */
+  removeProjet: (id: string) => void
+  addSousProjet: (sousProjet: Omit<SousProjet, "id">) => string
+  /** Add a tâche (id filled in); returns the new id. */
+  addTache: (tache: Omit<Tache, "id">) => string
+  updateTache: (id: string, patch: Partial<Tache>) => void
+  removeTache: (id: string) => void
+  /** Move a tâche to another kanban column. */
+  setTacheStatut: (id: string, statut: Tache["statut"]) => void
+  /** Replace a tâche's sous-tâches (the edit modal saves the whole list). */
+  setSousTaches: (tacheId: string, sousTaches: SousTache[]) => void
+  /** Tick / untick one sous-tâche in place. */
+  toggleSousTache: (tacheId: string, sousTacheId: string) => void
+  /** Move one tâche from a (unité, membre) to another one. */
+  moveOrgTache: (
+    from: { uniteId: string; membreId: string; tacheId: string },
+    to: { uniteId: string; membreId: string },
+  ) => void
   /** Add a sponsoring offer (id filled in); returns the new id. */
   addOffer: (offer: Omit<Offer, "id">) => string
   updateOffer: (id: string, patch: Partial<Offer>) => void
@@ -443,6 +511,9 @@ export function DataProvider({ children }: { children: ReactNode }) {
   // Documents only add/remove (the editor is a placeholder), so plain state is
   // enough. New documents go to the front (most recent first).
   const [documents, setDocuments] = useState<Document[]>(documentsSeed)
+  // Fiches & Documents: same add/remove shape — a fiche is created from the
+  // modal and read on its detail page; its membres come from the picker.
+  const [fiches, setFiches] = useState<Fiche[]>(fichesSeed)
   // Procédés: the taxonomy (groupes ▸ phases ▸ principes) is a fixed
   // referential, only the library itself add / edit / removes. New procédés go
   // to the front so a freshly created one leads its principe's grid.
@@ -490,6 +561,18 @@ export function DataProvider({ children }: { children: ReactNode }) {
   // Éducateurs add / edit / remove, so plain in-memory state is enough. New
   // rows get a uuid; seed rows keep their readable slug ids.
   const [educateurs, setEducateurs] = useState<Educateur[]>(educateursSeed)
+  // Organigramme — unités (tree + canvas position + affectations) and the
+  // transverse relations between them. The membres pool is read-only: people
+  // are created elsewhere in the product, the organigramme only places them.
+  const [orgUnites, setOrgUnites] = useState<OrgUnite[]>(unitesSeed)
+  const [orgRelations, setOrgRelations] = useState<OrgRelation[]>(relationsSeed)
+  const [orgMembres] = useState<OrgMembre[]>(membresPool)
+  // Gestion des tâches — projets / sous-projets / tâches. Tâches stay flat so
+  // the kanban, the hierarchy and the project cards are three filters over one
+  // list rather than three copies of the same work.
+  const [projets, setProjets] = useState<Projet[]>(projetsSeed)
+  const [sousProjets, setSousProjets] = useState<SousProjet[]>(sousProjetsSeed)
+  const [taches, setTaches] = useState<Tache[]>(tachesSeed)
   // Sponsoring offers — add / edit / remove / duplicate, plain in-memory state.
   // Seed is empty: the module opens on its empty state until the club joins.
   // Sponsoring — the club has already joined the program, so offers and their
@@ -547,6 +630,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
       entries,
       months,
       documents,
+      fiches,
       procedeGroupes,
       procedePhases,
       procedePrincipes,
@@ -566,6 +650,12 @@ export function DataProvider({ children }: { children: ReactNode }) {
       notifications,
       reviewObjectifId,
       educateurs,
+      orgUnites,
+      orgRelations,
+      orgMembres,
+      projets,
+      sousProjets,
+      taches,
       offers,
       partners,
       sponsorAccounts,
@@ -608,6 +698,13 @@ export function DataProvider({ children }: { children: ReactNode }) {
       },
       removeDocument: (id) =>
         setDocuments((prev) => prev.filter((doc) => doc.id !== id)),
+      addFiche: (fiche) => {
+        const id = crypto.randomUUID()
+        setFiches((prev) => [{ id, ...fiche }, ...prev])
+        return id
+      },
+      removeFiche: (id) =>
+        setFiches((prev) => prev.filter((fiche) => fiche.id !== id)),
       addProcede: (procede) => {
         const id = crypto.randomUUID()
         setProcedes((prev) => [{ id, ...procede }, ...prev])
@@ -891,6 +988,141 @@ export function DataProvider({ children }: { children: ReactNode }) {
         ),
       removeEducateur: (id) =>
         setEducateurs((prev) => prev.filter((edu) => edu.id !== id)),
+      addOrgUnite: (unite) => {
+        const id = crypto.randomUUID()
+        setOrgUnites((prev) => [...prev, { id, ...unite }])
+        return id
+      },
+      updateOrgUnite: (id, patch) =>
+        setOrgUnites((prev) =>
+          prev.map((u) => (u.id === id ? { ...u, ...patch } : u)),
+        ),
+      removeOrgUnite: (id) => {
+        setOrgUnites((prev) => {
+          const gone = prev.find((u) => u.id === id)
+          if (!gone) return prev
+          // Children are re-attached to the deleted unité's own parent, so the
+          // tree never breaks into orphan branches.
+          return prev
+            .filter((u) => u.id !== id)
+            .map((u) =>
+              u.parentId === id ? { ...u, parentId: gone.parentId } : u,
+            )
+        })
+        // Its transverse relations go with it.
+        setOrgRelations((prev) =>
+          prev.filter((r) => r.sourceId !== id && r.targetId !== id),
+        )
+      },
+      setOrgPositions: (positions) =>
+        setOrgUnites((prev) =>
+          prev.map((u) => (positions[u.id] ? { ...u, ...positions[u.id] } : u)),
+        ),
+      setOrgUniteMembres: (id, membres) =>
+        setOrgUnites((prev) =>
+          prev.map((u) => (u.id === id ? { ...u, membres } : u)),
+        ),
+      addOrgRelation: (relation) => {
+        const id = crypto.randomUUID()
+        setOrgRelations((prev) => [...prev, { id, ...relation }])
+        return id
+      },
+      updateOrgRelation: (id, patch) =>
+        setOrgRelations((prev) =>
+          prev.map((r) => (r.id === id ? { ...r, ...patch } : r)),
+        ),
+      removeOrgRelation: (id) =>
+        setOrgRelations((prev) => prev.filter((r) => r.id !== id)),
+      addProjet: (projet) => {
+        const id = crypto.randomUUID()
+        setProjets((prev) => [{ id, ...projet }, ...prev])
+        return id
+      },
+      updateProjet: (id, patch) =>
+        setProjets((prev) =>
+          prev.map((p) => (p.id === id ? { ...p, ...patch } : p)),
+        ),
+      removeProjet: (id) => {
+        // A sous-projet and a tâche only exist through their projet.
+        const orphans = new Set(
+          sousProjets.filter((sp) => sp.projetId === id).map((sp) => sp.id),
+        )
+        setProjets((prev) => prev.filter((p) => p.id !== id))
+        setSousProjets((prev) => prev.filter((sp) => sp.projetId !== id))
+        setTaches((prev) => prev.filter((t) => !orphans.has(t.sousProjetId)))
+      },
+      addSousProjet: (sousProjet) => {
+        const id = crypto.randomUUID()
+        setSousProjets((prev) => [...prev, { id, ...sousProjet }])
+        return id
+      },
+      addTache: (tache) => {
+        const id = crypto.randomUUID()
+        setTaches((prev) => [{ id, ...tache }, ...prev])
+        return id
+      },
+      updateTache: (id, patch) =>
+        setTaches((prev) =>
+          prev.map((t) => (t.id === id ? { ...t, ...patch } : t)),
+        ),
+      removeTache: (id) => setTaches((prev) => prev.filter((t) => t.id !== id)),
+      setTacheStatut: (id, statut) =>
+        setTaches((prev) =>
+          prev.map((t) =>
+            t.id !== id
+              ? t
+              : {
+                  ...t,
+                  statut,
+                  // Closing a tâche closes what's left under it — a "Terminée"
+                  // card with open sous-tâches reads as a bug.
+                  sousTaches:
+                    statut === "Terminée"
+                      ? t.sousTaches.map((s) => ({ ...s, faite: true }))
+                      : t.sousTaches,
+                },
+          ),
+        ),
+      setSousTaches: (tacheId, sousTaches) =>
+        setTaches((prev) =>
+          prev.map((t) => (t.id === tacheId ? { ...t, sousTaches } : t)),
+        ),
+      toggleSousTache: (tacheId, sousTacheId) =>
+        setTaches((prev) =>
+          prev.map((t) =>
+            t.id !== tacheId
+              ? t
+              : {
+                  ...t,
+                  sousTaches: t.sousTaches.map((s) =>
+                    s.id === sousTacheId ? { ...s, faite: !s.faite } : s,
+                  ),
+                },
+          ),
+        ),
+      moveOrgTache: (from, to) =>
+        setOrgUnites((prev) => {
+          const source = prev.find((u) => u.id === from.uniteId)
+          const tache = source?.membres
+            .find((a) => a.membreId === from.membreId)
+            ?.taches.find((t) => t.id === from.tacheId)
+          if (!tache) return prev
+          return prev.map((u) => ({
+            ...u,
+            membres: u.membres.map((a) => {
+              if (u.id === from.uniteId && a.membreId === from.membreId) {
+                return {
+                  ...a,
+                  taches: a.taches.filter((t) => t.id !== from.tacheId),
+                }
+              }
+              if (u.id === to.uniteId && a.membreId === to.membreId) {
+                return { ...a, taches: [...a.taches, tache] }
+              }
+              return a
+            }),
+          }))
+        }),
       addOffer: (offer) => {
         const id = crypto.randomUUID()
         setOffers((prev) => [...prev, { id, ...offer }])
@@ -1115,6 +1347,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
       entries,
       months,
       documents,
+      fiches,
       procedeGroupes,
       procedePhases,
       procedePrincipes,
@@ -1133,6 +1366,12 @@ export function DataProvider({ children }: { children: ReactNode }) {
       notifications,
       reviewObjectifId,
       educateurs,
+      orgUnites,
+      orgRelations,
+      orgMembres,
+      projets,
+      sousProjets,
+      taches,
       offers,
       partners,
       sponsorAccounts,
