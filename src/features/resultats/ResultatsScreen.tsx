@@ -65,9 +65,9 @@ export function ResultatsScreen() {
         subtitle="Matchs joués et leurs scores, par compétition et par catégorie."
       />
 
-      {/* Sponsor banner — the calendar_banner ad slot, wired to running campaigns. */}
+      {/* Sponsor banner — the planification ad slot, wired to running campaigns. */}
       <div className="mt-6">
-        <AdBanner />
+        <AdBanner space="match_detail" />
       </div>
 
       {played.length === 0 ? (

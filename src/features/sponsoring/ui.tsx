@@ -1,11 +1,9 @@
 import type { ReactNode } from "react"
 import {
-  BookUser,
+  LayoutDashboard,
   CalendarDays,
   Check,
-  Newspaper,
   Trophy,
-  Smartphone,
   Bell,
   List,
   Dumbbell,
@@ -86,11 +84,10 @@ export function TierBadge({
 
 /* ── Icon per ad-space slot (for the compact slot row) ──────────────────── */
 export const SLOT_ICON: Record<SlotKey, LucideIcon> = {
-  partners_page: BookUser,
-  calendar_banner: CalendarDays,
-  home_feed: Newspaper,
+  accueil: LayoutDashboard,
+  planification: CalendarDays,
   match_detail: Trophy,
-  splash: Smartphone,
+  messagerie: MessageSquare,
   notification: Bell,
 }
 

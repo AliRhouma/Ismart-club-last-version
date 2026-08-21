@@ -112,9 +112,9 @@ export function MatchScreen() {
 
       <MatchHeader match={match} />
 
-      {/* Sponsor banner — the calendar_banner ad slot, wired to running
+      {/* Sponsor banner — the planification ad slot, wired to running
           campaigns (shared with the Planification calendar). */}
-      <AdBanner />
+      <AdBanner space="match_detail" />
 
       <MatchTabs eventId={match.eventId} tabs={tabs} active={activeTab} />
 

@@ -13,21 +13,20 @@ import { PARTNERSHIPS, type Tier } from "@/features/sponsor/mock"
 /** The ad spaces each tier grants — mirrors CLUB_OFFERS.includes. */
 export const TIER_SLOTS: Record<Tier, SlotKey[]> = {
   Or: [
-    "partners_page",
-    "calendar_banner",
-    "home_feed",
+    "messagerie",
+    "planification",
+    "accueil",
     "match_detail",
-    "splash",
     "notification",
   ],
   Argent: [
-    "partners_page",
-    "calendar_banner",
-    "home_feed",
+    "messagerie",
+    "planification",
+    "accueil",
     "match_detail",
     "notification",
   ],
-  Bronze: ["partners_page", "calendar_banner"],
+  Bronze: ["messagerie", "planification"],
 }
 
 /** What the sponsor wants out of the campaign — drives nothing, it's a label. */
@@ -62,11 +61,10 @@ export type ObjectifKey = (typeof OBJECTIFS)[number]["key"]
  * (the prototype never validates an upload).
  */
 export const SLOT_DIMENSIONS: Record<SlotKey, string> = {
-  partners_page: "400 × 400 px · logo carré",
-  calendar_banner: "1200 × 300 px · format 4:1",
-  home_feed: "1200 × 675 px · format 16:9",
+  messagerie: "400 × 400 px · logo carré",
+  planification: "1200 × 300 px · format 4:1",
+  accueil: "1200 × 675 px · format 16:9",
   match_detail: "1080 × 340 px · bannière",
-  splash: "1080 × 1920 px · plein écran vertical",
   notification: "256 × 256 px · icône carrée",
 }
 
@@ -76,21 +74,26 @@ export const SLOT_DIMENSIONS: Record<SlotKey, string> = {
  * (the prototype computes nothing).
  */
 export const SLOT_SHARE: Record<SlotKey, string> = {
-  partners_page: "100 %",
-  calendar_banner: "20 %",
-  home_feed: "16 %",
+  messagerie: "100 %",
+  planification: "20 %",
+  accueil: "16 %",
   match_detail: "25 %",
-  splash: "50 %",
   notification: "10 %",
 }
 
-/** One ad space of a draft: the visual and the link behind it. */
+/**
+ * One ad space of a draft. A `visuel` space carries TWO artworks — one per
+ * version of the app, each at its own dimension; a `message` space carries no
+ * image at all and reads its `headline` as the message the parent gets.
+ */
 export type DraftSlot = {
   key: SlotKey
-  /** Headline drawn on the mock creative — stands in for the uploaded image. */
+  /** The message text on a `message` space; the creative's line otherwise. */
   headline: string
-  /** Filename of the "uploaded" visual, or "" while the slot is empty. */
+  /** Filename of the "uploaded" web visual, or "" while the slot is empty. */
   image: string
+  /** Filename of the "uploaded" mobile visual. */
+  mobileImage: string
   link: string
 }
 
@@ -141,6 +144,7 @@ export function slotsForTier(tier: Tier): DraftSlot[] {
     key,
     headline: "",
     image: "",
+    mobileImage: "",
     link: "",
   }))
 }
@@ -190,7 +194,8 @@ export function draftFromCampaign(
         ? {
             ...s,
             headline: headlines[i],
-            image: `${s.key}-visuel.png`,
+            image: `${s.key}-web.png`,
+            mobileImage: `${s.key}-mobile.png`,
             link: "https://delice.tn/campagne",
           }
         : s,

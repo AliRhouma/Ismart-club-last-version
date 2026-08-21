@@ -441,7 +441,7 @@ export function PlanificationScreen() {
         }
       />
 
-      {/* Sponsor banner — the calendar_banner ad slot, wired to running campaigns. */}
+      {/* Sponsor banner — the planification ad slot, wired to running campaigns. */}
       <AdBanner />
 
       {/* Toolbar: month nav (left) + type filter (right). */}

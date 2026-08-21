@@ -99,7 +99,7 @@ export function SeanceScreen() {
 
       <SeanceHeader detail={detail} />
 
-      {/* Sponsor banner — the same calendar_banner ad slot, reused here. */}
+      {/* Sponsor banner — the same planification ad slot, reused here. */}
       <AdBanner />
 
       <SeanceTabs eventId={detail.eventId} tabs={tabs} active={activeTab} />

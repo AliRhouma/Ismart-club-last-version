@@ -12,7 +12,6 @@ import {
   ImageIcon,
   Ruler,
   Send,
-  Smartphone,
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -21,20 +20,8 @@ import { PageHeader } from "@/components/kit/PageHeader"
 import { EmptyState } from "@/components/kit/EmptyState"
 import { Avatar } from "@/components/kit/Avatar"
 import { FormSheet } from "@/components/kit/FormSheet"
-import {
-  AdSlot,
-  AnnuaireMock,
-  CalendarMock,
-  EmplacementCard,
-  FeedMock,
-  MatchMock,
-  NotificationMock,
-  PhoneFrame,
-  SplashMock,
-  WebFrame,
-  Line,
-} from "@/features/sponsoring/emplacementMocks"
-import { Creative } from "@/features/sponsoring/campaignUi"
+import { EmplacementCard } from "@/features/sponsoring/emplacementMocks"
+import { SurfacePair } from "@/features/sponsoring/appSurfaces"
 import {
   CAMPAIGN_REQUESTS,
   SLOT_DIMENSIONS,
@@ -343,8 +330,8 @@ function RequestDetail({
         ressource (fichier, lien) et la dimension attendue.
       </p>
 
-      {/* ── The six surfaces, read-only ───────────────────────────────── */}
-      <div className="mt-5 grid grid-cols-1 gap-8 lg:grid-cols-2">
+      {/* ── The surfaces, read-only, in both versions ─────────────────── */}
+      <div className="mt-5 flex flex-col gap-6">
         {request.slots.map((slot) => (
           <EmplacementCard
             key={slot.key}
@@ -353,7 +340,18 @@ function RequestDetail({
             headerRight={<DimensionChip slotKey={slot.key} />}
             footer={<ResourceRow slot={slot} />}
           >
-            <SlotSurface slot={slot} sponsor={request.sponsor} color={request.color} />
+            <SurfacePair
+              slotKey={slot.key}
+              ad={
+                slot.image || slot.headline
+                  ? {
+                      sponsor: request.sponsor,
+                      color: request.color,
+                      headline: slot.headline || slot.image,
+                    }
+                  : null
+              }
+            />
           </EmplacementCard>
         ))}
       </div>
@@ -553,145 +551,4 @@ function Toast({ msg }: { msg: string }) {
       <span className="font-body text-[0.84rem] text-ink">{msg}</span>
     </div>
   )
-}
-
-/* ── One slot, drawn read-only in its real surface ──────────────────────── */
-function SlotSurface({
-  slot,
-  sponsor,
-  color,
-}: {
-  slot: RequestSlot
-  sponsor: string
-  color: string
-}) {
-  const empty = slot.image === ""
-
-  const creative = (className: string, compact?: boolean) => (
-    <Creative
-      name={sponsor}
-      headline={slot.headline || slot.image}
-      color={color}
-      className={className}
-      compact={compact}
-    />
-  )
-
-  switch (slot.key) {
-    case "partners_page":
-      return (
-        <WebFrame title="ismartclub.tn — Nos partenaires">
-          <AnnuaireMock
-            slot={
-              empty ? (
-                <AdSlot label="Espace laissé vide" className="size-full" />
-              ) : (
-                creative("size-full", true)
-              )
-            }
-          />
-        </WebFrame>
-      )
-
-    case "calendar_banner":
-      return (
-        <PhoneFrame>
-          <CalendarMock
-            slot={
-              empty ? (
-                <AdSlot label="Espace laissé vide" className="w-full" />
-              ) : (
-                creative("h-[54px]", true)
-              )
-            }
-          />
-        </PhoneFrame>
-      )
-
-    case "home_feed":
-      return (
-        <PhoneFrame>
-          <FeedMock
-            slot={
-              empty ? (
-                <AdSlot label="Espace laissé vide" className="w-full" />
-              ) : (
-                creative("h-[86px]")
-              )
-            }
-          />
-        </PhoneFrame>
-      )
-
-    case "match_detail":
-      return (
-        <PhoneFrame>
-          <MatchMock
-            slot={
-              empty ? (
-                <AdSlot label="Espace laissé vide" className="w-full" />
-              ) : (
-                creative("h-[52px]", true)
-              )
-            }
-          />
-        </PhoneFrame>
-      )
-
-    case "splash":
-      return (
-        <PhoneFrame dark>
-          <SplashMock
-            slot={
-              empty ? (
-                <AdSlot
-                  icon={Smartphone}
-                  label="Espace laissé vide"
-                  tall
-                  className="w-full"
-                />
-              ) : (
-                creative("h-[240px] w-full")
-              )
-            }
-          />
-        </PhoneFrame>
-      )
-
-    case "notification":
-      return (
-        <PhoneFrame dark>
-          <NotificationMock
-            slot={
-              empty ? (
-                <AdSlot label="Espace laissé vide" className="w-full" />
-              ) : (
-                <div className="rounded-xl border border-border-strong bg-surface px-3 py-2.5">
-                  <div className="flex items-center gap-2">
-                    <span
-                      className="flex size-5 items-center justify-center rounded-[4px] font-ui text-[0.45rem] font-semibold text-white"
-                      style={{ backgroundColor: color }}
-                    >
-                      {sponsor.slice(0, 2).toUpperCase()}
-                    </span>
-                    <span className="truncate font-ui text-[0.6rem] font-medium text-ink">
-                      {sponsor}
-                    </span>
-                    <span className="ml-auto font-body text-[0.5rem] text-ink-disabled">
-                      maintenant
-                    </span>
-                  </div>
-                  <p className="mt-1.5 font-body text-[0.6rem] leading-snug text-ink-subtle">
-                    {slot.headline || slot.image}
-                  </p>
-                </div>
-              )
-            }
-          />
-        </PhoneFrame>
-      )
-
-    default:
-      return <Line />
-  }
 }

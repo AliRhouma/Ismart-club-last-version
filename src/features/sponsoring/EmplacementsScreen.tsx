@@ -1,24 +1,14 @@
 import { useEffect, useState } from "react"
-import { Link2, Radio, Smartphone, Timer } from "lucide-react"
+import { LayoutTemplate, Link2, Radio, Sparkles, Timer } from "lucide-react"
 
 import { cn } from "@/lib/utils"
-import { PageHeader } from "@/components/kit/PageHeader"
-import { BackButton } from "@/components/kit/BackButton"
+import { useNavigate } from "react-router-dom"
+
+import { useData } from "@/data/useData"
+import { SponsoringShell } from "@/features/sponsoring/SponsoringShell"
 import { SLOT_DEFS, type SlotKey } from "@/data/seed/sponsoring"
-import {
-  AdSlot,
-  AnnuaireMock,
-  CalendarMock,
-  EmplacementCard,
-  FeedMock,
-  MatchMock,
-  NotificationEmptySlot,
-  NotificationMock,
-  PhoneFrame,
-  SplashMock,
-  WebFrame,
-} from "@/features/sponsoring/emplacementMocks"
-import { Creative } from "@/features/sponsoring/campaignUi"
+import { EmplacementCard } from "@/features/sponsoring/emplacementMocks"
+import { SurfacePair } from "@/features/sponsoring/appSurfaces"
 import {
   endTone,
   RUNNING_BY_SLOT,
@@ -26,32 +16,61 @@ import {
 } from "@/features/sponsoring/emplacementsRunningMock"
 
 /**
- * Screen — "Espaces publicitaires". One card per ad placement, showing WHERE a
- * sponsor appears in the club app AND, now, WHAT is being served there right
- * now: the visuals in rotation, each with its share of the space, the campagne
- * and the partenaire behind it, and when it stops.
+ * Sponsoring ▸ Espaces publicitaires — the module's second tab (it took the
+ * Packs seat: what the club sells day to day is the space, not the formula).
  *
- * The surfaces themselves live in emplacementMocks and are shared with the
- * campaign screens; only the slot content changes. A space with nothing running
- * falls back to the "Espace disponible" placeholder (see `splash`).
+ * One card per ad placement, showing WHERE a sponsor appears in the club app
+ * AND WHAT is being served there right now: the visuals in rotation, each with
+ * its share of the space, the campagne and the partenaire behind it, and when
+ * it stops. The packs themselves are one click away, in the toolbar.
+ *
+ * Every space is drawn in BOTH versions of the app — web and mobile — so the
+ * club sees each format at its own dimension. The surfaces live in appSurfaces
+ * and are shared with the campaign screens; only the slot content changes. A
+ * space with nothing running falls back to the "Espace disponible" placeholder.
  *
  * The running data is IMAGINARY and local to this screen
  * (emplacementsRunningMock) — a display proposal, no rotation logic yet.
  */
 export function EmplacementsScreen() {
+  const navigate = useNavigate()
+  const { offerRequests } = useData()
   const running = SLOT_DEFS.flatMap((d) => RUNNING_BY_SLOT[d.key])
   const busySpaces = SLOT_DEFS.filter(
     (d) => RUNNING_BY_SLOT[d.key].length > 0,
   ).length
+  const pendingRequests = offerRequests.filter(
+    (r) => r.status === "en_attente",
+  ).length
 
   return (
-    <div className="mx-auto max-w-5xl">
-      <BackButton to="/sponsoring/offres" label="Retour aux offres" />
-      <PageHeader
-        title="Espaces publicitaires"
-        subtitle="Où vos sponsors apparaissent dans l'app du club — et ce qui y est diffusé en ce moment."
-      />
-
+    <SponsoringShell
+      active="emplacements"
+      subtitle="Où vos sponsors apparaissent dans l'app du club — et ce qui y est diffusé en ce moment."
+      actions={
+        <>
+          <button
+            type="button"
+            onClick={() => navigate("/sponsoring/offres")}
+            className="inline-flex items-center gap-1.5 rounded-md border border-input px-4 py-2 font-ui text-sm font-medium text-ink transition-colors hover:border-border-strong hover:bg-accent"
+          >
+            <LayoutTemplate size={16} /> Packs
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate("/sponsoring/demandes-sur-mesure")}
+            className="inline-flex items-center gap-1.5 rounded-md border border-input px-4 py-2 font-ui text-sm font-medium text-ink transition-colors hover:border-border-strong hover:bg-accent"
+          >
+            <Sparkles size={16} /> Sur mesure
+            {pendingRequests > 0 ? (
+              <span className="inline-flex min-w-5 items-center justify-center rounded-full bg-info/15 px-1.5 py-0.5 font-ui text-[0.68rem] font-medium text-info tabular-nums">
+                {pendingRequests}
+              </span>
+            ) : null}
+          </button>
+        </>
+      }
+    >
       {/* Ce qui tourne, en une ligne — la question qu'on se pose en arrivant. */}
       <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 rounded-lg border border-border px-5 py-4">
         <span className="inline-flex items-center gap-2 font-ui text-[0.72rem] font-medium tracking-[0.1em] text-ink-muted uppercase">
@@ -65,12 +84,12 @@ export function EmplacementsScreen() {
         </span>
       </div>
 
-      <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-2">
+      <div className="mt-8 flex flex-col gap-6">
         {SLOT_DEFS.map((def) => (
           <SpaceCard key={def.key} slotKey={def.key} />
         ))}
       </div>
-    </div>
+    </SponsoringShell>
   )
 }
 
@@ -127,7 +146,18 @@ function SpaceCard({ slotKey }: { slotKey: SlotKey }) {
         )
       }
     >
-      <SlotSurface slotKey={slotKey} ad={current} />
+      <SurfacePair
+        slotKey={slotKey}
+        ad={
+          current
+            ? {
+                sponsor: current.partner,
+                color: current.color,
+                headline: current.headline,
+              }
+            : null
+        }
+      />
     </EmplacementCard>
   )
 }
@@ -213,133 +243,3 @@ function AdRow({
   )
 }
 
-/* ── The surface, with the selected visual dropped into its ad position ──── */
-function SlotSurface({
-  slotKey,
-  ad,
-}: {
-  slotKey: SlotKey
-  ad: RunningAd | null
-}) {
-  const creative = (className: string, compact?: boolean) =>
-    ad ? (
-      <Creative
-        name={ad.partner}
-        headline={ad.headline}
-        color={ad.color}
-        className={className}
-        compact={compact}
-      />
-    ) : null
-
-  switch (slotKey) {
-    case "partners_page":
-      return (
-        <WebFrame title="ismartclub.tn — Nos partenaires">
-          <AnnuaireMock
-            slot={
-              creative("size-full", true) ?? (
-                <div className="flex size-full flex-col items-center justify-center gap-1 rounded-md border border-dashed border-info/40 bg-info/5 text-info">
-                  <span className="font-ui text-[0.6rem] font-medium">
-                    Disponible
-                  </span>
-                </div>
-              )
-            }
-          />
-        </WebFrame>
-      )
-
-    case "calendar_banner":
-      return (
-        <PhoneFrame>
-          <CalendarMock
-            slot={
-              creative("h-[54px]", true) ?? <AdSlot sub="Bannière · 320×80" />
-            }
-          />
-        </PhoneFrame>
-      )
-
-    case "home_feed":
-      return (
-        <PhoneFrame>
-          <FeedMock
-            slot={
-              creative("h-[86px]") ?? (
-                <AdSlot label="Carte sponsorisée" sub="Espace disponible" />
-              )
-            }
-          />
-        </PhoneFrame>
-      )
-
-    case "match_detail":
-      return (
-        <PhoneFrame>
-          <MatchMock
-            slot={
-              creative("h-[52px]", true) ?? (
-                <AdSlot label="Match présenté par…" sub="Espace disponible" />
-              )
-            }
-          />
-        </PhoneFrame>
-      )
-
-    case "splash":
-      return (
-        <PhoneFrame dark>
-          <SplashMock
-            slot={
-              creative("h-[240px] w-full") ?? (
-                <AdSlot
-                  icon={Smartphone}
-                  label="Écran d'ouverture"
-                  sub="Plein écran · 3 s"
-                  tall
-                  className="w-full"
-                />
-              )
-            }
-          />
-        </PhoneFrame>
-      )
-
-    case "notification":
-      return (
-        <PhoneFrame dark>
-          <NotificationMock
-            slot={
-              ad ? (
-                <div className="rounded-xl border border-border-strong bg-surface px-3 py-2.5">
-                  <div className="flex items-center gap-2">
-                    <span
-                      className="flex size-5 items-center justify-center rounded-[4px] font-ui text-[0.45rem] font-semibold text-white"
-                      style={{ backgroundColor: ad.color }}
-                    >
-                      {ad.partner.slice(0, 2).toUpperCase()}
-                    </span>
-                    <span className="truncate font-ui text-[0.6rem] font-medium text-ink">
-                      {ad.partner}
-                    </span>
-                    <span className="ml-auto font-body text-[0.5rem] text-ink-disabled">
-                      maintenant
-                    </span>
-                  </div>
-                  <p className="mt-1.5 font-body text-[0.6rem] leading-snug text-ink-subtle">
-                    {ad.headline}
-                  </p>
-                </div>
-              ) : (
-                <NotificationEmptySlot />
-              )
-            }
-          />
-        </PhoneFrame>
-      )
-
-    default:
-      return null
-  }
-}

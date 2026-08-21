@@ -2,14 +2,18 @@ import { jsPDF } from "jspdf"
 
 import {
   campaignTotals,
+  creativeLabel,
   num,
   SLOT_BY_KEY,
+  slotCreatives,
   type Campaign,
 } from "@/data/seed/sponsoring"
 
 /**
- * "Exporter les KPIs (PDF)" — the bilan a club sends to a sponsor once a
- * campaign is archived: its totals, then vues / clics / CTR space by space.
+ * "Exporter le rapport (PDF)" — the bilan a club sends to a sponsor: the
+ * période it covers stated up front (dates, durée, and how far along it is when
+ * the campaign is still running), what it cost and what that bought (coût pour
+ * 1 000 vues, coût par clic), then vues / clics / CTR space by space.
  *
  * Drawn with jsPDF rather than printing the screen, because the report is a
  * LIGHT document (paper), not the dark app chrome. It keeps the brand signature
@@ -66,6 +70,21 @@ function txt(
   doc.text(clean(text), x, y, opts)
 }
 
+/** "12 000 DT" — a campaign's price, or the label when there is none. */
+function price(campaign: Campaign): string {
+  return campaign.price !== null
+    ? `${campaign.price.toLocaleString("fr-FR")} DT`
+    : "Echange"
+}
+
+/** "39,74 DT" — a computed amount, two decimals, French. */
+function dt(amount: number): string {
+  return `${amount.toLocaleString("fr-FR", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })} DT`
+}
+
 /** Per-space CTR, formatted like the on-screen one. */
 function ctrOf(views: number, clicks: number): string {
   if (!views) return "-"
@@ -100,7 +119,15 @@ export function exportCampaignKpisPdf(
   txt(doc, "Plateforme club", M + 14, 19.2)
 
   doc.setFontSize(8.5)
-  txt(doc, "Bilan de campagne", W - M, 16.4, { align: "right" })
+  txt(
+    doc,
+    campaign.status === "en_cours"
+      ? "Rapport de campagne  ·  en cours"
+      : "Bilan de campagne  ·  terminee",
+    W - M,
+    16.4,
+    { align: "right" },
+  )
 
   /* ── Title block ─────────────────────────────────────────────────────── */
   let y = 45
@@ -113,22 +140,41 @@ export function exportCampaignKpisPdf(
   doc.setFont("helvetica", "normal").setFontSize(10)
   txt(doc, partnerName, M, y)
 
-  y += 5.5
-  doc.setTextColor(INK_SOFT)
-  doc.setFontSize(9)
-  txt(doc, 
-    `Du ${campaign.startDate} au ${campaign.endDate}  ·  ${campaign.duration}`,
-    M,
-    y,
+  /* ── Période couverte ────────────────────────────────────────────────── */
+  y += 8
+  doc.setDrawColor(BORDER)
+  doc.setLineWidth(0.3)
+  doc.roundedRect(M, y, W - 2 * M, 20, 2, 2, "S")
+
+  doc.setTextColor(INK_MUTED)
+  doc.setFont("helvetica", "bold").setFontSize(7)
+  txt(doc, "PERIODE COUVERTE PAR CE RAPPORT", M + 5, y + 6.5)
+
+  doc.setTextColor(INK)
+  doc.setFont("helvetica", "bold").setFontSize(10.5)
+  txt(doc, `Du ${campaign.startDate} au ${campaign.endDate}`, M + 5, y + 13.5)
+
+  doc.setTextColor(INK_MUTED)
+  doc.setFont("helvetica", "normal").setFontSize(8.5)
+  txt(
+    doc,
+    campaign.status === "en_cours"
+      ? `${campaign.duration}  ·  ${campaign.progress} % ecoules${
+          campaign.remaining ? `  ·  ${campaign.remaining}` : ""
+        }`
+      : `${campaign.duration}  ·  periode terminee`,
+    W - M - 5,
+    y + 13.5,
+    { align: "right" },
   )
 
   /* ── The four totals ─────────────────────────────────────────────────── */
-  y += 8
+  y += 28
   const cards: [string, string][] = [
     ["Vues totales", num(totals.views)],
     ["Clics totaux", num(totals.clicks)],
     ["CTR moyen", totals.ctr],
-    ["Espaces", String(campaign.slots.length)],
+    ["Cout de la campagne", price(campaign)],
   ]
   const cw = (W - 2 * M - 3 * 4) / 4
   cards.forEach(([label, value], i) => {
@@ -144,8 +190,34 @@ export function exportCampaignKpisPdf(
     txt(doc, label.toUpperCase(), x + 5, y + 18.5)
   })
 
+  /* ── What the montant bought — display arithmetic, nothing stored ────── */
+  y += 28
+  if (campaign.price !== null && totals.views > 0) {
+    doc.setFillColor("#fafafa")
+    doc.setDrawColor(BORDER)
+    doc.roundedRect(M, y, W - 2 * M, 12, 2, 2, "FD")
+
+    doc.setTextColor(INK_MUTED)
+    doc.setFont("helvetica", "bold").setFontSize(7)
+    txt(doc, "RETOUR SUR LE MONTANT INVESTI", M + 5, y + 5)
+
+    doc.setTextColor(INK)
+    doc.setFont("helvetica", "normal").setFontSize(8.5)
+    txt(
+      doc,
+      `Cout pour 1 000 vues : ${dt((campaign.price / totals.views) * 1000)}` +
+        (totals.clicks > 0
+          ? `      Cout par clic : ${dt(campaign.price / totals.clicks)}`
+          : ""),
+      M + 5,
+      y + 9.5,
+    )
+    y += 18
+  } else {
+    y += 6
+  }
+
   /* ── Space-by-space table ────────────────────────────────────────────── */
-  y += 38
   doc.setTextColor(INK_MUTED)
   doc.setFont("helvetica", "bold").setFontSize(7.5)
   txt(doc, "DETAIL PAR ESPACE PUBLICITAIRE", M, y)
@@ -183,6 +255,29 @@ export function exportCampaignKpisPdf(
       align: "right",
     })
 
+    // A space whose artwork was swapped reports each visual on its own line:
+    // an average would hide the one that actually worked.
+    const creatives = slotCreatives(slot, campaign)
+    if (creatives.length > 1) {
+      creatives.forEach((creative, i) => {
+        y += 5
+        doc.setTextColor(INK_MUTED)
+        doc.setFont("helvetica", "normal").setFontSize(7.5)
+        txt(
+          doc,
+          `${creativeLabel(i)}  ·  ${creative.from} - ${creative.to || "en cours"}`,
+          M + 4,
+          y,
+        )
+        txt(doc, num(creative.views), colViews, y, { align: "right" })
+        txt(doc, num(creative.clicks), colClicks, y, { align: "right" })
+        txt(doc, ctrOf(creative.views, creative.clicks), colCtr, y, {
+          align: "right",
+        })
+      })
+      y += 2
+    }
+
     doc.setDrawColor(BORDER)
     doc.line(M, y + 3.5, W - M, y + 3.5)
   })
@@ -209,7 +304,7 @@ export function exportCampaignKpisPdf(
   txt(doc, `Genere le ${today}`, M, 287)
   txt(doc, "iSmart Club  ·  Sponsoring", W - M, 287, { align: "right" })
 
-  const filename = `kpis-${slug(campaign.name)}.pdf`
+  const filename = `rapport-${slug(campaign.name)}.pdf`
   doc.save(filename)
   return filename
 }

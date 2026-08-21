@@ -63,7 +63,13 @@ export function PartenaireAccueilScreen() {
       {/* ── Identity header ───────────────────────────────────────────── */}
       <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex min-w-0 items-start gap-4">
-          <Avatar name={partner.name} size="lg" />
+          {/* Même pastille que dans la table : la couleur cercle l'avatar. */}
+          <span
+            className="shrink-0 rounded-pill border-2 p-[3px]"
+            style={{ borderColor: partner.color }}
+          >
+            <Avatar name={partner.name} size="lg" />
+          </span>
           <div className="min-w-0">
             <h1 className="font-ui text-2xl font-semibold text-ink">
               {partner.name}
@@ -273,6 +279,9 @@ function RunningCard({
         <div className="mt-5 flex flex-wrap items-center gap-1.5 border-t border-border pt-4">
           <span className="mr-1 font-body text-[0.74rem] text-ink-muted">
             {campaign.slots.length} espaces actifs
+            {campaign.price !== null
+              ? ` · ${campaign.price.toLocaleString("fr-FR")} DT`
+              : ""}
           </span>
           {campaign.slots.map((s) => {
             const Icon = SLOT_ICON[s.key]
@@ -339,6 +348,9 @@ function ArchiveCard({
         <div className="mt-3 flex items-center justify-between border-t border-border pt-3">
           <span className="font-body text-[0.72rem] text-ink-muted">
             {campaign.slots.length} espaces · CTR {totals.ctr}
+            {campaign.price !== null
+              ? ` · ${campaign.price.toLocaleString("fr-FR")} DT`
+              : ""}
           </span>
           <ArrowRight
             size={14}

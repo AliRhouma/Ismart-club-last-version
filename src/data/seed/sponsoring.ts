@@ -24,12 +24,19 @@ export type Allocation =
   | "quota" // capped by the unit (envois)
 
 export type SlotKey =
-  | "partners_page"
-  | "calendar_banner"
-  | "home_feed"
+  | "accueil"
+  | "planification"
   | "match_detail"
-  | "splash"
+  | "messagerie"
   | "notification"
+
+/**
+ * What a space carries. A `visuel` space is an artwork — and an artwork is
+ * always TWO artworks, one per version of the app (web and mobile), each with
+ * its own dimension. A `message` space carries no image at all: it borrows the
+ * app's own message / notification structure, so the sponsor writes text.
+ */
+export type SlotMedium = "visuel" | "message"
 
 export type SlotDef = {
   key: SlotKey
@@ -38,48 +45,72 @@ export type SlotDef = {
   allocation: Allocation
   /** Unit label for booked/quota controls (e.g. "matchs / saison"). */
   unit?: string
+  medium: SlotMedium
+  /** Required artwork size per version — `visuel` spaces only. */
+  webSize?: string
+  mobileSize?: string
+  /** Where the space sits, per version — the caption over each mock. */
+  webContext: string
+  mobileContext: string
 }
 
-/** The catalogue of ad spaces, in display order. */
+/**
+ * The catalogue of ad spaces, in display order — one per surface of the real
+ * app: Accueil, Planification, Matchs, Messagerie, and the push notification.
+ */
 export const SLOT_DEFS: SlotDef[] = [
   {
-    key: "partners_page",
-    label: "Page partenaires",
-    description: "Fiche du partenaire dans l'annuaire du club",
-    allocation: "cumulative",
+    key: "accueil",
+    label: "Accueil",
+    description: "Bannière en haut du tableau de bord, sur toutes les sessions",
+    allocation: "rotational",
+    medium: "visuel",
+    webSize: "1200 × 300 px · format 4:1",
+    mobileSize: "640 × 320 px · format 2:1",
+    webContext: "Accueil — tableau de bord",
+    mobileContext: "Accueil",
   },
   {
-    key: "calendar_banner",
-    label: "Bannière calendrier",
-    description: "Bandeau en haut du calendrier des parents et joueurs",
+    key: "planification",
+    label: "Planification",
+    description: "Bandeau dans le calendrier des séances et des matchs",
     allocation: "rotational",
-  },
-  {
-    key: "home_feed",
-    label: "Fil d'accueil",
-    description: "Carte sponsorisée dans le fil d'actualité",
-    allocation: "rotational",
+    medium: "visuel",
+    webSize: "1200 × 240 px · format 5:1",
+    mobileSize: "640 × 240 px · format 8:3",
+    webContext: "Planification — calendrier",
+    mobileContext: "Planification",
   },
   {
     key: "match_detail",
-    label: "Page de match",
-    description: "Mention « Match présenté par… »",
+    label: "Matchs & résultats",
+    description: "Bandeau sur la fiche d'un match et sur la page résultats",
     allocation: "booked",
     unit: "matchs / saison",
+    medium: "visuel",
+    webSize: "1080 × 340 px · bannière",
+    mobileSize: "640 × 280 px · bannière",
+    webContext: "Match — feuille de match",
+    mobileContext: "Match",
   },
   {
-    key: "splash",
-    label: "Écran d'ouverture",
-    description: "Visuel plein écran à l'ouverture de l'app, 3 secondes",
-    allocation: "booked",
-    unit: "jours / saison",
+    key: "messagerie",
+    label: "Messagerie",
+    description: "Conversation sponsorisée dans la liste des discussions",
+    allocation: "cumulative",
+    medium: "message",
+    webContext: "Messagerie — liste des conversations",
+    mobileContext: "Messagerie",
   },
   {
     key: "notification",
     label: "Notification push",
-    description: "Message envoyé aux parents et joueurs",
+    description: "Message envoyé aux parents, joueurs et éducateurs",
     allocation: "quota",
     unit: "envois / saison",
+    medium: "message",
+    webContext: "Cloche de notifications",
+    mobileContext: "Notification",
   },
 ]
 
@@ -194,9 +225,10 @@ export type Offer = {
 }
 
 /**
- * Tier-colour presets for the swatch picker (6). Raw hex: these are product
- * data (the colour a sponsor's badge is drawn in), not design-system chrome, so
- * they legitimately sit outside the token palette.
+ * Colour presets for the swatch pickers (6), shared by the packs and the
+ * partenaires. Raw hex: these are product data (the colour a sponsor's badge is
+ * drawn in), not design-system chrome, so they legitimately sit outside the
+ * token palette. Both pickers also accept any custom colour.
  */
 export const PRESET_COLORS: string[] = [
   "#E0A82E", // or
@@ -394,12 +426,21 @@ export const sponsorAccountsSeed: SponsorAccount[] = [
  * a club often signs a partner before that partner has an account — the link can
  * be added later.
  */
+/**
+ * Où en est le partenariat. Un partenaire ne se supprime pas — il s'archive :
+ * le club garde la trace des entreprises qui l'ont soutenu.
+ */
+export type PartnerStatus = "actif" | "archive"
+
 export type Partner = {
   id: string
   /** Offer (tier) the partner occupies a seat on. */
   offerId: string
   name: string
   description: string
+  /** Couleur du partenaire (hex brut, comme les packs) — sa pastille partout. */
+  color: string
+  status: PartnerStatus
   accountId: string | null
   /**
    * Contract period — how long the partenaire holds its seat. ISO, so the form
@@ -416,6 +457,8 @@ export function blankPartner(offerId: string): Omit<Partner, "id"> {
     offerId,
     name: "",
     description: "",
+    color: PRESET_COLORS[0],
+    status: "actif",
     accountId: null,
     startDate: start,
     endDate: applyContractPreset(CONTRACT_PRESETS[1], start).end,
@@ -562,6 +605,8 @@ export const partnersSeed: Partner[] = [
     name: "Délice Danone",
     description:
       "Partenaire principal du club depuis 2019. Présent sur les maillots et sur l'ensemble des espaces de l'app.",
+    color: "#0091FF",
+    status: "actif",
     accountId: "account-delice",
     startDate: "2025-09-01",
     endDate: "2027-06-30",
@@ -572,6 +617,8 @@ export const partnersSeed: Partner[] = [
     name: "Ooredoo Tunisie",
     description:
       "Partenaire télécom, sponsor du tournoi de jeunes et de la billetterie.",
+    color: "#E5844B",
+    status: "actif",
     accountId: "account-ooredoo",
     startDate: "2026-01-01",
     endDate: "2026-08-31",
@@ -581,6 +628,8 @@ export const partnersSeed: Partner[] = [
     offerId: "offer-bronze",
     name: "Pharmacie Centrale El Menzah",
     description: "",
+    color: "#14B8A6",
+    status: "archive",
     accountId: null,
     startDate: "2025-07-01",
     endDate: "2026-06-30",
@@ -603,11 +652,45 @@ export type CampaignStatus = "en_cours" | "archivee"
 /** One ad space inside a campaign: its creative, its link, its numbers. */
 export type CampaignSlot = {
   key: SlotKey
-  /** Headline drawn on the mock creative. */
+  /**
+   * The text the parent reads: the headline drawn on a `visuel`, or the message
+   * itself on the messagerie / notification spaces.
+   */
   headline: string
   /** Where the creative sends you. */
   link: string
-  /** Frozen seed figures — archived campaigns show these. */
+  /** `visuel` spaces: the two artworks, one per version of the app. */
+  webImage?: string
+  mobileImage?: string
+  /**
+   * The whole space's figures — the sum of everything that ran in it.
+   * Frozen seed values; archived campaigns show these.
+   */
+  views: number
+  clicks: number
+  /**
+   * Every creative that occupied this space, oldest first, the last one being
+   * the one on air. A space whose artwork never changed leaves this out — read
+   * it through `slotCreatives`, which folds that case into a single entry.
+   */
+  creatives?: SlotCreative[]
+}
+
+/**
+ * One creative in the life of an ad space. Swapping the visual mid-campaign
+ * closes the running one and opens a new one, so each keeps the vues et clics
+ * IT made and the bilan can compare them instead of averaging them away.
+ */
+export type SlotCreative = {
+  id: string
+  /** The text this creative carried (a message space writes its own). */
+  headline: string
+  link: string
+  webImage?: string
+  mobileImage?: string
+  /** Pre-formatted French dates. `to` is "" while the creative is on air. */
+  from: string
+  to: string
   views: number
   clicks: number
 }
@@ -628,6 +711,10 @@ export type Campaign = {
   remaining: string
   /** Creative colour (raw hex — product data, like the tier colours). */
   color: string
+  /** What the partenaire pays for this campaign, in DT. `null` = échange. */
+  price: number | null
+  /** Who the campaign is aimed at — absent when it targets everyone. */
+  audience?: Audience
   slots: CampaignSlot[]
 }
 
@@ -651,6 +738,105 @@ export function campaignTotals(campaign: Campaign): {
   }
 }
 
+/**
+ * The creatives of a space, oldest first. A space that never changed its
+ * artwork has none stored: it reads as one creative covering the whole période.
+ */
+export function slotCreatives(
+  slot: CampaignSlot,
+  campaign: Campaign,
+): SlotCreative[] {
+  if (slot.creatives?.length) return slot.creatives
+  return [
+    {
+      id: `${slot.key}-v1`,
+      headline: slot.headline,
+      link: slot.link,
+      webImage: slot.webImage,
+      mobileImage: slot.mobileImage,
+      from: campaign.startDate,
+      to: campaign.status === "archivee" ? campaign.endDate : "",
+      views: slot.views,
+      clicks: slot.clicks,
+    },
+  ]
+}
+
+/** "Visuel 2" — creatives are named by their rank in the space. */
+export function creativeLabel(index: number): string {
+  return `Visuel ${index + 1}`
+}
+
+/** Did the artwork (or the message) actually change? A new link alone hasn't. */
+function creativeChanged(a: SlotCreative, b: Partial<SlotCreative>): boolean {
+  return (
+    (b.webImage ?? "") !== (a.webImage ?? "") ||
+    (b.mobileImage ?? "") !== (a.mobileImage ?? "") ||
+    (b.headline ?? "") !== a.headline
+  )
+}
+
+/**
+ * Save an edited space back onto a campaign.
+ *
+ * On a campaign that is running, replacing the artwork does NOT overwrite what
+ * came before: the creative on air is closed on today's date with the figures
+ * it made, and the new one starts at zero. That is the whole point — the club
+ * has to be able to say which visual worked.
+ */
+export function applySlotEdit(
+  campaign: Campaign,
+  key: SlotKey,
+  next: {
+    headline: string
+    link: string
+    webImage: string
+    mobileImage: string
+  },
+): Pick<Campaign, "slots"> {
+  const today = fmtFrLong(todayISO())
+
+  return {
+    slots: campaign.slots.map((slot) => {
+      if (slot.key !== key) return slot
+
+      const history = slotCreatives(slot, campaign)
+      const live = history[history.length - 1]
+      const patch = {
+        headline: next.headline.trim() || slot.headline,
+        link: next.link.trim(),
+        webImage: next.webImage || undefined,
+        mobileImage: next.mobileImage || undefined,
+      }
+
+      // A finished campaign is corrected, not re-versioned: nothing is running.
+      const versions =
+        campaign.status === "en_cours" && creativeChanged(live, patch)
+          ? [
+              ...history.slice(0, -1),
+              { ...live, to: today },
+              {
+                ...patch,
+                id: `${key}-v${history.length + 1}`,
+                from: today,
+                to: "",
+                views: 0,
+                clicks: 0,
+              },
+            ]
+          : [...history.slice(0, -1), { ...live, ...patch }]
+
+      return {
+        ...slot,
+        ...patch,
+        creatives: versions,
+        views: versions.reduce((n, v) => n + v.views, 0),
+        clicks: versions.reduce((n, v) => n + v.clicks, 0),
+      }
+    }),
+  }
+}
+
 /** "1 284 302" — French thousands separators. */
 export function num(n: number): string {
   return n.toLocaleString("fr-FR")
@@ -671,8 +857,99 @@ export const CAMPAIGN_COLORS: string[] = [
   "#9aa4b2", // gris
 ]
 
-/** One ad space as composed on the form (before it becomes a CampaignSlot). */
-export type DraftSlot = { enabled: boolean; headline: string }
+/* ── Ciblage (configuration avancée) ────────────────────────────────────── */
+
+/**
+ * Who a campaign speaks to. Every field is a plain label — nothing is matched
+ * against real people: the prototype targets nobody, it only records the brief.
+ */
+export const AUDIENCE_TYPES = [
+  { key: "tous", label: "Tout le monde" },
+  { key: "joueur", label: "Joueurs" },
+  { key: "parent", label: "Parents" },
+  { key: "coach", label: "Coachs" },
+] as const
+export type AudienceType = (typeof AUDIENCE_TYPES)[number]["key"]
+
+export const AUDIENCE_GENDERS = [
+  { key: "tous", label: "Tous" },
+  { key: "feminin", label: "Filles" },
+  { key: "masculin", label: "Garçons" },
+] as const
+export type AudienceGender = (typeof AUDIENCE_GENDERS)[number]["key"]
+
+export type Audience = {
+  /** The admin opened "Configuration avancée" and kept it on. */
+  enabled: boolean
+  city: string
+  address: string
+  gender: AudienceGender
+  /** The two ends of the age range, as typed. */
+  ageMin: string
+  ageMax: string
+  type: AudienceType
+  /** Catégorie names, as they read in the club (U12, Senior…). */
+  categories: string[]
+  /** `type === "parent"` only — the children the parent follows. */
+  childAgeMin: string
+  childAgeMax: string
+  childCategories: string[]
+}
+
+export function blankAudience(): Audience {
+  return {
+    enabled: false,
+    city: "",
+    address: "",
+    gender: "tous",
+    ageMin: "",
+    ageMax: "",
+    type: "tous",
+    categories: [],
+    childAgeMin: "",
+    childAgeMax: "",
+    childCategories: [],
+  }
+}
+
+/** "Tunis · Parents · U10, U12" — the brief in one line, computed in render. */
+export function audienceSummary(a: Audience | undefined): string {
+  if (!a || !a.enabled) return "Tout le club"
+  const parts: string[] = []
+  if (a.city.trim()) parts.push(a.city.trim())
+  parts.push(
+    AUDIENCE_TYPES.find((t) => t.key === a.type)?.label ?? "Tout le monde",
+  )
+  if (a.gender !== "tous") {
+    parts.push(AUDIENCE_GENDERS.find((g) => g.key === a.gender)!.label)
+  }
+  if (a.ageMin || a.ageMax) {
+    parts.push(`${a.ageMin || "?"}–${a.ageMax || "?"} ans`)
+  }
+  const cats = a.type === "parent" ? a.childCategories : a.categories
+  if (cats.length) parts.push(cats.join(", "))
+  return parts.join(" · ")
+}
+
+/* ── Le brouillon de campagne ───────────────────────────────────────────── */
+
+/**
+ * One ad space as composed on the wizard's "Les visuels" step.
+ *
+ * `enabled` is the activation switch on the card: a campaign rarely runs
+ * everywhere, so each space is turned on or off on purpose. A `visuel` space
+ * then takes its two artworks (web + mobile, each its own dimension); a
+ * `message` space takes the text the parent will read instead.
+ */
+export type DraftSlot = {
+  enabled: boolean
+  /** Filenames of the "uploaded" artworks — `visuel` spaces only. */
+  webImage: string
+  mobileImage: string
+  /** `message` spaces: the message / notification body. */
+  message: string
+  link: string
+}
 
 /**
  * What the admin fills in. Dates are ISO here (they come from `<input
@@ -684,26 +961,55 @@ export type CampaignDraft = {
   name: string
   start: string
   end: string
-  /** Destination of every creative — one link for the whole campaign. */
-  link: string
+  /** What the partenaire pays, in DT. `null` = échange / institutionnel. */
+  price: number | null
+  /**
+   * Creative colour — inherited from the partenaire's offre, never picked by
+   * hand: the campaign is the partner's pack in motion, so it wears its colour.
+   */
   color: string
+  audience: Audience
   slots: Record<SlotKey, DraftSlot>
 }
 
-/** A blank draft: the three always-on surfaces pre-selected. */
-export function blankCampaignDraft(partnerId: string): CampaignDraft {
-  const on = new Set<SlotKey>(["partners_page", "calendar_banner", "home_feed"])
+/** A blank draft: every space active — the admin switches off what he doesn't sell. */
+export function blankCampaignDraft(
+  partnerId: string,
+  color: string = CAMPAIGN_COLORS[0],
+): CampaignDraft {
   return {
     partnerId,
     name: "",
     start: "",
     end: "",
-    link: "https://",
-    color: CAMPAIGN_COLORS[0],
+    price: null,
+    color,
+    audience: blankAudience(),
     slots: Object.fromEntries(
-      SLOT_DEFS.map((s) => [s.key, { enabled: on.has(s.key), headline: "" }]),
+      SLOT_DEFS.map((s) => [
+        s.key,
+        { enabled: true, webImage: "", mobileImage: "", message: "", link: "" },
+      ]),
     ) as Record<SlotKey, DraftSlot>,
   }
+}
+
+/** The spaces switched on — what the campaign will actually occupy. */
+export function activeSlots(draft: CampaignDraft): SlotKey[] {
+  return SLOT_DEFS.filter((def) => draft.slots[def.key].enabled).map(
+    (def) => def.key,
+  )
+}
+
+/**
+ * A space is ready when it carries what its medium needs: at least one artwork
+ * for a `visuel`, the message text for a `message`. An active space that isn't
+ * ready still runs — it just falls back to the campaign's own name.
+ */
+export function slotIsReady(key: SlotKey, slot: DraftSlot): boolean {
+  return SLOT_BY_KEY[key].medium === "message"
+    ? slot.message.trim() !== ""
+    : slot.webImage !== "" || slot.mobileImage !== ""
 }
 
 /** Whole days between two ISO dates, inclusive of both ends. */
@@ -765,29 +1071,57 @@ export function buildCampaign(draft: CampaignDraft): Omit<Campaign, "id"> {
     name: draft.name.trim() || "Campagne sans nom",
     ...campaignPeriod(draft.start, draft.end),
     color: draft.color,
-    slots: SLOT_DEFS.filter((def) => draft.slots[def.key].enabled).map((def) => ({
-      key: def.key,
-      // An empty accroche falls back to the campaign's own name.
-      headline: draft.slots[def.key].headline.trim() || draft.name.trim(),
-      link: draft.link.trim(),
-      views: 0,
-      clicks: 0,
-    })),
+    price: draft.price,
+    audience: draft.audience.enabled ? draft.audience : undefined,
+    // Only the spaces switched on: the others diffuse nothing.
+    slots: activeSlots(draft).map((key) => {
+      const slot = draft.slots[key]
+      const message = slot.message.trim()
+      return {
+        key,
+        // A message space reads its own text; a visuel carries the campaign name.
+        headline:
+          SLOT_BY_KEY[key].medium === "message" && message
+            ? message
+            : draft.name.trim() || "Campagne sans nom",
+        link: slot.link.trim(),
+        webImage: slot.webImage || undefined,
+        mobileImage: slot.mobileImage || undefined,
+        views: 0,
+        clicks: 0,
+      }
+    }),
   }
 }
 
 /* ── Modifier la configuration d'une campagne ───────────────────────────── */
 
-/** One ad space as composed on the config modal (link is per space here). */
-export type EditSlot = { enabled: boolean; headline: string; link: string }
+/**
+ * One ad space as composed on the config modal: its artworks (or its message)
+ * and its link. There is no accroche — a `visuel` carries the campaign's own
+ * name, and a `message` space IS its text.
+ */
+export type EditSlot = {
+  enabled: boolean
+  /** `message` spaces only: the text the parent reads. */
+  headline: string
+  webImage: string
+  mobileImage: string
+  link: string
+}
 
-/** What the config modal edits: everything but the partenaire and the figures. */
+/**
+ * What the config modal edits: the name, the période and the spaces. Not the
+ * partenaire, not the figures, and not the colour — that one is inherited from
+ * the offre the partenaire signed.
+ */
 export type CampaignEdit = {
   name: string
   /** ISO, for the date inputs. */
   start: string
   end: string
-  color: string
+  /** What the partenaire pays, in DT. `null` = échange / institutionnel. */
+  price: number | null
   slots: Record<SlotKey, EditSlot>
 }
 
@@ -798,7 +1132,7 @@ export function campaignEditDraft(campaign: Campaign): CampaignEdit {
     name: campaign.name,
     start: parseFrLong(campaign.startDate),
     end: parseFrLong(campaign.endDate),
-    color: campaign.color,
+    price: campaign.price,
     slots: Object.fromEntries(
       SLOT_DEFS.map((def) => {
         const slot = bySlot.get(def.key)
@@ -807,6 +1141,8 @@ export function campaignEditDraft(campaign: Campaign): CampaignEdit {
           {
             enabled: Boolean(slot),
             headline: slot?.headline ?? "",
+            webImage: slot?.webImage ?? "",
+            mobileImage: slot?.mobileImage ?? "",
             // A space added here inherits the campaign's existing destination.
             link: slot?.link ?? campaign.slots[0]?.link ?? "https://",
           },
@@ -828,14 +1164,22 @@ export function applyCampaignEdit(
   return {
     name: edit.name.trim() || campaign.name,
     ...campaignPeriod(edit.start, edit.end),
-    color: edit.color,
+    price: edit.price,
     slots: SLOT_DEFS.filter((def) => edit.slots[def.key].enabled).map((def) => {
       const previous = bySlot.get(def.key)
       const draft = edit.slots[def.key]
       return {
         key: def.key,
-        headline: draft.headline.trim() || edit.name.trim(),
+        // Only a message space writes its own line; a visuel wears the name.
+        headline:
+          SLOT_BY_KEY[def.key].medium === "message"
+            ? draft.headline.trim() || edit.name.trim()
+            : edit.name.trim() || campaign.name,
         link: draft.link.trim(),
+        webImage: draft.webImage || undefined,
+        mobileImage: draft.mobileImage || undefined,
+        // The history belongs to the space — the form never rewrites it.
+        creatives: previous?.creatives,
         views: previous?.views ?? 0,
         clicks: previous?.clicks ?? 0,
       }
@@ -856,48 +1200,75 @@ export const campaignsSeed: Campaign[] = [
     progress: 51,
     remaining: "45 jours restants",
     color: "#0091ff",
+    price: 12000,
+    // Half-way through the période, so the figures are half a season's.
     slots: [
       {
-        key: "partners_page",
+        key: "messagerie",
         headline: "Délice Danone — Partenaire officiel",
         link: "https://delice.tn",
-        views: 0,
-        clicks: 0,
+        views: 18420,
+        clicks: 690,
       },
       {
-        key: "calendar_banner",
+        key: "planification",
         headline: "Bien grandir, bien jouer",
         link: "https://delice.tn/juniors",
-        views: 0,
-        clicks: 0,
+        webImage: "planification-web.png",
+        mobileImage: "planification-mobile.png",
+        views: 154300,
+        clicks: 2040,
       },
       {
-        key: "home_feed",
+        // The one space whose artwork was swapped mid-campaign: the club
+        // replaced the June visual on 1 July, so each keeps its own figures.
+        key: "accueil",
         headline: "Délice Zéro — nouveau",
         link: "https://delice.tn/zero",
-        views: 0,
-        clicks: 0,
+        webImage: "accueil-web-zero.png",
+        mobileImage: "accueil-mobile-zero.png",
+        views: 96250,
+        clicks: 3180,
+        creatives: [
+          {
+            id: "accueil-v1",
+            headline: "Délice Danone — Partenaire officiel",
+            link: "https://delice.tn",
+            webImage: "accueil-web-lancement.png",
+            mobileImage: "accueil-mobile-lancement.png",
+            from: "1 juin 2026",
+            to: "30 juin 2026",
+            views: 41200,
+            clicks: 980,
+          },
+          {
+            id: "accueil-v2",
+            headline: "Délice Zéro — nouveau",
+            link: "https://delice.tn/zero",
+            webImage: "accueil-web-zero.png",
+            mobileImage: "accueil-mobile-zero.png",
+            from: "1 juillet 2026",
+            to: "",
+            views: 55050,
+            clicks: 2200,
+          },
+        ],
       },
       {
         key: "match_detail",
         headline: "Match présenté par Délice",
         link: "https://delice.tn",
-        views: 0,
-        clicks: 0,
-      },
-      {
-        key: "splash",
-        headline: "L'énergie des champions",
-        link: "https://delice.tn/campagne-ete",
-        views: 0,
-        clicks: 0,
+        webImage: "match-web.png",
+        // Mobile artwork still missing — a real campaign is rarely complete.
+        views: 26740,
+        clicks: 810,
       },
       {
         key: "notification",
         headline: "Un yaourt offert après chaque victoire",
         link: "https://delice.tn/offre",
-        views: 0,
-        clicks: 0,
+        views: 6900,
+        clicks: 1470,
       },
     ],
   },
@@ -912,23 +1283,24 @@ export const campaignsSeed: Campaign[] = [
     progress: 100,
     remaining: "",
     color: "#0091ff",
+    price: 28000,
     slots: [
       {
-        key: "partners_page",
+        key: "messagerie",
         headline: "Délice Danone — Partenaire officiel",
         link: "https://delice.tn",
         views: 48920,
         clicks: 1840,
       },
       {
-        key: "calendar_banner",
+        key: "planification",
         headline: "Bien grandir, bien jouer",
         link: "https://delice.tn/juniors",
         views: 412300,
         clicks: 5210,
       },
       {
-        key: "home_feed",
+        key: "accueil",
         headline: "Délice, partenaire de vos exploits",
         link: "https://delice.tn",
         views: 286450,
@@ -940,13 +1312,6 @@ export const campaignsSeed: Campaign[] = [
         link: "https://delice.tn",
         views: 74210,
         clicks: 2130,
-      },
-      {
-        key: "splash",
-        headline: "L'énergie des champions",
-        link: "https://delice.tn",
-        views: 96800,
-        clicks: 4320,
       },
       {
         key: "notification",
@@ -968,16 +1333,17 @@ export const campaignsSeed: Campaign[] = [
     progress: 100,
     remaining: "",
     color: "#7f77dd",
+    price: 4500,
     slots: [
       {
-        key: "calendar_banner",
+        key: "planification",
         headline: "Ramadan Karim — Délice",
         link: "https://delice.tn/ramadan",
         views: 51200,
         clicks: 1490,
       },
       {
-        key: "home_feed",
+        key: "accueil",
         headline: "Nos recettes de l'iftar",
         link: "https://delice.tn/recettes",
         views: 43800,
@@ -1003,16 +1369,10 @@ export const campaignsSeed: Campaign[] = [
     progress: 100,
     remaining: "",
     color: "#14b8a6",
+    price: 6800,
     slots: [
       {
-        key: "splash",
-        headline: "Délice Zéro — 0 % sucre ajouté",
-        link: "https://delice.tn/zero",
-        views: 33400,
-        clicks: 2210,
-      },
-      {
-        key: "home_feed",
+        key: "accueil",
         headline: "Délice Zéro arrive",
         link: "https://delice.tn/zero",
         views: 29900,
@@ -1033,23 +1393,24 @@ export const campaignsSeed: Campaign[] = [
     progress: 35,
     remaining: "60 jours restants",
     color: "#e5484d",
+    price: 9500,
     slots: [
       {
-        key: "partners_page",
+        key: "messagerie",
         headline: "Ooredoo — Partenaire télécom",
         link: "https://ooredoo.tn",
         views: 0,
         clicks: 0,
       },
       {
-        key: "calendar_banner",
+        key: "planification",
         headline: "Forfait Jeunes — 30 Go",
         link: "https://ooredoo.tn/jeunes",
         views: 0,
         clicks: 0,
       },
       {
-        key: "home_feed",
+        key: "accueil",
         headline: "Restez connectés au club",
         link: "https://ooredoo.tn/jeunes",
         views: 0,

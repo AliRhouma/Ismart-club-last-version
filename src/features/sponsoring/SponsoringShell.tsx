@@ -6,21 +6,26 @@ import { PageHeader } from "@/components/kit/PageHeader"
 
 /**
  * The Sponsoring module's front chrome: one "Sponsoring" title and the three
- * route-linked tabs (Mes partenaires · Packs · Campagnes) that every top-level
- * sponsoring screen shares. Detail/drill-in screens (a partenaire, an offer
- * form, a demande) don't use it — they carry a BackButton instead.
+ * route-linked tabs (Mes partenaires · Espaces publicitaires · Campagnes) that
+ * every top-level sponsoring screen shares. Detail/drill-in screens (a
+ * partenaire, the packs, an offer form, a demande) don't use it — they carry a
+ * BackButton instead.
  *
  * Each tab screen renders this itself, passing its own `active` value and
- * per-tab `actions`, so the toolbar stays specific to the tab (Packs owns
- * "Nouveau pack", Campagnes owns "Demandes de campagne"). Route-linked, neutral
+ * per-tab `actions`, so the toolbar stays specific to the tab (Espaces owns
+ * "Packs", Campagnes owns "Demandes de campagne"). Route-linked, neutral
  * active à la the Catégories / Budget2 tab bars (design-system rule: tabs are
  * never green).
  */
-export type SponsoringTab = "partenaires" | "packs" | "campagnes"
+export type SponsoringTab = "partenaires" | "emplacements" | "campagnes"
 
 const TABS: { value: SponsoringTab; label: string; path: string }[] = [
   { value: "partenaires", label: "Mes partenaires", path: "/sponsoring/partenaires" },
-  { value: "packs", label: "Packs", path: "/sponsoring/offres" },
+  {
+    value: "emplacements",
+    label: "Espaces publicitaires",
+    path: "/sponsoring/emplacements",
+  },
   { value: "campagnes", label: "Campagnes", path: "/sponsoring/campagnes" },
 ]
 

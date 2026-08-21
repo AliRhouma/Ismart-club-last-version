@@ -293,6 +293,9 @@ function RunningCard({
         <div className="mt-5 flex flex-wrap items-center gap-1.5 border-t border-border pt-4">
           <span className="mr-1 font-body text-[0.74rem] text-ink-muted">
             {campaign.slots.length} espaces actifs
+            {campaign.price !== null
+              ? ` · ${campaign.price.toLocaleString("fr-FR")} DT`
+              : ""}
           </span>
           {campaign.slots.map((s) => {
             const Icon = SLOT_ICON[s.key]
@@ -376,6 +379,9 @@ function ArchiveCard({
         <div className="mt-3 flex items-center justify-between">
           <span className="font-body text-[0.72rem] text-ink-muted">
             {campaign.slots.length} espaces · CTR {totals.ctr}
+            {campaign.price !== null
+              ? ` · ${campaign.price.toLocaleString("fr-FR")} DT`
+              : ""}
           </span>
           <ArrowRight
             size={14}

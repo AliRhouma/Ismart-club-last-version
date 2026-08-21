@@ -1,106 +1,65 @@
-import { useMemo, useState } from "react"
-import { Check, Search, X, UserRound, Link2Off, CalendarRange } from "lucide-react"
+import { useState } from "react"
+import { Check, Pipette, X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
-import { fmtFrLong } from "@/lib/format"
 import { useData } from "@/data/useData"
 import {
-  applyContractPreset,
   blankPartner,
-  CONTRACT_PRESETS,
-  contractSpan,
-  matchContractPreset,
-  type Offer,
+  PRESET_COLORS,
   type Partner,
 } from "@/data/seed/sponsoring"
-import { Avatar } from "@/components/kit/Avatar"
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { TierBadge } from "@/features/sponsoring/ui"
 
 const inputCls =
   "w-full rounded-md border border-input bg-transparent px-3.5 py-2.5 font-body text-sm text-ink outline-none transition-colors placeholder:text-ink-disabled focus:border-border-focus"
 
 /**
- * Add / edit a partenaire: a name, a description, the durée du partenariat, and
- * the sponsor account it's linked to.
+ * Add / edit a partenaire: a name and a description, nothing else.
  *
- * The période is picked as a DURATION first (6 mois / 1 an / 2 ans / 3 ans /
- * saison sportive), because that's the term you sign — the two date fields are
- * written by the chips and stay editable for anything off-preset.
+ * The colour is the partenaire's pastille — it rings its avatar in the table and
+ * on its fiche, so two partners are told apart at a glance. Six presets cover the
+ * usual cases; the pipette takes a brand's exact hex when the club has it.
  *
- * The account link is the interesting one — a sponsor signs up on iSmart Club to
- * follow its own campaigns, and the admin picks which of those accounts this
- * partenaire *is*. It's optional: clubs routinely sign a partner months before
- * that partner has an account, so "Aucun compte" is a first-class choice, not a
- * failure to fill the form.
+ * The form is deliberately short — a partenaire is created the moment the
+ * club shakes hands, well before the pack, the contract dates or the sponsor's
+ * iSmart Club account are settled. Those are filled in later from the partner's
+ * own fiche; the seed defaults (today → +1 an, aucun pack, aucun compte) cover
+ * the gap so the table always has something to show.
  *
  * Referenced OffreFormScreen (field styling, footer) and the Objectif modal
  * (header + close button) to stay on-brand.
  */
 export function PartnerFormModal({
-  offer,
   editing,
   onClose,
   onSaved,
 }: {
-  /** Offer whose seat this partenaire takes. */
-  offer: Offer
   /** Existing partenaire when editing, null when creating. */
   editing: Partner | null
   onClose: () => void
   onSaved: (msg: string) => void
 }) {
-  const { sponsorAccounts, partners, addPartner, updatePartner } = useData()
+  const { addPartner, updatePartner } = useData()
 
+  // Editing keeps the fields the form no longer shows (période, compte) intact.
   const [draft, setDraft] = useState<Omit<Partner, "id">>(() =>
-    editing ? { ...editing } : blankPartner(offer.id),
+    editing ? { ...editing } : blankPartner(""),
   )
-  const [query, setQuery] = useState("")
+
+  // La pipette est « active » dès que la couleur n'est plus un preset.
+  const custom = !PRESET_COLORS.some((c) => sameColor(draft.color, c))
 
   const set = <K extends keyof Omit<Partner, "id">>(
     key: K,
     val: Omit<Partner, "id">[K],
   ) => setDraft((d) => ({ ...d, [key]: val }))
 
-  // An account belongs to a single partenaire — show the others as taken.
-  const takenBy = useMemo(() => {
-    const map = new Map<string, string>()
-    for (const p of partners) {
-      if (p.accountId && p.id !== editing?.id) map.set(p.accountId, p.name)
-    }
-    return map
-  }, [partners, editing?.id])
-
-  const results = useMemo(() => {
-    const q = query.trim().toLowerCase()
-    if (!q) return sponsorAccounts
-    return sponsorAccounts.filter((a) =>
-      [a.company, a.contact, a.sector, a.email].some((f) =>
-        f.toLowerCase().includes(q),
-      ),
-    )
-  }, [sponsorAccounts, query])
-
-  const selected =
-    sponsorAccounts.find((a) => a.id === draft.accountId) ?? null
-
-  // Période — the duration chips and the summary both read from the two dates.
-  const span = contractSpan(draft.startDate, draft.endDate)
-  const activePreset = matchContractPreset(draft.startDate, draft.endDate)
-  const datesOk = span !== null && span.valid
-
-  const pickPreset = (preset: (typeof CONTRACT_PRESETS)[number]) => {
-    const { start, end } = applyContractPreset(preset, draft.startDate)
-    setDraft((d) => ({ ...d, startDate: start, endDate: end }))
-  }
-
   const submit = () => {
-    if (!datesOk) return
     const clean: Omit<Partner, "id"> = {
       ...draft,
       name: draft.name.trim() || "Sans nom",
@@ -111,7 +70,7 @@ export function PartnerFormModal({
       onSaved(`Partenaire « ${clean.name} » mis à jour`)
     } else {
       addPartner(clean)
-      onSaved(`Partenaire « ${clean.name} » ajouté à l'offre ${offer.name}`)
+      onSaved(`Partenaire « ${clean.name} » ajouté`)
     }
     onClose()
   }
@@ -120,7 +79,7 @@ export function PartnerFormModal({
     <Dialog open onOpenChange={(o) => !o && onClose()}>
       <DialogContent
         showCloseButton={false}
-        className="flex max-h-[88vh] flex-col gap-0 overflow-hidden rounded-xl border-border bg-surface p-0 sm:max-w-[560px]"
+        className="flex max-h-[88vh] flex-col gap-0 overflow-hidden rounded-xl border-border bg-surface p-0 sm:max-w-[480px]"
       >
         {/* Header */}
         <div className="flex items-start justify-between gap-3 border-b border-border px-5 py-4">
@@ -128,9 +87,9 @@ export function PartnerFormModal({
             <DialogTitle className="font-ui text-base font-medium text-ink">
               {editing ? "Modifier le partenaire" : "Ajouter un partenaire"}
             </DialogTitle>
-            <DialogDescription className="mt-1.5 flex items-center gap-2 font-body text-[0.78rem] text-ink-muted">
-              <span>Sur l'offre</span>
-              <TierBadge name={offer.name} color={offer.color} size="sm" />
+            <DialogDescription className="mt-1.5 font-body text-[0.78rem] text-ink-muted">
+              Le nom et la description du contrat. Le pack et la période se
+              renseignent depuis sa fiche.
             </DialogDescription>
           </div>
           <button
@@ -175,202 +134,52 @@ export function PartnerFormModal({
             </span>
           </label>
 
-          {/* ── Durée du partenariat ──────────────────────────────────────
-              La durée d'abord, les dates ensuite : on signe « pour deux ans »,
-              on ne calcule pas une date de fin de tête. Les chips écrivent les
-              deux champs, qui restent librement modifiables. */}
+          {/* ── Couleur ───────────────────────────────────────────────────
+              Six pastilles suffisent dans 90 % des cas ; la pipette est là pour
+              la couleur exacte d'une marque, sans encombrer la rangée. */}
           <div className="flex flex-col gap-2.5">
-            <div className="flex items-baseline justify-between gap-3">
-              <span className="font-ui text-[0.7rem] font-medium tracking-[0.06em] text-ink-muted uppercase">
-                Durée du partenariat
-              </span>
-              {span ? (
-                <span className="font-body text-[0.72rem] text-ink-disabled tabular-nums">
-                  {span.valid ? span.label : "Période invalide"}
-                </span>
-              ) : null}
-            </div>
-
-            <div className="flex flex-wrap items-center gap-1.5">
-              {CONTRACT_PRESETS.map((preset) => {
-                const active = activePreset === preset.key
-                return (
-                  <button
-                    key={preset.key}
-                    type="button"
-                    aria-pressed={active}
-                    onClick={() => pickPreset(preset)}
-                    className={cn(
-                      "rounded-pill border px-3.5 py-1.5 font-ui text-[0.76rem] font-medium transition-colors",
-                      active
-                        ? "border-info bg-info/10 text-info"
-                        : "border-border text-ink-muted hover:border-border-strong hover:text-ink",
-                    )}
-                  >
-                    {preset.label}
-                  </button>
-                )
-              })}
-            </div>
-
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <label className="flex flex-col gap-1.5">
-                <span className="font-ui text-[0.66rem] font-medium tracking-[0.06em] text-ink-muted uppercase">
-                  Début
-                </span>
-                <input
-                  type="date"
-                  value={draft.startDate}
-                  onChange={(e) => set("startDate", e.target.value)}
-                  className={cn(inputCls, "[color-scheme:dark]")}
+            <span className="font-ui text-[0.7rem] font-medium tracking-[0.06em] text-ink-muted uppercase">
+              Couleur
+            </span>
+            <div className="flex flex-wrap items-center gap-2">
+              {PRESET_COLORS.map((color) => (
+                <Swatch
+                  key={color}
+                  color={color}
+                  selected={sameColor(draft.color, color)}
+                  onSelect={() => set("color", color)}
                 />
-              </label>
-              <label className="flex flex-col gap-1.5">
-                <span className="font-ui text-[0.66rem] font-medium tracking-[0.06em] text-ink-muted uppercase">
-                  Fin
-                </span>
-                <input
-                  type="date"
-                  min={draft.startDate || undefined}
-                  value={draft.endDate}
-                  onChange={(e) => set("endDate", e.target.value)}
-                  className={cn(
-                    inputCls,
-                    "[color-scheme:dark]",
-                    !datesOk && "border-danger",
-                  )}
-                />
-              </label>
-            </div>
+              ))}
 
-            {datesOk && span ? (
-              <div className="flex items-start gap-2.5 rounded-md border border-border bg-surface-nested px-3.5 py-3">
-                <CalendarRange size={14} className="mt-0.5 shrink-0 text-info" />
-                <p className="font-body text-[0.76rem] leading-relaxed text-ink-muted">
-                  Du{" "}
-                  <span className="text-ink">{fmtFrLong(draft.startDate)}</span>{" "}
-                  au <span className="text-ink">{fmtFrLong(draft.endDate)}</span>.
-                  <span
-                    className={cn(
-                      "ml-1",
-                      span.tone === "over" && "text-danger",
-                      span.tone === "soon" && "text-warning",
-                    )}
-                  >
-                    {span.status}.
-                  </span>
-                </p>
-              </div>
-            ) : (
-              <p className="font-body text-[0.74rem] text-danger">
-                La date de fin doit suivre la date de début.
-              </p>
-            )}
-          </div>
+              <span className="mx-0.5 h-6 w-px shrink-0 bg-border" />
 
-          {/* Compte sponsor */}
-          <div className="flex flex-col gap-2.5">
-            <div className="flex items-baseline justify-between gap-3">
-              <span className="font-ui text-[0.7rem] font-medium tracking-[0.06em] text-ink-muted uppercase">
-                Compte sponsor
-              </span>
-              <span className="font-body text-[0.72rem] text-ink-disabled">
-                Optionnel
-              </span>
-            </div>
-            <p className="font-body text-[0.75rem] leading-relaxed text-ink-muted">
-              Rattachez ce partenaire à son compte iSmart Club pour qu'il puisse
-              suivre ses campagnes de son côté. Vous pourrez le faire plus tard.
-            </p>
-
-            <div className="relative flex items-center">
-              <Search
-                size={14}
-                className="pointer-events-none absolute left-3 text-ink-disabled"
-              />
-              <input
-                className={cn(inputCls, "pl-9")}
-                placeholder="Rechercher une entreprise, un contact, un secteur…"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-              />
-            </div>
-
-            <div className="max-h-[236px] overflow-y-auto rounded-lg border border-border">
-              {/* "Aucun compte" — always first, always available. */}
-              <AccountRow
-                selected={draft.accountId === null}
-                onSelect={() => set("accountId", null)}
+              {/* Pipette — n'importe quelle couleur, y compris hors presets. */}
+              <label
+                title="Couleur personnalisée"
+                className={cn(
+                  "relative flex size-8 cursor-pointer items-center justify-center rounded-pill border transition-colors",
+                  custom
+                    ? "border-transparent ring-2 ring-info ring-offset-2 ring-offset-surface"
+                    : "border-border hover:border-border-strong",
+                )}
+                style={custom ? { backgroundColor: draft.color } : undefined}
               >
-                <span className="flex size-9 shrink-0 items-center justify-center rounded-pill border border-border text-ink-disabled">
-                  <Link2Off size={15} />
-                </span>
-                <div className="min-w-0 flex-1">
-                  <div className="font-body text-[0.84rem] text-ink">
-                    Aucun compte pour l'instant
-                  </div>
-                  <div className="truncate font-body text-[0.74rem] text-ink-muted">
-                    Le partenaire sera visible côté club uniquement
-                  </div>
-                </div>
-              </AccountRow>
+                <Pipette
+                  size={14}
+                  className={custom ? "text-ink-inverted" : "text-ink-muted"}
+                />
+                <input
+                  type="color"
+                  value={draft.color}
+                  onChange={(e) => set("color", e.target.value)}
+                  className="absolute inset-0 size-full cursor-pointer opacity-0"
+                />
+              </label>
 
-              {results.length === 0 ? (
-                <div className="border-t border-border px-4 py-6 text-center">
-                  <p className="font-body text-[0.8rem] text-ink-muted">
-                    Aucun compte ne correspond à « {query} ».
-                  </p>
-                  <p className="mt-1 font-body text-[0.74rem] text-ink-disabled">
-                    Le sponsor doit d'abord créer son compte iSmart Club.
-                  </p>
-                </div>
-              ) : (
-                results.map((account) => {
-                  const taken = takenBy.get(account.id)
-                  return (
-                    <AccountRow
-                      key={account.id}
-                      selected={draft.accountId === account.id}
-                      disabled={Boolean(taken)}
-                      onSelect={() => set("accountId", account.id)}
-                    >
-                      <Avatar name={account.company} size="md" />
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-2">
-                          <span className="truncate font-body text-[0.84rem] text-ink">
-                            {account.company}
-                          </span>
-                          {account.status === "pending" ? (
-                            <span className="shrink-0 rounded-pill border border-warning/25 bg-warning/10 px-2 py-0.5 font-ui text-[0.6rem] font-medium tracking-[0.06em] text-warning uppercase">
-                              Invitation en attente
-                            </span>
-                          ) : null}
-                        </div>
-                        <div className="truncate font-body text-[0.74rem] text-ink-muted">
-                          {taken
-                            ? `Déjà rattaché à « ${taken} »`
-                            : `${account.contact} · ${account.sector}`}
-                        </div>
-                      </div>
-                    </AccountRow>
-                  )
-                })
-              )}
+              <span className="ml-1 font-mono text-[0.72rem] text-ink-disabled uppercase">
+                {draft.color}
+              </span>
             </div>
-
-            {selected ? (
-              <div className="flex items-start gap-2.5 rounded-md border border-border bg-surface-nested px-3.5 py-3">
-                <UserRound size={14} className="mt-0.5 shrink-0 text-info" />
-                <p className="font-body text-[0.76rem] leading-relaxed text-ink-muted">
-                  <span className="text-ink">{selected.contact}</span> pourra
-                  suivre les campagnes de ce partenaire depuis{" "}
-                  <span className="font-mono text-[0.72rem] text-ink-subtle">
-                    {selected.email}
-                  </span>
-                  .
-                </p>
-              </div>
-            ) : null}
           </div>
         </div>
 
@@ -386,7 +195,7 @@ export function PartnerFormModal({
           <button
             type="button"
             onClick={submit}
-            disabled={!draft.name.trim() || !datesOk}
+            disabled={!draft.name.trim()}
             className="inline-flex items-center gap-1.5 rounded-md bg-brand px-5 py-2 font-ui text-sm font-medium text-ink-inverted shadow-glow transition-colors hover:bg-brand-dim disabled:cursor-not-allowed disabled:opacity-45"
           >
             <Check size={16} />
@@ -398,42 +207,37 @@ export function PartnerFormModal({
   )
 }
 
-/** One selectable row of the account picker (selected = blue, per rule 3). */
-function AccountRow({
+/** Hex comparison, casse ignorée — `<input type="color">` renvoie en minuscules. */
+function sameColor(a: string, b: string) {
+  return a.toLowerCase() === b.toLowerCase()
+}
+
+/** Une pastille de couleur sélectionnable (sélection = anneau bleu, règle 3). */
+function Swatch({
+  color,
   selected,
-  disabled,
   onSelect,
-  children,
 }: {
+  color: string
   selected: boolean
-  disabled?: boolean
   onSelect: () => void
-  children: React.ReactNode
 }) {
   return (
     <button
       type="button"
       role="radio"
       aria-checked={selected}
-      disabled={disabled}
+      aria-label={`Couleur ${color}`}
       onClick={onSelect}
+      style={{ backgroundColor: color }}
       className={cn(
-        "flex w-full items-center gap-3 border-t border-border px-3.5 py-3 text-left transition-colors first:border-t-0",
-        disabled
-          ? "cursor-not-allowed opacity-45"
-          : "hover:bg-surface-hover",
-        selected && "bg-info/5",
+        "flex size-8 items-center justify-center rounded-pill transition-transform",
+        selected
+          ? "ring-2 ring-info ring-offset-2 ring-offset-surface"
+          : "hover:scale-105",
       )}
     >
-      {children}
-      <span
-        className={cn(
-          "flex size-[18px] shrink-0 items-center justify-center rounded-full border transition-colors",
-          selected ? "border-info bg-info" : "border-border-strong",
-        )}
-      >
-        {selected ? <Check size={11} className="text-ink-inverted" /> : null}
-      </span>
+      {selected ? <Check size={14} className="text-ink-inverted" /> : null}
     </button>
   )
 }

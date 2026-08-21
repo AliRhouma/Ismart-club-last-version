@@ -4,13 +4,17 @@ import { ExternalLink, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { initials } from "@/lib/tint"
 import { useSponsorAds } from "@/data/useSponsorAds"
+import type { SlotKey } from "@/data/seed/sponsoring"
 
 /**
- * Sponsor banner for the calendar — the `calendar_banner` ad slot come to life.
+ * Sponsor banner — an ad space come to life, on whichever surface hosts it:
+ * `accueil` on the dashboard, `planification` in the calendar, `match_detail`
+ * on a match or the résultats page.
  *
- * It reads the store's running campaigns (via useSponsorAds) and renders each
- * one's creative as a full-width banner. The slot is `rotational`, so when more
- * than one sponsor qualifies the banner auto-rotates between them (manual dots).
+ * It reads the store's running campaigns for that space (via useSponsorAds) and
+ * renders each one's creative as a full-width banner. The spaces are
+ * `rotational`, so when more than one sponsor qualifies the banner auto-rotates
+ * between them (manual dots).
  *
  * The colored fill is the sponsor's *artwork* (product content), not app chrome
  * — the one place a gradient fill is sanctioned (see campaignUi `Creative`).
@@ -19,8 +23,8 @@ import { useSponsorAds } from "@/data/useSponsorAds"
 
 const ROTATE_MS = 7000
 
-export function AdBanner() {
-  const ads = useSponsorAds()
+export function AdBanner({ space = "planification" }: { space?: SlotKey }) {
+  const ads = useSponsorAds(space)
 
   const [dismissed, setDismissed] = useState(false)
   const [index, setIndex] = useState(0)

@@ -4,13 +4,13 @@ import { Check, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useData } from "@/data/useData"
 import {
-  CAMPAIGN_COLORS,
   SLOT_DEFS,
   applyCampaignEdit,
   campaignEditDraft,
   num,
   type Campaign,
   type CampaignEdit,
+  type EditSlot,
   type SlotKey,
 } from "@/data/seed/sponsoring"
 import {
@@ -19,16 +19,18 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { Creative } from "@/features/sponsoring/campaignUi"
 import { SLOT_ICON, Switch } from "@/features/sponsoring/ui"
+import { SlotFields } from "@/features/sponsoring/EmplacementModal"
 
 const inputCls =
   "w-full rounded-md border border-input bg-transparent px-3.5 py-2.5 font-body text-sm text-ink outline-none transition-colors placeholder:text-ink-disabled focus:border-border-focus"
 
 /**
  * Modifier la configuration — one place for everything a campaign *is*: its
- * name, its période, the colour of its artwork, and the ad spaces it runs in
- * with their accroche and destination.
+ * name, its période, and the ad spaces it runs in, each with its visuals (web +
+ * mobile) and its link. No colour and no accroche: the artwork wears the
+ * partenaire's offre colour and carries the campaign's own name, so those two
+ * are not decisions the admin makes here.
  *
  * It replaces the two narrow header actions ("Modifier les dates" / "Remplacer
  * les visuels"): the admin came here to change the campaign, not to guess which
@@ -132,6 +134,30 @@ export function CampagneConfigModal({
             />
           </label>
 
+          <label className="flex flex-col gap-1.5">
+            <span className="font-ui text-[0.7rem] font-medium tracking-[0.06em] text-ink-muted uppercase">
+              Prix de la campagne
+            </span>
+            <div className="relative flex items-center">
+              <input
+                inputMode="numeric"
+                value={draft.price === null ? "" : String(draft.price)}
+                onChange={(e) => {
+                  const digits = e.target.value.replace(/\D/g, "")
+                  set({ price: digits === "" ? null : Number(digits) })
+                }}
+                placeholder="—"
+                className={cn(inputCls, "pr-14 tabular-nums")}
+              />
+              <span className="pointer-events-none absolute right-3.5 font-ui text-[0.76rem] font-medium text-ink-disabled">
+                DT
+              </span>
+            </div>
+            <span className="font-body text-[0.72rem] text-ink-disabled">
+              Vide = échange ou partenariat institutionnel.
+            </span>
+          </label>
+
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <label className="flex flex-col gap-1.5">
               <span className="font-ui text-[0.7rem] font-medium tracking-[0.06em] text-ink-muted uppercase">
@@ -167,29 +193,6 @@ export function CampagneConfigModal({
             </label>
           </div>
 
-          <div className="flex flex-col gap-2">
-            <span className="font-ui text-[0.7rem] font-medium tracking-[0.06em] text-ink-muted uppercase">
-              Couleur des visuels
-            </span>
-            <div className="flex flex-wrap items-center gap-2">
-              {CAMPAIGN_COLORS.map((c) => (
-                <button
-                  key={c}
-                  type="button"
-                  aria-label={`Couleur ${c}`}
-                  onClick={() => set({ color: c })}
-                  className={cn(
-                    "size-8 rounded-full border-2 transition-colors",
-                    draft.color === c
-                      ? "border-info"
-                      : "border-transparent hover:border-border-strong",
-                  )}
-                  style={{ backgroundColor: c }}
-                />
-              ))}
-            </div>
-          </div>
-
           {/* Les espaces */}
           <div>
             <div className="mb-3.5 flex items-baseline justify-between gap-3 border-b border-border pb-2">
@@ -208,9 +211,7 @@ export function CampagneConfigModal({
                   label={def.label}
                   description={def.description}
                   slot={draft.slots[def.key]}
-                  fallback={draft.name}
                   partnerName={partnerName}
-                  color={draft.color}
                   onChange={(patch) => setSlot(def.key, patch)}
                 />
               ))}
@@ -256,26 +257,21 @@ export function CampagneConfigModal({
   )
 }
 
-/* ── One ad space: toggle, then its accroche, son lien et son visuel ─────── */
+/* ── One ad space: its switch, then its visuels et son lien ─────────────── */
 function SlotRow({
   slotKey,
   label,
   description,
   slot,
-  fallback,
   partnerName,
-  color,
   onChange,
 }: {
   slotKey: SlotKey
   label: string
   description: string
-  slot: { enabled: boolean; headline: string; link: string }
-  /** Campaign name — what an empty accroche falls back to. */
-  fallback: string
+  slot: EditSlot
   partnerName: string
-  color: string
-  onChange: (patch: Partial<{ enabled: boolean; headline: string; link: string }>) => void
+  onChange: (patch: Partial<EditSlot>) => void
 }) {
   const Icon = SLOT_ICON[slotKey]
 
@@ -318,37 +314,12 @@ function SlotRow({
       </div>
 
       {slot.enabled ? (
-        <div className="mt-3.5 flex items-end gap-3 border-t border-border pt-3.5">
-          <div className="flex min-w-0 flex-1 flex-col gap-3">
-            <label className="flex flex-col gap-1.5">
-              <span className="font-ui text-[0.66rem] font-medium tracking-[0.06em] text-ink-muted uppercase">
-                Accroche
-              </span>
-              <input
-                value={slot.headline}
-                onChange={(e) => onChange({ headline: e.target.value })}
-                placeholder={fallback || "Bien grandir, bien jouer"}
-                className={cn(inputCls, "py-2 text-[0.82rem]")}
-              />
-            </label>
-            <label className="flex flex-col gap-1.5">
-              <span className="font-ui text-[0.66rem] font-medium tracking-[0.06em] text-ink-muted uppercase">
-                Lien
-              </span>
-              <input
-                value={slot.link}
-                onChange={(e) => onChange({ link: e.target.value })}
-                placeholder="https://exemple.tn"
-                className={cn(inputCls, "py-2 font-mono text-[0.78rem]")}
-              />
-            </label>
-          </div>
-          {/* Live creative — the admin sees the artwork as he types. */}
-          <Creative
-            name={partnerName}
-            headline={slot.headline || fallback || "Accroche"}
-            color={color}
-            className="h-[66px] w-[146px] shrink-0"
+        <div className="mt-3.5 border-t border-border pt-3.5">
+          <SlotFields
+            slotKey={slotKey}
+            value={slot}
+            onChange={onChange}
+            partnerName={partnerName}
             compact
           />
         </div>

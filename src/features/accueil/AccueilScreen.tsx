@@ -141,7 +141,7 @@ export function AccueilScreen() {
           rounded corners once it's pinned. Full-width on web, copy collapses
           on mobile. Reads the live running campaigns (shared ad pool). */}
       <div className="sticky top-0 z-20 -mx-6 bg-background px-6 py-2 md:-mx-8 md:px-8">
-        <AdBanner />
+        <AdBanner space="accueil" />
       </div>
 
       <section className="flex flex-col gap-4">

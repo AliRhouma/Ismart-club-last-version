@@ -213,7 +213,7 @@ export function MessagerieScreen() {
 
   // The sponsored conversation — drawn from the live campaign pool, shown as a
   // row in every tab. We surface just the first sponsor on air.
-  const sponsoredAd = useSponsorAds()[0] ?? null
+  const sponsoredAd = useSponsorAds("messagerie")[0] ?? null
 
   const [selectedId, setSelectedId] = useState(list[0]?.id ?? "")
   // When switching tabs, land on the first conversation of that type — but keep

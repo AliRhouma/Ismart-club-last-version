@@ -7,7 +7,6 @@ import {
   Copy,
   Trash2,
   Check,
-  LayoutTemplate,
   Sparkles,
 } from "lucide-react"
 
@@ -20,9 +19,10 @@ import {
   pct,
   type Offer,
 } from "@/data/seed/sponsoring"
-import { SponsoringShell } from "@/features/sponsoring/SponsoringShell"
 import { EmptyState } from "@/components/kit/EmptyState"
 import { ConfirmDialog } from "@/components/kit/ConfirmDialog"
+import { BackButton } from "@/components/kit/BackButton"
+import { PageHeader } from "@/components/kit/PageHeader"
 import { Stat } from "@/features/budget/ui"
 import { SPACE_ICON } from "@/features/sponsoring/ui"
 import {
@@ -75,40 +75,38 @@ export function OffresScreen() {
     partners.filter((p) => p.offerId === offerId).length
 
   return (
-    <SponsoringShell
-      active="packs"
-      subtitle="Vos formules de partenariat et la visibilité qu'elles donnent."
-      actions={
-        <>
-          <button
-            type="button"
-            onClick={() => navigate("/sponsoring/emplacements")}
-            className="inline-flex items-center gap-1.5 rounded-md border border-input px-4 py-2 font-ui text-sm font-medium text-ink transition-colors hover:border-border-strong hover:bg-accent"
-          >
-            <LayoutTemplate size={16} /> Espaces publicitaires
-          </button>
-          <button
-            type="button"
-            onClick={() => navigate("/sponsoring/demandes-sur-mesure")}
-            className="inline-flex items-center gap-1.5 rounded-md border border-input px-4 py-2 font-ui text-sm font-medium text-ink transition-colors hover:border-border-strong hover:bg-accent"
-          >
-            <Sparkles size={16} /> Sur mesure
-            {pendingRequests > 0 ? (
-              <span className="inline-flex min-w-5 items-center justify-center rounded-full bg-info/15 px-1.5 py-0.5 font-ui text-[0.68rem] font-medium text-info tabular-nums">
-                {pendingRequests}
-              </span>
-            ) : null}
-          </button>
-          <button
-            type="button"
-            onClick={() => navigate("/sponsoring/offres/nouvelle")}
-            className="inline-flex items-center gap-1.5 rounded-md bg-brand px-4 py-2 font-ui text-sm font-medium text-ink-inverted shadow-glow transition-colors hover:bg-brand-dim"
-          >
-            <Plus size={16} /> Nouveau pack
-          </button>
-        </>
-      }
-    >
+    <>
+      <BackButton
+        to="/sponsoring/emplacements"
+        label="Retour aux espaces publicitaires"
+      />
+      <PageHeader
+        title="Packs"
+        subtitle="Vos formules de partenariat et la visibilité qu'elles donnent."
+        actions={
+          <>
+            <button
+              type="button"
+              onClick={() => navigate("/sponsoring/demandes-sur-mesure")}
+              className="inline-flex items-center gap-1.5 rounded-md border border-input px-4 py-2 font-ui text-sm font-medium text-ink transition-colors hover:border-border-strong hover:bg-accent"
+            >
+              <Sparkles size={16} /> Sur mesure
+              {pendingRequests > 0 ? (
+                <span className="inline-flex min-w-5 items-center justify-center rounded-full bg-info/15 px-1.5 py-0.5 font-ui text-[0.68rem] font-medium text-info tabular-nums">
+                  {pendingRequests}
+                </span>
+              ) : null}
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate("/sponsoring/offres/nouvelle")}
+              className="inline-flex items-center gap-1.5 rounded-md bg-brand px-4 py-2 font-ui text-sm font-medium text-ink-inverted shadow-glow transition-colors hover:bg-brand-dim"
+            >
+              <Plus size={16} /> Nouveau pack
+            </button>
+          </>
+        }
+      />
 
       {/* Summary strip */}
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
@@ -210,7 +208,7 @@ export function OffresScreen() {
           <span className="font-body text-[0.84rem] text-ink">{toast.msg}</span>
         </div>
       ) : null}
-    </SponsoringShell>
+    </>
   )
 }
 

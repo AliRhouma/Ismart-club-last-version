@@ -43,10 +43,10 @@ export type RunningAd = {
  * nobody has bought the écran d'ouverture for the moment).
  */
 export const RUNNING_BY_SLOT: Record<SlotKey, RunningAd[]> = {
-  /* Annuaire — cumulative: every partenaire is always visible. */
-  partners_page: [
+  /* Messagerie — cumulative: every partenaire keeps its conversation. */
+  messagerie: [
     {
-      id: "run-annuaire-delice",
+      id: "run-messagerie-delice",
       partner: "Délice Danone",
       campaign: "Campagne Été 2026",
       headline: "Délice Danone — Partenaire officiel",
@@ -56,10 +56,10 @@ export const RUNNING_BY_SLOT: Record<SlotKey, RunningAd[]> = {
       endsIn: "dans 45 jours",
       endDate: "31 août 2026",
       daysLeft: 45,
-      note: "Toujours visible — l'annuaire n'est pas une rotation",
+      note: "Toujours visible — la liste des conversations n'est pas une rotation",
     },
     {
-      id: "run-annuaire-ooredoo",
+      id: "run-messagerie-ooredoo",
       partner: "Ooredoo Tunisie",
       campaign: "Forfait Jeunes 2026",
       headline: "Ooredoo — Partenaire télécom",
@@ -71,7 +71,7 @@ export const RUNNING_BY_SLOT: Record<SlotKey, RunningAd[]> = {
       daysLeft: 60,
     },
     {
-      id: "run-annuaire-sartex",
+      id: "run-messagerie-sartex",
       partner: "Sartex Sport — équipementier officiel",
       campaign: "Maillots 2026-2027",
       headline: "Sartex Sport — équipementier officiel",
@@ -83,7 +83,7 @@ export const RUNNING_BY_SLOT: Record<SlotKey, RunningAd[]> = {
       daysLeft: 210,
     },
     {
-      id: "run-annuaire-pharmacie",
+      id: "run-messagerie-pharmacie",
       partner: "Pharmacie Centrale El Menzah",
       campaign: "Santé des jeunes",
       headline: "Votre pharmacie de quartier",
@@ -97,7 +97,7 @@ export const RUNNING_BY_SLOT: Record<SlotKey, RunningAd[]> = {
   ],
 
   /* Bannière calendrier — rotation pondérée, la plus disputée. */
-  calendar_banner: [
+  planification: [
     {
       id: "run-cal-delice",
       partner: "Délice Danone",
@@ -149,7 +149,7 @@ export const RUNNING_BY_SLOT: Record<SlotKey, RunningAd[]> = {
   ],
 
   /* Fil d'accueil — rotation plus courte, une campagne se termine demain. */
-  home_feed: [
+  accueil: [
     {
       id: "run-feed-delice",
       partner: "Délice Danone",
@@ -205,8 +205,6 @@ export const RUNNING_BY_SLOT: Record<SlotKey, RunningAd[]> = {
     },
   ],
 
-  /* Écran d'ouverture — personne n'a acheté : l'espace est libre. */
-  splash: [],
 
   /* Notification push — quota d'envois partagé entre deux partenaires. */
   notification: [

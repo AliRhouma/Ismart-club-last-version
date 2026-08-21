@@ -92,7 +92,7 @@ function SponsoredNotifRow({
 }: {
   onDismiss: () => void
 }) {
-  const ad = useSponsorAds()[0]
+  const ad = useSponsorAds("notification")[0]
   if (!ad) return null
   return (
     <a

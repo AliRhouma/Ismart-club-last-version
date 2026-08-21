@@ -5,10 +5,10 @@ import {
   ImageIcon,
   Link2,
   Pencil,
+  MessageSquare,
   Ruler,
   Send,
   Upload,
-  Smartphone,
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -17,24 +17,12 @@ import { BackButton } from "@/components/kit/BackButton"
 import { FormSheet } from "@/components/kit/FormSheet"
 import { TierBadge } from "@/features/sponsoring/ui"
 import { TIER_COLOR } from "@/features/sponsor/mock"
-import {
-  AdSlot,
-  AnnuaireMock,
-  CalendarMock,
-  EmplacementCard,
-  FeedMock,
-  MatchMock,
-  NotificationMock,
-  PhoneFrame,
-  SplashMock,
-  WebFrame,
-  Line,
-} from "@/features/sponsoring/emplacementMocks"
-import { Creative, EditableCreative, IconButton } from "@/features/sponsoring/campaignUi"
+import { EmplacementCard } from "@/features/sponsoring/emplacementMocks"
+import { SurfacePair } from "@/features/sponsoring/appSurfaces"
+import { IconButton } from "@/features/sponsoring/campaignUi"
 import {
   CAMPAIGN_HEADLINES,
   draftFromCampaign,
-  SLOT_DIMENSIONS,
   SPONSOR_CAMPAIGNS,
   type CampaignDraft,
   type DraftSlot,
@@ -50,7 +38,8 @@ const inputCls =
  * Each space states the dimension its visual must respect.
  *
  * The draft arrives through the router's `state` (no store — see campagneMock).
- * Editing a slot opens the centered modal: visuel + accroche + lien. "Envoyer
+ * Editing a slot opens the centered modal: the visuel and the lien it opens —
+ * the creative carries the campaign's own name, there is no accroche. "Envoyer
  * la demande" sends the whole thing to the club, which reviews it before it
  * goes live.
  */
@@ -76,7 +65,7 @@ export function CampagneVisuelsScreen() {
 
   const isNew = !existing
 
-  const filled = draft.slots.filter((s) => s.image !== "").length
+  const filled = draft.slots.filter(slotFilled).length
 
   const saveSlot = (key: SlotKey, patch: Partial<DraftSlot>) =>
     setDraft((d) =>
@@ -155,15 +144,15 @@ export function CampagneVisuelsScreen() {
       </p>
 
       {/* ── The surfaces the tier grants ──────────────────────────────── */}
-      <div className="mt-5 grid grid-cols-1 gap-8 lg:grid-cols-2">
+      <div className="mt-5 flex flex-col gap-6">
         {draft.slots.map((slot) => (
           <EmplacementCard
             key={slot.key}
             slotKey={slot.key}
+            badge={null}
             headerRight={
               <div className="flex items-center gap-2">
-                <DimensionChip slotKey={slot.key} />
-                {slot.image ? (
+                {slotFilled(slot) ? (
                   <IconButton
                     icon={Pencil}
                     label="Modifier cet espace"
@@ -181,7 +170,7 @@ export function CampagneVisuelsScreen() {
               </div>
             }
             footer={
-              slot.image ? (
+              slotFilled(slot) ? (
                 <SlotSummary slot={slot} onEdit={() => setEditing(slot.key)} />
               ) : (
                 <p className="font-body text-[0.72rem] text-ink-disabled">
@@ -190,10 +179,25 @@ export function CampagneVisuelsScreen() {
               )
             }
           >
-            <SlotMock
-              slot={slot}
-              sponsor="Délice Danone"
-              color={draft.color}
+            <SurfacePair
+              slotKey={slot.key}
+              placed={
+                SLOT_BY_KEY[slot.key].medium === "message"
+                  ? { web: true, mobile: true }
+                  : { web: slot.image !== "", mobile: slot.mobileImage !== "" }
+              }
+              ad={
+                slotFilled(slot)
+                  ? {
+                      sponsor: "Délice Danone",
+                      color: draft.color,
+                      headline:
+                        SLOT_BY_KEY[slot.key].medium === "message"
+                          ? slot.headline
+                          : draft.name,
+                    }
+                  : null
+              }
               onEdit={() => setEditing(slot.key)}
             />
           </EmplacementCard>
@@ -243,6 +247,13 @@ export function CampagneVisuelsScreen() {
   )
 }
 
+/** A space is filled when it carries what its medium needs. */
+function slotFilled(slot: DraftSlot): boolean {
+  return SLOT_BY_KEY[slot.key].medium === "message"
+    ? slot.headline.trim() !== ""
+    : slot.image !== "" || slot.mobileImage !== ""
+}
+
 /* ── The slot editor modal ──────────────────────────────────────────────── */
 function SlotModal({
   slot,
@@ -255,8 +266,14 @@ function SlotModal({
 }) {
   const def = SLOT_BY_KEY[slot.key]
   const [image, setImage] = useState(slot.image)
+  const [mobileImage, setMobileImage] = useState(slot.mobileImage)
   const [headline, setHeadline] = useState(slot.headline)
   const [link, setLink] = useState(slot.link)
+
+  const isMessage = def.medium === "message"
+  const incomplete = isMessage
+    ? headline.trim() === ""
+    : image === "" && mobileImage === ""
 
   return (
     <FormSheet
@@ -265,64 +282,51 @@ function SlotModal({
       title={def.label}
       description={def.description}
       submitLabel="Enregistrer l'espace"
-      submitDisabled={image === ""}
-      onSubmit={() => onSave({ image, headline, link })}
+      submitDisabled={incomplete}
+      onSubmit={() => onSave({ image, mobileImage, headline, link })}
     >
       <div className="flex flex-col gap-5">
-        {/* The dimension rule for this exact space, stated before the upload. */}
-        <div className="flex items-center gap-2 rounded-md border border-border bg-surface-nested px-3 py-2.5">
-          <Ruler size={14} className="shrink-0 text-info" />
-          <span className="font-body text-[0.78rem] text-ink-subtle">
-            Dimension requise :{" "}
-            <span className="text-ink">{SLOT_DIMENSIONS[slot.key]}</span>
-          </span>
-        </div>
-
-        {/* Not a <label>: a wrapping label would steal the upload button's
-            accessible name. */}
-        <ModalField label="Visuel" hint="PNG ou JPG, 2 Mo maximum." plain>
-          {image ? (
-            <div className="flex items-center gap-3 rounded-md border border-border bg-surface-nested px-3 py-2.5">
-              <span className="flex size-8 shrink-0 items-center justify-center rounded-sm bg-surface text-info">
-                <ImageIcon size={14} />
+        {isMessage ? (
+          <>
+            <div className="flex items-center gap-2 rounded-md border border-border bg-surface-nested px-3 py-2.5">
+              <MessageSquare size={14} className="shrink-0 text-info" />
+              <span className="font-body text-[0.78rem] text-ink-subtle">
+                Aucun visuel ici : {slot.key === "messagerie" ? "la conversation" : "la notification"}{" "}
+                reprend la mise en forme de l'app, sous votre nom.
               </span>
-              <span className="min-w-0 flex-1 truncate font-body text-[0.8rem] text-ink-subtle">
-                {image}
-              </span>
-              <button
-                type="button"
-                onClick={() => setImage("")}
-                className="shrink-0 rounded-sm px-1.5 py-0.5 font-ui text-[0.7rem] font-medium tracking-[0.04em] text-info uppercase transition-colors hover:bg-surface-hover"
-              >
-                Retirer
-              </button>
             </div>
-          ) : (
-            /* No network in the prototype: "uploading" just names a file. */
-            <button
-              type="button"
-              onClick={() => setImage(`${slot.key}-visuel.png`)}
-              className="flex w-full flex-col items-center justify-center gap-1.5 rounded-md border border-dashed border-border-strong px-4 py-7 transition-colors hover:border-info hover:bg-info/5"
+            <ModalField
+              label={slot.key === "messagerie" ? "Message" : "Texte de la notification"}
+              hint="Ce que le parent lit, en une ou deux lignes."
             >
-              <Upload size={18} className="text-ink-muted" />
-              <span className="font-ui text-[0.78rem] font-medium text-ink">
-                Envoyer un visuel
-              </span>
-              <span className="font-body text-[0.72rem] text-ink-disabled">
-                ou glissez votre fichier ici
-              </span>
-            </button>
-          )}
-        </ModalField>
-
-        <ModalField label="Accroche" hint="Texte affiché sur le visuel.">
-          <input
-            value={headline}
-            onChange={(e) => setHeadline(e.target.value)}
-            placeholder="Bien grandir, bien jouer"
-            className={inputCls}
-          />
-        </ModalField>
+              <textarea
+                autoFocus
+                rows={3}
+                value={headline}
+                onChange={(e) => setHeadline(e.target.value)}
+                placeholder="Bien grandir, bien jouer"
+                className={cn(inputCls, "resize-none leading-relaxed")}
+              />
+            </ModalField>
+          </>
+        ) : (
+          <>
+            <UploadField
+              label="Visuel — version web"
+              size={def.webSize ?? ""}
+              value={image}
+              onChange={setImage}
+              file={`${slot.key}-web.png`}
+            />
+            <UploadField
+              label="Visuel — version mobile"
+              size={def.mobileSize ?? ""}
+              value={mobileImage}
+              onChange={setMobileImage}
+              file={`${slot.key}-mobile.png`}
+            />
+          </>
+        )}
 
         <ModalField label="Lien au clic" hint="Où le visiteur arrive après le clic.">
           <div className="relative flex items-center">
@@ -343,16 +347,62 @@ function SlotModal({
   )
 }
 
-/* ── The dimension rule for a space, shown on its card header ────────────── */
-function DimensionChip({ slotKey }: { slotKey: SlotKey }) {
+/** One artwork slot in the modal: its dimension, then the upload. */
+function UploadField({
+  label,
+  size,
+  value,
+  onChange,
+  file,
+}: {
+  label: string
+  size: string
+  value: string
+  onChange: (v: string) => void
+  /** The filename "uploading" produces — the prototype has no network. */
+  file: string
+}) {
   return (
-    <span
-      title={`Dimension requise : ${SLOT_DIMENSIONS[slotKey]}`}
-      className="inline-flex items-center gap-1.5 rounded-sm border border-border bg-surface-nested px-2 py-1 font-body text-[0.68rem] whitespace-nowrap text-ink-muted"
-    >
-      <Ruler size={11} className="shrink-0 text-ink-disabled" />
-      {SLOT_DIMENSIONS[slotKey]}
-    </span>
+    /* Not a <label>: a wrapping label would steal the upload button's name. */
+    <ModalField label={label} plain>
+      <div className="flex items-center gap-2 rounded-md border border-border bg-surface-nested px-3 py-2">
+        <Ruler size={13} className="shrink-0 text-info" />
+        <span className="font-body text-[0.74rem] text-ink-subtle">
+          Dimension requise : <span className="text-ink">{size}</span>
+        </span>
+      </div>
+      {value ? (
+        <div className="mt-2 flex items-center gap-3 rounded-md border border-border px-3 py-2.5">
+          <span className="flex size-8 shrink-0 items-center justify-center rounded-sm bg-surface-nested text-info">
+            <ImageIcon size={14} />
+          </span>
+          <span className="min-w-0 flex-1 truncate font-body text-[0.8rem] text-ink-subtle">
+            {value}
+          </span>
+          <button
+            type="button"
+            onClick={() => onChange("")}
+            className="shrink-0 rounded-sm px-1.5 py-0.5 font-ui text-[0.7rem] font-medium tracking-[0.04em] text-info uppercase transition-colors hover:bg-surface-hover"
+          >
+            Retirer
+          </button>
+        </div>
+      ) : (
+        <button
+          type="button"
+          onClick={() => onChange(file)}
+          className="mt-2 flex w-full flex-col items-center justify-center gap-1.5 rounded-md border border-dashed border-border-strong px-4 py-6 transition-colors hover:border-info hover:bg-info/5"
+        >
+          <Upload size={17} className="text-ink-muted" />
+          <span className="font-ui text-[0.76rem] font-medium text-ink">
+            Envoyer un visuel
+          </span>
+          <span className="font-body text-[0.7rem] text-ink-disabled">
+            ou glissez votre fichier ici
+          </span>
+        </button>
+      )}
+    </ModalField>
   )
 }
 
@@ -422,189 +472,5 @@ function DateBlock({
         {value}
       </div>
     </div>
-  )
-}
-
-/* ── The slot, drawn in its real surface: empty or carrying the creative ── */
-function SlotMock({
-  slot,
-  sponsor,
-  color,
-  onEdit,
-}: {
-  slot: DraftSlot
-  sponsor: string
-  color: string
-  onEdit: () => void
-}) {
-  const empty = slot.image === ""
-
-  /** A filled creative gets the hover edit affordances. */
-  const creative = (className: string, compact?: boolean) => (
-    <EditableCreative onEditImage={onEdit} onEditLink={onEdit}>
-      <Creative
-        name={sponsor}
-        headline={slot.headline || slot.image}
-        color={color}
-        className={className}
-        compact={compact}
-      />
-    </EditableCreative>
-  )
-
-  switch (slot.key) {
-    case "partners_page":
-      return (
-        <WebFrame title="ismartclub.tn — Nos partenaires">
-          <AnnuaireMock
-            slot={
-              empty ? (
-                <button
-                  type="button"
-                  onClick={onEdit}
-                  className="flex size-full flex-col items-center justify-center gap-1 rounded-md border border-dashed border-info/40 bg-info/5 text-info transition-colors hover:bg-info/10"
-                >
-                  <span className="font-ui text-[0.6rem] font-medium">
-                    Disponible
-                  </span>
-                </button>
-              ) : (
-                creative("size-full", true)
-              )
-            }
-          />
-        </WebFrame>
-      )
-
-    case "calendar_banner":
-      return (
-        <PhoneFrame>
-          <CalendarMock
-            slot={
-              empty ? (
-                <EmptySlot onEdit={onEdit} sub="Bannière · 320×80" />
-              ) : (
-                creative("h-[54px]", true)
-              )
-            }
-          />
-        </PhoneFrame>
-      )
-
-    case "home_feed":
-      return (
-        <PhoneFrame>
-          <FeedMock
-            slot={
-              empty ? (
-                <EmptySlot onEdit={onEdit} label="Carte sponsorisée" />
-              ) : (
-                creative("h-[86px]")
-              )
-            }
-          />
-        </PhoneFrame>
-      )
-
-    case "match_detail":
-      return (
-        <PhoneFrame>
-          <MatchMock
-            slot={
-              empty ? (
-                <EmptySlot onEdit={onEdit} label="Match présenté par…" />
-              ) : (
-                creative("h-[52px]", true)
-              )
-            }
-          />
-        </PhoneFrame>
-      )
-
-    case "splash":
-      return (
-        <PhoneFrame dark>
-          <SplashMock
-            slot={
-              empty ? (
-                <EmptySlot
-                  onEdit={onEdit}
-                  icon={Smartphone}
-                  label="Écran d'ouverture"
-                  sub="Plein écran · 3 s"
-                  tall
-                />
-              ) : (
-                creative("h-[240px] w-full")
-              )
-            }
-          />
-        </PhoneFrame>
-      )
-
-    case "notification":
-      return (
-        <PhoneFrame dark>
-          <NotificationMock
-            slot={
-              empty ? (
-                <EmptySlot onEdit={onEdit} label="Notification sponsor" />
-              ) : (
-                <EditableCreative onEditImage={onEdit} onEditLink={onEdit}>
-                  <div className="rounded-xl border border-border-strong bg-surface px-3 py-2.5">
-                    <div className="flex items-center gap-2">
-                      <span
-                        className="flex size-5 items-center justify-center rounded-[4px] font-ui text-[0.45rem] font-semibold text-white"
-                        style={{ backgroundColor: color }}
-                      >
-                        {sponsor.slice(0, 2).toUpperCase()}
-                      </span>
-                      <span className="truncate font-ui text-[0.6rem] font-medium text-ink">
-                        {sponsor}
-                      </span>
-                      <span className="ml-auto font-body text-[0.5rem] text-ink-disabled">
-                        maintenant
-                      </span>
-                    </div>
-                    <p className="mt-1.5 font-body text-[0.6rem] leading-snug text-ink-subtle">
-                      {slot.headline || slot.image}
-                    </p>
-                  </div>
-                </EditableCreative>
-              )
-            }
-          />
-        </PhoneFrame>
-      )
-
-    default:
-      return <Line />
-  }
-}
-
-/** The empty "Espace disponible" placeholder, made clickable. */
-function EmptySlot({
-  onEdit,
-  icon,
-  label,
-  sub,
-  tall,
-}: {
-  onEdit: () => void
-  icon?: typeof Smartphone
-  label?: string
-  sub?: string
-  tall?: boolean
-}) {
-  return (
-    <button type="button" onClick={onEdit} className="w-full">
-      <AdSlot
-        icon={icon}
-        label={label}
-        sub={sub ?? "Espace disponible"}
-        tall={tall}
-        className="w-full transition-colors hover:bg-info/10"
-      />
-    </button>
   )
 }

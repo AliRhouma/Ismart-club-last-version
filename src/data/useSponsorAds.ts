@@ -1,6 +1,7 @@
 import { useMemo } from "react"
 
 import { useData } from "@/data/useData"
+import type { SlotKey } from "@/data/seed/sponsoring"
 
 /** One ready-to-render sponsor creative, drawn from a running campaign. */
 export type SponsorAd = {
@@ -12,12 +13,12 @@ export type SponsorAd = {
 }
 
 /**
- * The pool of sponsor creatives currently on air: every running campaign
- * (`en_cours`) whose offer includes an enabled `calendar_banner` slot. Shared
- * by every in-app ad placement (calendar banner, messagerie…) so they all show
- * the same live sponsors and stay in sync with the Sponsoring module.
+ * The pool of sponsor creatives currently on air in ONE ad space: every
+ * running campaign (`en_cours`) that activated that space. Each in-app
+ * placement asks for its own space, so switching a space off in the campaign
+ * wizard really does empty it here.
  */
-export function useSponsorAds(): SponsorAd[] {
+export function useSponsorAds(space: SlotKey = "planification"): SponsorAd[] {
   const { campaigns, partners } = useData()
 
   return useMemo<SponsorAd[]>(() => {
@@ -25,7 +26,7 @@ export function useSponsorAds(): SponsorAd[] {
     const out: SponsorAd[] = []
     for (const c of campaigns) {
       if (c.status !== "en_cours") continue
-      const slot = c.slots.find((s) => s.key === "calendar_banner")
+      const slot = c.slots.find((s) => s.key === space)
       if (!slot) continue
       const partner = byPartner.get(c.partnerId)
       if (!partner) continue
@@ -38,5 +39,5 @@ export function useSponsorAds(): SponsorAd[] {
       })
     }
     return out
-  }, [campaigns, partners])
+  }, [campaigns, partners, space])
 }
