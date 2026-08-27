@@ -11,6 +11,7 @@ import {
   Gauge,
   Layers,
   CalendarDays,
+  Dumbbell,
   PlayCircle,
   Trophy,
   Network,
@@ -35,6 +36,7 @@ import {
   Building2,
   Megaphone,
   Inbox,
+  Swords,
   Component,
   type LucideIcon,
 } from "lucide-react"
@@ -51,6 +53,8 @@ export type NavLeaf = {
   label: string
   path: string
   icon: LucideIcon
+  /** Active only on an exact match (a space root that owns sub-routes). */
+  exact?: boolean
 }
 
 export type NavGroup = {
@@ -181,8 +185,104 @@ export const sponsorNavLeaves: NavLeaf[] = sponsorNavTree.flatMap((node) =>
   node.type === "group" ? node.children : [node],
 )
 
+/**
+ * The parent space — the narrowest of the three. `/parent` is the family
+ * accueil (the children); everything below it belongs to ONE child and carries
+ * his id in the URL (`/parent/u10-j7/planification`), so "se connecter en tant
+ * que…" is a plain link and the space keeps no active-child state.
+ */
+export function parentNavTreeFor(enfantId: string): NavNode[] {
+  const base = `/parent/${enfantId}`
+  return [
+    { type: "item", label: "Mes enfants", path: "/parent", icon: Home, exact: true },
+    {
+      type: "item",
+      label: "Planification",
+      path: `${base}/planification`,
+      icon: Calendar,
+    },
+    {
+      type: "item",
+      label: "Séances",
+      path: `${base}/seances`,
+      icon: Dumbbell,
+    },
+    { type: "item", label: "Matchs", path: `${base}/matchs`, icon: Swords },
+    // Familiale, pas scopée à un enfant : la boîte réunit les conversations
+    // des trois enfants (l'enfant sert de filtre, pas de compte).
+    {
+      type: "item",
+      label: "Messagerie",
+      path: "/parent/messagerie",
+      icon: MessageSquare,
+    },
+  ]
+}
+
+/** Static shape of the tree — the top bar reads it to title the current page. */
+export const parentNavTree: NavNode[] = [
+  { type: "item", label: "Mes enfants", path: "/parent", icon: Home, exact: true },
+  {
+    type: "item",
+    label: "Planification",
+    path: "/parent/planification",
+    icon: Calendar,
+  },
+  { type: "item", label: "Séances", path: "/parent/seances", icon: Dumbbell },
+  { type: "item", label: "Matchs", path: "/parent/matchs", icon: Swords },
+  {
+    type: "item",
+    label: "Messagerie",
+    path: "/parent/messagerie",
+    icon: MessageSquare,
+  },
+]
+
+/** Sections of the parent space — never mistaken for a child's id. */
+const PARENT_SECTIONS = ["planification", "seances", "matchs", "messagerie"]
+
+/**
+ * "/parent/u10-j7/planification/seance/x" → "/parent/planification/seance/x",
+ * so a child-scoped URL still resolves against the static leaves above. A URL
+ * that already names a section ("/parent/seances") is left untouched.
+ */
+export function normalizeParentPath(pathname: string): string {
+  // La messagerie est familiale : son éventuel second segment n'est qu'un
+  // filtre par enfant, pas un compte — elle se replie sur sa propre feuille.
+  if (pathname.startsWith("/parent/messagerie")) return "/parent/messagerie"
+  const m = pathname.match(/^\/parent\/([^/]+)(\/.*)?$/)
+  if (!m || PARENT_SECTIONS.includes(m[1])) return pathname
+  return `/parent${m[2] ?? ""}`
+}
+
+export const parentNavLeaves: NavLeaf[] = parentNavTree.flatMap((node) =>
+  node.type === "group" ? node.children : [node],
+)
+
 /** Where each role lands after signing in. */
-export const HOME_PATH: Record<"admin" | "sponsor", string> = {
+export const HOME_PATH: Record<"admin" | "sponsor" | "parent", string> = {
   admin: "/",
   sponsor: "/sponsor/partenaires",
+  parent: "/parent",
+}
+
+/** The nav tree each space renders in the sidebar. */
+export const NAV_TREE: Record<"admin" | "sponsor" | "parent", NavNode[]> = {
+  admin: navTree,
+  sponsor: sponsorNavTree,
+  parent: parentNavTree,
+}
+
+/** Flat leaves per space — the top bar reads them to title the current page. */
+export const NAV_LEAVES: Record<"admin" | "sponsor" | "parent", NavLeaf[]> = {
+  admin: navLeaves,
+  sponsor: sponsorNavLeaves,
+  parent: parentNavLeaves,
+}
+
+/** Sidebar wordmark subtitle per space. */
+export const SPACE_SUBTITLE: Record<"admin" | "sponsor" | "parent", string> = {
+  admin: "Plateforme club",
+  sponsor: "Espace sponsor",
+  parent: "Espace parent",
 }

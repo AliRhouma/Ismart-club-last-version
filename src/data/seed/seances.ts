@@ -15,13 +15,27 @@
  */
 
 import type { PlanEvent } from "@/data/seed/events"
+import type { ProcedeItem } from "@/data/seed/procedes"
 
 /* ── Attendance enums (mirror the match feature for a consistent family) ───── */
 
 /** RSVP to the convocation — shown on a *not-started* séance. */
 export type ConvocationStatut = "accepte" | "refuse" | "attente"
-/** Attendance recorded on the day — shown on a *started/terminée* séance. */
-export type PresenceStatut = "present" | "absent" | "retard"
+/**
+ * Attendance recorded on the day — shown on a *started / terminée* séance.
+ *
+ * Five states, the ones an éducateur actually needs at the whistle: présent,
+ * en retard, blessé (là, mais ne s'entraîne pas), absent justifié (excusé — un
+ * mot de la famille) et absent (non excusé). Someone with no line at all is
+ * *non pointé*: the Présence tab shows that as its own neutral state instead of
+ * pretending he was absent.
+ */
+export type PresenceStatut =
+  | "present"
+  | "retard"
+  | "blesse"
+  | "absentJustifie"
+  | "absent"
 
 /** One convoqué — a joueur or a staff member invited to the séance. */
 export type SeanceParticipant = {
@@ -57,6 +71,16 @@ export type Procede = {
   sequence: string
   /** Recovery in seconds, e.g. "180". */
   recuperation: string
+  /** Terrain, e.g. "15 × 20 m" — carried by procédés copied from the library. */
+  surface?: string
+  /** Effectif, e.g. "9 joueurs · 1 gardien" — library procédés only. */
+  effectif?: string
+  /** Library family ("Jeu", "Situation", "Exercice"); the seeded physical tests
+   *  carry a `fifaCard` instead. */
+  type?: string
+  /** ProcedeItem.id this was copied from. A séance keeps its own snapshot, so
+   *  re-editing the library never rewrites a session already run. */
+  procedeId?: string
   /** Illustration URL (content image — not fetched through the store). */
   image?: string
   blocks: ProcedeBlock[]
@@ -462,8 +486,12 @@ const MINIME_ROSTER: SeanceParticipant[] = [
   { id: "sp-sub3", name: "Tarek Amri", role: "Défenseur", kind: "joueur", numero: 15, convocation: "accepte" },
 ]
 
-/** Attendance for the terminée séance — varied présent / retard / absent. */
-const SEANCE_22_PRESENCE: Record<string, PresenceStatut> = {
+/**
+ * Attendance for the terminée séance — the five states in play, plus two
+ * participants deliberately left out of the record: they were never pointés,
+ * which is what the Présence tab's "à pointer" counter reads.
+ */
+const SEANCE_21_PRESENCE: Record<string, PresenceStatut> = {
   "sp-st1": "present",
   "sp-st2": "present",
   "sp-st3": "present",
@@ -471,17 +499,17 @@ const SEANCE_22_PRESENCE: Record<string, PresenceStatut> = {
   "sp-gk": "present",
   "sp-df1": "present",
   "sp-df2": "present",
-  "sp-df3": "retard",
   "sp-df4": "present",
   "sp-me1": "present",
   "sp-me2": "present",
-  "sp-me3": "absent",
+  // Blessé à l'échauffement — présent au bord du terrain, mais pas à l'entraînement.
+  "sp-me3": "blesse",
   "sp-at1": "present",
   "sp-at2": "present",
-  "sp-at3": "present",
+  "sp-at3": "absentJustifie",
   "sp-sub1": "absent",
   "sp-sub2": "present",
-  "sp-sub3": "retard",
+  // sp-sub3 et sp-df3 volontairement non pointés → l'état « à pointer ».
 }
 
 /* ── Seeded details ───────────────────────────────────────────────────────── */
@@ -515,25 +543,27 @@ export const seanceDetailsSeed: SeanceDetail[] = [
     hydratationVerifiee: true,
     procedes: SEANCE_21_PROCEDES,
     participants: MINIME_ROSTER,
-    presence: SEANCE_22_PRESENCE,
+    presence: SEANCE_21_PRESENCE,
   },
   {
     eventId: "ev-seance-22",
     numero: "Séance 22",
     type: "Évaluation",
-    categorie: "FFF",
+    categorie: "Minime · Minime A",
     groupe: "Groupe A",
-    effectif: "N/A",
-    date: "25/02/2026",
+    effectif: "18",
+    date: "06/07/2026",
     duree: "32",
     intensite: "N/A",
     saison: "2025 - 2026",
-    statut: "Planifiée",
-    securiteVerifiee: false,
+    // Séance démarrée : c'est celle sur laquelle on fait le pointage.
+    statut: "En cours",
+    securiteVerifiee: true,
     hydratationVerifiee: false,
     procedes: [PROCEDE_VAMEVAL, PROCEDE_SPRINT],
     participants: MINIME_ROSTER,
-    presence: SEANCE_22_PRESENCE,
+    // Séance en cours : le pointage se fait maintenant, rien n'est encore saisi.
+    presence: {},
   },
   // A not-started séance (Planifiée) — its tabs are Procédé + Convocation.
   {
@@ -555,6 +585,54 @@ export const seanceDetailsSeed: SeanceDetail[] = [
     presence: {},
   },
 ]
+
+/**
+ * Copy a procédé of the club's library (Pôle technique ▸ Procédés) into a
+ * séance.
+ *
+ * The séance takes a **snapshot** — its own id, its own blocks — so that
+ * re-editing the library afterwards never rewrites a session already run, and
+ * so the same exercise can be programmed twice in one séance. The library's
+ * `sections` become the rich blocks the page already renders, and its matériel
+ * becomes a small table.
+ */
+export function procedeFromLibrary(item: ProcedeItem): Procede {
+  const blocks: ProcedeBlock[] = item.sections.map((section) =>
+    section.items?.length
+      ? { kind: "list", heading: section.titre, items: section.items }
+      : { kind: "paragraph", heading: section.titre, text: section.texte ?? "" },
+  )
+  if (item.materiel.length > 0) {
+    blocks.push({
+      kind: "table",
+      heading: "Matériel",
+      head: ["Matériel", "Quantité"],
+      rows: item.materiel.map((m) => [m.nom, String(m.quantite)]),
+    })
+  }
+
+  const [joueurs, gardiens] = item.effectif
+  const effectif = [
+    `${joueurs} joueur${joueurs > 1 ? "s" : ""}`,
+    gardiens > 0 ? `${gardiens} gardien${gardiens > 1 ? "s" : ""}` : null,
+  ]
+    .filter(Boolean)
+    .join(" · ")
+
+  return {
+    id: crypto.randomUUID(),
+    procedeId: item.id,
+    titre: item.titre,
+    type: item.type,
+    duree: `${item.duree} minutes`,
+    sequence: item.sequence,
+    recuperation: item.recuperation,
+    surface: `${item.surface[0]} × ${item.surface[1]} m`,
+    effectif,
+    image: item.image,
+    blocks,
+  }
+}
 
 /**
  * Any séance without a seeded detail still opens a coherent page: the header is

@@ -130,7 +130,7 @@ export type MatchDetail = {
 
 /* ── Shared image (per the brief, every consigne card uses this one) ───────── */
 
-const TACTIC_IMG =
+export const TACTIC_IMG =
   "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/tactics/image-1761666361994-890610436.png"
 
 /* ── Rosters ───────────────────────────────────────────────────────────────── */

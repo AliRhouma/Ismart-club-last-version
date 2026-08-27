@@ -1,5 +1,6 @@
 import {
   createContext,
+  useCallback,
   useMemo,
   useReducer,
   useState,
@@ -56,7 +57,18 @@ import {
   type ProcedePrincipe,
 } from "@/data/seed/procedes"
 import { eventsSeed, type PlanEvent } from "@/data/seed/events"
-import { seanceDetailsSeed, type SeanceDetail } from "@/data/seed/seances"
+import {
+  buildFallbackSeance,
+  seanceDetailsSeed,
+  type PresenceStatut,
+  type Procede,
+  type SeanceDetail,
+  type SeanceStatut,
+} from "@/data/seed/seances"
+import {
+  convocationsSeed,
+  type SeanceConvocation,
+} from "@/data/seed/convocations"
 import { matchDetailsSeed, type MatchDetail } from "@/data/seed/matches"
 import { objectifsSeed, type Objectif, type ObjectifStatut } from "@/data/seed/objectifs"
 import { notificationsSeed, type AppNotif } from "@/data/seed/notifications"
@@ -92,9 +104,22 @@ import {
 } from "@/data/seed/sponsoring"
 import {
   adminSession,
+  parentSession,
   sponsorSession,
   type Session,
 } from "@/data/seed/session"
+import {
+  parentEnfantsSeed,
+  parentEventsSeed,
+  type ParentEnfant,
+  type ParentEvent,
+  type ParentReponse,
+} from "@/data/seed/parent"
+import {
+  parentConversationsSeed,
+  type ParentConversation,
+  type ParentMessage,
+} from "@/data/seed/parentMessages"
 import {
   offerRequestsSeed,
   type OfferRequest,
@@ -237,7 +262,28 @@ export type DataContextValue = {
   session: Session | null
   signInAsAdmin: () => void
   signInAsSponsor: () => void
+  signInAsParent: () => void
   signOut: () => void
+  /** Espace parent — every child of the signed-in family (read-only). */
+  parentEnfants: ParentEnfant[]
+  /**
+   * Espace parent — the agenda of ALL the children (séances, matchs, réunions
+   * parents). A child's screens scope it to the child in the URL; the accueil
+   * reads the whole family for "aujourd'hui".
+   */
+  parentEvents: ParentEvent[]
+  /** The parent answers a convocation — the only thing this space mutates. */
+  repondreParentEvent: (id: string, reponse: ParentReponse) => void
+  /**
+   * Espace parent — the family inbox: every conversation the club opens about
+   * one of the children. A conversation always carries its `enfantId`, so the
+   * messagerie can pin the child on each row and filter by child.
+   */
+  parentConversations: ParentConversation[]
+  /** The parent writes in a thread (and the thread is marked read). */
+  envoyerMessageParent: (conversationId: string, texte: string) => void
+  /** Opening a thread clears its unread counter. */
+  lireConversationParent: (conversationId: string) => void
   budget: BudgetState
   /** Past, clôturée seasons shown (read-only) in the season picker. */
   seasons: Season[]
@@ -275,6 +321,42 @@ export type DataContextValue = {
   events: PlanEvent[]
   /** Session detail (header + procédés) behind a séance card, keyed by event id. */
   seanceDetails: SeanceDetail[]
+  /** Met à jour la fiche d'une séance (type, effectif, intensité, date…). */
+  updateSeanceDetail: (eventId: string, patch: Partial<SeanceDetail>) => void
+  /** Ajoute des procédés (copiés de la bibliothèque) au plan d'une séance. */
+  addSeanceProcedes: (eventId: string, procedes: Procede[]) => void
+  /** Retire un procédé du plan d'une séance. */
+  removeSeanceProcede: (eventId: string, procedeId: string) => void
+  /** Remonte (-1) ou descend (+1) un procédé dans le déroulé de la séance. */
+  moveSeanceProcede: (eventId: string, procedeId: string, dir: -1 | 1) => void
+  /** Pointe un participant. `null` le remet à « non pointé ». */
+  setSeancePresence: (
+    eventId: string,
+    participantId: string,
+    statut: PresenceStatut | null,
+  ) => void
+  /** Pointage en masse : tout le monde au même statut, ou tout effacer. */
+  setSeancePresenceAll: (
+    eventId: string,
+    participantIds: string[],
+    statut: PresenceStatut | null,
+  ) => void
+  /** Démarre / termine / rouvre une séance (c'est ce qui ouvre le pointage). */
+  setSeanceStatut: (eventId: string, statut: SeanceStatut) => void
+  /** Coche / décoche un contrôle d'avant-séance. */
+  toggleSeanceCheck: (eventId: string, check: "securite" | "hydratation") => void
+  /** Convocations de séance — qui est appelé, et dans quel groupe (par séance). */
+  convocations: SeanceConvocation[]
+  /** Crée ou remplace la convocation d'une séance. */
+  saveConvocation: (convocation: SeanceConvocation) => void
+  /** Annule la convocation d'une séance (retour à l'état vide). */
+  removeConvocation: (eventId: string) => void
+  /** Change durablement le groupe d'un joueur dans sa catégorie. */
+  updateJoueurGroupe: (
+    categorieId: string,
+    joueurId: string,
+    groupeId: string,
+  ) => void
   /** Match detail (header + convocation / consignes / debrief) behind a match card. */
   matchDetails: MatchDetail[]
   /** Technical objectives (Structuration ▸ Objectifs techniques). */
@@ -498,6 +580,17 @@ export function DataProvider({ children }: { children: ReactNode }) {
   // Signed in as the club admin on first load; signing out sends you to the
   // /connexion screen, where you pick the admin or the sponsor space.
   const [session, setSession] = useState<Session | null>(adminSession)
+  // Espace parent: the children are fixed referential rows; their agenda only
+  // ever changes through the parent's réponse to a convocation. Which child a
+  // screen shows comes from the URL, not from here.
+  const [parentEnfants] = useState<ParentEnfant[]>(parentEnfantsSeed)
+  const [parentEvents, setParentEvents] =
+    useState<ParentEvent[]>(parentEventsSeed)
+  // La messagerie familiale : une seule boîte pour les trois enfants. Elle ne
+  // bouge que quand le parent écrit ou ouvre un fil.
+  const [parentConversations, setParentConversations] = useState<
+    ParentConversation[]
+  >(parentConversationsSeed)
   const [budget, dispatch] = useReducer(reducer, budgetSeed)
   // Archived seasons are read-only for now (no screen mutates them), so they
   // live in plain in-memory state rather than the budget reducer.
@@ -546,9 +639,34 @@ export function DataProvider({ children }: { children: ReactNode }) {
   // Calendar events add / edit / remove, so plain in-memory state is enough
   // (no reducer). New rows get a uuid; seed rows keep their readable slug ids.
   const [events, setEvents] = useState<PlanEvent[]>(eventsSeed)
-  // Séance details are read-only for now (the coach views the plan; editing the
-  // procédé library is a future job), so plain in-memory state is enough.
-  const [seanceDetails] = useState<SeanceDetail[]>(seanceDetailsSeed)
+  // Séance details: the coach builds the plan (add / retire / réordonne les
+  // procédés) and points the présence on the day, so they mutate. A séance with
+  // no seeded detail is upserted from its calendar event on first edit — see
+  // patchSeance below — so every séance card is editable, not just the seeded ones.
+  const [seanceDetails, setSeanceDetails] =
+    useState<SeanceDetail[]>(seanceDetailsSeed)
+  // Convocations: one row per séance, created / replaced from the séance page.
+  const [convocations, setConvocations] =
+    useState<SeanceConvocation[]>(convocationsSeed)
+
+  /**
+   * Edit one séance detail. A séance that has no seeded detail (most of the
+   * calendar) is materialised from its event the first time it is touched, so
+   * the coach can build a plan or point the présence on any séance card.
+   */
+  const patchSeance = useCallback(
+    (eventId: string, updater: (detail: SeanceDetail) => SeanceDetail) =>
+      setSeanceDetails((prev) => {
+        const current = prev.find((d) => d.eventId === eventId)
+        if (current) {
+          return prev.map((d) => (d.eventId === eventId ? updater(d) : d))
+        }
+        const event = events.find((e) => e.id === eventId)
+        if (!event) return prev
+        return [...prev, updater(buildFallbackSeance(event))]
+      }),
+    [events],
+  )
   // Match details are read-only for now (the club views the briefing / debrief;
   // editing convocations & présences is a future job), like séance details.
   const [matchDetails] = useState<MatchDetail[]>(matchDetailsSeed)
@@ -624,7 +742,40 @@ export function DataProvider({ children }: { children: ReactNode }) {
       session,
       signInAsAdmin: () => setSession(adminSession),
       signInAsSponsor: () => setSession(sponsorSession),
+      signInAsParent: () => setSession(parentSession),
       signOut: () => setSession(null),
+      parentEnfants,
+      parentEvents,
+      repondreParentEvent: (id, reponse) =>
+        setParentEvents((list) =>
+          list.map((e) => (e.id === id ? { ...e, reponse } : e)),
+        ),
+      parentConversations,
+      envoyerMessageParent: (conversationId, texte) => {
+        const now = new Date()
+        const pad = (n: number) => String(n).padStart(2, "0")
+        const message: ParentMessage = {
+          id: crypto.randomUUID(),
+          author: "Moi",
+          text: texte,
+          date: `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`,
+          time: `${pad(now.getHours())}:${pad(now.getMinutes())}`,
+          mine: true,
+        }
+        setParentConversations((list) =>
+          list.map((c) =>
+            c.id === conversationId
+              ? { ...c, unread: 0, messages: [...c.messages, message] }
+              : c,
+          ),
+        )
+      },
+      lireConversationParent: (conversationId) =>
+        setParentConversations((list) =>
+          list.map((c) =>
+            c.id === conversationId && c.unread ? { ...c, unread: 0 } : c,
+          ),
+        ),
       budget,
       seasons,
       entries,
@@ -645,6 +796,76 @@ export function DataProvider({ children }: { children: ReactNode }) {
       categories,
       events,
       seanceDetails,
+      updateSeanceDetail: (eventId, patch) =>
+        patchSeance(eventId, (d) => ({ ...d, ...patch })),
+      addSeanceProcedes: (eventId, nouveaux) =>
+        patchSeance(eventId, (d) => ({
+          ...d,
+          procedes: [...d.procedes, ...nouveaux],
+        })),
+      removeSeanceProcede: (eventId, procedeId) =>
+        patchSeance(eventId, (d) => ({
+          ...d,
+          procedes: d.procedes.filter((p) => p.id !== procedeId),
+        })),
+      moveSeanceProcede: (eventId, procedeId, dir) =>
+        patchSeance(eventId, (d) => {
+          const from = d.procedes.findIndex((p) => p.id === procedeId)
+          const to = from + dir
+          if (from === -1 || to < 0 || to >= d.procedes.length) return d
+          const procedes = [...d.procedes]
+          const [moved] = procedes.splice(from, 1)
+          procedes.splice(to, 0, moved)
+          return { ...d, procedes }
+        }),
+      setSeancePresence: (eventId, participantId, statut) =>
+        patchSeance(eventId, (d) => {
+          const presence = { ...d.presence }
+          // `null` = non pointé : on retire la ligne plutôt que d'inventer un statut.
+          if (statut === null) delete presence[participantId]
+          else presence[participantId] = statut
+          return { ...d, presence }
+        }),
+      setSeancePresenceAll: (eventId, participantIds, statut) =>
+        patchSeance(eventId, (d) => {
+          if (statut === null) {
+            const presence = { ...d.presence }
+            for (const id of participantIds) delete presence[id]
+            return { ...d, presence }
+          }
+          const presence = { ...d.presence }
+          for (const id of participantIds) presence[id] = statut
+          return { ...d, presence }
+        }),
+      setSeanceStatut: (eventId, statut) =>
+        patchSeance(eventId, (d) => ({ ...d, statut })),
+      toggleSeanceCheck: (eventId, check) =>
+        patchSeance(eventId, (d) =>
+          check === "securite"
+            ? { ...d, securiteVerifiee: !d.securiteVerifiee }
+            : { ...d, hydratationVerifiee: !d.hydratationVerifiee },
+        ),
+      convocations,
+      saveConvocation: (convocation) =>
+        setConvocations((prev) => {
+          const rest = prev.filter((c) => c.eventId !== convocation.eventId)
+          return [...rest, convocation]
+        }),
+      removeConvocation: (eventId) =>
+        setConvocations((prev) => prev.filter((c) => c.eventId !== eventId)),
+      updateJoueurGroupe: (categorieId, joueurId, groupeId) =>
+        setCategories((prev) =>
+          prev.map((c) =>
+            c.id === categorieId
+              ? {
+                  ...c,
+                  joueurs: c.joueurs.map((j) =>
+                    j.id === joueurId ? { ...j, groupeId } : j,
+                  ),
+                }
+              : c,
+          ),
+        ),
       matchDetails,
       objectifs,
       notifications,
@@ -1342,6 +1563,9 @@ export function DataProvider({ children }: { children: ReactNode }) {
     }),
     [
       session,
+      parentEnfants,
+      parentEvents,
+      parentConversations,
       budget,
       seasons,
       entries,
@@ -1361,6 +1585,8 @@ export function DataProvider({ children }: { children: ReactNode }) {
       categories,
       events,
       seanceDetails,
+      patchSeance,
+      convocations,
       matchDetails,
       objectifs,
       notifications,

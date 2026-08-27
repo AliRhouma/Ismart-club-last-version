@@ -11,14 +11,16 @@ import {
   Bell,
   ChevronDown,
   LogOut,
+  Repeat2,
   MessageSquare,
   Settings,
   SlidersHorizontal,
   User,
 } from "lucide-react"
 
-import { navLeaves, sponsorNavLeaves, HOME_PATH } from "@/lib/navigation"
+import { NAV_LEAVES, HOME_PATH, normalizeParentPath } from "@/lib/navigation"
 import { useData } from "@/data/useData"
+import type { Role } from "@/data/seed/session"
 import { AppSidebar } from "@/components/AppSidebar"
 import { NotificationsMenu } from "@/components/NotificationsMenu"
 import { ObjectifReviewModal } from "@/features/objectifs/ObjectifReviewModal"
@@ -83,7 +85,7 @@ function AccountMenu() {
   const { session, signOut } = useData()
   const [open, setOpen] = useState(false)
   const wrapRef = useRef<HTMLDivElement>(null)
-  const isSponsor = session?.role === "sponsor"
+  const isAdmin = session?.role === "admin"
 
   useEffect(() => {
     if (!open) return
@@ -152,7 +154,7 @@ function AccountMenu() {
           {/* Actions */}
           <div className="py-1.5">
             {/* Club-admin-only tool. */}
-            {!isSponsor ? (
+            {isAdmin ? (
               <MenuItem
                 icon={SlidersHorizontal}
                 label="Configuration de transaction"
@@ -161,6 +163,16 @@ function AccountMenu() {
             ) : null}
             <MenuItem icon={User} label="Mon profil" onClick={() => setOpen(false)} />
             <MenuItem icon={Settings} label="Paramètres" onClick={() => setOpen(false)} />
+          </div>
+
+          {/* Switch space without signing out — the three identities of the
+              prototype live behind the same /connexion screen. */}
+          <div className="border-t border-border py-1.5">
+            <MenuItem
+              icon={Repeat2}
+              label="Changer de compte"
+              onClick={() => go("/connexion")}
+            />
           </div>
 
           <div className="border-t border-border py-1.5">
@@ -220,9 +232,14 @@ function HeaderActions() {
   )
 }
 
-function useCurrentTitle(isSponsor: boolean): string {
-  const { pathname } = useLocation()
-  const leaves = isSponsor ? sponsorNavLeaves : navLeaves
+function useCurrentTitle(role: Role): string {
+  const { pathname: raw } = useLocation()
+  // A parent URL carries the child's id — drop it before matching the leaves.
+  const pathname = role === "parent" ? normalizeParentPath(raw) : raw
+  // Longest path first so "/parent/matchs" wins over the space's "/parent".
+  const leaves = [...NAV_LEAVES[role]].sort(
+    (a, b) => b.path.length - a.path.length,
+  )
   const leaf =
     leaves.find((l) =>
       l.path === "/" ? pathname === "/" : pathname.startsWith(l.path),
@@ -230,11 +247,20 @@ function useCurrentTitle(isSponsor: boolean): string {
   return leaf?.label ?? "Page introuvable"
 }
 
+/** Which space a URL belongs to — the guard below keeps the three separate. */
+function areaOf(pathname: string): Role {
+  // "/sponsor/" is distinct from the club's "/sponsoring" module — the
+  // trailing slash keeps them from colliding.
+  if (pathname.startsWith("/sponsor/")) return "sponsor"
+  if (pathname === "/parent" || pathname.startsWith("/parent/")) return "parent"
+  return "admin"
+}
+
 export function AppShell() {
   const { session } = useData()
   const { pathname } = useLocation()
-  const isSponsor = session?.role === "sponsor"
-  const title = useCurrentTitle(isSponsor)
+  const role: Role = session?.role ?? "admin"
+  const title = useCurrentTitle(role)
   const [params] = useSearchParams()
 
   // Embed mode (`?embed=1`) — strips the sidebar + top bar so a single screen
@@ -251,16 +277,9 @@ export function AppShell() {
   // Signed out → the sign-in screen.
   if (!session) return <Navigate to="/connexion" replace />
 
-  // The two spaces stay separate: a sponsor only ever sees /sponsor/*, and the
-  // club admin never does. Note "/sponsor/" is distinct from the club's
-  // "/sponsoring" module — the trailing slash keeps them from colliding.
-  const inSponsorArea = pathname.startsWith("/sponsor/")
-  if (isSponsor && !inSponsorArea) {
-    return <Navigate to={HOME_PATH.sponsor} replace />
-  }
-  if (!isSponsor && inSponsorArea) {
-    return <Navigate to={HOME_PATH.admin} replace />
-  }
+  // The three spaces stay separate: each role only ever sees its own area, and
+  // landing anywhere else bounces you back to your own home.
+  if (areaOf(pathname) !== role) return <Navigate to={HOME_PATH[role]} replace />
 
   return (
     <SidebarProvider defaultOpen={readSidebarDefaultOpen()}>

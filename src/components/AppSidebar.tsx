@@ -2,9 +2,11 @@ import { Link, useLocation } from "react-router-dom"
 import { ChevronRight } from "lucide-react"
 
 import {
-  navTree,
-  sponsorNavTree,
+  NAV_TREE,
+  SPACE_SUBTITLE,
   HOME_PATH,
+  normalizeParentPath,
+  parentNavTreeFor,
   type NavGroup,
   type NavLeaf,
 } from "@/lib/navigation"
@@ -34,10 +36,18 @@ import {
 /** "/" matches only the home route; every other route also matches its children. */
 function useIsActive() {
   const { pathname } = useLocation()
-  return (path: string) =>
-    path === "/"
-      ? pathname === "/"
-      : pathname === path || pathname.startsWith(path + "/")
+  // In the parent space the child's id sits in the URL; compare the section
+  // paths so "Séances" reads as active for one child as for the whole family.
+  const norm = (p: string) =>
+    p.startsWith("/parent") ? normalizeParentPath(p) : p
+
+  return (path: string, exact = false) => {
+    const current = norm(pathname)
+    const target = norm(path)
+    return path === "/" || exact
+      ? current === target
+      : current === target || current.startsWith(target + "/")
+  }
 }
 
 /** Brand mark — green monogram + wordmark. Wordmark hides in icon mode. */
@@ -140,13 +150,21 @@ function NavGroupItem({
 
 export function AppSidebar() {
   const isActive = useIsActive()
-  const { session } = useData()
+  const { pathname } = useLocation()
+  const { session, parentEnfants } = useData()
 
-  // The sponsor space reuses this exact shell — only the tree is shorter.
-  const isSponsor = session?.role === "sponsor"
-  const tree = isSponsor ? sponsorNavTree : navTree
-  const home = HOME_PATH[isSponsor ? "sponsor" : "admin"]
-  const subtitle = isSponsor ? "Espace sponsor" : "Plateforme club"
+  const enfantId =
+    pathname.match(/^\/parent\/([^/]+)/)?.[1] ?? parentEnfants[0]?.id ?? ""
+  const parentTree = parentNavTreeFor(enfantId)
+
+  // The sponsor and parent spaces reuse this exact shell — only the tree
+  // (and the wordmark's subtitle) changes with the role.
+  const role = session?.role ?? "admin"
+  // The parent space carries the child in the URL, so its nav is built for the
+  // child currently opened (falling back to the first one from /parent).
+  const tree = role === "parent" ? parentTree : NAV_TREE[role]
+  const home = HOME_PATH[role]
+  const subtitle = SPACE_SUBTITLE[role]
 
   return (
     <Sidebar collapsible="icon">
@@ -172,7 +190,7 @@ export function AppSidebar() {
                 <NavLeafItem
                   key={node.path}
                   leaf={node}
-                  isActive={isActive(node.path)}
+                  isActive={isActive(node.path, node.exact)}
                 />
               ),
             )}

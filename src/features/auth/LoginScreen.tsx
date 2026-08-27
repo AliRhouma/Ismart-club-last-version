@@ -1,20 +1,30 @@
 import { useNavigate } from "react-router-dom"
-import { ArrowRight, Handshake, ShieldCheck, type LucideIcon } from "lucide-react"
+import {
+  ArrowRight,
+  Handshake,
+  ShieldCheck,
+  Users,
+  type LucideIcon,
+} from "lucide-react"
 
 import { useData } from "@/data/useData"
 import { HOME_PATH } from "@/lib/navigation"
-import { adminSession, sponsorSession } from "@/data/seed/session"
+import {
+  adminSession,
+  parentSession,
+  sponsorSession,
+} from "@/data/seed/session"
 
 /**
  * Sign-in screen — renders OUTSIDE the app shell (no sidebar / top bar).
  *
  * There is no auth in the prototype: you pick a space and the shell follows the
- * role. Two identities are offered so the demo can walk both sides of the
- * product (club back-office ↔ sponsor space) with no dead end either way.
+ * role. Three identities are offered so the demo can walk every side of the
+ * product (club back-office ↔ sponsor ↔ parent) with no dead end either way.
  */
 export function LoginScreen() {
   const navigate = useNavigate()
-  const { signInAsAdmin, signInAsSponsor } = useData()
+  const { signInAsAdmin, signInAsSponsor, signInAsParent } = useData()
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-5 py-10">
@@ -55,6 +65,16 @@ export function LoginScreen() {
             onClick={() => {
               signInAsSponsor()
               navigate(HOME_PATH.sponsor)
+            }}
+          />
+          <RoleCard
+            icon={Users}
+            title="Se connecter en tant que parent"
+            name={parentSession.name}
+            subtitle={parentSession.subtitle}
+            onClick={() => {
+              signInAsParent()
+              navigate(HOME_PATH.parent)
             }}
           />
         </div>

@@ -41,6 +41,7 @@ import { ProjetDeJeuDetailScreen } from "@/features/pole-technique/ProjetDeJeuDe
 import { CompositionsScreen } from "@/features/pole-technique/CompositionsScreen"
 import { CompositionDetailScreen } from "@/features/pole-technique/CompositionDetailScreen"
 import { EducateursScreen } from "@/features/educateurs/EducateursScreen"
+import { JoueursScreen } from "@/features/joueurs/JoueursScreen"
 import { SponsoringHome } from "@/features/sponsoring/SponsoringHome"
 import { DemarrageScreen } from "@/features/sponsoring/DemarrageScreen"
 import { OffreFormScreen } from "@/features/sponsoring/OffreFormScreen"
@@ -67,11 +68,20 @@ import { ExplorerScreen } from "@/features/sponsor/ExplorerScreen"
 import { ClubOffresScreen } from "@/features/sponsor/ClubOffresScreen"
 import { CustomOfferScreen } from "@/features/sponsor/CustomOfferScreen"
 import { DemandesSurMesureScreen } from "@/features/sponsor/DemandesSurMesureScreen"
+import { ParentAccueilScreen } from "@/features/parent/ParentAccueilScreen"
+import { ParentPlanificationScreen } from "@/features/parent/ParentPlanificationScreen"
+import { ParentMatchsScreen } from "@/features/parent/ParentMatchsScreen"
+import { ParentSeancesScreen } from "@/features/parent/ParentSeancesScreen"
+import { ParentSeanceScreen } from "@/features/parent/ParentSeanceScreen"
+import { ParentMatchScreen } from "@/features/parent/ParentMatchScreen"
+import { ParentMessagerieScreen } from "@/features/parent/ParentMessagerieScreen"
+import { ParentSpaceRedirect } from "@/features/parent/shared"
 
 /** Routes that have a real screen (so they skip the generic Placeholder). */
 const CUSTOM_ROUTES = new Set([
   "/",
   "/ressources-humaines/educateurs",
+  "/ressources-humaines/joueurs",
   "/planification",
   "/resultats",
   "/messagerie",
@@ -153,6 +163,13 @@ export default function App() {
             <Route
               path="ressources-humaines/educateurs"
               element={<EducateursScreen />}
+            />
+
+            {/* Ressources humaines — Joueurs: the club's effectif, read by
+                catégorie then by groupe (the grain a convocation is built at). */}
+            <Route
+              path="ressources-humaines/joueurs"
+              element={<JoueursScreen />}
             />
 
             {/* Planification — month calendar of séances / matchs / réunions.
@@ -369,6 +386,78 @@ export default function App() {
             <Route
               path="sponsor/explorer/:slug/sur-mesure"
               element={<CustomOfferScreen />}
+            />
+
+            {/* Espace parent — the family's side of the product. `/parent` is
+                the family accueil (les enfants + aujourd'hui); everything below
+                belongs to ONE child and carries his id in the URL, so "se
+                connecter en tant que…" is a link, not an app state. */}
+            <Route path="parent" element={<ParentAccueilScreen />} />
+            {/* Messagerie — la SEULE page de l'espace qui reste familiale :
+                une boîte unique où arrivent les conversations des trois
+                enfants. L'enfant en second segment n'ouvre pas un compte, il
+                filtre la boîte sur cet enfant. */}
+            <Route path="parent/messagerie" element={<ParentMessagerieScreen />} />
+            <Route
+              path="parent/messagerie/:enfantId"
+              element={<ParentMessagerieScreen />}
+            />
+            {/* Anciennes URLs sans enfant → l'espace du premier enfant. */}
+            <Route
+              path="parent/planification"
+              element={<ParentSpaceRedirect sub="planification" />}
+            />
+            <Route
+              path="parent/matchs"
+              element={<ParentSpaceRedirect sub="matchs" />}
+            />
+            {/* Séances — la seule liste de l'espace qui traverse la famille :
+                sans enfant dans l'URL elle montre les trois agendas, avec un
+                enfant elle se filtre sur lui (les puces du filtre sont des
+                liens vers ces deux URLs). */}
+            <Route path="parent/seances" element={<ParentSeancesScreen />} />
+            <Route
+              path="parent/:enfantId"
+              element={<Navigate to="planification" replace />}
+            />
+            <Route
+              path="parent/:enfantId/planification"
+              element={<ParentPlanificationScreen />}
+            />
+            <Route
+              path="parent/:enfantId/seances"
+              element={<ParentSeancesScreen />}
+            />
+            <Route
+              path="parent/:enfantId/matchs"
+              element={<ParentMatchsScreen />}
+            />
+            {/* La fiche d'un rendez-vous — même architecture que les pages du
+                club (/planification/seance/:id), en lecture seule côté famille.
+                Une réunion parents ouvre la même fiche que la séance. */}
+            <Route
+              path="parent/:enfantId/planification/seance/:id"
+              element={<ParentSeanceScreen />}
+            />
+            <Route
+              path="parent/:enfantId/planification/seance/:id/:tab"
+              element={<ParentSeanceScreen />}
+            />
+            <Route
+              path="parent/:enfantId/planification/reunion/:id"
+              element={<ParentSeanceScreen />}
+            />
+            <Route
+              path="parent/:enfantId/planification/reunion/:id/:tab"
+              element={<ParentSeanceScreen />}
+            />
+            <Route
+              path="parent/:enfantId/planification/match/:id"
+              element={<ParentMatchScreen />}
+            />
+            <Route
+              path="parent/:enfantId/planification/match/:id/:tab"
+              element={<ParentMatchScreen />}
             />
 
             {/* Finance — Transactions is the first real tool of the module. */}
