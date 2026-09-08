@@ -59,6 +59,19 @@ export type ProcedeBlock =
   | { kind: "list"; heading: string; items: string[] }
   | { kind: "table"; heading: string; head: string[]; rows: string[][] }
 
+/**
+ * A sub-group of players inside one procédé — the ateliers a coach splits the
+ * squad into for that exercise. Membership is per procédé, not per séance: the
+ * same joueur can be in atelier 1 on the rondo and atelier 3 on the finishing
+ * drill. Ids only; names are read from the roster at render time.
+ */
+export type ProcedeAtelier = {
+  id: string
+  nom: string
+  /** Ids of the convoqués in this atelier, in the order they were added. */
+  joueurIds: string[]
+}
+
 export type Procede = {
   id: string
   /** Exercise name, e.g. "VAMEVAL". */
@@ -84,6 +97,8 @@ export type Procede = {
   /** Illustration URL (content image — not fetched through the store). */
   image?: string
   blocks: ProcedeBlock[]
+  /** Player groups for this exercise. Absent = everyone works together. */
+  ateliers?: ProcedeAtelier[]
 }
 
 export type SeanceStatut = "Terminé" | "Planifiée" | "En cours"
@@ -631,6 +646,56 @@ export function procedeFromLibrary(item: ProcedeItem): Procede {
     effectif,
     image: item.image,
     blocks,
+  }
+}
+
+/**
+ * The programme annuel keeps its own, leaner `SeanceClub` rows. Planning one
+ * from the programme should still open the full séance page, so this widens it
+ * into a `SeanceDetail`: its procédés are copied out of the library, and its
+ * convoqués are the joueurs of the groupe it belongs to.
+ */
+export function buildSeanceFromClub(
+  seance: {
+    id: string
+    numero: number
+    date: string
+    categorie: string
+    groupe: string
+    statut: "À venir" | "En cours" | "Terminée"
+    duree: string
+    effectif: number
+    procedeIds: string[]
+    securiteVerifiee: boolean
+    hydratationVerifiee: boolean
+  },
+  titre: string,
+  procedes: Procede[],
+  participants: SeanceParticipant[],
+  saison: string,
+): SeanceDetail {
+  return {
+    eventId: seance.id,
+    numero: `Séance ${seance.numero}`,
+    type: titre,
+    categorie: seance.categorie,
+    groupe: seance.groupe,
+    effectif: seance.effectif ? String(seance.effectif) : String(participants.length),
+    date: frDate(seance.date.slice(0, 10)),
+    duree: seance.duree,
+    intensite: "N/A",
+    saison,
+    statut:
+      seance.statut === "Terminée"
+        ? "Terminé"
+        : seance.statut === "En cours"
+          ? "En cours"
+          : "Planifiée",
+    securiteVerifiee: seance.securiteVerifiee,
+    hydratationVerifiee: seance.hydratationVerifiee,
+    procedes,
+    participants,
+    presence: {},
   }
 }
 

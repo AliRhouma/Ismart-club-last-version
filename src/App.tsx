@@ -34,6 +34,16 @@ import { CategoryDetailScreen } from "@/features/pole-technique/CategoryDetailSc
 import { ProcedesScreen } from "@/features/pole-technique/ProcedesScreen"
 import { ProcedeDetailScreen } from "@/features/pole-technique/ProcedeDetailScreen"
 import { ProgrammationScreen } from "@/features/pole-technique/ProgrammationScreen"
+import {
+  ProgrammationEquipesScreen,
+  ProgrammationSaisonsScreen,
+} from "@/features/pole-technique/ProgrammationParcours"
+import { ProgrammeShell } from "@/features/pole-technique/ProgrammeShell"
+import { SeanceCreationScreen } from "@/features/pole-technique/SeanceCreationScreen"
+import { RejoindreScreen } from "@/features/inscription/RejoindreScreen"
+import { ProgrammePlanificationTab } from "@/features/pole-technique/ProgrammePlanificationTab"
+import { ProgrammeStatsTab } from "@/features/pole-technique/ProgrammeStatsTab"
+import { ProgrammeReglagesTab } from "@/features/pole-technique/ProgrammeReglagesTab"
 import { SeancesScreen } from "@/features/pole-technique/SeancesScreen"
 import { SeanceDetailScreen } from "@/features/pole-technique/SeanceDetailScreen"
 import { ProjetsDeJeuScreen } from "@/features/pole-technique/ProjetsDeJeuScreen"
@@ -122,6 +132,11 @@ export default function App() {
           {/* Sign-in — also outside the shell: you pick a space (club admin or
               sponsor) and the shell's nav + routes follow that role. */}
           <Route path="/connexion" element={<LoginScreen />} />
+
+          {/* Inscription par lien — opened by someone who is not a member yet,
+              so it renders outside the shell: no sidebar, no nav, just the
+              step. The token identifies the catégorie being joined. */}
+          <Route path="/rejoindre/:token" element={<RejoindreScreen />} />
 
           {/* Public marketing page — its own URL, outside the shell, and on the
               iSmart Coach landing design system (Bebas / Syne / DM Sans), not
@@ -262,11 +277,35 @@ export default function App() {
               element={<ProcedeDetailScreen />}
             />
 
-            {/* Pôle Technique — Programmation: the annual plan, and the séances
-                that realise it (planning a slot creates the séance). */}
+            {/* Pôle Technique — Programmation: a saison → équipe parcours down
+                to that équipe's annual plan (all its groupes run it), and the
+                séances that realise it (planning a slot creates the séance). */}
             <Route
               path="pole-technique/programmation"
-              element={<ProgrammationScreen />}
+              element={<ProgrammationSaisonsScreen />}
+            />
+            <Route
+              path="pole-technique/programmation/:saison"
+              element={<ProgrammationEquipesScreen />}
+            />
+            {/* One programme per équipe, four tabs — each its own URL. */}
+            <Route
+              path="pole-technique/programmation/:saison/:categorieId"
+              element={<ProgrammeShell />}
+            >
+              <Route index element={<ProgrammationScreen />} />
+              <Route
+                path="planification"
+                element={<ProgrammePlanificationTab />}
+              />
+              <Route path="stats" element={<ProgrammeStatsTab />} />
+              <Route path="reglages" element={<ProgrammeReglagesTab />} />
+            </Route>
+            {/* The long "fiche de création" behind one line of a programme —
+                a full page, not a tab of the programme. */}
+            <Route
+              path="pole-technique/seances/nouvelle/:sessionId"
+              element={<SeanceCreationScreen />}
             />
             <Route path="pole-technique/seances" element={<SeancesScreen />} />
             <Route

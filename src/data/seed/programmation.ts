@@ -52,6 +52,44 @@ export type ProgSession = {
   seanceId?: string
 }
 
+/** Who a shared programme reaches outside the staff. */
+export type PartagePortee = "prive" | "partenaires" | "personnalise"
+
+/** The blocks of the programme a share can carry. */
+export const PARTAGE_RESSOURCES = [
+  "Critères d'évaluation",
+  "Étape de projet de jeu",
+  "Séances",
+] as const
+
+export type ProgrammePartage = {
+  /** Which blocks travel with the share. */
+  ressources: string[]
+  portee: PartagePortee
+  /** Only read when `portee` is "personnalise". */
+  partenaireIds: string[]
+}
+
+/** Who inside the club can open the programme, set from the Réglages tab. */
+export type ProgrammeVisibilite = {
+  joueurs: boolean
+  parents: boolean
+  /** Groupes of the catégorie that see it. Empty = every groupe. */
+  groupeIds: string[]
+}
+
+export const PARTAGE_PAR_DEFAUT: ProgrammePartage = {
+  ressources: [],
+  portee: "prive",
+  partenaireIds: [],
+}
+
+export const VISIBILITE_PAR_DEFAUT: ProgrammeVisibilite = {
+  joueurs: false,
+  parents: false,
+  groupeIds: [],
+}
+
 export type ProgrammeAnnuel = {
   id: string
   saison: string
@@ -59,18 +97,24 @@ export type ProgrammeAnnuel = {
   categorieId: string
   /** Display name of that catégorie, e.g. "FFF". */
   categorie: string
-  /** Id of its groupe within the catégorie. */
-  groupeId: string
-  /** Display name of that groupe, e.g. "Groupe A". */
-  groupe: string
   sessions: ProgSession[]
+  /** Community share — unset means the default (privé, nothing shared). */
+  partage?: ProgrammePartage
+  /** In-club visibility — unset means staff only. */
+  visibilite?: ProgrammeVisibilite
+  /** Folder the programme was filed into, if any (`dossiersSeed`). */
+  dossierId?: string
 }
 
-/** The saison × catégorie × groupe the Programmation screen is looking at. */
+/**
+ * The saison × équipe the Programmation screen is looking at. A programme
+ * annuel is written once per équipe and run by all of its groupes — the two
+ * groupes of a catégorie work the same season — so the groupe is a filter
+ * inside the programme, never part of its identity.
+ */
 export type ProgrammeScope = {
   saison: string
   categorieId: string
-  groupeId: string
 }
 
 export type SeanceStatut = "À venir" | "En cours" | "Terminée"
@@ -98,15 +142,21 @@ export type SeanceClub = {
   procedeIds: string[]
   securiteVerifiee: boolean
   hydratationVerifiee: boolean
+  /** Free-text "explication" written when the séance is created. */
+  notes?: string
+  /** Minute marks where the séance breaks for drinks, in order. */
+  hydratations?: number[]
+  /** Séance debriefed: the éducateur filled in his évaluation of it. */
+  evaluationFaite?: boolean
+  /** Player performances rated for that séance. */
+  performanceFaite?: boolean
 }
 
 export const programmeAnnuelSeed: ProgrammeAnnuel = {
-  id: "prog-fff-groupe-a",
+  id: "prog-fff",
   saison: SAISON_ACTIVE,
   categorieId: "fff",
   categorie: "FFF",
-  groupeId: "fff-groupe-a",
-  groupe: "Groupe A",
   sessions: [
     {
       id: "prog-s1",
@@ -1020,7 +1070,7 @@ const INSTALLATIONS = ["Stade de France", "Terrain annexe", "Complexe Nord"]
 /** Build a full 36-week programme; `decalage` shifts the rotation per groupe. */
 export function programmeGenere(
   id: string,
-  scope: ProgrammeScope & { categorie: string; groupe: string },
+  scope: ProgrammeScope & { categorie: string },
   decalage = 0,
 ): ProgrammeAnnuel {
   const sessions: ProgSession[] = []
@@ -1054,7 +1104,7 @@ export function programmeGenere(
 /** An untouched programme — every séance still à définir. */
 export function programmeVierge(
   id: string,
-  scope: ProgrammeScope & { categorie: string; groupe: string },
+  scope: ProgrammeScope & { categorie: string },
 ): ProgrammeAnnuel {
   const sessions: ProgSession[] = []
   for (let semaine = 1; semaine <= SEMAINES; semaine++) {
@@ -1092,43 +1142,30 @@ export function renumeroterSessions(sessions: ProgSession[]): ProgSession[] {
 const slug = (saison: string) => saison.replace(/\s/g, "")
 
 /**
- * The active saison is covered for every catégorie × groupe of the club; the
- * previous one only for the two squads that already existed. 2026 - 2027 is
- * deliberately left empty — the screen opens on its "à créer" state there.
+ * The active saison is covered for every équipe of the club; the previous one
+ * only for the two squads that already existed. 2026 - 2027 is deliberately
+ * left empty — the screen opens on its "à créer" state there.
  */
 export const programmesAnnuelsSeed: ProgrammeAnnuel[] = [
   programmeAnnuelSeed,
-  ...categoriesSeed.flatMap((cat, ci) =>
-    cat.groupes
-      .filter((g) => g.id !== "fff-groupe-a")
-      .map((g, gi) =>
-        programmeGenere(
-          `prog-${slug(SAISON_ACTIVE)}-${g.id}`,
-          {
-            saison: SAISON_ACTIVE,
-            categorieId: cat.id,
-            categorie: cat.nom,
-            groupeId: g.id,
-            groupe: g.nom,
-          },
-          ci * 2 + gi,
-        ),
+  ...categoriesSeed
+    .filter((cat) => cat.id !== "fff")
+    .map((cat, i) =>
+      programmeGenere(
+        `prog-${slug(SAISON_ACTIVE)}-${cat.id}`,
+        {
+          saison: SAISON_ACTIVE,
+          categorieId: cat.id,
+          categorie: cat.nom,
+        },
+        i,
       ),
-  ),
-  ...["fff-groupe-a", "fff-groupe-b", "senior-groupe-a"].map((groupeId, i) => {
-    const cat = categoriesSeed.find((c) =>
-      c.groupes.some((g) => g.id === groupeId),
-    )!
-    const groupe = cat.groupes.find((g) => g.id === groupeId)!
+    ),
+  ...["fff", "senior"].map((categorieId, i) => {
+    const cat = categoriesSeed.find((c) => c.id === categorieId)!
     return programmeGenere(
-      `prog-2024-2025-${groupeId}`,
-      {
-        saison: "2024 - 2025",
-        categorieId: cat.id,
-        categorie: cat.nom,
-        groupeId,
-        groupe: groupe.nom,
-      },
+      `prog-2024-2025-${categorieId}`,
+      { saison: "2024 - 2025", categorieId: cat.id, categorie: cat.nom },
       i + 3,
     )
   }),
@@ -1157,6 +1194,8 @@ export const seancesClubSeed: SeanceClub[] = [
     procedeIds: [],
     securiteVerifiee: true,
     hydratationVerifiee: true,
+    evaluationFaite: false,
+    performanceFaite: false,
   },
   {
     id: "seance-5",
@@ -1175,6 +1214,8 @@ export const seancesClubSeed: SeanceClub[] = [
     procedeIds: [],
     securiteVerifiee: false,
     hydratationVerifiee: false,
+    evaluationFaite: true,
+    performanceFaite: true,
   },
   {
     id: "seance-6",
@@ -1193,6 +1234,8 @@ export const seancesClubSeed: SeanceClub[] = [
     procedeIds: [],
     securiteVerifiee: false,
     hydratationVerifiee: false,
+    evaluationFaite: true,
+    performanceFaite: false,
   },
   {
     id: "seance-8",
@@ -1220,6 +1263,8 @@ export const seancesClubSeed: SeanceClub[] = [
     ],
     securiteVerifiee: true,
     hydratationVerifiee: false,
+    evaluationFaite: true,
+    performanceFaite: false,
   },
   {
     id: "seance-9",
@@ -1246,6 +1291,8 @@ export const seancesClubSeed: SeanceClub[] = [
     ],
     securiteVerifiee: false,
     hydratationVerifiee: false,
+    evaluationFaite: false,
+    performanceFaite: true,
   },
   {
     id: "seance-3",
@@ -1264,6 +1311,8 @@ export const seancesClubSeed: SeanceClub[] = [
     procedeIds: [],
     securiteVerifiee: false,
     hydratationVerifiee: false,
+    evaluationFaite: true,
+    performanceFaite: false,
   },
   {
     id: "seance-37",
@@ -1292,6 +1341,8 @@ export const seancesClubSeed: SeanceClub[] = [
     ],
     securiteVerifiee: false,
     hydratationVerifiee: false,
+    evaluationFaite: false,
+    performanceFaite: false,
   },
   {
     id: "seance-38",
@@ -1320,6 +1371,8 @@ export const seancesClubSeed: SeanceClub[] = [
     ],
     securiteVerifiee: false,
     hydratationVerifiee: false,
+    evaluationFaite: false,
+    performanceFaite: false,
   },
   {
     id: "seance-39",
@@ -1346,6 +1399,8 @@ export const seancesClubSeed: SeanceClub[] = [
     ],
     securiteVerifiee: false,
     hydratationVerifiee: false,
+    evaluationFaite: false,
+    performanceFaite: false,
   },
   {
     id: "seance-46",
@@ -1364,6 +1419,8 @@ export const seancesClubSeed: SeanceClub[] = [
     procedeIds: [],
     securiteVerifiee: false,
     hydratationVerifiee: false,
+    evaluationFaite: true,
+    performanceFaite: false,
   },
   {
     id: "seance-47",
@@ -1387,6 +1444,8 @@ export const seancesClubSeed: SeanceClub[] = [
     procedeIds: [],
     securiteVerifiee: false,
     hydratationVerifiee: false,
+    evaluationFaite: true,
+    performanceFaite: true,
   },
   {
     id: "seance-48",
@@ -1405,6 +1464,8 @@ export const seancesClubSeed: SeanceClub[] = [
     procedeIds: [],
     securiteVerifiee: false,
     hydratationVerifiee: false,
+    evaluationFaite: false,
+    performanceFaite: false,
   },
   {
     id: "seance-7",
@@ -1427,6 +1488,8 @@ export const seancesClubSeed: SeanceClub[] = [
     ],
     securiteVerifiee: false,
     hydratationVerifiee: false,
+    evaluationFaite: false,
+    performanceFaite: false,
   },
   {
     id: "seance-1",
@@ -1445,6 +1508,8 @@ export const seancesClubSeed: SeanceClub[] = [
     procedeIds: [],
     securiteVerifiee: false,
     hydratationVerifiee: false,
+    evaluationFaite: true,
+    performanceFaite: false,
   },
   {
     id: "seance-2",
@@ -1468,6 +1533,8 @@ export const seancesClubSeed: SeanceClub[] = [
     procedeIds: [],
     securiteVerifiee: false,
     hydratationVerifiee: false,
+    evaluationFaite: true,
+    performanceFaite: true,
   },
   {
     id: "seance-54",
@@ -1489,6 +1556,8 @@ export const seancesClubSeed: SeanceClub[] = [
     ],
     securiteVerifiee: false,
     hydratationVerifiee: false,
+    evaluationFaite: true,
+    performanceFaite: false,
   },
   {
     id: "seance-64",
@@ -1514,6 +1583,8 @@ export const seancesClubSeed: SeanceClub[] = [
     ],
     securiteVerifiee: false,
     hydratationVerifiee: false,
+    evaluationFaite: false,
+    performanceFaite: false,
   },
   {
     id: "seance-65",
@@ -1542,6 +1613,8 @@ export const seancesClubSeed: SeanceClub[] = [
     ],
     securiteVerifiee: false,
     hydratationVerifiee: false,
+    evaluationFaite: false,
+    performanceFaite: false,
   },
   {
     id: "seance-66",
@@ -1567,6 +1640,8 @@ export const seancesClubSeed: SeanceClub[] = [
     ],
     securiteVerifiee: false,
     hydratationVerifiee: false,
+    evaluationFaite: false,
+    performanceFaite: false,
   },
   {
     id: "seance-87",
@@ -1585,6 +1660,8 @@ export const seancesClubSeed: SeanceClub[] = [
     procedeIds: [],
     securiteVerifiee: false,
     hydratationVerifiee: false,
+    evaluationFaite: false,
+    performanceFaite: false,
   },
   {
     id: "seance-101",
@@ -1610,6 +1687,8 @@ export const seancesClubSeed: SeanceClub[] = [
     ],
     securiteVerifiee: false,
     hydratationVerifiee: false,
+    evaluationFaite: false,
+    performanceFaite: false,
   },
   {
     id: "seance-85",
@@ -1628,6 +1707,8 @@ export const seancesClubSeed: SeanceClub[] = [
     procedeIds: [],
     securiteVerifiee: false,
     hydratationVerifiee: false,
+    evaluationFaite: true,
+    performanceFaite: true,
   },
   {
     id: "seance-86",
@@ -1651,6 +1732,8 @@ export const seancesClubSeed: SeanceClub[] = [
     procedeIds: [],
     securiteVerifiee: false,
     hydratationVerifiee: false,
+    evaluationFaite: false,
+    performanceFaite: false,
   },
   {
     id: "seance-102",
@@ -1676,6 +1759,8 @@ export const seancesClubSeed: SeanceClub[] = [
     ],
     securiteVerifiee: false,
     hydratationVerifiee: false,
+    evaluationFaite: false,
+    performanceFaite: false,
   },
   {
     id: "seance-92",
@@ -1702,6 +1787,8 @@ export const seancesClubSeed: SeanceClub[] = [
     ],
     securiteVerifiee: false,
     hydratationVerifiee: false,
+    evaluationFaite: false,
+    performanceFaite: false,
   },
   {
     id: "seance-103",
@@ -1727,6 +1814,8 @@ export const seancesClubSeed: SeanceClub[] = [
     ],
     securiteVerifiee: false,
     hydratationVerifiee: false,
+    evaluationFaite: false,
+    performanceFaite: false,
   },
   {
     id: "seance-94",
@@ -1753,6 +1842,8 @@ export const seancesClubSeed: SeanceClub[] = [
     ],
     securiteVerifiee: false,
     hydratationVerifiee: false,
+    evaluationFaite: false,
+    performanceFaite: false,
   },
   {
     id: "seance-95",
@@ -1780,6 +1871,8 @@ export const seancesClubSeed: SeanceClub[] = [
     ],
     securiteVerifiee: false,
     hydratationVerifiee: false,
+    evaluationFaite: false,
+    performanceFaite: false,
   },
   {
     id: "seance-96",
@@ -1805,5 +1898,7 @@ export const seancesClubSeed: SeanceClub[] = [
     ],
     securiteVerifiee: false,
     hydratationVerifiee: false,
+    evaluationFaite: false,
+    performanceFaite: false,
   },
 ]

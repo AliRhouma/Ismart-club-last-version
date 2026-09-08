@@ -42,6 +42,7 @@ import {
   type Bilan,
   type CategorieTab,
 } from "@/features/pole-technique/categorieUi"
+import { CategorieInscriptions } from "@/features/pole-technique/CategorieInscriptions"
 import {
   heureDe,
   jourDe,
@@ -220,6 +221,9 @@ export function CategoryDetailScreen() {
             seances={seances}
             onOpen={(id) => navigate(`/pole-technique/seances/${id}`)}
           />
+        ) : null}
+        {activeTab === "inscriptions" ? (
+          <CategorieInscriptions categorie={categorie} />
         ) : null}
         {activeTab === "programme" ? (
           <ProgrammeTab
@@ -661,7 +665,7 @@ function ProgrammeTab({
         <Chiffre label="À programmer" value={String(sessions - planifiees)} />
       </div>
 
-      {/* One line per groupe — that's the grain a programme is built at. */}
+      {/* One programme per saison — every groupe of the équipe follows it. */}
       <ul className="flex flex-col gap-1.5">
         {programmes.map((p) => {
           const faites = p.sessions.filter((s) => s.seanceId).length
@@ -670,7 +674,12 @@ function ProgrammeTab({
               key={p.id}
               className="flex items-center justify-between gap-3 rounded-lg border border-border px-4 py-2.5"
             >
-              <span className="font-ui text-[0.82rem] text-ink">{p.groupe}</span>
+              <span className="font-ui text-[0.82rem] text-ink">
+                {p.saison}
+                <span className="ml-2 text-[0.74rem] text-ink-disabled">
+                  {categorie.groupes.map((g) => g.nom).join(" · ")}
+                </span>
+              </span>
               <span className="font-ui text-[0.74rem] text-ink-muted tabular-nums">
                 {faites} / {p.sessions.length} planifiées
               </span>

@@ -20,6 +20,21 @@ import { seasonsSeed, type Season } from "@/data/seed/seasons"
 import { entriesSeed, type Entry } from "@/data/seed/entries"
 import { monthsSeed, type Month } from "@/data/seed/months"
 import { documentsSeed, type Document } from "@/data/seed/documents"
+import { dossiersSeed, type Dossier } from "@/data/seed/dossiers"
+import {
+  aujourdhuiFr,
+  demandesInscriptionSeed,
+  liensInscriptionSeed,
+  type DemandeInscription,
+  type LienInscription,
+  type StatutDemande,
+} from "@/data/seed/inscriptions"
+import {
+  evaluationGrillesSeed,
+  evaluationNotesSeed,
+  type EvaluationGrille,
+  type EvaluationNote,
+} from "@/data/seed/evaluations"
 import { fichesSeed, type Fiche } from "@/data/seed/fichesPoste"
 import {
   categoriesSeed,
@@ -59,9 +74,12 @@ import {
 import { eventsSeed, type PlanEvent } from "@/data/seed/events"
 import {
   buildFallbackSeance,
+  buildSeanceFromClub,
+  procedeFromLibrary,
   seanceDetailsSeed,
   type PresenceStatut,
   type Procede,
+  type ProcedeAtelier,
   type SeanceDetail,
   type SeanceStatut,
 } from "@/data/seed/seances"
@@ -305,6 +323,8 @@ export type DataContextValue = {
   saisons: string[]
   /** Every programme annuel of the club (one per saison × catégorie × groupe). */
   programmesAnnuels: ProgrammeAnnuel[]
+  /** The club's filing tree — read-only; a programme records its `dossierId`. */
+  dossiers: Dossier[]
   /** The saison × catégorie × groupe the Programmation screen is showing. */
   programmeScope: ProgrammeScope
   /** Programme of the active scope — null when that combination has none yet. */
@@ -321,6 +341,41 @@ export type DataContextValue = {
   events: PlanEvent[]
   /** Session detail (header + procédés) behind a séance card, keyed by event id. */
   seanceDetails: SeanceDetail[]
+  /** The séance behind an id — seeded detail, calendar event, or programme séance. */
+  seanceDetailPour: (id: string) => SeanceDetail | null
+  /** Invite links an éducateur shares to fill a catégorie. */
+  liensInscription: LienInscription[]
+  /** Join requests, from the moment they are submitted to the decision. */
+  demandesInscription: DemandeInscription[]
+  /** Mint a link for a catégorie (revoking any live one); returns its token. */
+  creerLienInscription: (categorieId: string, groupeId?: string) => string
+  /** Revoke a link — it stops opening, but stays in the history. */
+  revoquerLienInscription: (id: string) => void
+  /** Submit a join request; also notifies the éducateur. Returns its id. */
+  soumettreDemande: (
+    demande: Omit<DemandeInscription, "id" | "statut" | "soumiseLe">,
+  ) => string
+  /**
+   * Approve or refuse a request. Approving adds the joueur to the catégorie's
+   * effectif — that promotion is the whole point of the pending state.
+   */
+  traiterDemande: (id: string, statut: StatutDemande, motif?: string) => void
+  /** The grids a joueur is scored against — fixed content for now. */
+  evaluationGrilles: EvaluationGrille[]
+  /** Every score given, one row per séance × joueur × critère. */
+  evaluationNotes: EvaluationNote[]
+  /**
+   * Score one critère for one joueur on one séance. `null` clears it: an
+   * unscored critère has no row rather than a zero.
+   */
+  setEvaluationNote: (
+    seanceId: string,
+    joueurId: string,
+    critereId: string,
+    valeur: number | null,
+  ) => void
+  /** Wipe a whole grille's scores for one séance. */
+  clearEvaluationGrille: (seanceId: string, critereIds: string[]) => void
   /** Met à jour la fiche d'une séance (type, effectif, intensité, date…). */
   updateSeanceDetail: (eventId: string, patch: Partial<SeanceDetail>) => void
   /** Ajoute des procédés (copiés de la bibliothèque) au plan d'une séance. */
@@ -329,6 +384,12 @@ export type DataContextValue = {
   removeSeanceProcede: (eventId: string, procedeId: string) => void
   /** Remonte (-1) ou descend (+1) un procédé dans le déroulé de la séance. */
   moveSeanceProcede: (eventId: string, procedeId: string, dir: -1 | 1) => void
+  /** Replace the player groups of one procédé of a séance. */
+  setProcedeAteliers: (
+    eventId: string,
+    procedeId: string,
+    ateliers: ProcedeAtelier[],
+  ) => void
   /** Pointe un participant. `null` le remet à « non pointé ». */
   setSeancePresence: (
     eventId: string,
@@ -424,6 +485,10 @@ export type DataContextValue = {
   setProgrammeScope: (patch: Partial<ProgrammeScope>) => void
   /** Start a blank programme for the active scope; returns its id. */
   creerProgrammeAnnuel: () => string
+  /** Patch a programme's own fields (partage, visibilité, dossier). */
+  updateProgrammeAnnuel: (id: string, patch: Partial<ProgrammeAnnuel>) => void
+  /** Delete a whole programme annuel. Its séances are left in the calendar. */
+  removeProgrammeAnnuel: (id: string) => void
   /** Retarget one slot of the programme annuel (principe / special). */
   updateProgSession: (id: string, patch: Partial<ProgSession>) => void
   /** Append a semaine (and its séances placeholder) to a programme annuel. */
@@ -434,8 +499,18 @@ export type DataContextValue = {
   removeProgSession: (id: string) => void
   /** Remove a whole semaine and the séances placeholder it holds. */
   removeProgSemaine: (programmeId: string, semaine: number) => void
-  /** Turn a programme slot into a real séance and link the two. Returns its id. */
-  planifierSeance: (sessionId: string) => string
+  /**
+   * Turn a programme slot into a real séance and link the two. The programme
+   * is written for the whole équipe, so the caller says which groupe runs it.
+   * `patch` is folded in as the séance is created — a follow-up updateSeance
+   * would race the insert, since both are queued from the same event.
+   * Returns the new séance's id.
+   */
+  planifierSeance: (
+    sessionId: string,
+    groupe?: string,
+    patch?: Partial<Omit<SeanceClub, "id">>,
+  ) => string
   addSeance: (seance: Omit<SeanceClub, "id">) => string
   updateSeance: (id: string, patch: Partial<SeanceClub>) => void
   /** Delete a séance and unlink it from its programme slot. */
@@ -625,9 +700,10 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const [programmeScope, setScope] = useState<ProgrammeScope>({
     saison: SAISON_ACTIVE,
     categorieId: "fff",
-    groupeId: "fff-groupe-a",
   })
   const [seancesClub, setSeancesClub] = useState<SeanceClub[]>(seancesClubSeed)
+  // The filing tree is fixed content for now — nothing creates a dossier yet.
+  const dossiers = dossiersSeed
   // Projets de jeu are read-only for now (the club consults its model; editing
   // the étapes is a future job). Compositions add / edit / remove.
   const [projetsDeJeu] = useState<ProjetDeJeu[]>(projetsDeJeuSeed)
@@ -648,11 +724,75 @@ export function DataProvider({ children }: { children: ReactNode }) {
   // Convocations: one row per séance, created / replaced from the séance page.
   const [convocations, setConvocations] =
     useState<SeanceConvocation[]>(convocationsSeed)
+  // Inscriptions: a link an éducateur shares, and the requests it brings in.
+  // Dates are stamped "dd/mm/yyyy", the format the seeded rows already use.
+  // Both mutate at runtime, so plain state; new rows get uuids.
+  const [liensInscription, setLiens] =
+    useState<LienInscription[]>(liensInscriptionSeed)
+  const [demandesInscription, setDemandes] = useState<DemandeInscription[]>(
+    demandesInscriptionSeed,
+  )
+  // Évaluations: the grids are fixed content, the scores are written from the
+  // séance's Évaluation tab, one row per séance × joueur × critère.
+  const evaluationGrilles = evaluationGrillesSeed
+  const [evaluationNotes, setEvaluationNotes] =
+    useState<EvaluationNote[]>(evaluationNotesSeed)
 
   /**
-   * Edit one séance detail. A séance that has no seeded detail (most of the
-   * calendar) is materialised from its event the first time it is touched, so
-   * the coach can build a plan or point the présence on any séance card.
+   * The séance behind an id, whatever it came from: a seeded detail, a calendar
+   * event, or a séance planned from a programme annuel (`seancesClub`, which
+   * has no event of its own). One resolver for the whole app, so the page that
+   * reads a séance and the reducer that edits it never disagree about what it is.
+   */
+  const seanceDetailPour = useCallback(
+    (id: string): SeanceDetail | null => {
+      const seeded = seanceDetails.find((d) => d.eventId === id)
+      if (seeded) return seeded
+
+      const event = events.find((e) => e.id === id && e.type === "seance")
+      if (event) return buildFallbackSeance(event)
+
+      const club = seancesClub.find((x) => x.id === id)
+      if (!club) return null
+      const cat = categories.find((c) => c.nom === club.categorie)
+      const groupe = cat?.groupes.find((g) => g.nom === club.groupe)
+      return buildSeanceFromClub(
+        club,
+        club.principeId
+          ? (procedePrincipes.find((x) => x.id === club.principeId)?.nom ??
+              "Séance technique")
+          : (club.special ?? "Séance technique"),
+        club.procedeIds
+          .map((pid) => procedes.find((x) => x.id === pid))
+          .filter((x) => !!x)
+          .map(procedeFromLibrary),
+        (cat?.joueurs ?? [])
+          .filter((j) => !groupe || j.groupeId === groupe.id)
+          .map((j) => ({
+            id: j.id,
+            name: j.nom,
+            role: j.poste,
+            kind: "joueur" as const,
+            convocation: "attente" as const,
+          })),
+        SAISON_ACTIVE,
+      )
+    },
+    [
+      seanceDetails,
+      events,
+      seancesClub,
+      categories,
+      procedes,
+      procedePrincipes,
+    ],
+  )
+
+  /**
+   * Edit one séance detail. A séance with no seeded detail is materialised from
+   * whichever source it does have the first time it is touched, so the coach can
+   * build a plan or point the présence on any séance card — including one
+   * planned straight from a programme annuel.
    */
   const patchSeance = useCallback(
     (eventId: string, updater: (detail: SeanceDetail) => SeanceDetail) =>
@@ -661,11 +801,11 @@ export function DataProvider({ children }: { children: ReactNode }) {
         if (current) {
           return prev.map((d) => (d.eventId === eventId ? updater(d) : d))
         }
-        const event = events.find((e) => e.id === eventId)
-        if (!event) return prev
-        return [...prev, updater(buildFallbackSeance(event))]
+        const base = seanceDetailPour(eventId)
+        if (!base) return prev
+        return [...prev, updater(base)]
       }),
-    [events],
+    [seanceDetailPour],
   )
   // Match details are read-only for now (the club views the briefing / debrief;
   // editing convocations & présences is a future job), like séance details.
@@ -731,8 +871,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
       programmesAnnuels.find(
         (p) =>
           p.saison === programmeScope.saison &&
-          p.categorieId === programmeScope.categorieId &&
-          p.groupeId === programmeScope.groupeId,
+          p.categorieId === programmeScope.categorieId,
       ) ?? null,
     [programmesAnnuels, programmeScope],
   )
@@ -788,6 +927,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
       procedes,
       saisons: SAISONS,
       programmesAnnuels,
+      dossiers,
       programmeScope,
       programmeAnnuel,
       seancesClub,
@@ -796,12 +936,128 @@ export function DataProvider({ children }: { children: ReactNode }) {
       categories,
       events,
       seanceDetails,
+      seanceDetailPour,
+      liensInscription,
+      demandesInscription,
+      creerLienInscription: (categorieId, groupeId) => {
+        const id = crypto.randomUUID()
+        // A catégorie has one live link at a time: minting a new one revokes
+        // the old, so a link that leaked can be replaced by generating another.
+        const token = `${categorieId}-${Math.random().toString(36).slice(2, 8)}`
+        setLiens((prev) => [
+          ...prev.map((l) =>
+            l.categorieId === categorieId ? { ...l, actif: false } : l,
+          ),
+          {
+            id,
+            token,
+            categorieId,
+            groupeId,
+            creeLe: aujourdhuiFr(),
+            actif: true,
+          },
+        ])
+        return token
+      },
+      revoquerLienInscription: (id) =>
+        setLiens((prev) =>
+          prev.map((l) => (l.id === id ? { ...l, actif: false } : l)),
+        ),
+      soumettreDemande: (demande) => {
+        const id = crypto.randomUUID()
+        setDemandes((prev) => [
+          ...prev,
+          { ...demande, id, statut: "en-attente", soumiseLe: aujourdhuiFr() },
+        ])
+        const qui = `${demande.joueur.prenom} ${demande.joueur.nom}`
+        setNotifications((prev) => [
+          {
+            id: crypto.randomUUID(),
+            kind: "demande",
+            title: "Demande d'inscription",
+            date: aujourdhuiFr(),
+            body:
+              demande.profil === "parent"
+                ? `${demande.parent?.prenom ?? "Un parent"} inscrit ${qui} — à valider`
+                : `${qui} demande à rejoindre la catégorie — à valider`,
+            unread: true,
+          },
+          ...prev,
+        ])
+        return id
+      },
+      traiterDemande: (id, statut, motif) => {
+        setDemandes((prev) =>
+          prev.map((d) =>
+            d.id === id
+              ? { ...d, statut, motif, traiteeLe: aujourdhuiFr() }
+              : d,
+          ),
+        )
+        if (statut !== "approuvee") return
+        // Approving is what puts the joueur in the effectif.
+        const demande = demandesInscription.find((d) => d.id === id)
+        if (!demande) return
+        setCategories((prev) =>
+          prev.map((c) =>
+            c.id === demande.categorieId
+              ? {
+                  ...c,
+                  joueurs: [
+                    ...c.joueurs,
+                    {
+                      id: demande.joueur.joueurId ?? crypto.randomUUID(),
+                      nom: `${demande.joueur.prenom} ${demande.joueur.nom}`,
+                      poste: demande.joueur.poste ?? "MOC",
+                      groupeId: c.groupes[0]?.id ?? "",
+                      naissance: demande.joueur.naissance,
+                      presences: 0,
+                      seances: 0,
+                    },
+                  ],
+                }
+              : c,
+          ),
+        )
+      },
+      evaluationGrilles,
+      evaluationNotes,
+      setEvaluationNote: (seanceId, joueurId, critereId, valeur) =>
+        setEvaluationNotes((prev) => {
+          const reste = prev.filter(
+            (n) =>
+              !(
+                n.seanceId === seanceId &&
+                n.joueurId === joueurId &&
+                n.critereId === critereId
+              ),
+          )
+          if (valeur === null) return reste
+          return [
+            ...reste,
+            { id: crypto.randomUUID(), seanceId, joueurId, critereId, valeur },
+          ]
+        }),
+      clearEvaluationGrille: (seanceId, critereIds) =>
+        setEvaluationNotes((prev) =>
+          prev.filter(
+            (n) =>
+              !(n.seanceId === seanceId && critereIds.includes(n.critereId)),
+          ),
+        ),
       updateSeanceDetail: (eventId, patch) =>
         patchSeance(eventId, (d) => ({ ...d, ...patch })),
       addSeanceProcedes: (eventId, nouveaux) =>
         patchSeance(eventId, (d) => ({
           ...d,
           procedes: [...d.procedes, ...nouveaux],
+        })),
+      setProcedeAteliers: (eventId, procedeId, ateliers) =>
+        patchSeance(eventId, (d) => ({
+          ...d,
+          procedes: d.procedes.map((p) =>
+            p.id === procedeId ? { ...p, ateliers } : p,
+          ),
         })),
       removeSeanceProcede: (eventId, procedeId) =>
         patchSeance(eventId, (d) => ({
@@ -937,26 +1193,15 @@ export function DataProvider({ children }: { children: ReactNode }) {
         ),
       removeProcede: (id) =>
         setProcedes((prev) => prev.filter((p) => p.id !== id)),
-      setProgrammeScope: (patch) =>
-        setScope((prev) => {
-          const next = { ...prev, ...patch }
-          // Changing catégorie invalidates the groupe — fall back to its first.
-          if (patch.categorieId && !patch.groupeId) {
-            const cat = categories.find((c) => c.id === patch.categorieId)
-            next.groupeId = cat?.groupes[0]?.id ?? ""
-          }
-          return next
-        }),
+      setProgrammeScope: (patch) => setScope((prev) => ({ ...prev, ...patch })),
       creerProgrammeAnnuel: () => {
         const id = crypto.randomUUID()
         const cat = categories.find((c) => c.id === programmeScope.categorieId)
-        const groupe = cat?.groupes.find((g) => g.id === programmeScope.groupeId)
         setProgrammesAnnuels((prev) =>
           prev.some(
             (p) =>
               p.saison === programmeScope.saison &&
-              p.categorieId === programmeScope.categorieId &&
-              p.groupeId === programmeScope.groupeId,
+              p.categorieId === programmeScope.categorieId,
           )
             ? prev
             : [
@@ -964,12 +1209,17 @@ export function DataProvider({ children }: { children: ReactNode }) {
                 programmeVierge(id, {
                   ...programmeScope,
                   categorie: cat?.nom ?? "",
-                  groupe: groupe?.nom ?? "",
                 }),
               ],
         )
         return id
       },
+      updateProgrammeAnnuel: (id, patch) =>
+        setProgrammesAnnuels((prev) =>
+          prev.map((p) => (p.id === id ? { ...p, ...patch } : p)),
+        ),
+      removeProgrammeAnnuel: (id) =>
+        setProgrammesAnnuels((prev) => prev.filter((p) => p.id !== id)),
       updateProgSession: (id, patch) =>
         setProgrammesAnnuels((prev) =>
           prev.map((prog) =>
@@ -1056,7 +1306,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
             }
           }),
         ),
-      planifierSeance: (sessionId) => {
+      planifierSeance: (sessionId, groupe, patch) => {
         const id = crypto.randomUUID()
         setProgrammesAnnuels((prev) => {
           const prog = prev.find((p) =>
@@ -1076,7 +1326,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
                   Date.UTC(2025, 6, 1) + (slot.semaine - 1) * 7 * 864e5,
                 ).toISOString(),
                 categorie: prog.categorie,
-                groupe: prog.groupe,
+                groupe: groupe ?? "",
                 statut: "À venir" as const,
                 brouillon: true,
                 duree: "60",
@@ -1089,6 +1339,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
                 procedeIds: [],
                 securiteVerifiee: false,
                 hydratationVerifiee: false,
+                ...patch,
               },
             ].sort((a, b) => a.date.localeCompare(b.date)),
           )
@@ -1577,6 +1828,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
       procedePrincipes,
       procedes,
       programmesAnnuels,
+      dossiers,
       programmeScope,
       programmeAnnuel,
       seancesClub,
@@ -1585,6 +1837,11 @@ export function DataProvider({ children }: { children: ReactNode }) {
       categories,
       events,
       seanceDetails,
+      seanceDetailPour,
+      liensInscription,
+      demandesInscription,
+      evaluationGrilles,
+      evaluationNotes,
       patchSeance,
       convocations,
       matchDetails,

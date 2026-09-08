@@ -24,11 +24,9 @@ import {
   CircleDashed,
   Eraser,
   GripVertical,
-  Layers,
   MapPin,
   Pencil,
   Plus,
-  Target,
   TrafficCone,
   Trash2,
   X,
@@ -37,7 +35,6 @@ import {
 import { cn } from "@/lib/utils"
 import { useData } from "@/data/useData"
 import { PROG_SPECIALS, type ProgSession } from "@/data/seed/programmation"
-import { PageHeader } from "@/components/kit/PageHeader"
 import { EmptyState } from "@/components/kit/EmptyState"
 import { Button } from "@/components/ui/button"
 import {
@@ -48,6 +45,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { useProgramme } from "@/features/pole-technique/useProgramme"
 import { Segmented } from "@/features/budget/ui"
 import { Toast } from "@/features/sponsoring/ui"
 import {
@@ -57,8 +64,8 @@ import {
   encreSur,
 } from "@/features/pole-technique/programmeCouleurs"
 
-const fieldCls =
-  "w-full rounded-md border border-input bg-transparent px-3.5 py-2.5 font-body text-sm text-ink outline-none transition-colors focus:border-border-focus"
+/* Radix Select reserves "" for "no value", so the unset row needs a sentinel. */
+const PRINCIPE_A_DEFINIR = "a-definir"
 
 type Filtre = "Toutes" | "Planifiées" | "À programmer"
 type Vue = "planning" | "liste"
@@ -83,13 +90,9 @@ const patchDe = (cle: string): Partial<ProgSession> =>
 
 export function ProgrammationScreen() {
   const navigate = useNavigate()
+  const { categorie, programme: programmeAnnuel } = useProgramme()
   const {
-    saisons,
-    categories,
-    programmeScope,
-    setProgrammeScope,
     creerProgrammeAnnuel,
-    programmeAnnuel,
     seancesClub,
     procedeGroupes,
     procedePrincipes,
@@ -99,7 +102,6 @@ export function ProgrammationScreen() {
     addProgSession,
     removeProgSession,
     removeProgSemaine,
-    planifierSeance,
   } = useData()
 
   const [vue, setVue] = useState<Vue>("planning")
@@ -132,9 +134,6 @@ export function ProgrammationScreen() {
       activationConstraint: { delay: 180, tolerance: 8 },
     }),
   )
-
-  const categorie = categories.find((c) => c.id === programmeScope.categorieId)
-  const groupes = categorie?.groupes ?? []
 
   const principeById = useMemo(
     () => new Map(procedePrincipes.map((p) => [p.id, p])),
@@ -321,76 +320,17 @@ export function ProgrammationScreen() {
     >
       <div
         className={cn(
-          "mx-auto flex w-full max-w-6xl flex-col gap-6",
+          "flex w-full flex-col gap-6",
           // Room for the principes dock that stays docked on mobile.
           edition && "pb-48 lg:pb-0",
         )}
       >
-        <PageHeader
-          title="Programmation"
-          subtitle="Le programme annuel : ce que chaque séance de la saison doit travailler."
-          actions={
-            <div className="flex flex-wrap items-center gap-2">
-              {programmeAnnuel ? (
-                <Button
-                  variant={edition ? "default" : "outline"}
-                  onClick={basculerEdition}
-                >
-                  {edition ? (
-                    <>
-                      <Check /> Terminer
-                    </>
-                  ) : (
-                    <>
-                      <Pencil /> Modifier
-                    </>
-                  )}
-                </Button>
-              ) : null}
-              <Button
-                variant="outline"
-                onClick={() => navigate("/pole-technique/seances")}
-              >
-                <CalendarDays /> Voir les séances
-              </Button>
-            </div>
-          }
-        />
-
-        {/* Scope — one programme per saison × catégorie × groupe. */}
-        <div className="grid gap-3 rounded-lg border border-border p-4 sm:grid-cols-3">
-          <ScopeSelect
-            icon={CalendarDays}
-            label="Saison"
-            value={programmeScope.saison}
-            onChange={(saison) => setProgrammeScope({ saison })}
-            options={saisons.map((s) => ({ value: s, label: s }))}
-          />
-          <ScopeSelect
-            icon={Layers}
-            label="Équipe"
-            value={programmeScope.categorieId}
-            onChange={(categorieId) => setProgrammeScope({ categorieId })}
-            options={categories.map((c) => ({ value: c.id, label: c.nom }))}
-          />
-          <ScopeSelect
-            icon={Target}
-            label="Groupe"
-            value={programmeScope.groupeId}
-            onChange={(groupeId) => setProgrammeScope({ groupeId })}
-            options={groupes.map((g) => ({ value: g.id, label: g.nom }))}
-          />
-        </div>
-
         {!programmeAnnuel ? (
           <div className="rounded-lg border border-border">
             <EmptyState
               icon={CalendarDays}
               title="Aucun programme annuel"
-              description={`${categorie?.nom ?? "Cette équipe"} · ${
-                groupes.find((g) => g.id === programmeScope.groupeId)?.nom ??
-                "ce groupe"
-              } n'a pas encore de programme pour la saison ${programmeScope.saison}.`}
+              description={`${categorie?.nom ?? "Cette équipe"} n'a pas encore de programme pour cette saison. Il servira à tous ses groupes.`}
               action={
                 <Button
                   onClick={() => {
@@ -446,6 +386,9 @@ export function ProgrammationScreen() {
                       setPinceau((p) => (p === VIDE ? null : VIDE))
                     }
                   />
+                  <Button size="sm" onClick={basculerEdition}>
+                    <Check /> Terminer
+                  </Button>
                 </div>
               </div>
             ) : (
@@ -493,6 +436,12 @@ export function ProgrammationScreen() {
                   <span className="text-ink">{visible.length}</span> séance
                   {visible.length > 1 ? "s" : ""}
                 </p>
+
+                {/* Editing shapes the programme below, so its switch sits with
+                    the filters that scope it — not up in the section header. */}
+                <Button variant="outline" size="sm" onClick={basculerEdition}>
+                  <Pencil /> Modifier
+                </Button>
               </div>
             )}
 
@@ -633,7 +582,7 @@ export function ProgrammationScreen() {
                   <DialogTitle>Séance {openSlot.numero}</DialogTitle>
                   <DialogDescription>
                     Semaine {openSlot.semaine} · {programmeAnnuel.categorie} ·{" "}
-                    {programmeAnnuel.groupe} · {programmeAnnuel.saison}
+                    {programmeAnnuel.saison}
                   </DialogDescription>
                 </DialogHeader>
 
@@ -642,39 +591,54 @@ export function ProgrammationScreen() {
                     <span className="block font-ui text-[0.72rem] font-medium text-ink">
                       Principe travaillé
                     </span>
-                    <select
-                      value={cleDe(openSlot) ?? ""}
-                      onChange={(e) => {
-                        const v = e.target.value
+                    <Select
+                      value={cleDe(openSlot) ?? PRINCIPE_A_DEFINIR}
+                      onValueChange={(v) =>
                         updateProgSession(
                           openSlot.id,
                           v.startsWith("special:")
                             ? { principeId: undefined, special: v.slice(8) }
-                            : { principeId: v || undefined, special: undefined },
+                            : {
+                                principeId:
+                                  v === PRINCIPE_A_DEFINIR ? undefined : v,
+                                special: undefined,
+                              },
                         )
-                      }}
-                      className={fieldCls}
+                      }
                     >
-                      <option value="">À définir</option>
-                      {procedePhases.map((ph) => (
-                        <optgroup key={ph.id} label={ph.nom}>
-                          {procedePrincipes
-                            .filter((pr) => pr.phaseId === ph.id)
-                            .map((pr) => (
-                              <option key={pr.id} value={pr.id}>
-                                {pr.nom}
-                              </option>
-                            ))}
-                        </optgroup>
-                      ))}
-                      <optgroup label="Autre">
-                        {PROG_SPECIALS.map((sp) => (
-                          <option key={sp} value={cleSpeciale(sp)}>
-                            {sp}
-                          </option>
-                        ))}
-                      </optgroup>
-                    </select>
+                      <SelectTrigger aria-label="Principe travaillé">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value={PRINCIPE_A_DEFINIR}>
+                          À définir
+                        </SelectItem>
+                        {procedePhases.map((ph) => {
+                          const principes = procedePrincipes.filter(
+                            (pr) => pr.phaseId === ph.id,
+                          )
+                          if (!principes.length) return null
+                          return (
+                            <SelectGroup key={ph.id}>
+                              <SelectLabel>{ph.nom}</SelectLabel>
+                              {principes.map((pr) => (
+                                <SelectItem key={pr.id} value={pr.id}>
+                                  {pr.nom}
+                                </SelectItem>
+                              ))}
+                            </SelectGroup>
+                          )
+                        })}
+                        <SelectGroup>
+                          <SelectLabel>Autre</SelectLabel>
+                          {PROG_SPECIALS.map((sp) => (
+                            <SelectItem key={sp} value={cleSpeciale(sp)}>
+                              {sp}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
                   </label>
 
                   {openSlot.installation ? (
@@ -701,18 +665,17 @@ export function ProgrammationScreen() {
                     ) : (
                       <div className="flex flex-col gap-3">
                         <p className="font-body text-[0.84rem] text-ink-muted">
-                          Pas encore de séance. La créer reprend le principe, la
-                          semaine et le lieu de cette ligne.
+                          Pas encore de séance. La fiche de création reprend le
+                          principe, la semaine et le lieu de cette ligne.
                         </p>
                         <Button
-                          onClick={() => {
-                            const id = planifierSeance(openSlot.id)
-                            setOpenId(null)
-                            notify("Séance planifiée.")
-                            navigate(`/pole-technique/seances/${id}`)
-                          }}
+                          onClick={() =>
+                            navigate(
+                              `/pole-technique/seances/nouvelle/${openSlot.id}`,
+                            )
+                          }
                         >
-                          <CalendarPlus /> Planifier la séance
+                          <CalendarPlus /> Créer la séance
                         </Button>
                       </div>
                     )}
@@ -770,48 +733,6 @@ export function ProgrammationScreen() {
         ) : null}
       </DragOverlay>
     </DndContext>
-  )
-}
-
-/* ── Scope selects ────────────────────────────────────────────────────────── */
-
-function ScopeSelect({
-  icon: Icon,
-  label,
-  value,
-  onChange,
-  options,
-}: {
-  icon: typeof CalendarDays
-  label: string
-  value: string
-  onChange: (value: string) => void
-  options: { value: string; label: string }[]
-}) {
-  return (
-    <label className="flex flex-col gap-1.5">
-      <span className="flex items-center gap-1.5 font-ui text-[0.62rem] font-medium tracking-[0.1em] text-ink-disabled uppercase">
-        <Icon size={12} /> {label}
-      </span>
-      <span className="relative block">
-        <select
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          className={cn(fieldCls, "appearance-none pr-9")}
-        >
-          {options.map((o) => (
-            <option key={o.value} value={o.value}>
-              {o.label}
-            </option>
-          ))}
-        </select>
-        <ChevronDown
-          size={14}
-          aria-hidden
-          className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-ink-muted"
-        />
-      </span>
-    </label>
   )
 }
 

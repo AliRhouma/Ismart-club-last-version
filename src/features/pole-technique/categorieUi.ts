@@ -12,6 +12,7 @@ export const CATEGORIE_TABS = [
   { value: "resultats", label: "Résultats" },
   { value: "seances", label: "Séances" },
   { value: "programme", label: "Programme annuel" },
+  { value: "inscriptions", label: "Inscriptions" },
 ] as const
 
 export type CategorieTab = (typeof CATEGORIE_TABS)[number]["value"]

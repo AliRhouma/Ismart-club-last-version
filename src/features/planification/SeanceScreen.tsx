@@ -38,7 +38,6 @@ import {
 import { cn } from "@/lib/utils"
 import { useData } from "@/data/useData"
 import {
-  buildFallbackSeance,
   isSeanceStarted,
   type ConvocationStatut,
   type PresenceStatut,
@@ -57,6 +56,8 @@ import type { PlanEvent } from "@/data/seed/events"
 import type { SeanceConvocation } from "@/data/seed/convocations"
 import { AdBanner } from "@/features/planification/AdBanner"
 import { ConvocationBuilder } from "@/features/planification/ConvocationBuilder"
+import { EvaluationTab } from "@/features/planification/EvaluationTab"
+import { ProcedeAteliers } from "@/features/planification/ProcedeAteliers"
 import { ProcedePicker } from "@/features/planification/ProcedePicker"
 import { SeanceFormModal } from "@/features/planification/SeanceFormModal"
 
@@ -75,9 +76,15 @@ const TAB_LABEL: Record<SeanceTab, string> = {
   evaluation: "Évaluation",
 }
 
+/**
+ * Tabs in the order the séance is lived: what is planned, who is called, who
+ * turned up, how it went. Convocation stays available once the séance has
+ * started — it is the list the présence is pointed against, and a coach still
+ * needs to read (or fix) who was called after the fact.
+ */
 function tabsFor(detail: SeanceDetail): SeanceTab[] {
   return isSeanceStarted(detail.statut)
-    ? ["procede", "presence", "evaluation"]
+    ? ["procede", "convocation", "presence", "evaluation"]
     : ["procede", "convocation"]
 }
 
@@ -86,18 +93,18 @@ function tabsFor(detail: SeanceDetail): SeanceTab[] {
 export function SeanceScreen() {
   const { id, tab } = useParams()
   const navigate = useNavigate()
-  const { events, seanceDetails } = useData()
+  const { events, seanceDetailPour } = useData()
   // One toast for the whole page: every tab confirms in the same place.
   const { toast, notify } = useToast()
 
   // Prefer a seeded detail; otherwise derive one from the calendar event so any
   // séance card still opens a coherent page (with an empty procédé state).
-  const detail: SeanceDetail | null = useMemo(() => {
-    const seeded = seanceDetails.find((s) => s.eventId === id)
-    if (seeded) return seeded
-    const event = events.find((e) => e.id === id && e.type === "seance")
-    return event ? buildFallbackSeance(event) : null
-  }, [events, seanceDetails, id])
+  // Seeded detail, calendar event, or a séance planned from a programme —
+  // the store knows which, and edits go back through the same resolver.
+  const detail: SeanceDetail | null = useMemo(
+    () => (id ? seanceDetailPour(id) : null),
+    [seanceDetailPour, id],
+  )
 
   if (!detail) {
     return (
@@ -145,7 +152,7 @@ export function SeanceScreen() {
       ) : activeTab === "presence" ? (
         <PresenceTab detail={detail} notify={notify} />
       ) : (
-        <EvaluationTab numero={detail.numero} />
+        <EvaluationTab detail={detail} notify={notify} />
       )}
 
       <Toast toast={toast} />
@@ -637,7 +644,18 @@ function ProcedeTab({
 
       {/* Main — the selected procédé's content. */}
       <div className="min-w-0 flex-1">
-        {active ? <ProcedeContent procede={active} /> : null}
+        {active ? (
+          <>
+            <ProcedeContent procede={active} />
+            {/* How the squad is split for this exercise — per procédé, so it
+                can differ from one exercise to the next. */}
+            <ProcedeAteliers
+              detail={detail}
+              procede={active}
+              notify={notify}
+            />
+          </>
+        ) : null}
       </div>
 
       {overlays}
@@ -1700,14 +1718,3 @@ function GroupeChip({
 
 /* ── Évaluation — empty until the debrief is wired ────────────────────────── */
 
-function EvaluationTab({ numero }: { numero: string }) {
-  return (
-    <section className="rounded-lg border border-border">
-      <EmptyState
-        icon={Gauge}
-        title="Évaluation indisponible"
-        description={`Le bilan de la séance (charges, notes des joueurs) sera saisi ici une fois la séance terminée — ${numero}.`}
-      />
-    </section>
-  )
-}
