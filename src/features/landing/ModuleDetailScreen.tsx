@@ -1,3 +1,5 @@
+import logoWordmark from "@/assets/brand/logo-ismart.svg"
+import logoMark from "@/assets/brand/logo-ismart-mark.svg"
 import { useEffect, useState } from "react"
 import { Link, Navigate, useParams } from "react-router-dom"
 import {
@@ -66,8 +68,16 @@ export function ModuleDetailScreen() {
 
       <nav className={`lp-nav ${scrolled ? "lp-nav--scrolled" : ""}`}>
         <Link className="lp-logo" to="/landing">
-          <span className="lp-logo-mark">iS</span>
-          <span className="lp-logo-word">iSMART CLUB</span>
+          <img
+            className="lp-logo-img lp-logo-img--word"
+            src={logoWordmark}
+            alt="iSmart Club"
+          />
+          <img
+            className="lp-logo-img lp-logo-img--mark"
+            src={logoMark}
+            alt="iSmart Club"
+          />
         </Link>
         <ul className="lp-nav-links">
           <li>

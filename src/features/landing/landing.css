@@ -86,27 +86,14 @@ html:has(.lp) {
   gap: 0.6rem;
   text-decoration: none;
 }
-.lp-logo-mark {
-  width: 30px;
-  height: 30px;
-  border-radius: 8px;
-  background: var(--green);
-  color: var(--slate);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: "Syne", sans-serif;
-  font-weight: 800;
-  font-size: 0.85rem;
-  flex-shrink: 0;
+/* The wordmark on wide screens, the figure alone on narrow ones. */
+.lp-logo-img {
+  display: block;
+  height: 34px;
+  width: auto;
 }
-.lp-logo-word {
-  font-family: "Syne", sans-serif;
-  font-weight: 800;
-  font-size: 1rem;
-  letter-spacing: 0.02em;
-  color: var(--white);
-  white-space: nowrap;
+.lp-logo-img--mark {
+  display: none;
 }
 .lp-nav-links {
   display: flex;
@@ -2248,8 +2235,8 @@ html:has(.lp) {
   .lp-nav--scrolled {
     padding: 0.75rem 4%;
   }
-  .lp-logo-word {
-    font-size: 0.85rem;
+  .lp-logo-img {
+    height: 28px;
   }
   .lp-nav-cta,
   .lp-nav-signin {
@@ -2264,9 +2251,12 @@ html:has(.lp) {
 @media (max-width: 430px) {
   /* Below this the wordmark loses to the CTA — the mark carries the brand,
      and sign-in falls back to the footer link. */
-  .lp-logo-word,
+  .lp-logo-img--word,
   .lp-nav-signin {
     display: none;
+  }
+  .lp-logo-img--mark {
+    display: block;
   }
 }
 

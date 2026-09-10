@@ -1,3 +1,4 @@
+import { Logo } from "@/components/kit/Logo"
 import { Link, useLocation } from "react-router-dom"
 import { ChevronRight } from "lucide-react"
 
@@ -50,21 +51,24 @@ function useIsActive() {
   }
 }
 
-/** Brand mark — green monogram + wordmark. Wordmark hides in icon mode. */
+/**
+ * Brand — the iSmart Club wordmark with the space's name under it. A collapsed
+ * (icon) sidebar has no room for the words, so it keeps the figure alone.
+ */
 function BrandMark({ to, subtitle }: { to: string; subtitle: string }) {
   return (
     <Link
       to={to}
-      className="flex min-w-0 items-center gap-2.5 outline-hidden"
+      className="flex min-w-0 items-center outline-hidden"
       aria-label="iSmart Club — Accueil"
     >
-      <span className="flex size-8 shrink-0 items-center justify-center rounded-md bg-brand font-display text-lg font-bold leading-none text-ink-inverted shadow-glow">
-        iS
-      </span>
-      <span className="flex min-w-0 flex-col group-data-[collapsible=icon]:hidden">
-        <span className="truncate font-ui text-sm font-semibold tracking-normal text-ink">
-          iSmart Club
-        </span>
+      <Logo
+        variant="mark"
+        alt=""
+        className="hidden h-8 group-data-[collapsible=icon]:block"
+      />
+      <span className="flex min-w-0 flex-col gap-1 group-data-[collapsible=icon]:hidden">
+        <Logo alt="" className="h-7" />
         <span className="truncate font-body text-[0.68rem] text-ink-muted">
           {subtitle}
         </span>

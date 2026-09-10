@@ -1,3 +1,4 @@
+import { Logo } from "@/components/kit/Logo"
 import type { ReactNode } from "react"
 import {
   Bell,
@@ -172,12 +173,7 @@ function BrowserFrame({
         {/* sidebar */}
         <div className="flex w-[62px] shrink-0 flex-col gap-1 border-r border-border bg-surface px-1.5 py-2">
           <div className="flex items-center gap-1 px-1 pb-1.5">
-            <span className="flex size-4 items-center justify-center rounded-[4px] bg-brand font-ui text-[0.45rem] font-bold text-ink-inverted">
-              iS
-            </span>
-            <span className="font-ui text-[0.5rem] font-semibold tracking-wide text-ink">
-              iSMART
-            </span>
+            <Logo alt="" className="h-3" />
           </div>
           {NAV.map((n) => (
             <div

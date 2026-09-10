@@ -1,3 +1,5 @@
+import logoWordmark from "@/assets/brand/logo-ismart.svg"
+import logoMark from "@/assets/brand/logo-ismart-mark.svg"
 import { useEffect, useRef, useState } from "react"
 import { Link, useLocation } from "react-router-dom"
 import {
@@ -246,8 +248,16 @@ export function LandingScreen() {
 
       <nav className={`lp-nav ${scrolled ? "lp-nav--scrolled" : ""}`}>
         <a className="lp-logo" href="#hero">
-          <span className="lp-logo-mark">iS</span>
-          <span className="lp-logo-word">iSMART CLUB</span>
+          <img
+            className="lp-logo-img lp-logo-img--word"
+            src={logoWordmark}
+            alt="iSmart Club"
+          />
+          <img
+            className="lp-logo-img lp-logo-img--mark"
+            src={logoMark}
+            alt="iSmart Club"
+          />
         </a>
         <ul className="lp-nav-links">
           <li>

@@ -1,3 +1,4 @@
+import { Logo } from "@/components/kit/Logo"
 import { useState } from "react"
 import { useNavigate, useParams, useSearchParams } from "react-router-dom"
 import {
@@ -1014,18 +1015,11 @@ function Cadre({
             </button>
           ) : null}
 
-          {/* The one place green and bold are intentional (design system §logo),
-              and the one raised surface here worth the brand glow. */}
-          <span className="shadow-glow flex size-16 items-center justify-center rounded-xl bg-primary font-ui text-2xl font-bold text-ink-inverted">
-            iS
-          </span>
-          <span>
-            <span className="block font-ui text-lg font-semibold text-ink">
-              iSmart Club
-            </span>
-            <span className="mt-0.5 block font-body text-[0.78rem] text-ink-muted">
-              Demande d'inscription à une catégorie
-            </span>
+          {/* The club's wordmark, centred and large — this card is its front
+              door for a family who has never seen the product. */}
+          <Logo className="h-12" />
+          <span className="block font-body text-[0.78rem] text-ink-muted">
+            Demande d'inscription à une catégorie
           </span>
         </div>
 

@@ -1,3 +1,4 @@
+import { Logo } from "@/components/kit/Logo"
 import { useNavigate } from "react-router-dom"
 import {
   ArrowRight,
@@ -31,12 +32,11 @@ export function LoginScreen() {
       <div className="w-full max-w-md">
         {/* Brand */}
         <div className="flex flex-col items-center gap-3">
-          <span className="flex size-11 items-center justify-center rounded-md bg-brand font-display text-xl font-bold leading-none text-ink-inverted shadow-glow">
-            iS
-          </span>
           <div className="text-center">
-            <h1 className="font-ui text-xl font-semibold tracking-normal text-ink">
-              iSmart Club
+            {/* The wordmark is the page's title: the h1 keeps the name for
+                assistive tech through the image's alt. */}
+            <h1 className="flex justify-center">
+              <Logo className="h-12" />
             </h1>
             <p className="mt-1 font-body text-sm text-ink-muted">
               Choisissez l'espace auquel vous connecter.
