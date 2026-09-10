@@ -2,9 +2,13 @@ import { useMemo, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import {
   CalendarDays,
+  Check,
   ChevronRight,
   ClipboardList,
+  Copy,
+  Inbox,
   Layers,
+  Link2,
   MapPin,
   Target,
   Trash2,
@@ -211,7 +215,13 @@ export function CategoryDetailScreen() {
         </div>
 
         {activeTab === "effectif" ? (
-          <EffectifTab categorie={categorie} joueurs={joueurs} />
+          <EffectifTab
+            categorie={categorie}
+            joueurs={joueurs}
+            onVoirInscriptions={() =>
+              navigate(`${LIST}/${categorie.id}/inscriptions`)
+            }
+          />
         ) : null}
         {activeTab === "resultats" ? (
           <ResultatsTab matchs={categorie.matchs} bilan={bilan} />
@@ -255,18 +265,92 @@ export function CategoryDetailScreen() {
 function EffectifTab({
   categorie,
   joueurs,
+  onVoirInscriptions,
 }: {
   categorie: Categorie
   joueurs: CategorieJoueur[]
+  onVoirInscriptions: () => void
 }) {
+  const {
+    liensInscription,
+    demandesInscription,
+    creerLienInscription,
+  } = useData()
+  const [copie, setCopie] = useState(false)
+
+  const lien = liensInscription.find(
+    (l) => l.categorieId === categorie.id && l.actif,
+  )
+  const enAttente = demandesInscription.filter(
+    (d) => d.categorieId === categorie.id && d.statut === "en-attente",
+  ).length
+
+  /**
+   * Recruter — the effectif is where a coach notices he is short of players,
+   * so the invite link is offered here too. It stays a shortcut: the link and
+   * the requests live on the Inscriptions tab, and "Voir les demandes" goes
+   * there rather than duplicating the desk.
+   */
+  const recrutement = (
+    <section className="flex flex-wrap items-center gap-3 rounded-lg border border-border p-4">
+      <div className="min-w-0 flex-1">
+        <h2 className="font-ui text-[0.9rem] font-medium text-ink">
+          Compléter l'effectif
+        </h2>
+        <p className="font-body text-[0.78rem] text-ink-muted">
+          {lien
+            ? "Le lien est actif : partagez-le, les familles s'inscrivent et vous validez."
+            : "Générez un lien à partager par WhatsApp ou SMS : les familles s'inscrivent elles-mêmes."}
+        </p>
+      </div>
+
+      {lien ? (
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={async () => {
+            try {
+              await navigator.clipboard.writeText(
+                `${window.location.origin}/rejoindre/${lien.token}`,
+              )
+              setCopie(true)
+              setTimeout(() => setCopie(false), 2000)
+            } catch {
+              // Clipboard blocked — the Inscriptions tab shows the link in full.
+            }
+          }}
+        >
+          {copie ? <Check /> : <Copy />}
+          {copie ? "Lien copié" : "Copier le lien"}
+        </Button>
+      ) : (
+        <Button size="sm" onClick={() => creerLienInscription(categorie.id)}>
+          <Link2 /> Générer un lien d'invitation
+        </Button>
+      )}
+
+      <Button variant="outline" size="sm" onClick={onVoirInscriptions}>
+        <Inbox /> Voir les demandes
+        {enAttente > 0 ? (
+          <span className="ml-1 inline-flex min-w-5 items-center justify-center rounded-pill bg-warning/15 px-1.5 font-ui text-[0.68rem] text-warning tabular-nums">
+            {enAttente}
+          </span>
+        ) : null}
+      </Button>
+    </section>
+  )
+
   if (joueurs.length === 0 && categorie.educateurs.length === 0) {
     return (
-      <div className="rounded-lg border border-border">
-        <EmptyState
-          icon={Users}
-          title="Catégorie à constituer"
-          description="Aucun joueur ni éducateur n'est encore rattaché à cette catégorie."
-        />
+      <div className="flex flex-col gap-5">
+        {recrutement}
+        <div className="rounded-lg border border-border">
+          <EmptyState
+            icon={Users}
+            title="Catégorie à constituer"
+            description="Aucun joueur ni éducateur n'est encore rattaché à cette catégorie."
+          />
+        </div>
       </div>
     )
   }
@@ -275,7 +359,10 @@ function EffectifTab({
   const autres = joueurs.filter((j) => !connus.includes(j.poste))
 
   return (
-    <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-6">
+    <div className="flex flex-col gap-5">
+      {recrutement}
+
+      <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-6">
       <section className="flex flex-col gap-2 lg:w-[18rem] lg:shrink-0">
         <h2 className="font-ui text-[0.66rem] font-medium tracking-[0.1em] text-ink-disabled uppercase">
           Éducateurs · {categorie.educateurs.length}
@@ -340,6 +427,7 @@ function EffectifTab({
         ) : null}
       </div>
     </div>
+      </div>
   )
 }
 
