@@ -40,6 +40,7 @@ import { BackButton } from "@/components/kit/BackButton"
 import { PageHeader } from "@/components/kit/PageHeader"
 import { Avatar } from "@/components/kit/Avatar"
 import { EmptyState } from "@/components/kit/EmptyState"
+import { Steps } from "@/components/kit/Steps"
 import { FormSheet } from "@/components/kit/FormSheet"
 import { EmplacementCard } from "@/features/sponsoring/emplacementMocks"
 import { SurfacePair } from "@/features/sponsoring/appSurfaces"
@@ -66,6 +67,8 @@ const inputCls =
  * partenaire. References sponsor/CampagneVisuelsScreen (slot modal, dates band)
  * and EmplacementsScreen (surface cards).
  */
+const ETAPES = ["Le partenaire", "La campagne", "Les emplacements"]
+
 export function NouvelleCampagneScreen() {
   const navigate = useNavigate()
   const [params] = useSearchParams()
@@ -166,7 +169,9 @@ export function NouvelleCampagneScreen() {
         subtitle="Lancez une campagne pour l'un de vos partenaires, sans attendre sa demande."
       />
 
-      <Steps step={step} />
+      <div className="mt-6">
+        <Steps steps={ETAPES} current={step} />
+      </div>
 
       {/* ── 1. Le partenaire ────────────────────────────────────────────── */}
       {step === 1 ? (
@@ -861,48 +866,6 @@ function FileChip({ label, value }: { label: string; value: string }) {
       <ImageIcon size={11} className={value ? "text-info" : undefined} />
       {label} : {value || "manquant"}
     </span>
-  )
-}
-
-/* ── Step rail ──────────────────────────────────────────────────────────── */
-function Steps({ step }: { step: 1 | 2 | 3 }) {
-  const items = [
-    { n: 1, label: "Le partenaire" },
-    { n: 2, label: "La campagne" },
-    { n: 3, label: "Les emplacements" },
-  ]
-  return (
-    <div className="mt-6 flex flex-wrap items-center gap-3">
-      {items.map((it, i) => (
-        <div key={it.n} className="flex items-center gap-3">
-          <div className="flex items-center gap-2">
-            <span
-              className={cn(
-                "flex size-6 items-center justify-center rounded-full border font-ui text-[0.68rem] tabular-nums transition-colors",
-                it.n < step
-                  ? "border-info/40 bg-info/10 text-info"
-                  : it.n === step
-                    ? "border-info bg-info text-ink-inverted"
-                    : "border-border-strong text-ink-disabled",
-              )}
-            >
-              {it.n < step ? <Check size={12} /> : it.n}
-            </span>
-            <span
-              className={cn(
-                "font-ui text-[0.78rem]",
-                it.n === step ? "text-ink" : "text-ink-disabled",
-              )}
-            >
-              {it.label}
-            </span>
-          </div>
-          {i < items.length - 1 ? (
-            <span className="h-px w-6 bg-border-strong" />
-          ) : null}
-        </div>
-      ))}
-    </div>
   )
 }
 

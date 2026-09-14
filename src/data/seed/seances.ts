@@ -68,9 +68,30 @@ export type ProcedeBlock =
 export type ProcedeAtelier = {
   id: string
   nom: string
+  /**
+   * Chasuble worn by the group — what the coach calls it on the pitch. Absent
+   * on an older group, which then falls back to the first bib.
+   */
+  couleur?: AtelierCouleur
   /** Ids of the convoqués in this atelier, in the order they were added. */
   joueurIds: string[]
 }
+
+/**
+ * A drinks break in the déroulé: after the procédé at index `apres` (0-based),
+ * the séance stops for `duree` minutes. The coach sets the length — a U9 water
+ * break and a senior one in July are not the same pause.
+ */
+export type PauseHydratation = { apres: number; duree: number }
+
+/** The bibs a club owns — see features/planification/atelierCouleurs.ts. */
+export type AtelierCouleur =
+  | "bleu"
+  | "rouge"
+  | "jaune"
+  | "vert"
+  | "orange"
+  | "blanc"
 
 export type Procede = {
   id: string
@@ -125,6 +146,8 @@ export type SeanceDetail = {
   securiteVerifiee: boolean
   hydratationVerifiee: boolean
   procedes: Procede[]
+  /** Drinks breaks between procédés, as decided on the fiche de création. */
+  hydratations?: PauseHydratation[]
   /** Staff + joueurs invited — the Convocation tab (not started) reads their
    *  `convocation`; the Présence tab (terminée) reads `presence[id]`. */
   participants: SeanceParticipant[]
@@ -668,6 +691,7 @@ export function buildSeanceFromClub(
     procedeIds: string[]
     securiteVerifiee: boolean
     hydratationVerifiee: boolean
+    hydratations?: PauseHydratation[]
   },
   titre: string,
   procedes: Procede[],
@@ -694,6 +718,7 @@ export function buildSeanceFromClub(
     securiteVerifiee: seance.securiteVerifiee,
     hydratationVerifiee: seance.hydratationVerifiee,
     procedes,
+    hydratations: seance.hydratations,
     participants,
     presence: {},
   }

@@ -1,6 +1,13 @@
 import { useEffect, useRef, useState } from "react"
 import { Link, Navigate, Outlet, useLocation, useNavigate } from "react-router-dom"
-import { CalendarDays, Layers, Target } from "lucide-react"
+import {
+  CalendarDays,
+  CalendarRange,
+  ChartColumn,
+  Layers,
+  Settings2,
+  Target,
+} from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { useData } from "@/data/useData"
@@ -15,7 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import {
-  PROGRAMME_TABS,
+  PROGRAMME_VUES,
   cheminProgramme,
   cheminSaison,
 } from "@/features/pole-technique/programmationRoutes"
@@ -24,10 +31,13 @@ import { useProgramme } from "@/features/pole-technique/useProgramme"
 import { Toast } from "@/features/sponsoring/ui"
 
 /**
- * One programme annuel, four tabs. The shell owns everything the tabs share —
- * where you are (back + title), what you are looking at (the three scope
- * selects) and which tab is open. Each tab is a real route, so any of them can
- * be linked to or reloaded directly.
+ * One programme annuel. The programmation itself *is* the page — its three
+ * secondary views (planification, stats, réglages) sit as buttons in the header,
+ * next to the séances link, instead of eating a tab bar's worth of vertical
+ * space above content that is already dense.
+ *
+ * Each view is still a real route, so any of them can be linked to or reloaded
+ * directly; the active one is marked and toggles back to the programmation.
  */
 export function ProgrammeShell() {
   const navigate = useNavigate()
@@ -58,8 +68,7 @@ export function ProgrammeShell() {
 
   const base = cheminProgramme(saison, categorie.id)
   const reste = pathname.slice(base.length).replace(/^\/|\/$/g, "")
-  const ongletActif =
-    PROGRAMME_TABS.find((t) => t.value === reste)?.value ?? ""
+  const vueActive = PROGRAMME_VUES.find((v) => v.value === reste)?.value ?? ""
 
   return (
     <div className="mx-auto flex w-full max-w-6xl flex-col gap-6">
@@ -70,6 +79,39 @@ export function ProgrammeShell() {
           subtitle={`${saison} · le programme annuel : ce que chaque séance de la saison doit travailler.`}
           actions={
             <>
+              {/* The three secondary views, as buttons. The active one reads
+                  selected and clicking it again drops back to the programmation. */}
+              {PROGRAMME_VUES.map((v) => {
+                const actif = v.value === vueActive
+                const Icon = VUE_ICONS[v.value]
+                return (
+                  <Button
+                    key={v.value}
+                    asChild
+                    variant="outline"
+                    size="sm"
+                    aria-current={actif ? "page" : undefined}
+                    className={cn(
+                      actif &&
+                        "border-border-second bg-surface-nested text-ink hover:bg-surface-nested",
+                    )}
+                  >
+                    <Link
+                      to={actif ? base : `${base}/${v.value}`}
+                      title={
+                        actif
+                          ? "Retour à la programmation"
+                          : `Ouvrir ${v.label.toLowerCase()}`
+                      }
+                    >
+                      <Icon /> {v.label}
+                    </Link>
+                  </Button>
+                )
+              })}
+
+              <span aria-hidden className="mx-1 h-5 w-px bg-border" />
+
               <Button
                 variant="outline"
                 onClick={() => navigate("/pole-technique/seances")}
@@ -127,31 +169,18 @@ export function ProgrammeShell() {
         </p>
       </div>
 
-      {/* Tabs are routes, so a tab is linkable. */}
-      <div className="-mx-1 flex gap-1 overflow-x-auto border-b border-border px-1">
-        {PROGRAMME_TABS.map((t) => (
-          <Link
-            key={t.value || "programmation"}
-            to={t.value ? `${base}/${t.value}` : base}
-            aria-current={t.value === ongletActif ? "page" : undefined}
-            className={cn(
-              "shrink-0 border-b-2 px-3.5 py-2.5 font-ui text-[0.82rem] transition-colors",
-              t.value === ongletActif
-                ? "border-ink text-ink"
-                : "border-transparent text-ink-muted hover:text-ink",
-            )}
-          >
-            {t.label}
-          </Link>
-        ))}
-      </div>
-
       <Outlet />
 
       {toast ? <Toast key={toast.id} id={toast.id} msg={toast.msg} /> : null}
     </div>
   )
 }
+
+const VUE_ICONS = {
+  planification: CalendarRange,
+  stats: ChartColumn,
+  reglages: Settings2,
+} as const
 
 /* ── Scope selects ────────────────────────────────────────────────────────── */
 

@@ -13,6 +13,7 @@
  */
 
 import { categoriesSeed } from "@/data/seed/categories"
+import type { PauseHydratation, ProcedeAtelier } from "@/data/seed/seances"
 
 /** Slots that aren't a principe de jeu but still occupy a séance. */
 export type ProgSpecial = string
@@ -144,8 +145,15 @@ export type SeanceClub = {
   hydratationVerifiee: boolean
   /** Free-text "explication" written when the séance is created. */
   notes?: string
-  /** Minute marks where the séance breaks for drinks, in order. */
-  hydratations?: number[]
+  /** Drinks breaks in the déroulé, in order. */
+  hydratations?: PauseHydratation[]
+  /**
+   * How the squad is split, procédé by procédé — the chasuble groups decided on
+   * the fiche de création. One entry per position in `procedeIds` (an empty
+   * array = everyone works together on that exercise). The séance page reads
+   * them onto its procédés, where the coach can re-shuffle them.
+   */
+  ateliersParProcede?: ProcedeAtelier[][]
   /** Séance debriefed: the éducateur filled in his évaluation of it. */
   evaluationFaite?: boolean
   /** Player performances rated for that séance. */

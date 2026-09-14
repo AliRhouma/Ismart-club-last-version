@@ -12,6 +12,7 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@/components/ui/dialog"
+import { ProcedeVignette } from "@/features/planification/ProcedeVignette"
 import { Select, inputCls } from "@/features/finance/ui"
 import { Segmented, type SegOption } from "@/features/budget/ui"
 
@@ -245,6 +246,13 @@ function ProcedeLigne({
         >
           <Check size={13} />
         </span>
+
+        {/* Le schéma : ce qu'on reconnaît avant de lire le titre. */}
+        <ProcedeVignette
+          src={procede.image}
+          titre={procede.titre}
+          className="h-14 w-20 sm:h-16 sm:w-24"
+        />
 
         <span className="min-w-0 flex-1">
           <span className="flex flex-wrap items-center gap-2">

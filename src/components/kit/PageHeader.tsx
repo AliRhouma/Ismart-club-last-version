@@ -6,7 +6,8 @@ import { cn } from "@/lib/utils"
  * Standard page heading used at the top of every screen: the title, an optional
  * subtitle, and an optional right-side action slot (buttons, filters…). The
  * action slot stacks below the title on narrow screens and sits to the right
- * from `sm` up.
+ * from `sm` up, wrapping onto extra rows rather than overflowing when a screen
+ * hangs several actions off it.
  */
 export function PageHeader({
   title,
@@ -36,7 +37,7 @@ export function PageHeader({
       </div>
 
       {actions ? (
-        <div className="flex shrink-0 items-center gap-2">{actions}</div>
+        <div className="flex flex-wrap items-center justify-end gap-2">{actions}</div>
       ) : null}
     </div>
   )

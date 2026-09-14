@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { Fragment, useMemo, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import {
   ArrowDown,
@@ -560,9 +560,10 @@ function ProcedeTab({
         <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 lg:mx-0 lg:flex-col lg:gap-1 lg:px-0 lg:pb-0">
           {procedes.map((p, i) => {
             const on = p.id === active?.id
+            const pause = detail.hydratations?.find((h) => h.apres === i)
             return (
+              <Fragment key={p.id}>
               <div
-                key={p.id}
                 className={cn(
                   "flex w-[15rem] shrink-0 items-center gap-1 rounded-md border px-1.5 py-1.5 transition-colors lg:w-full",
                   on
@@ -628,6 +629,16 @@ function ProcedeTab({
                   </span>
                 ) : null}
               </div>
+
+              {/* La pause décidée sur la fiche de création : sa durée compte
+                  autant que sa présence, alors on l'affiche. */}
+              {pause ? (
+                <span className="flex w-[15rem] shrink-0 items-center justify-center gap-1.5 rounded-md border border-dashed border-info/30 px-2 py-1 font-ui text-[0.72rem] text-info lg:w-full">
+                  <Droplets size={12} />
+                  Hydratation · <span className="tabular-nums">{pause.duree}</span> min
+                </span>
+              ) : null}
+              </Fragment>
             )
           })}
 

@@ -20,12 +20,14 @@ export const cheminSaison = (saison: string) =>
 export const cheminProgramme = (saison: string, categorieId: string) =>
   `${cheminSaison(saison)}/${categorieId}`
 
-/** The four tabs of one programme, in the order they are read. */
-export const PROGRAMME_TABS = [
-  { value: "", label: "Programmation" },
+/**
+ * The programme annuel *is* the page. Its three secondary views hang off it as
+ * header buttons, each its own URL, so any of them stays linkable.
+ */
+export const PROGRAMME_VUES = [
   { value: "planification", label: "Planification" },
   { value: "stats", label: "Stats" },
   { value: "reglages", label: "Réglages" },
 ] as const
 
-export type ProgrammeTab = (typeof PROGRAMME_TABS)[number]["value"]
+export type ProgrammeVue = (typeof PROGRAMME_VUES)[number]["value"]

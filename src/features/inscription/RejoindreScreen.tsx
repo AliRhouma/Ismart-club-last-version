@@ -5,10 +5,12 @@ import {
   AlertTriangle,
   ArrowLeft,
   BadgeCheck,
+  Check,
   CheckCircle2,
   Clock,
   KeyRound,
   Mail,
+  Link2,
   Loader2,
   MessageSquare,
   Plus,
@@ -22,10 +24,12 @@ import { cn } from "@/lib/utils"
 import { useData } from "@/data/useData"
 import {
   CLUB_NOM,
+  type DemandeInscription,
   type FicheJoueur,
   type FicheParent,
+  type ProfilDemande,
+  type ScenarioDemande,
 } from "@/data/seed/inscriptions"
-import { POSTES, POSTE_LABEL } from "@/data/seed/categories"
 import { SAISON_ACTIVE } from "@/data/seed/programmation"
 import { Button } from "@/components/ui/button"
 import {
@@ -72,6 +76,8 @@ type Compte = {
   role: "joueur" | "parent"
   /** Joueurs only — their fiche is already known, so the form opens filled. */
   fiche?: FicheJoueur
+  /** Parents only — the fiche the club already holds, sent with the demande. */
+  parent?: FicheParent
 }
 
 const COMPTE_PARENT: Compte = {
@@ -79,6 +85,14 @@ const COMPTE_PARENT: Compte = {
   civilite: "Mme",
   nom: "Nadia Khemiri",
   role: "parent",
+  parent: {
+    prenom: "Nadia",
+    nom: "Khemiri",
+    email: "nadia.khemiri@example.com",
+    telephone: "+216 98 447 210",
+    genre: "Mère",
+    ville: "Tunis",
+  },
 }
 
 const COMPTE_JOUEUR: Compte = {
@@ -93,7 +107,6 @@ const COMPTE_JOUEUR: Compte = {
     genre: "Masculin",
     email: "firas.zouari@example.com",
     telephone: "+216 20 559 174",
-    poste: "DC",
     niveau: "Trois saisons en U13 puis U15",
   },
 }
@@ -127,7 +140,6 @@ const ficheJoueurVide: FicheJoueur = {
   genre: "Masculin",
   email: "",
   telephone: "",
-  poste: "",
   niveau: "",
 }
 
@@ -146,7 +158,6 @@ const ficheEnfantParDefaut: FicheJoueur = {
   telephone: "",
   adresse: "12 rue de Carthage",
   ville: "Tunis",
-  poste: "GB",
   niveau: "",
 }
 
@@ -207,10 +218,15 @@ export function RejoindreScreen() {
     depart?.compte?.fiche ?? ficheJoueurVide,
   )
   const [parent, setParent] = useState<FicheParent>(ficheParentVide)
-  const [enfantId, setEnfantId] = useState<string | null>(null)
+  /**
+   * Several at once: a parent with two children in the club sends them in one
+   * go. They leave as one selection and arrive as one demande each — the
+   * éducateur can take the elder and refuse the younger.
+   */
+  const [enfantIds, setEnfantIds] = useState<string[]>([])
   /** Fiches created during this parcours — rattachées au compte à la volée. */
   const [enfantsAjoutes, setEnfantsAjoutes] = useState<EnfantChoix[]>([])
-  const [demandeId, setDemandeId] = useState<string | null>(null)
+  const [demandeIds, setDemandeIds] = useState<string[]>([])
   /**
    * The message shown while moving to the next step. A parcours that jumps
    * instantly reads as one long form; a short beat — with copy saying what is
@@ -261,23 +277,44 @@ export function RejoindreScreen() {
       </Cadre>
     )
 
-  const demande = demandesInscription.find((d) => d.id === demandeId) ?? null
+  const demandes = demandesInscription.filter((d) => demandeIds.includes(d.id))
+  const demande = demandes[0] ?? null
 
+  /** The parent the club will see: his account's fiche, or the one just filled. */
+  const ficheParentActuelle = (): FicheParent | undefined =>
+    compte?.parent ?? (parent.prenom.trim() ? parent : undefined)
+
+  /**
+   * One demande per joueur, always. Sent together they share a `fratrieId` and
+   * are marked as a fratrie, which is exactly what the éducateur needs to know:
+   * same family, same evening, two decisions.
+   */
   const soumettre = (
-    profil: "joueur" | "parent",
-    fiche: FicheJoueur,
-    parentFiche?: FicheParent,
+    profil: ProfilDemande,
+    scenario: ScenarioDemande,
+    fiches: FicheJoueur[],
+    extra: Partial<DemandeInscription> = {},
   ) => {
-    const id = soumettreDemande({
-      categorieId: categorie.id,
-      lienId: lien.id,
-      profil,
-      nouveauCompte: !connecte,
-      joueur: fiche,
-      parent: parentFiche,
-    })
-    setDemandeId(id)
-    allerA("attente", "Envoi de votre demande…")
+    const fratrieId = fiches.length > 1 ? crypto.randomUUID() : undefined
+    const ids = fiches.map((fiche) =>
+      soumettreDemande({
+        categorieId: categorie.id,
+        lienId: lien.id,
+        profil,
+        scenario: fratrieId ? "fratrie" : scenario,
+        nouveauCompte: !connecte,
+        joueur: fiche,
+        parent: profil === "parent" ? ficheParentActuelle() : undefined,
+        fratrieId,
+        compteEmail: compte?.email,
+        ...extra,
+      }),
+    )
+    setDemandeIds(ids)
+    allerA(
+      "attente",
+      ids.length > 1 ? "Envoi de vos demandes…" : "Envoi de votre demande…",
+    )
   }
 
   // A brand-new account has nothing attached to it yet: only a parent who
@@ -508,7 +545,7 @@ export function RejoindreScreen() {
           </div>
         ) : (
           <div
-            role="radiogroup"
+            role="group"
             aria-label="Vos enfants"
             className="flex flex-col gap-2"
           >
@@ -516,12 +553,18 @@ export function RejoindreScreen() {
               <button
                 key={e.id}
                 type="button"
-                role="radio"
-                aria-checked={enfantId === e.id}
-                onClick={() => setEnfantId(e.id)}
+                role="checkbox"
+                aria-checked={enfantIds.includes(e.id)}
+                onClick={() =>
+                  setEnfantIds((prev) =>
+                    prev.includes(e.id)
+                      ? prev.filter((x) => x !== e.id)
+                      : [...prev, e.id],
+                  )
+                }
                 className={cn(
                   "flex items-center gap-3 rounded-lg border p-3.5 text-left transition-colors",
-                  enfantId === e.id
+                  enfantIds.includes(e.id)
                     ? "border-info bg-info/5"
                     : "border-border hover:border-border-strong",
                 )}
@@ -546,13 +589,28 @@ export function RejoindreScreen() {
                       : "Date de naissance à compléter"}
                   </span>
                 </span>
-                {enfantId === e.id ? (
-                  <CheckCircle2 size={16} className="shrink-0 text-info" />
-                ) : null}
+                {/* A box, not a dot: several can be sent at once. */}
+                <span
+                  className={cn(
+                    "flex size-5 shrink-0 items-center justify-center rounded-[5px] border transition-colors",
+                    enfantIds.includes(e.id)
+                      ? "border-info bg-info text-ink-inverted"
+                      : "border-border-strong",
+                  )}
+                >
+                  {enfantIds.includes(e.id) ? <Check size={13} /> : null}
+                </span>
               </button>
             ))}
           </div>
         )}
+
+        {enfants.length > 1 ? (
+          <p className="font-body text-[0.78rem] text-ink-disabled">
+            Vous pouvez en sélectionner plusieurs : une demande sera envoyée
+            pour chaque enfant, et l'éducateur les traitera séparément.
+          </p>
+        ) : null}
 
         <Button
           variant={enfants.length === 0 ? "default" : "outline"}
@@ -566,27 +624,39 @@ export function RejoindreScreen() {
 
         {enfants.length > 0 ? (
           <Button
-            disabled={!enfantId}
+            disabled={enfantIds.length === 0}
             onClick={() => {
-              const enfant = enfants.find((e) => e.id === enfantId)
-              if (!enfant) return
-              // `id` belongs to the picker, not to the fiche.
+              const choisis = enfants.filter((e) => enfantIds.includes(e.id))
+              if (!choisis.length) return
+              // A fiche the club already holds asks for nothing but the équipe;
+              // one filled in just now by a parent without an account means the
+              // whole family is to be created.
+              const tousConnus = choisis.every((e) => !!e.joueurId)
               soumettre(
                 "parent",
-                {
-                  prenom: enfant.prenom,
-                  nom: enfant.nom,
-                  naissance: enfant.naissance,
-                  genre: enfant.genre,
-                  poste: enfant.poste,
-                  niveau: enfant.niveau,
-                  joueurId: enfant.joueurId,
-                },
-                parent.prenom ? parent : undefined,
+                tousConnus || connecte
+                  ? "enfant-rattache"
+                  : "creation-comptes",
+                // `id` belongs to the picker, not to the fiche.
+                choisis.map((e) => ({
+                  prenom: e.prenom,
+                  nom: e.nom,
+                  naissance: e.naissance,
+                  genre: e.genre,
+                  email: e.email,
+                  telephone: e.telephone,
+                  adresse: e.adresse,
+                  ville: e.ville,
+                  poste: e.poste,
+                  niveau: e.niveau,
+                  joueurId: e.joueurId,
+                })),
               )
             }}
           >
-            Envoyer la demande
+            {enfantIds.length > 1
+              ? `Envoyer les ${enfantIds.length} demandes`
+              : "Envoyer la demande"}
           </Button>
         ) : null}
       </Cadre>
@@ -705,7 +775,6 @@ export function RejoindreScreen() {
       !!joueur.prenom.trim() &&
       !!joueur.nom.trim() &&
       !!joueur.naissance &&
-      !!joueur.poste &&
       (!emailRequis || !!joueur.email?.trim())
 
     return (
@@ -829,45 +898,47 @@ export function RejoindreScreen() {
           </div>
         </Bloc>
 
-        <Bloc titre="Informations du joueur">
-          <label className="flex flex-col gap-1.5">
-            <span className={labelCls}>
-              Poste <Etoile />
-            </span>
-            <Select
-              value={joueur.poste || ""}
-              onValueChange={(v) => setJoueur((j) => ({ ...j, poste: v }))}
-            >
-              <SelectTrigger aria-label="Poste">
-                <SelectValue placeholder="Sélectionner un poste" />
-              </SelectTrigger>
-              <SelectContent>
-                {POSTES.map((code) => (
-                  <SelectItem key={code} value={code}>
-                    {POSTE_LABEL[code] ?? code}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </label>
-        </Bloc>
+        {/* Ni poste ni groupe ici : où un joueur s'entraîne et à quel poste il
+            joue, c'est l'éducateur qui le décide — il le fait au moment
+            d'approuver la demande. */}
+        <p className="flex items-start gap-2.5 rounded-lg border border-border bg-surface-nested px-3.5 py-3 font-body text-[0.8rem] leading-relaxed text-ink-muted">
+          <ShieldCheck size={15} className="mt-0.5 shrink-0 text-ink-disabled" aria-hidden />
+          Le poste et le groupe seront attribués par l'éducateur après
+          validation de la demande.
+        </p>
 
+        {/* L'adresse est déjà prise : la bonne issue n'est pas une seconde
+            fiche, c'est de demander celle qui existe. Le bouton fait de ce
+            mur une demande — l'éducateur reçoit « rattacher puis inscrire ». */}
         {pourEnfant && emailRefuse ? (
-          <p
+          <div
             role="alert"
-            className="flex items-start gap-2.5 rounded-lg border border-danger/30 bg-danger/5 px-3.5 py-3"
+            className="flex flex-col gap-3 rounded-lg border border-danger/30 bg-danger/5 px-3.5 py-3"
           >
-            <AlertTriangle
-              size={15}
-              className="mt-0.5 shrink-0 text-danger"
-              aria-hidden
-            />
-            <span className="font-body text-[0.8rem] text-ink-muted">
-              <span className="text-ink">Cet email est déjà utilisé.</span>{" "}
-              Contactez l'administration du club pour rattacher votre enfant à
-              votre compte, plutôt que de créer une seconde fiche.
-            </span>
-          </p>
+            <p className="flex items-start gap-2.5">
+              <AlertTriangle
+                size={15}
+                className="mt-0.5 shrink-0 text-danger"
+                aria-hidden
+              />
+              <span className="font-body text-[0.8rem] leading-relaxed text-ink-muted">
+                <span className="text-ink">Cet email est déjà utilisé.</span>{" "}
+                Une fiche joueur existe déjà à cette adresse — n'en créez pas
+                une seconde. Demandez son rattachement à votre compte :
+                l'éducateur la retrouvera et l'inscrira à {categorie.nom}.
+              </span>
+            </p>
+            <Button
+              variant="outline"
+              onClick={() =>
+                soumettre("parent", "rattachement-compte", [joueur], {
+                  emailConflit: joueur.email,
+                })
+              }
+            >
+              <Link2 /> Demander le rattachement à mon compte
+            </Button>
+          </div>
         ) : null}
 
         <p className="font-body text-[0.74rem] text-ink-disabled">
@@ -885,11 +956,15 @@ export function RejoindreScreen() {
               if (emailPris) return setEmailRefuse(true)
               const id = crypto.randomUUID()
               setEnfantsAjoutes((prev) => [...prev, { ...joueur, id }])
-              setEnfantId(id)
+              setEnfantIds((prev) => [...prev, id])
               allerA("enfants", "Rattachement de l'enfant…")
               return
             }
-            soumettre("joueur", joueur)
+            soumettre(
+              "joueur",
+              connecte ? "joueur-compte-existant" : "joueur-nouveau-compte",
+              [joueur],
+            )
           }}
         >
           {pourEnfant ? "Ajouter l'enfant" : "Envoyer la demande"}
@@ -941,6 +1016,12 @@ export function RejoindreScreen() {
               {demande?.motif ??
                 "L'éducateur n'a pas retenu cette demande pour le moment."}
             </>
+          ) : demandes.length > 1 ? (
+            <>
+              Vos {demandes.length} demandes ont été envoyées à l'éducateur de{" "}
+              {categorie.nom} — une par enfant. Il les traitera séparément et
+              vous recevrez une notification pour chacune.
+            </>
           ) : (
             <>
               Votre demande a été envoyée à l'éducateur de {categorie.nom}. Vous
@@ -950,6 +1031,41 @@ export function RejoindreScreen() {
         </p>
       </div>
 
+      {/* Envoyées ensemble, suivies une par une. */}
+      {demandes.length > 1 ? (
+        <div className="flex flex-col gap-2">
+          {demandes.map((d) => (
+            <div
+              key={d.id}
+              className="flex items-center gap-3 rounded-lg border border-border p-3"
+            >
+              <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-surface-nested font-ui text-[0.7rem] text-ink-muted">
+                {(d.joueur.prenom[0] ?? "") + (d.joueur.nom[0] ?? "")}
+              </span>
+              <span className="min-w-0 flex-1 truncate font-ui text-[0.86rem] text-ink">
+                {d.joueur.prenom} {d.joueur.nom}
+              </span>
+              <span
+                className={cn(
+                  "shrink-0 font-body text-[0.75rem]",
+                  d.statut === "approuvee"
+                    ? "text-success"
+                    : d.statut === "refusee"
+                      ? "text-danger"
+                      : "text-ink-muted",
+                )}
+              >
+                {d.statut === "approuvee"
+                  ? "Approuvée"
+                  : d.statut === "refusee"
+                    ? "Refusée"
+                    : "En attente"}
+              </span>
+            </div>
+          ))}
+        </div>
+      ) : null}
+
       {statut === "refusee" ? (
         <Button variant="outline">
           <MessageSquare /> Contacter l'éducateur
@@ -957,7 +1073,8 @@ export function RejoindreScreen() {
       ) : null}
 
       <p className="font-body text-[0.78rem] text-ink-disabled">
-        Demande envoyée le {demande?.soumiseLe} · {categorie.nom}
+        {demandes.length > 1 ? "Demandes envoyées" : "Demande envoyée"} le{" "}
+        {demande?.soumiseLe} · {categorie.nom}
       </p>
 
       <Button

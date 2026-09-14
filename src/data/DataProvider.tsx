@@ -357,9 +357,16 @@ export type DataContextValue = {
   ) => string
   /**
    * Approve or refuse a request. Approving adds the joueur to the catégorie's
-   * effectif — that promotion is the whole point of the pending state.
+   * effectif — that promotion is the whole point of the pending state — at the
+   * groupe and the poste the éducateur picks on the way in. Neither is asked of
+   * the family: where a joueur trains and where he plays is the club's call.
    */
-  traiterDemande: (id: string, statut: StatutDemande, motif?: string) => void
+  traiterDemande: (
+    id: string,
+    statut: StatutDemande,
+    motif?: string,
+    affectation?: { groupeId: string; poste: string },
+  ) => void
   /** The grids a joueur is scored against — fixed content for now. */
   evaluationGrilles: EvaluationGrille[]
   /** Every score given, one row per séance × joueur × critère. */
@@ -765,7 +772,22 @@ export function DataProvider({ children }: { children: ReactNode }) {
         club.procedeIds
           .map((pid) => procedes.find((x) => x.id === pid))
           .filter((x) => !!x)
-          .map(procedeFromLibrary),
+          .map(procedeFromLibrary)
+          // Les chasubles décidées procédé par procédé sur la fiche de création
+          // ouvrent l'exercice ; l'éducateur les re-mélange ensuite sur place.
+          .map((p, i) => {
+            const ateliers = club.ateliersParProcede?.[i]
+            return ateliers?.length
+              ? {
+                  ...p,
+                  ateliers: ateliers.map((g) => ({
+                    ...g,
+                    id: crypto.randomUUID(),
+                    joueurIds: [...g.joueurIds],
+                  })),
+                }
+              : p
+          }),
         (cat?.joueurs ?? [])
           .filter((j) => !groupe || j.groupeId === groupe.id)
           .map((j) => ({
@@ -986,11 +1008,22 @@ export function DataProvider({ children }: { children: ReactNode }) {
         ])
         return id
       },
-      traiterDemande: (id, statut, motif) => {
+      traiterDemande: (id, statut, motif, affectation) => {
         setDemandes((prev) =>
           prev.map((d) =>
             d.id === id
-              ? { ...d, statut, motif, traiteeLe: aujourdhuiFr() }
+              ? {
+                  ...d,
+                  statut,
+                  motif,
+                  traiteeLe: aujourdhuiFr(),
+                  // The decision is kept on the demande too: the fiche of a
+                  // request already handled has to say where he went.
+                  groupeAffecteId: affectation?.groupeId ?? d.groupeAffecteId,
+                  joueur: affectation
+                    ? { ...d.joueur, poste: affectation.poste }
+                    : d.joueur,
+                }
               : d,
           ),
         )
@@ -1008,8 +1041,9 @@ export function DataProvider({ children }: { children: ReactNode }) {
                     {
                       id: demande.joueur.joueurId ?? crypto.randomUUID(),
                       nom: `${demande.joueur.prenom} ${demande.joueur.nom}`,
-                      poste: demande.joueur.poste ?? "MOC",
-                      groupeId: c.groupes[0]?.id ?? "",
+                      poste: affectation?.poste ?? demande.joueur.poste ?? "MOC",
+                      groupeId:
+                        affectation?.groupeId ?? c.groupes[0]?.id ?? "",
                       naissance: demande.joueur.naissance,
                       presences: 0,
                       seances: 0,
