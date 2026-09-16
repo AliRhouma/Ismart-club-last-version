@@ -212,7 +212,7 @@ export function CategorieInscriptions({ categorie }: { categorie: Categorie }) {
     <div className="flex flex-col gap-5">
       {/* The link the éducateur shares. */}
       <section className="flex flex-col gap-3.5 rounded-lg border border-border p-5">
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
           <div className="min-w-0 flex-1">
             <h2 className="font-ui text-[0.95rem] font-medium text-ink">
               Lien d'inscription
@@ -222,27 +222,29 @@ export function CategorieInscriptions({ categorie }: { categorie: Categorie }) {
               eux-mêmes, vous validez.
             </p>
           </div>
-          {lien ? (
+          <div className="flex flex-wrap items-center gap-2">
+            {lien ? (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => revoquerLienInscription(lien.id)}
+              >
+                <X /> Désactiver
+              </Button>
+            ) : null}
             <Button
-              variant="ghost"
+              variant={lien ? "outline" : "default"}
               size="sm"
-              onClick={() => revoquerLienInscription(lien.id)}
+              onClick={() => creerLienInscription(categorie.id)}
             >
-              <X /> Désactiver
+              {lien ? <RefreshCw /> : <Link2 />}
+              {lien ? "Régénérer" : "Générer le lien"}
             </Button>
-          ) : null}
-          <Button
-            variant={lien ? "outline" : "default"}
-            size="sm"
-            onClick={() => creerLienInscription(categorie.id)}
-          >
-            {lien ? <RefreshCw /> : <Link2 />}
-            {lien ? "Régénérer" : "Générer le lien"}
-          </Button>
+          </div>
         </div>
 
         {lien ? (
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
             <input
               readOnly
               value={url}
@@ -250,7 +252,12 @@ export function CategorieInscriptions({ categorie }: { categorie: Categorie }) {
               onFocus={(e) => e.currentTarget.select()}
               className="min-w-0 flex-1 rounded-md border border-input bg-transparent px-3.5 py-2.5 font-mono text-[0.8rem] text-ink-subtle outline-none"
             />
-            <Button variant="outline" size="sm" onClick={copier}>
+            <Button
+              variant="outline"
+              size="sm"
+              className="shrink-0"
+              onClick={copier}
+            >
               {copie ? <Check /> : <Copy />}
               {copie ? "Copié" : "Copier"}
             </Button>
@@ -361,36 +368,38 @@ export function CategorieInscriptions({ categorie }: { categorie: Categorie }) {
             return (
               <div
                 key={d.id}
-                className="flex flex-wrap items-center gap-3 rounded-lg border border-border p-3.5"
+                className="flex flex-col gap-3 rounded-lg border border-border p-3.5 sm:flex-row sm:items-center"
               >
-                <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-surface-nested font-ui text-[0.74rem] text-ink-muted">
-                  {d.joueur.prenom[0]}
-                  {d.joueur.nom[0]}
-                </span>
+                <div className="flex min-w-0 flex-1 items-center gap-3">
+                  <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-surface-nested font-ui text-[0.74rem] text-ink-muted">
+                    {d.joueur.prenom[0]}
+                    {d.joueur.nom[0]}
+                  </span>
 
-                <div className="min-w-0 flex-1">
-                  <span className="flex flex-wrap items-center gap-2">
-                    <span className="truncate font-ui text-[0.9rem] text-ink">
-                      {d.joueur.prenom} {d.joueur.nom}
-                    </span>
-                    <Badge variant={info.ton}>
-                      <Icon size={11} aria-hidden /> {info.label}
-                    </Badge>
-                    <Badge variant={STATUT_VARIANT[d.statut]}>
-                      {STATUT_DEMANDE_LABEL[d.statut]}
-                    </Badge>
-                    {aRelancer ? (
-                      <span className="inline-flex items-center gap-1.5 rounded-pill border border-warning/30 bg-warning/10 px-2.5 py-0.5 font-ui text-[0.68rem] text-warning">
-                        <Bell size={11} /> {jours} j sans réponse
+                  <div className="min-w-0 flex-1">
+                    <span className="flex flex-wrap items-center gap-2">
+                      <span className="truncate font-ui text-[0.9rem] text-ink">
+                        {d.joueur.prenom} {d.joueur.nom}
                       </span>
-                    ) : null}
-                  </span>
-                  <span className="mt-0.5 block truncate font-body text-[0.76rem] text-ink-muted">
-                    {info.resume} · reçue le {d.soumiseLe}
-                  </span>
+                      <Badge variant={info.ton}>
+                        <Icon size={11} aria-hidden /> {info.label}
+                      </Badge>
+                      <Badge variant={STATUT_VARIANT[d.statut]}>
+                        {STATUT_DEMANDE_LABEL[d.statut]}
+                      </Badge>
+                      {aRelancer ? (
+                        <span className="inline-flex items-center gap-1.5 rounded-pill border border-warning/30 bg-warning/10 px-2.5 py-0.5 font-ui text-[0.68rem] text-warning">
+                          <Bell size={11} /> {jours} j sans réponse
+                        </span>
+                      ) : null}
+                    </span>
+                    <span className="mt-0.5 line-clamp-2 font-body text-[0.76rem] text-ink-muted sm:line-clamp-1">
+                      {info.resume} · reçue le {d.soumiseLe}
+                    </span>
+                  </div>
                 </div>
 
-                <span className="flex shrink-0 items-center gap-2">
+                <span className="flex shrink-0 items-center justify-end gap-2">
                   <Button
                     variant="outline"
                     size="sm"
@@ -562,7 +571,11 @@ export function CategorieInscriptions({ categorie }: { categorie: Categorie }) {
                     ) : null}
 
                     {ctx.revoque ? (
-                      <Fait icon={Link2Off} titre="Lien d'origine" ton="default">
+                      <Fait
+                        icon={Link2Off}
+                        titre="Lien d'origine"
+                        ton="default"
+                      >
                         Reçue via{" "}
                         <span className="font-mono text-[0.78rem] text-ink">
                           /rejoindre/{ctx.revoque.token}
@@ -650,7 +663,8 @@ export function CategorieInscriptions({ categorie }: { categorie: Categorie }) {
                             <Mail size={12} /> {ouverte.joueur.email || "—"}
                           </span>
                           <span className="inline-flex items-center gap-1.5">
-                            <Phone size={12} /> {ouverte.joueur.telephone || "—"}
+                            <Phone size={12} />{" "}
+                            {ouverte.joueur.telephone || "—"}
                           </span>
                         </p>
                       </section>
@@ -891,7 +905,12 @@ function Fait({
   children: React.ReactNode
 }) {
   return (
-    <section className={cn("flex flex-col gap-1.5 rounded-lg border p-3.5", TON_CADRE[ton])}>
+    <section
+      className={cn(
+        "flex flex-col gap-1.5 rounded-lg border p-3.5",
+        TON_CADRE[ton],
+      )}
+    >
       <h4 className="flex items-center gap-2 font-ui text-[0.78rem] font-medium text-ink">
         <Icon size={13} className={TON_ICONE[ton]} aria-hidden /> {titre}
       </h4>

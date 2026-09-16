@@ -176,7 +176,7 @@ export function Segmented<T extends string>({
   return (
     <div
       className={cn(
-        "inline-flex gap-1 rounded-pill border border-border bg-transparent p-1",
+        "inline-flex max-w-full gap-1 overflow-x-auto rounded-pill border border-border bg-transparent p-1",
         className,
       )}
     >
@@ -188,7 +188,7 @@ export function Segmented<T extends string>({
             type="button"
             onClick={() => onChange(o.value)}
             className={cn(
-              "inline-flex items-center gap-1.5 rounded-pill px-4 py-1.5 font-ui text-[0.76rem] font-medium transition-colors",
+              "inline-flex shrink-0 items-center gap-1.5 rounded-pill px-4 py-1.5 font-ui text-[0.76rem] font-medium transition-colors",
               active
                 ? "border border-border-second bg-surface-nested text-ink"
                 : "border border-transparent text-ink-muted hover:text-ink",
