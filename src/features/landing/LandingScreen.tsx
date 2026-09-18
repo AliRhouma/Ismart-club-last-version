@@ -8,12 +8,18 @@ import {
   Building2,
   Check,
   Clock,
+  Crown,
   Download,
+  Headset,
   Info,
+  MessageSquare,
+  MonitorSmartphone,
   RefreshCw,
   Send,
   Share2,
   Shield,
+  ShieldCheck,
+  Shuffle,
   Sparkles,
   Users,
   Zap,
@@ -68,6 +74,73 @@ const HERO_FEATURES = [
     subtitle: "Du projet de jeu au terrain",
     url: VIDEO_PROCEDES,
   },
+]
+
+/* ── L'offre ──────────────────────────────────────────────────────────────
+   Trois packs, remisés de 50 % la première année. Le tarif est au membre et
+   au mois : le prix plein reste affiché à côté du prix remisé, sinon la
+   remise ne veut rien dire. Premium est mis en avant — c'est la somme des
+   deux autres.                                                            */
+const PACKS = [
+  {
+    id: "communication",
+    nom: "Communication",
+    icon: MessageSquare,
+    tagline: "Tout pour communiquer et organiser votre club simplement.",
+    plein: "0,39 €",
+    remise: "0,20 €",
+    complet: false,
+    features: [
+      "Communication avec les membres",
+      "Messagerie",
+      "Réunions et convocations",
+      "Organisation et planification",
+      "Gestion des présences",
+      "Accès joueurs / parents",
+    ],
+  },
+  {
+    id: "technique",
+    nom: "Technique",
+    icon: Shuffle,
+    tagline: "Des outils complets pour structurer le travail sportif de vos éducateurs.",
+    plein: "0,59 €",
+    remise: "0,30 €",
+    complet: false,
+    features: [
+      "Projet de jeu",
+      "Programmation",
+      "Bibliothèque de procédés",
+      "Consignes et compositions",
+      "Évaluations et suivi des joueurs",
+      "Préparation et organisation des séances",
+    ],
+  },
+  {
+    id: "premium",
+    nom: "Premium",
+    icon: Crown,
+    tagline: "Communication + Technique et des fonctionnalités avancées.",
+    plein: "0,89 €",
+    remise: "0,45 €",
+    complet: true,
+    features: [
+      "Toutes les fonctionnalités Communication",
+      "Toutes les fonctionnalités Technique",
+      "Suivi et performances",
+      "Partage de ressources",
+      "Accès joueurs / parents",
+      "Et bien plus encore…",
+    ],
+  },
+]
+
+/** Les quatre réassurances sous la grille — une ligne, quatre promesses. */
+const REASSURANCES = [
+  { icon: ShieldCheck, titre: "Une solution fiable", sous: "et sécurisée" },
+  { icon: MonitorSmartphone, titre: "Accessible sur tous", sous: "vos appareils" },
+  { icon: Users, titre: "Déjà des centaines de clubs", sous: "nous font confiance" },
+  { icon: Headset, titre: "Une équipe à votre écoute", sous: "au quotidien" },
 ]
 
 /* The module grid reads `MODULES` from ./modules — the same records the module
@@ -210,6 +283,8 @@ export function LandingScreen() {
   const [scrolled, setScrolled] = useState(false)
   const [sticky, setSticky] = useState(false)
   const [sent, setSent] = useState(false)
+  /** Le pack retenu sur la grille, repris dans le formulaire. */
+  const [pack, setPack] = useState("")
   const { hash } = useLocation()
 
   useScrollReveal()
@@ -242,6 +317,14 @@ export function LandingScreen() {
     document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })
   }
 
+  /** Choisir un pack, c'est demander un devis pour celui-là : le formulaire
+   *  s'ouvre avec le pack déjà renseigné. */
+  const choisirPack = (id: string) => {
+    setPack(id)
+    setSent(false)
+    goToForm()
+  }
+
   return (
     <div className="lp">
       <div className="lp-grain" aria-hidden />
@@ -267,7 +350,7 @@ export function LandingScreen() {
             <a href="#communaute">Communauté</a>
           </li>
           <li>
-            <a href="#offre">Pack Découverte</a>
+            <a href="#offre">Tarifs</a>
           </li>
         </ul>
         <div className="lp-nav-actions">
@@ -275,7 +358,7 @@ export function LandingScreen() {
             Se connecter
           </a>
           <button className="lp-nav-cta" onClick={goToForm}>
-            Demander le Pack
+            Demander un devis
           </button>
         </div>
       </nav>
@@ -286,7 +369,7 @@ export function LandingScreen() {
           <button className="lp-badge-strip" onClick={goToForm}>
             <span className="lp-badge-pulse" />
             <span className="lp-badge-text">
-              Pack Découverte 2026-2027 — 1 € HT par licencié
+              Offre limitée — -50 % la 1<sup>re</sup> année sur les 3 packs
             </span>
             <span className="lp-badge-arrow">→</span>
           </button>
@@ -311,11 +394,11 @@ export function LandingScreen() {
                 className="lp-btn-primary lp-btn-primary--xl"
                 onClick={goToForm}
               >
-                Demander le Pack Découverte
+                Demander un devis
               </button>
               <span className="lp-cta-note">
-                <Check size={13} /> 1 € HT par licencié · l'ensemble du club ·
-                saison 2026-2027
+                <Check size={13} /> À partir de 0,20 € / membre / mois · -50 %
+                la 1<sup>re</sup> année
               </span>
             </div>
             <a className="lp-btn-ghost" href="#modules">
@@ -445,15 +528,15 @@ export function LandingScreen() {
 
             {/* CTA #2 — the offer, mid-page */}
             <div className="lp-solution-cta lp-reveal">
-              <div className="lp-offer-tag">Offre de lancement</div>
+              <div className="lp-offer-tag">Offre limitée</div>
               <div>
                 <button className="lp-btn-primary" onClick={goToForm}>
-                  Demander le Pack Découverte
+                  Demander un devis
                 </button>
               </div>
               <p className="lp-solution-cta-note">
-                1 € HT par licencié pour la saison 2026-2027, à l'échelle du
-                club entier.
+                -50 % la première année sur les trois packs, à partir de 0,20 €
+                par membre et par mois.
               </p>
             </div>
           </div>
@@ -525,122 +608,108 @@ export function LandingScreen() {
         </div>
       </section>
 
-      {/* ════════ OFFER — Pack Découverte 2026-2027 ════════ */}
+      {/* ════════ OFFER — trois packs, -50 % la première année ════════ */}
       <section id="offre" className="lp-offer">
         <div className="lp-offer-inner">
           <div className="lp-reveal">
             <div className="lp-section-label lp-section-label--center">
-              Offre de lancement
+              Offre limitée
             </div>
             <h2 className="lp-title">
-              Pack Découverte
+              Choisissez le pack
               <br />
-              <span className="lp-green">2026-2027</span>
+              <span className="lp-green">adapté à votre club</span>
             </h2>
             <p className="lp-desc lp-center" style={{ margin: "1.25rem auto 0" }}>
-              Une offre de lancement destinée aux clubs de football qui
-              souhaitent découvrir iSmart Club pendant la saison 2026-2027.
+              Trois packs, une seule ambition : vous accompagner dans la
+              structuration et la progression de votre club, à un tarif
+              accessible.
             </p>
-          </div>
 
-          <div className="lp-offer-card lp-reveal">
-            <div className="lp-offer-price">
-              <span className="lp-offer-amount">1 €</span>
-              <span className="lp-offer-unit">
-                HT par licencié
-                <span>
-                  calculé sur le nombre total de licenciés du club — joueurs et
-                  membres du staff
+            {/* La remise, dite une fois en grand — elle vaut pour les trois. */}
+            <div className="lp-promo">
+              <div className="lp-promo-disc">
+                <span className="lp-promo-value">-50 %</span>
+                <span className="lp-promo-period">
+                  la 1<sup>re</sup> année
                 </span>
-              </span>
-            </div>
-
-            <p className="lp-offer-lead">
-              Contrairement à un abonnement classique, le Pack Découverte permet
-              au club de déployer la plateforme à l'échelle de toute sa
-              structure.
-            </p>
-
-            {/* The single condition of the offer: it is club-wide or nothing. */}
-            <div className="lp-offer-scope">
-              <Building2 size={15} />
-              <p>
-                <strong>L'offre est globale</strong> — il n'est pas possible
-                d'équiper uniquement une équipe ou une catégorie. L'objectif est
-                de permettre à l'ensemble des éducateurs, dirigeants et
-                catégories de travailler avec le même outil et la même
-                méthodologie.
-              </p>
-            </div>
-
-            <div className="lp-offer-includes-head">
-              Le Pack Découverte comprend
-            </div>
-            <ul className="lp-offer-includes">
-              <li>
-                <Check size={15} />
-                L'accès à l'ensemble des fonctionnalités d'iSmart Club
-              </li>
-              <li>
-                <Check size={15} />
-                L'accès pour tous les éducateurs, dirigeants et membres du staff
-              </li>
-              <li>
-                <Check size={15} />
-                L'accès pour toutes les catégories du club
-              </li>
-              <li>
-                <Check size={15} />
-                Les mises à jour de la plateforme pendant toute la saison
-              </li>
-              <li>
-                <Check size={15} />
-                L'accompagnement au déploiement et le support technique
-              </li>
-            </ul>
-
-            <div className="lp-offer-examples-head">
-              Quelle que soit la taille de votre club
-            </div>
-            <div className="lp-offer-examples">
-              <div className="lp-offer-example">
-                <div className="lp-offer-example-members">80 licenciés</div>
-                <div className="lp-offer-example-price">80 € HT</div>
-                <div className="lp-offer-example-per">
-                  pour la saison entière
-                </div>
               </div>
-              <div className="lp-offer-example">
-                <div className="lp-offer-example-members">250 licenciés</div>
-                <div className="lp-offer-example-price">250 € HT</div>
-                <div className="lp-offer-example-per">
-                  pour la saison entière
-                </div>
-              </div>
-              <div className="lp-offer-example">
-                <div className="lp-offer-example-members">700 licenciés</div>
-                <div className="lp-offer-example-price">700 € HT</div>
-                <div className="lp-offer-example-per">
-                  pour la saison entière
-                </div>
-              </div>
+              <span className="lp-promo-note">sur tous nos packs</span>
             </div>
-
-            {/* CTA #3 — the offer's own button */}
-            <button
-              className="lp-btn-primary lp-btn-primary--xl"
-              onClick={goToForm}
-            >
-              Demander le Pack Découverte
-            </button>
-
-            <p className="lp-offer-deadline">
-              Offre valable uniquement pour la saison 2026-2027, dans le cadre
-              du lancement d'iSmart Club. Elle permet aux clubs de tester la
-              plateforme dans des conditions optimales avant le passage à la
-              grille tarifaire standard, à partir de la saison suivante.
-            </p>
           </div>
+
+          <div className="lp-packs">
+            {PACKS.map((p) => {
+              const Icon = p.icon
+              return (
+                <article
+                  key={p.id}
+                  className={`lp-pack lp-reveal${p.complet ? " lp-pack--complet" : ""}`}
+                >
+                  {p.complet ? (
+                    <span className="lp-pack-ribbon">Pack complet</span>
+                  ) : null}
+
+                  <span className="lp-pack-icon">
+                    <Icon size={22} strokeWidth={1.8} />
+                  </span>
+                  <div className="lp-pack-eyebrow">Pack</div>
+                  <h3 className="lp-pack-nom">{p.nom}</h3>
+                  <p className="lp-pack-tagline">{p.tagline}</p>
+
+                  <ul className="lp-pack-features">
+                    {p.features.map((f) => (
+                      <li key={f}>
+                        <Check size={14} />
+                        {f}
+                      </li>
+                    ))}
+                  </ul>
+
+                  {/* Le prix : plein barré, remisé en grand, et l'unité — un
+                      tarif au membre ne se lit pas sans elle. */}
+                  <div className="lp-pack-tarif">
+                    <div className="lp-pack-tarif-chiffres">
+                      <span className="lp-pack-plein">{p.plein}</span>
+                      <span className="lp-pack-remise">{p.remise}</span>
+                      <span className="lp-pack-unite">/ membre / mois</span>
+                    </div>
+                    <span className="lp-pack-badge">
+                      -50 %
+                      <small>
+                        la 1<sup>re</sup> année
+                      </small>
+                    </span>
+                  </div>
+                  <p className="lp-pack-note">
+                    Offre limitée — valable la première année
+                  </p>
+
+                  <button
+                    className={`lp-pack-cta${p.complet ? " lp-pack-cta--plein" : ""}`}
+                    onClick={() => choisirPack(p.id)}
+                  >
+                    Choisir ce pack <ArrowRight size={15} />
+                  </button>
+                </article>
+              )
+            })}
+          </div>
+
+          <ul className="lp-reassurances lp-reveal">
+            {REASSURANCES.map((r) => {
+              const Icon = r.icon
+              return (
+                <li key={r.titre}>
+                  <Icon size={19} strokeWidth={1.7} />
+                  <span>
+                    {r.titre}
+                    <small>{r.sous}</small>
+                  </span>
+                </li>
+              )
+            })}
+          </ul>
         </div>
       </section>
 
@@ -797,27 +866,23 @@ export function LandingScreen() {
         </section>
       ) : null}
 
-      {/* The launch offer is a single pack, so there is no tariff grid to
-          compare — the standard grid only arrives the season after. A short
-          recap band carries the offer one more time before the contact form. */}
+      {/* La grille est juste au-dessus ; cette bande rappelle la remise une
+          dernière fois, juste avant le formulaire. */}
       <section className="lp-recap">
         <div className="lp-recap-inner lp-reveal">
           <div className="lp-recap-icon">
             <Sparkles size={20} />
           </div>
           <div className="lp-recap-text">
-            <strong>Pack Découverte 2026-2027 — 1 € HT par licencié</strong>
+            <strong>-50 % la première année sur les trois packs</strong>
             <span>
-              Une seule formule, pour l'ensemble du club. Tarification standard
-              à partir de la saison suivante.
+              Communication 0,20 € · Technique 0,30 € · Premium 0,45 € — par
+              membre et par mois.
             </span>
           </div>
           {/* CTA #5 */}
-          <button
-            className="lp-btn-primary"
-            onClick={goToForm}
-          >
-            Demander le Pack
+          <button className="lp-btn-primary" onClick={goToForm}>
+            Demander un devis
           </button>
         </div>
       </section>
@@ -832,8 +897,9 @@ export function LandingScreen() {
             </h2>
             <p className="lp-desc" style={{ marginTop: "1rem" }}>
               Dites-nous combien de licenciés compte votre club — joueurs et
-              staff — et nous vous renvoyons le montant exact du Pack Découverte
-              ainsi qu'un accès de démonstration.
+              staff — et le pack qui vous intéresse : nous vous renvoyons le
+              montant exact, remise de 50 % comprise, ainsi qu'un accès de
+              démonstration.
             </p>
             <div className="lp-contact-info">
               <div className="lp-contact-info-item">
@@ -901,6 +967,24 @@ export function LandingScreen() {
                 </div>
               </div>
               <div className="lp-form-field">
+                <label className="lp-form-label" htmlFor="lp-pack">
+                  Pack souhaité
+                </label>
+                <select
+                  id="lp-pack"
+                  className="lp-form-input"
+                  value={pack}
+                  onChange={(e) => setPack(e.target.value)}
+                >
+                  <option value="">Je ne sais pas encore</option>
+                  {PACKS.map((p) => (
+                    <option key={p.id} value={p.id}>
+                      Pack {p.nom} — {p.remise} / membre / mois
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="lp-form-field">
                 <label className="lp-form-label" htmlFor="lp-email">
                   Email
                 </label>
@@ -929,7 +1013,7 @@ export function LandingScreen() {
                 </div>
               ) : (
                 <button className="lp-form-btn" type="submit">
-                  Demander le Pack Découverte <ArrowRight size={16} />
+                  Demander un devis <ArrowRight size={16} />
                 </button>
               )}
             </form>
@@ -941,13 +1025,14 @@ export function LandingScreen() {
       <div className={`lp-sticky ${sticky ? "lp-sticky--visible" : ""}`}>
         <div className="lp-sticky-inner">
           <div className="lp-sticky-text">
-            <span className="lp-sticky-badge">Pack Découverte</span>
+            <span className="lp-sticky-badge">Offre limitée</span>
             <span>
-              <strong>1 € HT</strong> par licencié — saison 2026-2027
+              <strong>-50 %</strong> la 1<sup>re</sup> année — dès 0,20 € /
+              membre / mois
             </span>
           </div>
           <button className="lp-sticky-btn" onClick={goToForm}>
-            Demander le Pack
+            Demander un devis
             <ArrowRight size={14} />
           </button>
         </div>
@@ -961,7 +1046,7 @@ export function LandingScreen() {
             </div>
             <div className="lp-footer-links">
               <a href="#modules">Modules</a>
-              <a href="#offre">Pack Découverte</a>
+              <a href="#offre">Tarifs</a>
               <a href="#contact">Contact</a>
               <a href={PLATFORM_URL}>Connexion</a>
             </div>

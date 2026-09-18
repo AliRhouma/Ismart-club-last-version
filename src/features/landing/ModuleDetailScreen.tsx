@@ -87,7 +87,7 @@ export function ModuleDetailScreen() {
             <Link to="/landing#communaute">Communauté</Link>
           </li>
           <li>
-            <Link to="/landing#offre">Pack Découverte</Link>
+            <Link to="/landing#offre">Tarifs</Link>
           </li>
         </ul>
         <div className="lp-nav-actions">
@@ -95,7 +95,7 @@ export function ModuleDetailScreen() {
             Se connecter
           </a>
           <Link className="lp-nav-cta" to="/landing#contact">
-            Demander le Pack
+            Demander un devis
           </Link>
         </div>
       </nav>
@@ -145,7 +145,7 @@ export function ModuleDetailScreen() {
 
           <div className="lp-detail-actions">
             <Link className="lp-btn-primary lp-btn-primary--xl" to="/landing#contact">
-              Demander le Pack Découverte
+              Demander un devis
             </Link>
             <Link className="lp-btn-ghost" to="/landing#modules">
               <ArrowLeft size={16} style={{ marginRight: 8 }} />
@@ -311,13 +311,14 @@ export function ModuleDetailScreen() {
             <Sparkles size={20} />
           </div>
           <div className="lp-recap-text">
-            <strong>Pack Découverte 2026-2027 — 1 € HT par licencié</strong>
+            <strong>-50 % la première année sur les trois packs</strong>
             <span>
-              {mod.name} et les 33 autres modules, pour l'ensemble du club.
+              {mod.name} et les 33 autres modules, à partir de 0,20 € par
+              membre et par mois.
             </span>
           </div>
           <Link className="lp-btn-primary" to="/landing#contact">
-            Demander le Pack
+            Demander un devis
           </Link>
         </div>
       </section>
@@ -330,7 +331,7 @@ export function ModuleDetailScreen() {
             </div>
             <div className="lp-footer-links">
               <Link to="/landing#modules">Modules</Link>
-              <Link to="/landing#offre">Pack Découverte</Link>
+              <Link to="/landing#offre">Tarifs</Link>
               <Link to="/landing#contact">Contact</Link>
               <a href={PLATFORM_URL}>Connexion</a>
             </div>
