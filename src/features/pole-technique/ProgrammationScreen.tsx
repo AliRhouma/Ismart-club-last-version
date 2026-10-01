@@ -666,7 +666,8 @@ export function ProgrammationScreen() {
                       <div className="flex flex-col gap-3">
                         <p className="font-body text-[0.84rem] text-ink-muted">
                           Pas encore de séance. La fiche de création reprend le
-                          principe, la semaine et le lieu de cette ligne.
+                          principe, la semaine et le lieu de cette ligne ; vous
+                          y définissez le groupe et ses chasubles.
                         </p>
                         <Button
                           onClick={() =>

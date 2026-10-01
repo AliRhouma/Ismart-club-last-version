@@ -50,6 +50,22 @@ import { ProjetsDeJeuScreen } from "@/features/pole-technique/ProjetsDeJeuScreen
 import { ProjetDeJeuDetailScreen } from "@/features/pole-technique/ProjetDeJeuDetailScreen"
 import { CompositionsScreen } from "@/features/pole-technique/CompositionsScreen"
 import { CompositionDetailScreen } from "@/features/pole-technique/CompositionDetailScreen"
+import { PerformancesSaisonsScreen } from "@/features/performances/PerformancesSaisonsScreen"
+import { PerformancesSaisonScreen } from "@/features/performances/PerformancesSaisonScreen"
+import { ModeleDetailScreen } from "@/features/performances/ModeleDetailScreen"
+import { ModeleEditeurScreen } from "@/features/performances/ModeleEditeurScreen"
+import { QuestionnaireDetailScreen } from "@/features/performances/QuestionnaireDetailScreen"
+import { CommunauteShell } from "@/features/communaute/CommunauteShell"
+import {
+  MesPartenairesOnglet,
+  ParametresOnglet,
+  PartagesOnglet,
+  PartenairesLayout,
+  ProfilOnglet,
+  RessourcesPartenairesOnglet,
+} from "@/features/communaute/CommunauteOnglets"
+import { ClubCommunauteScreen } from "@/features/communaute/ClubCommunauteScreen"
+import { ImportOrganigrammeScreen } from "@/features/communaute/import/ImportOrganigrammeScreen"
 import { EducateursScreen } from "@/features/educateurs/EducateursScreen"
 import { JoueursScreen } from "@/features/joueurs/JoueursScreen"
 import { SponsoringHome } from "@/features/sponsoring/SponsoringHome"
@@ -95,6 +111,7 @@ const CUSTOM_ROUTES = new Set([
   "/planification",
   "/resultats",
   "/messagerie",
+  "/communaute",
   "/structuration/organigramme",
   "/structuration/taches",
   "/structuration/objectifs-techniques",
@@ -105,6 +122,7 @@ const CUSTOM_ROUTES = new Set([
   "/pole-technique/seances",
   "/pole-technique/projet-de-jeu",
   "/pole-technique/composition",
+  "/pole-technique/performances",
   "/sponsoring",
   "/budget",
   "/budget2",
@@ -330,6 +348,53 @@ export default function App() {
             <Route
               path="pole-technique/composition/:id"
               element={<CompositionDetailScreen />}
+            />
+
+            {/* Communauté — the club in the network: Profil, Fichiers partagés
+                and Partenaires (ressources / liste / paramètres), each its own
+                URL; a partner club's ressources on their own page. */}
+            <Route path="communaute" element={<CommunauteShell />}>
+              <Route index element={<ProfilOnglet />} />
+              <Route path="partages" element={<PartagesOnglet />} />
+              <Route path="partenaires" element={<PartenairesLayout />}>
+                <Route index element={<RessourcesPartenairesOnglet />} />
+                <Route path="liste" element={<MesPartenairesOnglet />} />
+                <Route path="parametres" element={<ParametresOnglet />} />
+              </Route>
+            </Route>
+            <Route path="communaute/clubs/:id" element={<ClubCommunauteScreen />} />
+            {/* Importing a partner's organigramme: a 4-step mapping flow. */}
+            <Route
+              path="communaute/import/:id"
+              element={<ImportOrganigrammeScreen />}
+            />
+
+            {/* Pôle Technique — Performances: saison → its questionnaires and
+                modèles → one questionnaire (réponses) or one modèle (and its
+                editor, shared by "nouveau" and "modifier"). */}
+            <Route
+              path="pole-technique/performances"
+              element={<PerformancesSaisonsScreen />}
+            />
+            <Route
+              path="pole-technique/performances/:saison"
+              element={<PerformancesSaisonScreen />}
+            />
+            <Route
+              path="pole-technique/performances/:saison/questionnaires/:id"
+              element={<QuestionnaireDetailScreen />}
+            />
+            <Route
+              path="pole-technique/performances/:saison/modeles/nouveau"
+              element={<ModeleEditeurScreen />}
+            />
+            <Route
+              path="pole-technique/performances/:saison/modeles/:id"
+              element={<ModeleDetailScreen />}
+            />
+            <Route
+              path="pole-technique/performances/:saison/modeles/:id/modifier"
+              element={<ModeleEditeurScreen />}
             />
 
             {/* Sponsoring — join flow: empty state → onboarding → offer form

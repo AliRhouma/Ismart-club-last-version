@@ -25,7 +25,7 @@ import {
 
 /** The three ways to scope a document, as a segmented control. */
 const SCOPES = [
-  { id: "group", label: "Groupe Staff", icon: Users },
+  { id: "group", label: "Par unité", icon: Users },
   { id: "post", label: "Par Poste", icon: Building2 },
   { id: "member", label: "Individuel", icon: User },
 ] as const
@@ -182,10 +182,17 @@ export function NouvelleFicheModal({
         ? picked[0].label
         : `${picked.length} sélections`
 
-  /** The picked individuals become the document's "Membres concernés" rows. */
+  /**
+   * The picked individuals — plus everyone in a picked unité of the
+   * organigramme — become the document's "Membres concernés" rows.
+   */
   const membresLies = (): MembreLie[] =>
     annuaire
-      .filter((m) => members.includes(m.id))
+      .filter(
+        (m) =>
+          members.includes(m.id) ||
+          m.uniteIds.some((u) => groups.includes(u)),
+      )
       .map((m) => ({
         id: m.id,
         nom: m.nom,

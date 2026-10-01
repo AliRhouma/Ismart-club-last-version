@@ -17,11 +17,17 @@ import {
   Link2,
   ListTodo,
   Network,
+  Globe,
+  Lock,
   Plus,
+  Settings2,
+  Share2,
   Users,
   Wand2,
   X,
 } from "lucide-react"
+
+import { useLocation, useNavigate } from "react-router-dom"
 
 import { cn } from "@/lib/utils"
 import { useData } from "@/data/useData"
@@ -34,6 +40,9 @@ import { layoutUnites, NODE_W, NODE_W_TACHES } from "./organigramme/layout"
 import { UniteNode, type UniteNodeType } from "./organigramme/UniteNode"
 import { RelationEdge } from "./organigramme/RelationEdge"
 import { StatChip, ToggleBtn, ToolSep } from "./organigramme/ui"
+import { MembreFicheModal } from "./organigramme/MembreFicheModal"
+import { CommunauteModal } from "@/features/pole-technique/ProgrammeActions"
+import { ORG_PARTAGE_RESSOURCES } from "@/data/seed/communaute"
 import {
   MembresModal,
   RelationModal,
@@ -75,6 +84,11 @@ export function OrganigrammeScreen() {
     orgUnites,
     orgRelations,
     orgMembres,
+    fiches,
+    orgPartage,
+    enregistrerOrgPartage,
+    clubsCommunaute,
+    partenariats,
     addOrgUnite,
     updateOrgUnite,
     removeOrgUnite,
@@ -97,6 +111,8 @@ export function OrganigrammeScreen() {
   /* Modals */
   const [membresFor, setMembresFor] = useState<string | null>(null)
   const [apercuFor, setApercuFor] = useState<string | null>(null)
+  const [ficheMembre, setFicheMembre] = useState<string | null>(null)
+  const [partageOpen, setPartageOpen] = useState(false)
   const [relationFor, setRelationFor] = useState<string | null>(null)
   const [transfert, setTransfert] = useState(false)
   const [deleting, setDeleting] = useState<string | null>(null)
@@ -114,10 +130,29 @@ export function OrganigrammeScreen() {
     return () => clearTimeout(t)
   }, [toast])
 
+  // A confirmation handed over by the screen that navigated here (an import).
+  const location = useLocation()
+  const navigateOrg = useNavigate()
+  const recu = (location.state as { toast?: string } | null)?.toast
+  useEffect(() => {
+    if (!recu) return
+    notify(recu)
+    navigateOrg(location.pathname, { replace: true, state: null })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [recu])
+
   const membresById = useMemo(
     () => Object.fromEntries(orgMembres.map((m) => [m.id, m])),
     [orgMembres],
   )
+
+  /** Documents each membre has been sent but not yet accepted / signed. */
+  const enAttente = useMemo(() => {
+    const out: Record<string, number> = {}
+    for (const f of fiches)
+      for (const m of f.membres) if (m.enAttente) out[m.id] = (out[m.id] ?? 0) + 1
+    return out
+  }, [fiches])
 
   /* ── Actions ──────────────────────────────────────────────────────────── */
 
@@ -258,6 +293,8 @@ export function OrganigrammeScreen() {
           onToggleMembre: toggleMembre,
           onGererMembres: setMembresFor,
           onApercu: setApercuFor,
+          onFicheMembre: setFicheMembre,
+          enAttente,
           onAddChild: addUnite,
           onRemove: setDeleting,
         },
@@ -271,6 +308,7 @@ export function OrganigrammeScreen() {
       expanded,
       picking,
       picked,
+      enAttente,
       updateOrgUnite,
       toggleMembre,
       addUnite,
@@ -353,6 +391,27 @@ export function OrganigrammeScreen() {
         subtitle={`${orgUnites.length} unité${orgUnites.length > 1 ? "s" : ""} · ${nbMembres} membre${nbMembres > 1 ? "s" : ""} affecté${nbMembres > 1 ? "s" : ""} · Structuration`}
         actions={
           <>
+            <Button
+              variant="outline"
+              onClick={() => setPartageOpen(true)}
+              title="Partager l'organigramme avec vos clubs partenaires"
+            >
+              <Share2 size={15} /> Partager
+              <span className="inline-flex items-center gap-1 rounded-pill border border-border px-2 py-0.5 font-ui text-[0.66rem] text-ink-muted">
+                {orgPartage.portee === "prive" ? (
+                  <Lock size={10} />
+                ) : orgPartage.portee === "partenaires" ? (
+                  <Globe size={10} />
+                ) : (
+                  <Settings2 size={10} />
+                )}
+                {orgPartage.portee === "prive"
+                  ? "Privé"
+                  : orgPartage.portee === "partenaires"
+                    ? "Partenaires"
+                    : `${orgPartage.partenaireIds.length} club${orgPartage.partenaireIds.length > 1 ? "s" : ""}`}
+              </span>
+            </Button>
             <Button variant="outline" onClick={() => relayout()}>
               <Wand2 size={15} /> Auto-agencer
             </Button>
@@ -556,6 +615,35 @@ export function OrganigrammeScreen() {
               `${n} membre${n > 1 ? "s" : ""} affecté${n > 1 ? "s" : ""} à « ${uniteMembres.nom} »`,
             )
           }
+        />
+      ) : null}
+
+      <CommunauteModal
+        open={partageOpen}
+        onOpenChange={setPartageOpen}
+        titre="Partager l'organigramme"
+        ressourcesDisponibles={ORG_PARTAGE_RESSOURCES}
+        partage={orgPartage}
+        partenaires={partenariats
+          .map((p) => clubsCommunaute.find((c) => c.id === p.clubId))
+          .filter((c): c is NonNullable<typeof c> => !!c)
+          .map((c) => ({ id: c.id, name: c.nom }))}
+        onEnregistrer={(partage) => {
+          enregistrerOrgPartage(partage)
+          setPartageOpen(false)
+          notify(
+            partage.portee === "prive"
+              ? "Organigramme privé — il n'est plus partagé."
+              : `Organigramme partagé (${partage.ressources.length ? partage.ressources.join(", ").toLowerCase() : "structure seule"}).`,
+          )
+        }}
+      />
+
+      {ficheMembre ? (
+        <MembreFicheModal
+          membreId={ficheMembre}
+          onClose={() => setFicheMembre(null)}
+          onNotify={notify}
         />
       ) : null}
 

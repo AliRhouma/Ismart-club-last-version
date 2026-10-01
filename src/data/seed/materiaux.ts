@@ -41,3 +41,36 @@ export const MATERIAUX: Materiau[] = [
 /** Retrouve le visuel d'une ligne de matériel déjà enregistrée (stockée par nom). */
 export const materiauParNom = (nom: string) =>
   MATERIAUX.find((m) => m.nom.toLowerCase() === nom.trim().toLowerCase())
+
+/** Une ligne de matériel telle qu'une séance ou un procédé la stocke. */
+export type LigneMateriel = { quantite: number; nom: string }
+
+/**
+ * Matériel d'un déroulé : chaque procédé fait son total par référence, puis on
+ * garde le plus grand besoin — les exercices s'enchaînent, les mêmes coupelles
+ * servent deux fois. Dérivé, jamais stocké.
+ */
+export function materielDeroule(
+  procedes: { materiel?: LigneMateriel[] }[],
+): Map<string, number> {
+  const max = new Map<string, number>()
+  for (const p of procedes) {
+    const parProcede = new Map<string, number>()
+    for (const m of p.materiel ?? [])
+      parProcede.set(m.nom, (parProcede.get(m.nom) ?? 0) + m.quantite)
+    for (const [nom, q] of parProcede) max.set(nom, Math.max(max.get(nom) ?? 0, q))
+  }
+  return max
+}
+
+/** Le matériel d'une séance : celui fixé par l'éducateur, sinon celui des procédés. */
+export function materielSeance(seance: {
+  materiel?: LigneMateriel[]
+  procedes: { materiel?: LigneMateriel[] }[]
+}): LigneMateriel[] {
+  if (seance.materiel) return seance.materiel
+  return [...materielDeroule(seance.procedes)].map(([nom, quantite]) => ({ nom, quantite }))
+}
+
+export const totalPieces = (lignes: LigneMateriel[]) =>
+  lignes.reduce((t, m) => t + m.quantite, 0)

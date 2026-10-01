@@ -33,7 +33,7 @@ import {
  * anatomy"): flush with the page at rest, the surface fill descending on hover.
  * The three screens only differ in what they put inside it.
  */
-function CarteNav({
+export function CarteNav({
   onOpen,
   children,
   className,
@@ -63,7 +63,7 @@ function CarteNav({
 }
 
 /** Icon tile + title + one muted line — the common head of all three cards. */
-function TeteDeCarte({
+export function TeteDeCarte({
   icon: Icon,
   image,
   initiales,

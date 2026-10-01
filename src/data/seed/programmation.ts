@@ -154,6 +154,8 @@ export type SeanceClub = {
    * them onto its procédés, where the coach can re-shuffle them.
    */
   ateliersParProcede?: ProcedeAtelier[][]
+  /** The séance's own chasubles, defined on the fiche de création. */
+  groupesSeance?: ProcedeAtelier[]
   /** Séance debriefed: the éducateur filled in his évaluation of it. */
   evaluationFaite?: boolean
   /** Player performances rated for that séance. */

@@ -32,6 +32,10 @@ export type UniteNodeData = {
   onToggleMembre: (uniteId: string, membreId: string) => void
   onGererMembres: (uniteId: string) => void
   onApercu: (uniteId: string) => void
+  /** Open a membre's sheet — rôles, fiche de poste, chartes. */
+  onFicheMembre: (membreId: string) => void
+  /** Documents each membre still has to accept / sign (by membre id). */
+  enAttente: Record<string, number>
   onAddChild: (uniteId: string) => void
   onRemove: (uniteId: string) => void
 }
@@ -256,6 +260,25 @@ export function UniteNode({ data, selected }: NodeProps<UniteNodeType>) {
                           {membre.role}
                         </span>
                       </span>
+                      <button
+                        type="button"
+                        title={
+                          data.enAttente[a.membreId]
+                            ? `Fiche du membre · ${data.enAttente[a.membreId]} document(s) en attente`
+                            : "Fiche du membre"
+                        }
+                        aria-label={`Fiche de ${membre.nom}`}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          data.onFicheMembre(a.membreId)
+                        }}
+                        className="nodrag relative flex size-6 shrink-0 items-center justify-center rounded-sm text-ink-muted transition-colors hover:bg-surface-hover hover:text-ink"
+                      >
+                        <Eye size={14} />
+                        {data.enAttente[a.membreId] ? (
+                          <span className="absolute top-0.5 right-0.5 size-1.5 rounded-full bg-warning" />
+                        ) : null}
+                      </button>
                       {showTaches && a.taches.length > 0 ? (
                         <span className="flex shrink-0 items-center gap-1 text-ink-muted">
                           <span className="rounded-pill border border-brand-blue-600/30 bg-brand-blue-600/10 px-1.5 font-ui text-[0.62rem] text-brand-blue-600 tabular-nums">

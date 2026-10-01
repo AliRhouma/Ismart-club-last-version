@@ -34,7 +34,7 @@ const inputCls =
 
 /* ── Shared modal shell — one close X, centered ─────────────────────────── */
 
-function Shell({
+export function Shell({
   title,
   description,
   onClose,

@@ -51,6 +51,7 @@ import {
 import {
   SAISONS,
   SAISON_ACTIVE,
+  type ProgrammePartage,
   SEANCES_PAR_SEMAINE,
   programmeVierge,
   renumeroterSessions,
@@ -173,6 +174,37 @@ import {
   type Transaction,
   type NewTransaction,
 } from "@/data/seed/finance"
+
+import {
+  aujourdhuiIso,
+  figer,
+  modelesQuestionnaireSeed,
+  questionnairesSeed,
+  type ModeleQuestionnaire,
+  type Questionnaire,
+} from "@/data/seed/performances"
+
+import {
+  orgPartageSeed,
+  clubsSeed,
+  demandesSeed,
+  importeesSeed,
+  parametresPartageSeed,
+  partenariatsSeed,
+  ressourcesSeed,
+  type ClubCommunaute,
+  type DemandePartenaire,
+  type Importation,
+  type ParametresPartage,
+  type Partenariat,
+  type Ressource,
+} from "@/data/seed/communaute"
+
+import {
+  organigrammesPartagesSeed,
+  type OrgPartage,
+} from "@/data/seed/organigrammesPartages"
+import type { PlanImportOrganigramme } from "@/data/seed/importOrganigramme"
 
 /**
  * App-root in-memory store (plain React Context + useReducer — no library).
@@ -335,6 +367,24 @@ export type DataContextValue = {
   projetsDeJeu: ProjetDeJeu[]
   /** Saved line-ups (Pôle technique ▸ Composition). */
   compositions: Composition[]
+  /** Questionnaire templates (Pôle technique ▸ Performances). */
+  modelesQuestionnaire: ModeleQuestionnaire[]
+  /** Launched questionnaires and their réponses, every saison. */
+  questionnaires: Questionnaire[]
+  /** Communauté — clubs of the network, our partenariats and demandes. */
+  clubsCommunaute: ClubCommunaute[]
+  partenariats: Partenariat[]
+  demandesPartenaire: DemandePartenaire[]
+  /** Every shared ressource — ours (`clubId === MOI`) and our partenaires'. */
+  ressourcesCommunaute: Ressource[]
+  /** Partner ressources we imported into our library. */
+  importees: Importation[]
+  parametresPartage: ParametresPartage
+  /** How our organigramme is shared with the Communauté, and what it carries. */
+  orgPartage: ProgrammePartage
+  enregistrerOrgPartage: (partage: ProgrammePartage) => void
+  /** The full content behind each shared "Organigramme" ressource (read-only). */
+  organigrammesPartages: Record<string, OrgPartage>
   /** Age groups with their effectif, groupes and calendrier (▸ Catégories). */
   categories: Categorie[]
   /** Scheduled events shown on the Planification calendar. */
@@ -391,6 +441,14 @@ export type DataContextValue = {
   removeSeanceProcede: (eventId: string, procedeId: string) => void
   /** Remonte (-1) ou descend (+1) un procédé dans le déroulé de la séance. */
   moveSeanceProcede: (eventId: string, procedeId: string, dir: -1 | 1) => void
+  /** Copie un procédé juste après lui (mêmes groupes, nouvel id). */
+  duplicateSeanceProcede: (eventId: string, procedeId: string) => string
+  /** Pause hydratation après le procédé n° `apres` ; `null` la retire. */
+  setSeanceHydratation: (
+    eventId: string,
+    apres: number,
+    duree: number | null,
+  ) => void
   /** Replace the player groups of one procédé of a séance. */
   setProcedeAteliers: (
     eventId: string,
@@ -483,6 +541,8 @@ export type DataContextValue = {
   removeDocument: (id: string) => void
   /** Add a fiche; returns the new id so the caller can open its detail page. */
   addFiche: (fiche: Omit<Fiche, "id">) => string
+  /** Patch a fiche — e.g. link a membre, or mark a charte as signed. */
+  updateFiche: (id: string, patch: Partial<Fiche>) => void
   removeFiche: (id: string) => void
   /** Add a procédé to the library; returns the new id so the caller can open it. */
   addProcede: (procede: Omit<ProcedeItem, "id">) => string
@@ -530,6 +590,54 @@ export type DataContextValue = {
   addComposition: (composition: Omit<Composition, "id">) => string
   updateComposition: (id: string, patch: Partial<Composition>) => void
   removeComposition: (id: string) => void
+  /** Add a questionnaire template; returns the new id so the caller can open it. */
+  addModeleQuestionnaire: (modele: Omit<ModeleQuestionnaire, "id">) => string
+  updateModeleQuestionnaire: (
+    id: string,
+    patch: Partial<ModeleQuestionnaire>,
+  ) => void
+  /** Launched questionnaires keep their frozen copy — nothing else changes. */
+  removeModeleQuestionnaire: (id: string) => void
+  /**
+   * Launch a modèle for a catégorie: freezes the modèle as it is now, stamps
+   * today, opens it. Returns the new questionnaire's id.
+   */
+  lancerQuestionnaire: (lancement: {
+    nom: string
+    saison: string
+    categorieId: string
+    groupeId: string | null
+    modeleId: string
+  }) => string
+  updateQuestionnaire: (id: string, patch: Partial<Questionnaire>) => void
+  removeQuestionnaire: (id: string) => void
+  /** Record (or replace) one joueur's answers, stamped today. */
+  enregistrerReponse: (
+    questionnaireId: string,
+    joueurId: string,
+    valeurs: Record<string, number>,
+  ) => void
+  removeReponse: (questionnaireId: string, reponseId: string) => void
+  /** Ask a club to become partenaire (a demande envoyée, pending). */
+  envoyerDemandePartenaire: (clubId: string) => void
+  /** Accept (→ partenariat) or decline a demande reçue. */
+  repondreDemande: (id: string, accepter: boolean) => void
+  /** Withdraw a demande we sent. */
+  annulerDemande: (id: string) => void
+  retirerPartenaire: (clubId: string) => void
+  /** Copy a partner ressource into our library (counts as one import). */
+  importerRessource: (id: string) => void
+  /** Opening a ressource's aperçu counts one vue. */
+  voirRessource: (id: string) => void
+  /** Stop sharing one of our ressources. */
+  retirerPartage: (id: string) => void
+  enregistrerParametresPartage: (p: ParametresPartage) => void
+  /**
+   * Apply a mapped organigramme import in one go: the new unités (and the
+   * re-laid-out positions of the whole chart), the members created on the
+   * way, the documents copied as drafts, and every member ↔ document link.
+   */
+  importerOrganigramme: (plan: PlanImportOrganigramme) => void
   /** Add a calendar event; returns the new id. */
   addEvent: (event: Omit<PlanEvent, "id">) => string
   updateEvent: (id: string, patch: Partial<PlanEvent>) => void
@@ -716,6 +824,25 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const [projetsDeJeu] = useState<ProjetDeJeu[]>(projetsDeJeuSeed)
   const [compositions, setCompositions] =
     useState<Composition[]>(compositionsSeed)
+  // Performances: templates add / edit / remove; a launched questionnaire
+  // freezes its template, so the two never need to be updated together.
+  const [modelesQuestionnaire, setModelesQuestionnaire] = useState<
+    ModeleQuestionnaire[]
+  >(modelesQuestionnaireSeed)
+  const [questionnaires, setQuestionnaires] =
+    useState<Questionnaire[]>(questionnairesSeed)
+  // Communauté: the network is fixed, our links to it add / remove.
+  const [clubsCommunaute] = useState<ClubCommunaute[]>(clubsSeed)
+  const [partenariats, setPartenariats] =
+    useState<Partenariat[]>(partenariatsSeed)
+  const [demandesPartenaire, setDemandesPartenaire] =
+    useState<DemandePartenaire[]>(demandesSeed)
+  const [ressourcesCommunaute, setRessourcesCommunaute] =
+    useState<Ressource[]>(ressourcesSeed)
+  const [importees, setImportees] = useState<Importation[]>(importeesSeed)
+  const [parametresPartage, setParametresPartage] =
+    useState<ParametresPartage>(parametresPartageSeed)
+  const [orgPartage, setOrgPartage] = useState<ProgrammePartage>(orgPartageSeed)
   // Catégories add / edit / remove. New rows get a uuid; seed rows keep their
   // readable slug ids (the URL of a catégorie is its id).
   const [categories, setCategories] = useState<Categorie[]>(categoriesSeed)
@@ -846,7 +973,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
   // are created elsewhere in the product, the organigramme only places them.
   const [orgUnites, setOrgUnites] = useState<OrgUnite[]>(unitesSeed)
   const [orgRelations, setOrgRelations] = useState<OrgRelation[]>(relationsSeed)
-  const [orgMembres] = useState<OrgMembre[]>(membresPool)
+  const [orgMembres, setOrgMembres] = useState<OrgMembre[]>(membresPool)
   // Gestion des tâches — projets / sous-projets / tâches. Tâches stay flat so
   // the kanban, the hierarchy and the project cards are three filters over one
   // list rather than three copies of the same work.
@@ -955,6 +1082,16 @@ export function DataProvider({ children }: { children: ReactNode }) {
       seancesClub,
       projetsDeJeu,
       compositions,
+      modelesQuestionnaire,
+      questionnaires,
+      clubsCommunaute,
+      partenariats,
+      demandesPartenaire,
+      ressourcesCommunaute,
+      importees,
+      parametresPartage,
+      orgPartage,
+      organigrammesPartages: organigrammesPartagesSeed,
       categories,
       events,
       seanceDetails,
@@ -1093,11 +1230,20 @@ export function DataProvider({ children }: { children: ReactNode }) {
             p.id === procedeId ? { ...p, ateliers } : p,
           ),
         })),
+      // Les pauses sont rangées par position (« après le procédé n° i ») :
+      // retirer, déplacer ou dupliquer un procédé les fait suivre.
       removeSeanceProcede: (eventId, procedeId) =>
-        patchSeance(eventId, (d) => ({
-          ...d,
-          procedes: d.procedes.filter((p) => p.id !== procedeId),
-        })),
+        patchSeance(eventId, (d) => {
+          const i = d.procedes.findIndex((p) => p.id === procedeId)
+          if (i === -1) return d
+          return {
+            ...d,
+            procedes: d.procedes.filter((p) => p.id !== procedeId),
+            hydratations: d.hydratations
+              ?.filter((h) => h.apres !== i)
+              .map((h) => (h.apres > i ? { ...h, apres: h.apres - 1 } : h)),
+          }
+        }),
       moveSeanceProcede: (eventId, procedeId, dir) =>
         patchSeance(eventId, (d) => {
           const from = d.procedes.findIndex((p) => p.id === procedeId)
@@ -1106,7 +1252,56 @@ export function DataProvider({ children }: { children: ReactNode }) {
           const procedes = [...d.procedes]
           const [moved] = procedes.splice(from, 1)
           procedes.splice(to, 0, moved)
-          return { ...d, procedes }
+          return {
+            ...d,
+            procedes,
+            hydratations: d.hydratations?.map((h) =>
+              h.apres === from
+                ? { ...h, apres: to }
+                : h.apres === to
+                  ? { ...h, apres: from }
+                  : h,
+            ),
+          }
+        }),
+      duplicateSeanceProcede: (eventId, procedeId) => {
+        const id = crypto.randomUUID()
+        patchSeance(eventId, (d) => {
+          const i = d.procedes.findIndex((p) => p.id === procedeId)
+          if (i === -1) return d
+          const source = d.procedes[i]
+          const copie = {
+            ...source,
+            id,
+            ateliers: source.ateliers?.map((g) => ({
+              ...g,
+              id: crypto.randomUUID(),
+              joueurIds: [...g.joueurIds],
+            })),
+          }
+          const procedes = [...d.procedes]
+          procedes.splice(i + 1, 0, copie)
+          // La pause qui suivait l'original suit maintenant la copie.
+          return {
+            ...d,
+            procedes,
+            hydratations: d.hydratations?.map((h) =>
+              h.apres >= i ? { ...h, apres: h.apres + 1 } : h,
+            ),
+          }
+        })
+        return id
+      },
+      setSeanceHydratation: (eventId, apres, duree) =>
+        patchSeance(eventId, (d) => {
+          const autres = (d.hydratations ?? []).filter((h) => h.apres !== apres)
+          return {
+            ...d,
+            hydratations:
+              duree === null
+                ? autres
+                : [...autres, { apres, duree }].sort((a, b) => a.apres - b.apres),
+          }
         }),
       setSeancePresence: (eventId, participantId, statut) =>
         patchSeance(eventId, (d) => {
@@ -1216,6 +1411,10 @@ export function DataProvider({ children }: { children: ReactNode }) {
       },
       removeFiche: (id) =>
         setFiches((prev) => prev.filter((fiche) => fiche.id !== id)),
+      updateFiche: (id, patch) =>
+        setFiches((prev) =>
+          prev.map((fiche) => (fiche.id === id ? { ...fiche, ...patch } : fiche)),
+        ),
       addProcede: (procede) => {
         const id = crypto.randomUUID()
         setProcedes((prev) => [{ id, ...procede }, ...prev])
@@ -1425,6 +1624,150 @@ export function DataProvider({ children }: { children: ReactNode }) {
         ),
       removeComposition: (id) =>
         setCompositions((prev) => prev.filter((c) => c.id !== id)),
+      addModeleQuestionnaire: (modele) => {
+        const id = crypto.randomUUID()
+        setModelesQuestionnaire((prev) => [...prev, { id, ...modele }])
+        return id
+      },
+      updateModeleQuestionnaire: (id, patch) =>
+        setModelesQuestionnaire((prev) =>
+          prev.map((m) => (m.id === id ? { ...m, ...patch } : m)),
+        ),
+      removeModeleQuestionnaire: (id) =>
+        setModelesQuestionnaire((prev) => prev.filter((m) => m.id !== id)),
+      lancerQuestionnaire: (lancement) => {
+        const id = crypto.randomUUID()
+        const modele = modelesQuestionnaire.find(
+          (m) => m.id === lancement.modeleId,
+        )
+        if (!modele) return id
+        setQuestionnaires((prev) => [
+          {
+            ...lancement,
+            id,
+            lanceLe: aujourdhuiIso(),
+            statut: "ouvert",
+            modele: figer(modele),
+            reponses: [],
+          },
+          ...prev,
+        ])
+        return id
+      },
+      updateQuestionnaire: (id, patch) =>
+        setQuestionnaires((prev) =>
+          prev.map((q) => (q.id === id ? { ...q, ...patch } : q)),
+        ),
+      removeQuestionnaire: (id) =>
+        setQuestionnaires((prev) => prev.filter((q) => q.id !== id)),
+      enregistrerReponse: (questionnaireId, joueurId, valeurs) =>
+        setQuestionnaires((prev) =>
+          prev.map((q) => {
+            if (q.id !== questionnaireId) return q
+            const existante = q.reponses.find((r) => r.joueurId === joueurId)
+            const reponse = {
+              id: existante?.id ?? crypto.randomUUID(),
+              joueurId,
+              valeurs,
+              reponduLe: aujourdhuiIso(),
+            }
+            return {
+              ...q,
+              reponses: existante
+                ? q.reponses.map((r) => (r.id === existante.id ? reponse : r))
+                : [...q.reponses, reponse],
+            }
+          }),
+        ),
+      envoyerDemandePartenaire: (clubId) =>
+        setDemandesPartenaire((prev) =>
+          prev.some((d) => d.clubId === clubId)
+            ? prev
+            : [
+                ...prev,
+                { id: crypto.randomUUID(), clubId, sens: "envoyee", le: aujourdhuiIso() },
+              ],
+        ),
+      repondreDemande: (id, accepter) => {
+        const demande = demandesPartenaire.find((d) => d.id === id)
+        setDemandesPartenaire((prev) => prev.filter((d) => d.id !== id))
+        if (accepter && demande)
+          setPartenariats((prev) => [
+            ...prev,
+            { clubId: demande.clubId, depuis: aujourdhuiIso() },
+          ])
+      },
+      annulerDemande: (id) =>
+        setDemandesPartenaire((prev) => prev.filter((d) => d.id !== id)),
+      retirerPartenaire: (clubId) =>
+        setPartenariats((prev) => prev.filter((pa) => pa.clubId !== clubId)),
+      importerRessource: (id) => {
+        if (importees.some((i) => i.ressourceId === id)) return
+        setImportees((prev) => [...prev, { ressourceId: id, le: aujourdhuiIso() }])
+        setRessourcesCommunaute((prev) =>
+          prev.map((res) => (res.id === id ? { ...res, imports: res.imports + 1 } : res)),
+        )
+      },
+      voirRessource: (id) =>
+        setRessourcesCommunaute((prev) =>
+          prev.map((res) => (res.id === id ? { ...res, vues: res.vues + 1 } : res)),
+        ),
+      retirerPartage: (id) =>
+        setRessourcesCommunaute((prev) => prev.filter((res) => res.id !== id)),
+      enregistrerParametresPartage: (params) => setParametresPartage(params),
+      enregistrerOrgPartage: (partage) => {
+        setOrgPartage(partage)
+        // One truth: the Communauté's paramètres show the same visibility.
+        setParametresPartage((prev) => ({
+          ...prev,
+          parType: {
+            ...prev.parType,
+            Organigramme: { portee: partage.portee, clubIds: partage.partenaireIds },
+          },
+        }))
+      },
+      importerOrganigramme: (plan) => {
+        setOrgUnites((prev) =>
+          [...prev, ...plan.unites].map((u) =>
+            plan.positions[u.id] ? { ...u, ...plan.positions[u.id] } : u,
+          ),
+        )
+        if (plan.nouveauxMembres.length)
+          setOrgMembres((prev) => [...prev, ...plan.nouveauxMembres])
+        setFiches((prev) =>
+          [...plan.nouvellesFiches, ...prev].map((f) => {
+            const liens = plan.liens.filter(
+              (l) =>
+                l.ficheId === f.id && !f.membres.some((m) => m.id === l.lien.id),
+            )
+            // One link per membre and document, even if two postes share it.
+            const uniques = liens.filter(
+              (l, i) => liens.findIndex((x) => x.lien.id === l.lien.id) === i,
+            )
+            return uniques.length
+              ? { ...f, membres: [...f.membres, ...uniques.map((l) => l.lien)] }
+              : f
+          }),
+        )
+        setImportees((prev) =>
+          prev.some((i) => i.ressourceId === plan.ressourceId)
+            ? prev
+            : [...prev, { ressourceId: plan.ressourceId, le: aujourdhuiIso() }],
+        )
+        setRessourcesCommunaute((prev) =>
+          prev.map((res) =>
+            res.id === plan.ressourceId ? { ...res, imports: res.imports + 1 } : res,
+          ),
+        )
+      },
+      removeReponse: (questionnaireId, reponseId) =>
+        setQuestionnaires((prev) =>
+          prev.map((q) =>
+            q.id === questionnaireId
+              ? { ...q, reponses: q.reponses.filter((r) => r.id !== reponseId) }
+              : q,
+          ),
+        ),
       removeSeance: (id) => {
         setSeancesClub((prev) => prev.filter((s) => s.id !== id))
         setProgrammesAnnuels((prev) =>
@@ -1868,6 +2211,15 @@ export function DataProvider({ children }: { children: ReactNode }) {
       seancesClub,
       projetsDeJeu,
       compositions,
+      modelesQuestionnaire,
+      questionnaires,
+      clubsCommunaute,
+      partenariats,
+      demandesPartenaire,
+      ressourcesCommunaute,
+      importees,
+      parametresPartage,
+      orgPartage,
       categories,
       events,
       seanceDetails,

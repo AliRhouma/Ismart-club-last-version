@@ -3,7 +3,7 @@ import { Calendar, ExternalLink, User, Users } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
 
 import { useData } from "@/data/useData"
-import type { MembreLie } from "@/data/seed/fichesPoste"
+import type { Fiche, MembreLie } from "@/data/seed/fichesPoste"
 import { Avatar } from "@/components/kit/Avatar"
 import { Badge } from "@/components/kit/Badge"
 import { BackButton } from "@/components/kit/BackButton"
@@ -84,11 +84,12 @@ export function FichePosteDetailScreen() {
       id: "statut",
       header: "Statut",
       width: "140px",
-      cell: (m) => <MembreStatutBadge statut={m.statut} />,
+      cell: (m) => <MembreStatutBadge statut={m.statut} enAttente={m.enAttente} />,
     },
   ]
 
   const nb = fiche.membres.length
+  const enAttente = fiche.membres.filter((m) => m.enAttente).length
 
   return (
     <div className="mx-auto flex max-w-4xl flex-col">
@@ -120,7 +121,13 @@ export function FichePosteDetailScreen() {
 
             <Button
               className="shrink-0"
-              onClick={() => navigate("/documents")}
+              onClick={() =>
+                fiche.contenu
+                  ? document
+                      .getElementById("contenu")
+                      ?.scrollIntoView({ behavior: "smooth" })
+                  : navigate("/documents")
+              }
             >
               <ExternalLink /> Ouvrir le document
             </Button>
@@ -134,8 +141,15 @@ export function FichePosteDetailScreen() {
               label="Membres"
               value={`${nb} concerné${nb > 1 ? "s" : ""}`}
             />
+            {enAttente ? (
+              <span className="font-body text-[0.78rem] text-warning">
+                {enAttente} en attente de réponse
+              </span>
+            ) : null}
           </div>
         </div>
+
+        {fiche.contenu ? <Contenu fiche={fiche} /> : null}
 
         {/* Who the document binds — the reason this screen exists. */}
         <div className="flex flex-col gap-3">
@@ -161,5 +175,56 @@ export function FichePosteDetailScreen() {
         </div>
       </div>
     </div>
+  )
+}
+
+/** The document itself, read-only — objectif, rattachement, then its sections. */
+function Contenu({ fiche }: { fiche: Fiche }) {
+  const c = fiche.contenu!
+  return (
+    <section
+      id="contenu"
+      className="scroll-mt-6 rounded-lg border border-border p-5 sm:p-6"
+    >
+      <h2 className="mb-4 font-ui text-sm font-medium text-ink">
+        Contenu du document
+      </h2>
+      <div className="flex flex-col gap-5">
+        {c.objectif || c.rattachement ? (
+          <div className="flex flex-col gap-2 border-b border-border pb-4">
+            {c.objectif ? (
+              <p className="font-body text-sm text-ink-subtle">
+                <span className="text-ink-muted">Objectif : </span>
+                {c.objectif}
+              </p>
+            ) : null}
+            {c.rattachement ? (
+              <p className="font-body text-sm text-ink-subtle">
+                <span className="text-ink-muted">Rattachement : </span>
+                {c.rattachement}
+              </p>
+            ) : null}
+          </div>
+        ) : null}
+        {c.sections.map((s) => (
+          <div key={s.titre} className="flex flex-col gap-2">
+            <h3 className="font-ui text-[0.9rem] font-medium text-ink">
+              {s.titre}
+            </h3>
+            <ul className="flex flex-col gap-1.5">
+              {s.points.map((pt) => (
+                <li
+                  key={pt}
+                  className="flex gap-2.5 font-body text-sm text-ink-subtle"
+                >
+                  <span className="mt-2 size-1 shrink-0 rounded-full bg-ink-disabled" />
+                  {pt}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
   )
 }

@@ -81,6 +81,19 @@ const MEMBRE_STATUT_VARIANTS: Record<MembreLieStatut, BadgeVariant> = {
   Concerné: "default",
 }
 
-export function MembreStatutBadge({ statut }: { statut: MembreLieStatut }) {
+/** A binding the member hasn't accepted yet reads "En attente", whatever its kind. */
+export function MembreStatutBadge({
+  statut,
+  enAttente,
+}: {
+  statut: MembreLieStatut
+  enAttente?: boolean
+}) {
+  if (enAttente)
+    return (
+      <Badge variant="warning" dot>
+        En attente
+      </Badge>
+    )
   return <Badge variant={MEMBRE_STATUT_VARIANTS[statut]}>{statut}</Badge>
 }

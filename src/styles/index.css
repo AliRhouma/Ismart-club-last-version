@@ -330,6 +330,24 @@
     background: var(--accent-soft);
     color: var(--ink);
   }
+  /* Native <select> menus: our selects are transparent (design rule 4), and
+     Chrome on Windows then paints the option list white while the options
+     inherit our near-white ink — unreadable. Give the list an explicit dark
+     surface so every native dropdown in the app reads correctly. */
+  select {
+    color-scheme: dark;
+  }
+  select option,
+  select optgroup {
+    background-color: var(--surface);
+    color: var(--ink);
+  }
+  select optgroup {
+    color: var(--ink-muted);
+  }
+  select option:disabled {
+    color: var(--ink-disabled);
+  }
 }
 
 /* ===========================================================================

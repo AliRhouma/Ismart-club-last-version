@@ -20,11 +20,13 @@ import { StatutBadge, TypeBadge, TypeTile, typeIcon } from "@/features/fiches-po
 type Filtre = "Tous" | (typeof FICHE_TYPE_FILTERS)[number]
 const FILTRES: Filtre[] = ["Tous", ...FICHE_TYPE_FILTERS]
 
-/** Today as the module's short display date, e.g. "07 Aug 2026". */
+/** Today as the module's display date, e.g. "13 août 2026". */
 function today() {
-  return new Date()
-    .toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })
-    .replace(/,/g, "")
+  return new Date().toLocaleDateString("fr-FR", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  })
 }
 
 export function FichesPosteScreen() {

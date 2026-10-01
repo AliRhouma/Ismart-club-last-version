@@ -16,6 +16,7 @@
 
 import type { PlanEvent } from "@/data/seed/events"
 import type { ProcedeItem } from "@/data/seed/procedes"
+import type { LigneMateriel } from "@/data/seed/materiaux"
 
 /* ── Attendance enums (mirror the match feature for a consistent family) ───── */
 
@@ -120,7 +121,17 @@ export type Procede = {
   blocks: ProcedeBlock[]
   /** Player groups for this exercise. Absent = everyone works together. */
   ateliers?: ProcedeAtelier[]
+  /**
+   * Which groups the procédé runs with: the séance's, its own (`ateliers`),
+   * or none — everyone together. Absent on older procédés: its own if it has
+   * any, else the séance's.
+   */
+  modeGroupes?: ModeGroupesProcede
+  /** What the exercise takes out of the caisse — copied from the library. */
+  materiel?: LigneMateriel[]
 }
+
+export type ModeGroupesProcede = "seance" | "personnalises" | "aucun"
 
 export type SeanceStatut = "Terminé" | "Planifiée" | "En cours"
 
@@ -139,6 +150,8 @@ export type SeanceDetail = {
   date: string
   /** Duration in minutes, plain string ("32"). */
   duree: string
+  /** Installation — for a séance with no calendar event to carry a lieu. */
+  lieu?: string
   /** Perceived intensity — "N/A" until the séance is run. */
   intensite: string
   saison: string
@@ -146,6 +159,16 @@ export type SeanceDetail = {
   securiteVerifiee: boolean
   hydratationVerifiee: boolean
   procedes: Procede[]
+  /**
+   * Matériel of the whole séance, set by the coach (fiche de création or
+   * « Modifier la séance »). Absent = computed from the procédés.
+   */
+  materiel?: LigneMateriel[]
+  /**
+   * The séance's own chasubles, defined when it is created. Every procédé
+   * uses them unless it is set to personalised groups.
+   */
+  groupesSeance?: ProcedeAtelier[]
   /** Drinks breaks between procédés, as decided on the fiche de création. */
   hydratations?: PauseHydratation[]
   /** Staff + joueurs invited — the Convocation tab (not started) reads their
@@ -177,6 +200,8 @@ const PROCEDE_VAMEVAL: Procede = {
   recuperation: "180",
   image:
     "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/tactics/image-1761666361994-890610436.png",
+  // Dix stations sur le schéma, un plot chacune.
+  materiel: [{ quantite: 10, nom: "Plots" }],
   blocks: [
     {
       kind: "paragraph",
@@ -239,6 +264,7 @@ const PROCEDE_SPRINT: Procede = {
   duree: "12 minutes",
   sequence: "1*12 minutes",
   recuperation: "30",
+  materiel: [{ quantite: 2, nom: "Plots" }],
   image:
     "https://back.ismart-club.com/public/fb4200ec-d401-4dfb-b6e6-9b2d71522bae/tactics/image-1761747316874-653387628.png",
   blocks: [
@@ -304,6 +330,7 @@ const PROCEDE_SPRINT: Procede = {
 const SEANCE_21_PROCEDES: Procede[] = [
   {
     id: "s21-echauffement",
+    materiel: [{ quantite: 12, nom: "Coupelles" }],
     titre: "Échauffement dynamique",
     fifaCard: "PHY",
     duree: "12 minutes",
@@ -342,6 +369,10 @@ const SEANCE_21_PROCEDES: Procede[] = [
   },
   {
     id: "s21-conduite",
+    materiel: [
+      { quantite: 10, nom: "Ballons" },
+      { quantite: 8, nom: "Piquets" },
+    ],
     titre: "Conduite de balle en slalom",
     fifaCard: "TEC",
     duree: "15 minutes",
@@ -380,6 +411,10 @@ const SEANCE_21_PROCEDES: Procede[] = [
   },
   {
     id: "s21-passes",
+    materiel: [
+      { quantite: 10, nom: "Ballons" },
+      { quantite: 18, nom: "Coupelles" },
+    ],
     titre: "Passes courtes en triangle",
     fifaCard: "TEC",
     duree: "15 minutes",
@@ -418,6 +453,11 @@ const SEANCE_21_PROCEDES: Procede[] = [
   },
   {
     id: "s21-jeu-position",
+    materiel: [
+      { quantite: 4, nom: "Ballons" },
+      { quantite: 16, nom: "Coupelles" },
+      { quantite: 6, nom: "Chasubles" },
+    ],
     titre: "Jeu de position 4 contre 2",
     fifaCard: "TAC",
     duree: "18 minutes",
@@ -631,8 +671,8 @@ export const seanceDetailsSeed: SeanceDetail[] = [
  * The séance takes a **snapshot** — its own id, its own blocks — so that
  * re-editing the library afterwards never rewrites a session already run, and
  * so the same exercise can be programmed twice in one séance. The library's
- * `sections` become the rich blocks the page already renders, and its matériel
- * becomes a small table.
+ * `sections` become the rich blocks the page already renders; its matériel is
+ * kept as data, shown in the séance's matériel column.
  */
 export function procedeFromLibrary(item: ProcedeItem): Procede {
   const blocks: ProcedeBlock[] = item.sections.map((section) =>
@@ -640,14 +680,6 @@ export function procedeFromLibrary(item: ProcedeItem): Procede {
       ? { kind: "list", heading: section.titre, items: section.items }
       : { kind: "paragraph", heading: section.titre, text: section.texte ?? "" },
   )
-  if (item.materiel.length > 0) {
-    blocks.push({
-      kind: "table",
-      heading: "Matériel",
-      head: ["Matériel", "Quantité"],
-      rows: item.materiel.map((m) => [m.nom, String(m.quantite)]),
-    })
-  }
 
   const [joueurs, gardiens] = item.effectif
   const effectif = [
@@ -669,6 +701,7 @@ export function procedeFromLibrary(item: ProcedeItem): Procede {
     effectif,
     image: item.image,
     blocks,
+    materiel: item.materiel.map((m) => ({ ...m })),
   }
 }
 
@@ -692,6 +725,10 @@ export function buildSeanceFromClub(
     securiteVerifiee: boolean
     hydratationVerifiee: boolean
     hydratations?: PauseHydratation[]
+    materiel?: LigneMateriel[]
+    groupesSeance?: ProcedeAtelier[]
+    rpeCible?: number
+    installation?: string
   },
   titre: string,
   procedes: Procede[],
@@ -707,7 +744,7 @@ export function buildSeanceFromClub(
     effectif: seance.effectif ? String(seance.effectif) : String(participants.length),
     date: frDate(seance.date.slice(0, 10)),
     duree: seance.duree,
-    intensite: "N/A",
+    intensite: seance.rpeCible ? `RPE ${seance.rpeCible}/10` : "N/A",
     saison,
     statut:
       seance.statut === "Terminée"
@@ -718,6 +755,10 @@ export function buildSeanceFromClub(
     securiteVerifiee: seance.securiteVerifiee,
     hydratationVerifiee: seance.hydratationVerifiee,
     procedes,
+    // Une séance planifiée sans matériel suit celui de ses procédés.
+    materiel: seance.materiel?.length ? seance.materiel : undefined,
+    groupesSeance: seance.groupesSeance,
+    lieu: seance.installation,
     hydratations: seance.hydratations,
     participants,
     presence: {},

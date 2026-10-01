@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, type ReactNode } from "react"
 import {
   Check,
   Palette,
@@ -54,6 +54,7 @@ export function GroupesJoueurs({
   notify,
   aide,
   vide,
+  actions,
 }: {
   roster: JoueurGroupe[]
   groupes: ProcedeAtelier[]
@@ -62,7 +63,9 @@ export function GroupesJoueurs({
   /** Appended to the count line — what these groups mean here. */
   aide?: string
   /** Empty-state copy: what "no group" means in this context. */
-  vide: { titre: string; description: string }
+  vide: { titre: string; description?: string }
+  /** Extra buttons shown beside « Ajouter un groupe ». */
+  actions?: ReactNode
 }) {
   const [ajoutPour, setAjoutPour] = useState<string | null>(null)
   const [palettePour, setPalettePour] = useState<string | null>(null)
@@ -100,7 +103,7 @@ export function GroupesJoueurs({
       <div className="flex flex-wrap items-center gap-3">
         <p className="min-w-0 flex-1 font-body text-[0.78rem] text-ink-muted">
           {groupes.length === 0
-            ? vide.description
+            ? (vide.description ?? "")
             : places.size +
               "/" +
               roster.length +
@@ -115,6 +118,7 @@ export function GroupesJoueurs({
             <Shuffle /> Répartir
           </Button>
         ) : null}
+        {actions}
         <Button
           variant="outline"
           size="sm"

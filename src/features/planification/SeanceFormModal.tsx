@@ -1,4 +1,5 @@
 import { useState, type ReactNode } from "react"
+import { RotateCcw, X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { useData } from "@/data/useData"
@@ -6,6 +7,12 @@ import type { PlanEvent } from "@/data/seed/events"
 import type { SeanceDetail } from "@/data/seed/seances"
 import { FormSheet } from "@/components/kit/FormSheet"
 import { Field, Select, inputCls } from "@/features/finance/ui"
+import {
+  MATERIAUX,
+  materiauParNom,
+  materielDeroule,
+  totalPieces,
+} from "@/data/seed/materiaux"
 
 /**
  * Fiche de la séance — Séance ▸ « Modifier la séance ».
@@ -105,6 +112,32 @@ export function SeanceFormModal({
     objectif: event?.detail ?? "",
   })
 
+  /*
+   * Matériel de la séance. Tant que l'éducateur n'y touche pas, il suit les
+   * procédés (calcul automatique) ; dès qu'il ajuste, sa liste fait foi.
+   */
+  const auto = [...materielDeroule(detail.procedes)].map(([nom, quantite]) => ({
+    nom,
+    quantite: String(quantite),
+  }))
+  const [materiel, setMateriel] = useState<{ nom: string; quantite: string }[]>(
+    () =>
+      detail.materiel
+        ? detail.materiel.map((m) => ({ nom: m.nom, quantite: String(m.quantite) }))
+        : auto,
+  )
+  const [materielManuel, setMaterielManuel] = useState(detail.materiel !== undefined)
+  const majMateriel = (suite: { nom: string; quantite: string }[]) => {
+    setMateriel(suite)
+    setMaterielManuel(true)
+  }
+  const pieces = totalPieces(
+    materiel.map((m) => ({ nom: m.nom, quantite: Number(m.quantite) || 0 })),
+  )
+  const horsCaisse = MATERIAUX.filter(
+    (m) => !materiel.some((l) => l.nom.toLowerCase() === m.nom.toLowerCase()),
+  )
+
   const set = <K extends keyof Draft>(key: K, value: Draft[K]) =>
     setDraft((prev) => ({ ...prev, [key]: value }))
 
@@ -137,6 +170,12 @@ export function SeanceFormModal({
       duree: draft.duree.trim() || "N/A",
       intensite: draft.intensite,
       saison: draft.saison,
+      // Non retouché : on laisse la séance suivre ses procédés.
+      materiel: materielManuel
+        ? materiel
+            .map((m) => ({ nom: m.nom, quantite: Number(m.quantite) || 0 }))
+            .filter((m) => m.quantite > 0)
+        : undefined,
     })
 
     // Le planning suit la fiche : intitulé, jour, horaire, lieu, objectif.
@@ -296,6 +335,101 @@ export function SeanceFormModal({
               }
             />
           </Field>
+        </div>
+
+        <Section
+          label={
+            <>
+              Matériaux ·{" "}
+              <span className="text-ink-muted tabular-nums">
+                {pieces} pièce{pieces > 1 ? "s" : ""}
+              </span>
+            </>
+          }
+        />
+
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center justify-between gap-3">
+            <span className="font-body text-[0.75rem] text-ink-muted">
+              {materielManuel
+                ? "Ajusté à la main."
+                : "Calculé depuis les procédés de la séance."}
+            </span>
+            {materielManuel ? (
+              <button
+                type="button"
+                onClick={() => {
+                  setMateriel(auto)
+                  setMaterielManuel(false)
+                }}
+                className="inline-flex shrink-0 items-center gap-1 font-ui text-[0.72rem] text-info hover:text-ink"
+              >
+                <RotateCcw size={12} /> Recalculer
+              </button>
+            ) : null}
+          </div>
+
+          {materiel.length === 0 ? (
+            <p className="rounded-md border border-dashed border-border px-3 py-4 text-center font-body text-[0.78rem] text-ink-disabled">
+              Aucun matériel pour cette séance.
+            </p>
+          ) : (
+            <ul className="flex flex-col gap-1.5">
+              {materiel.map((m, i) => {
+                const ref = materiauParNom(m.nom)
+                return (
+                  <li
+                    key={m.nom}
+                    className="flex items-center gap-3 rounded-md border border-border px-2.5 py-2"
+                  >
+                    <span className="flex size-8 shrink-0 items-center justify-center rounded-sm bg-surface-nested">
+                      {ref ? (
+                        <img src={ref.svg} alt="" aria-hidden className="max-h-5 max-w-[70%] object-contain" />
+                      ) : null}
+                    </span>
+                    <span className="min-w-0 flex-1 truncate font-ui text-[0.84rem] text-ink">
+                      {m.nom}
+                    </span>
+                    <input
+                      inputMode="numeric"
+                      aria-label={"Quantité — " + m.nom}
+                      value={m.quantite}
+                      onFocus={(e) => e.currentTarget.select()}
+                      onChange={(e) =>
+                        majMateriel(
+                          materiel.map((x, j) =>
+                            j === i ? { ...x, quantite: e.target.value.replace(/\D/g, "") } : x,
+                          ),
+                        )
+                      }
+                      className={cn(inputCls, "w-16 px-2 py-1 text-center tabular-nums")}
+                    />
+                    <button
+                      type="button"
+                      aria-label={"Retirer " + m.nom}
+                      onClick={() => majMateriel(materiel.filter((_, j) => j !== i))}
+                      className="shrink-0 text-ink-disabled transition-colors hover:text-danger"
+                    >
+                      <X size={14} />
+                    </button>
+                  </li>
+                )
+              })}
+            </ul>
+          )}
+
+          {horsCaisse.length ? (
+            <Select
+              value=""
+              placeholder="Ajouter du matériel…"
+              onChange={(nom) => {
+                const ref = MATERIAUX.find((m) => m.nom === nom)
+                if (ref)
+                  majMateriel([...materiel, { nom: ref.nom, quantite: String(ref.defaut) }])
+              }}
+              options={horsCaisse.map((m) => ({ value: m.nom, label: m.nom }))}
+            />
+          ) : null}
         </div>
 
         <Field label="Objectif de la séance">

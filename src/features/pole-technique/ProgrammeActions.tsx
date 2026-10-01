@@ -377,16 +377,27 @@ const PORTEES: {
   },
 ]
 
-function CommunauteModal({
+/**
+ * Share-with-partenaires dialog. Also used by the Performances modèles, which
+ * pass their own title and the blocks their share can carry.
+ */
+export function CommunauteModal({
   open,
   onOpenChange,
   partage,
   onEnregistrer,
+  titre = "Ressources à partager",
+  ressourcesDisponibles = PARTAGE_RESSOURCES,
+  partenaires,
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
   partage: ProgrammePartage
   onEnregistrer: (partage: ProgrammePartage) => void
+  titre?: string
+  ressourcesDisponibles?: readonly string[]
+  /** Who "Personnalisé" picks from — defaults to the active sponsor partners. */
+  partenaires?: { id: string; name: string; color?: string }[]
 }) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -397,6 +408,9 @@ function CommunauteModal({
           onAnnuler={() => onOpenChange(false)}
           partage={partage}
           onEnregistrer={onEnregistrer}
+          titre={titre}
+          ressourcesDisponibles={ressourcesDisponibles}
+          partenaires={partenaires}
         />
       ) : null}
     </Dialog>
@@ -407,15 +421,21 @@ function CommunauteCorps({
   partage,
   onAnnuler,
   onEnregistrer,
+  titre,
+  ressourcesDisponibles,
+  partenaires,
 }: {
   partage: ProgrammePartage
   onAnnuler: () => void
   onEnregistrer: (partage: ProgrammePartage) => void
+  titre: string
+  ressourcesDisponibles: readonly string[]
+  partenaires?: { id: string; name: string; color?: string }[]
 }) {
   const { partners } = useData()
   const actifs = useMemo(
-    () => partners.filter((p) => p.status === "actif"),
-    [partners],
+    () => partenaires ?? partners.filter((p) => p.status === "actif"),
+    [partenaires, partners],
   )
 
   const [ressources, setRessources] = useState<string[]>(partage.ressources)
@@ -438,14 +458,14 @@ function CommunauteCorps({
   return (
       <DialogContent className="max-h-[85vh] overflow-y-auto rounded-xl sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>Ressources à partager</DialogTitle>
+          <DialogTitle>{titre}</DialogTitle>
           <DialogDescription className="sr-only">
             Ce que le partage emporte, et qui peut le voir.
           </DialogDescription>
         </DialogHeader>
 
         <div className="flex flex-wrap gap-2">
-          {PARTAGE_RESSOURCES.map((r) => (
+          {ressourcesDisponibles.map((r) => (
             <button
               key={r}
               type="button"
